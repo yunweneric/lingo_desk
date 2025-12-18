@@ -108,21 +108,35 @@ lib/
 │   ├── app_management/
 │   │   ├── data/
 │   │   │   ├── datasources/
+│   │   │   │   └── export.dart    # Barrel file
 │   │   │   ├── models/
-│   │   │   └── repositories/
+│   │   │   │   └── export.dart    # Barrel file
+│   │   │   ├── repositories/
+│   │   │   │   └── export.dart    # Barrel file
+│   │   │   └── export.dart        # Main data barrel
 │   │   ├── domain/
 │   │   │   ├── entities/
+│   │   │   │   └── export.dart    # Barrel file
 │   │   │   ├── repositories/
-│   │   │   └── usecases/
+│   │   │   │   └── export.dart    # Barrel file
+│   │   │   ├── usecases/
+│   │   │   │   └── export.dart    # Barrel file
+│   │   │   └── export.dart        # Main domain barrel
 │   │   └── presentation/
 │   │       ├── bloc/
+│   │       │   └── export.dart    # Barrel file
 │   │       ├── pages/
-│   │       └── widgets/
+│   │       │   └── export.dart    # Barrel file
+│   │       ├── widgets/
+│   │       │   └── export.dart    # Barrel file
+│   │       └── export.dart        # Main presentation barrel
 │   ├── app_settings/
 │   ├── file_upload/
 │   └── translation_editor/
 └── main.dart
 ```
+
+> **Note**: Each feature uses barrel files (`export.dart`) for clean imports. See [Feature Implementation Guide](docs/feature.md#barrel-files) for details.
 
 ### Layer Responsibilities
 

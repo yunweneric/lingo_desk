@@ -1,7 +1,7 @@
-/// Helper utilities for testing BLoCs
-/// 
-/// This file provides common patterns and utilities for BLoC testing
-/// using the bloc_test package.
+// Helper utilities for testing BLoCs
+// 
+// This file provides common patterns and utilities for BLoC testing
+// using the bloc_test package.
 
 /// Example BLoC test helper - customize based on your BLoCs
 /// 

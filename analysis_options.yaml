@@ -21,8 +21,78 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Naming Conventions
+    # Enforce camelCase for variables, parameters, and methods
+    non_constant_identifier_names: true
 
+    # Enforce PascalCase for classes, enums, typedefs, and type parameters
+    camel_case_types: true
+
+    # Enforce lowercase_with_underscores for library names
+    library_names: true
+
+    # Enforce camelCase for file names (Dart convention)
+    file_names: true
+
+    # Enforce consistent naming for private members
+    library_prefixes: true
+
+    # Enforce consistent naming for constants
+    constant_identifier_names: true
+
+    # Code Style
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true
+
+    # Best Practices
+    avoid_print: true
+    avoid_empty_else: true
+    avoid_relative_lib_imports: true
+    avoid_returning_null_for_future: true
+    avoid_slow_async_io: true
+    avoid_type_to_string: true
+    avoid_unnecessary_containers: true
+    avoid_unused_constructor_parameters: true
+    cancel_subscriptions: true
+    close_sinks: true # Important for BLoC streams
+    no_duplicate_case_values: true
+
+    # Error Handling
+    always_declare_return_types: true
+    avoid_catches_without_on_clauses: true
+    avoid_catching_errors: true
+
+    # Documentation
+    public_member_api_docs: false # Set to true if you want to enforce documentation
+    package_api_docs: false
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "**/generated/**"
+    - "build/**"
+
+  errors:
+    # Treat missing required parameters as errors
+    missing_required_param: error
+    # Treat missing return types as errors
+    missing_return: error
+    # Treat unused imports as warnings (not errors)
+    unused_import: warning
+    # Treat unused elements as warnings
+    unused_element: warning
+    # Treat unused local variables as warnings
+    unused_local_variable: warning
+    # Treat unused fields as warnings
+    unused_field: warning
+    # Treat unused shown names as warnings
+    unused_shown_name: warning
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

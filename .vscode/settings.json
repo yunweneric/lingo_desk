@@ -2,24 +2,24 @@
   // Flutter settings
   "dart.flutterSdkPath": ".fvm/flutter_sdk",
   "dart.flutterSdkPaths": [".fvm/flutter_sdk"],
-  
+
   // Enable FVM support
   "dart.flutterAdditionalArgs": [],
-  
+
   // Test settings
   "dart.testAdditionalArgs": [],
-  
+
   // Code formatting
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  
+
   // File associations
   "files.associations": {
     "*.dart": "dart"
   },
-  
+
   // Exclude patterns
   "files.exclude": {
     "**/.dart_tool": true,
@@ -30,7 +30,7 @@
     "**/build": true,
     "**/coverage": true
   },
-  
+
   // Search exclude patterns
   "search.exclude": {
     "**/node_modules": true,
@@ -38,5 +38,14 @@
     "**/.dart_tool": true,
     "**/coverage": true,
     "**/.fvm": true
-  }
+  },
+  "cSpell.words": [
+    "dartz",
+    "elif",
+    "fvmrc",
+    "pubspec",
+    "romeovs",
+    "usecase",
+    "usecases"
+  ]
 }
