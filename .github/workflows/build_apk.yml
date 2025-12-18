@@ -1,0 +1,102 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install FVM
+        run: |
+          dart pub global activate fvm
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
+      - name: Setup Flutter via FVM
+        run: |
+          # Try to read Flutter version from FVM config files
+          if [ -f ".fvmrc" ]; then
+            FLUTTER_VERSION=$(grep -o '"flutter":"[^"]*"' .fvmrc | cut -d'"' -f4)
+            echo "Using Flutter version from .fvmrc: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          elif [ -f ".fvm/fvm_config.json" ]; then
+            FLUTTER_VERSION=$(grep -o '"flutterSdkVersion":"[^"]*"' .fvm/fvm_config.json | cut -d'"' -f4)
+            echo "Using Flutter version from FVM config: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          else
+            # Fallback: use a specific version
+            FLUTTER_VERSION="3.29.3"
+            echo "FVM config not found, using Flutter version: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          fi
+          fvm flutter --version
+
+      - name: Get dependencies
+        run: fvm flutter pub get
+
+      - name: Verify formatting
+        run: fvm dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: fvm flutter analyze
+
+      - name: Run tests
+        run: fvm flutter test
+
+      - name: Build APK (Debug)
+        run: fvm flutter build apk --debug
+
+      - name: Build APK (Release)
+        run: fvm flutter build apk --release
+
+      - name: Build App Bundle (AAB) - Release
+        run: fvm flutter build appbundle --release
+        continue-on-error: true # Continue even if signing fails
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 30
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+      - name: Upload App Bundle (AAB) - Release
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-release-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
+          if-no-files-found: ignore
+
