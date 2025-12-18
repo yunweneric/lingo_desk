@@ -1,3 +1,42 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.29.3"
+  // Flutter settings
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "dart.flutterSdkPaths": [".fvm/flutter_sdk"],
+  
+  // Enable FVM support
+  "dart.flutterAdditionalArgs": [],
+  
+  // Test settings
+  "dart.testAdditionalArgs": [],
+  
+  // Code formatting
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  
+  // File associations
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  
+  // Exclude patterns
+  "files.exclude": {
+    "**/.dart_tool": true,
+    "**/.flutter-plugins": true,
+    "**/.flutter-plugins-dependencies": true,
+    "**/.packages": true,
+    "**/.pub": true,
+    "**/build": true,
+    "**/coverage": true
+  },
+  
+  // Search exclude patterns
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/build": true,
+    "**/.dart_tool": true,
+    "**/coverage": true,
+    "**/.fvm": true
+  }
 }

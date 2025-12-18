@@ -116,7 +116,8 @@ lib/
 │   │   │   └── usecases/
 │   │   └── presentation/
 │   │       ├── bloc/
-│   │       └── pages/
+│   │       ├── pages/
+│   │       └── widgets/
 │   ├── app_settings/
 │   ├── file_upload/
 │   └── translation_editor/
@@ -211,13 +212,73 @@ The core engine of LingoDesk.
 
 ## 🧪 Testing
 
+The project includes comprehensive testing setup for unit tests, widget tests, and integration tests.
+
+### Running Tests
+
 ```bash
 # Run all tests
 fvm flutter test
 
-# Run tests with coverage
-fvm flutter test --coverage
+# Run unit tests only
+fvm flutter test test/unit
+
+# Run widget tests only
+fvm flutter test test/widget
+
+# Run integration tests
+fvm flutter test integration_test
+
+# Run specific test file
+fvm flutter test test/unit/core/bootstrap_test.dart
+
+# Using test scripts
+./scripts/test.sh all          # Run all tests
+./scripts/test.sh unit          # Run unit tests
+./scripts/test.sh widget        # Run widget tests
+./scripts/test.sh integration   # Run integration tests
+./scripts/test.sh coverage      # Run with coverage
 ```
+
+### Test Coverage
+
+```bash
+# Generate coverage report
+fvm flutter test --coverage
+
+# Generate and view HTML coverage report
+./scripts/test_coverage.sh
+
+# Or manually (requires lcov)
+fvm flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html
+```
+
+### Test Structure
+
+```
+test/
+├── helpers/              # Test utilities and helpers
+│   ├── test_helpers.dart
+│   ├── mock_factories.dart
+│   └── bloc_test_helpers.dart
+├── unit/                 # Unit tests
+│   └── core/
+└── widget/               # Widget tests
+    └── core/
+
+integration_test/         # Integration tests
+└── app_test.dart
+```
+
+### Test Types
+
+- **Unit Tests**: Test individual functions, classes, and use cases in isolation
+- **Widget Tests**: Test individual widgets and their interactions
+- **Integration Tests**: Test complete user flows and app behavior
+
+See [test/README.md](test/README.md) for detailed testing documentation.
 
 ## 📦 Building
 
