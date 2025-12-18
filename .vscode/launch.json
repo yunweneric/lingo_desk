@@ -1,0 +1,99 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "LingoDesk (Web)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "chrome"
+    },
+    {
+      "name": "LingoDesk (macOS)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "macos"
+    },
+    {
+      "name": "LingoDesk (iOS)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "ios"
+    },
+    {
+      "name": "LingoDesk (Android)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "android"
+    },
+    {
+      "name": "LingoDesk (Linux)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "linux"
+    },
+    {
+      "name": "LingoDesk (Windows)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "windows"
+    },
+    {
+      "name": "Run All Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/test",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Run Unit Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/unit",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Run Widget Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/widget",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Run Integration Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/integration_test/app_test.dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Run Tests with Coverage",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/test",
+      "flutterMode": "debug",
+      "args": [
+        "--coverage"
+      ]
+    },
+    {
+      "name": "Debug Current Test File",
+      "type": "dart",
+      "request": "launch",
+      "program": "${file}",
+      "flutterMode": "debug"
+    }
+  ]
+}
+

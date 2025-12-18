@@ -1,0 +1,19 @@
+# Test coverage configuration
+# 
+# This file can be used with coverage tools to configure coverage settings
+
+# Exclude patterns from coverage
+exclude:
+  - '**/*.g.dart'
+  - '**/*.freezed.dart'
+  - '**/*.mocks.dart'
+  - '**/generated/**'
+  - '**/test/**'
+  - '**/integration_test/**'
+  - '**/*_test.dart'
+  - '**/main.dart'
+
+# Include patterns for coverage
+include:
+  - 'lib/**/*.dart'
+
