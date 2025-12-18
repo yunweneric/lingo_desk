@@ -266,6 +266,9 @@ fvm flutter test test/unit/core/bootstrap_test.dart
 ./scripts/test.sh widget        # Run widget tests
 ./scripts/test.sh integration   # Run integration tests
 ./scripts/test.sh coverage      # Run with coverage
+
+# Test CI workflow steps locally (before pushing)
+./scripts/test_ci.sh            # Simulates GitHub Actions test workflow
 ```
 
 ### Test Coverage
