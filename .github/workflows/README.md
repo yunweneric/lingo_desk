@@ -31,9 +31,8 @@ Runs Flutter tests on pull requests to the main branch.
 Builds Android APK and App Bundle (AAB) files.
 
 **Triggers:**
-- Pushes to `main` branch
+- Pushes to `main` branch (when PRs are merged)
 - Version tags (e.g., `v1.0.0`)
-- Pull requests to `main` branch
 - Manual workflow dispatch
 
 **What it does:**

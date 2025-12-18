@@ -21,6 +21,9 @@ jobs:
           distribution: "zulu"
           java-version: "17"
 
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
       - name: Install FVM
         run: |
           dart pub global activate fvm
