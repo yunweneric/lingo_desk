@@ -20,7 +20,7 @@
     {
       "label": "Flutter: Clean",
       "type": "shell",
-      "command": "fvm flutter clean",
+      "command": "rm -rf pubspec.lock && fvm flutter clean && fvm flutter pub get",
       "group": "build",
       "presentation": {
         "echo": true,
@@ -30,6 +30,7 @@
       },
       "problemMatcher": []
     },
+
     {
       "label": "Test: Run All Tests",
       "type": "shell",
@@ -123,4 +124,3 @@
     }
   ]
 }
-
