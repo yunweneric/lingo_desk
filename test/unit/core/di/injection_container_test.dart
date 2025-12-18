@@ -31,7 +31,7 @@ void main() {
       await reset();
 
       // Verify it's no longer registered
-      expect(() => getIt<String>(), throwsA(isA<AssertionError>()));
+      expect(() => getIt<String>(), throwsA(isA<StateError>()));
     });
 
     test('getIt instance is accessible', () {

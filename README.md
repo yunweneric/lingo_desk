@@ -366,13 +366,25 @@ We welcome contributions to LingoDesk! Please follow these guidelines:
 
 ### Code Style
 
+**⚠️ Important**: Always format your code before committing to avoid CI failures.
+
 ```bash
-# Format code
+# Format code (always run this before committing)
 fvm dart format .
+
+# Verify formatting (used in CI - exits with error if changes needed)
+fvm dart format --set-exit-if-changed .
 
 # Analyze code
 fvm flutter analyze
 ```
+
+**Pre-Commit Checklist:**
+
+1. ✅ Run `fvm dart format .` to format all files
+2. ✅ Run `fvm flutter analyze` to check for issues
+3. ✅ Run `fvm flutter test` to ensure tests pass
+4. ✅ Verify no formatting changes with `fvm dart format --set-exit-if-changed .`
 
 ### Commit Messages
 
@@ -397,10 +409,19 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
    git rebase main
    ```
 
-2. **Ensure tests pass**
+2. **Ensure tests pass and code is formatted**
 
    ```bash
+   # Format code
+   fvm dart format .
+
+   # Verify formatting (should exit with 0)
+   fvm dart format --set-exit-if-changed .
+
+   # Run tests
    fvm flutter test
+
+   # Analyze code
    fvm flutter analyze
    ```
 
