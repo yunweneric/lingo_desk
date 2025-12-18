@@ -79,24 +79,84 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: app-debug-apk
+          name: lingodesk-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
-          retention-days: 30
+          retention-days: 90
+          if-no-files-found: error
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: app-release-apk
+          name: lingodesk-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-          retention-days: 30
+          retention-days: 90
+          if-no-files-found: error
 
       - name: Upload App Bundle (AAB) - Release
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: app-release-bundle
+          name: lingodesk-release-bundle
           path: build/app/outputs/bundle/release/app-release.aab
-          retention-days: 30
+          retention-days: 90
           if-no-files-found: ignore
+
+      - name: Extract version from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Tag version: $VERSION"
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ steps.tag_version.outputs.version }}
+          tag_name: ${{ steps.tag_version.outputs.version }}
+          body: |
+            ## 🚀 LingoDesk ${{ steps.tag_version.outputs.version }}
+            
+            ### 📦 Downloads
+            
+            - **Release APK**: Install and test the latest release
+            - **Debug APK**: For development and debugging
+            - **App Bundle (AAB)**: For Google Play Store submission (if available)
+            
+            ### 📝 Changes
+            
+            See the commit history for detailed changes.
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/app-debug.apk
+            build/app/outputs/bundle/release/app-release.aab
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Summary
+        if: always()
+        run: |
+          echo "## 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following artifacts are available for download:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### APK Files" >> $GITHUB_STEP_SUMMARY
+          echo "- **Debug APK**: \`lingodesk-debug-apk\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release APK**: \`lingodesk-release-apk\` (Recommended for testing)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### App Bundle" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release AAB**: \`lingodesk-release-bundle\` (For Google Play Store)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "### 🎉 GitHub Release" >> $GITHUB_STEP_SUMMARY
+            echo "A GitHub Release has been created with these APK files attached!" >> $GITHUB_STEP_SUMMARY
+            echo "Visit the [Releases](https://github.com/${{ github.repository }}/releases) page to download." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "> 💡 Go to the **Actions** tab → Select this workflow run → Scroll down to **Artifacts** section to download." >> $GITHUB_STEP_SUMMARY
 

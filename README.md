@@ -313,6 +313,8 @@ See [test/README.md](test/README.md) for detailed testing documentation.
 
 ## 📦 Building
 
+### Local Build
+
 ```bash
 # Web
 fvm flutter build web
@@ -334,6 +336,46 @@ fvm flutter build apk
 # or
 fvm flutter build appbundle
 ```
+
+### CI/CD Builds & Artifacts
+
+APKs are automatically built and uploaded as artifacts when code is pushed to `main` or when a version tag is created.
+
+**Downloading from GitHub Releases (Recommended):**
+
+When you create a version tag (e.g., `v1.0.0`), a GitHub Release is automatically created with APK files attached:
+
+1. Go to the **Releases** page in your GitHub repository
+2. Find the release version you want
+3. Download the APK files from the **Assets** section:
+   - **`app-release.apk`** - Release APK (recommended for testing)
+   - **`app-debug.apk`** - Debug APK
+   - **`app-release.aab`** - App Bundle for Google Play Store (if available)
+
+**Downloading from Workflow Artifacts:**
+
+1. Go to the **Actions** tab in your GitHub repository
+2. Select the latest **"Build Android APK"** workflow run
+3. Scroll down to the **Artifacts** section
+4. Download the desired artifact:
+   - **`lingodesk-release-apk`** - Release APK (recommended for testing)
+   - **`lingodesk-debug-apk`** - Debug APK
+   - **`lingodesk-release-bundle`** - App Bundle for Google Play Store
+
+**Creating a Release:**
+
+To create a new release, create and push a version tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This will trigger the build workflow and automatically create a GitHub Release with the APK files attached.
+
+**Artifact Retention:** 
+- **Releases**: Permanent (available indefinitely)
+- **Workflow Artifacts**: 90 days
 
 ## 🤝 Contributing
 
