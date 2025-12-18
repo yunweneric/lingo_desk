@@ -29,6 +29,19 @@ LingoDesk offers a cross-platform workflow to:
 - **Architecture**: Clean Architecture
 - **Storage**: Local storage (Hive/SharedPreferences)
 
+## 🎨 UI/UX Design
+
+The UI/UX design for LingoDesk is available on [UX Pilot](https://uxpilot.ai/s/470562a66d6978fa0526e25b06a74d90).
+
+This design guide includes:
+
+- Screen layouts and wireframes
+- User flow diagrams
+- Component specifications
+- Design system guidelines
+
+Refer to the design for visual reference when implementing features.
+
 ## 📋 Prerequisites
 
 - [Dart SDK](https://dart.dev/get-dart)
@@ -200,6 +213,7 @@ The core engine of LingoDesk.
 ### Data Transformation
 
 **Flattening**: Converts nested JSON into dot-notation format
+
 ```json
 // Input
 {
@@ -375,6 +389,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ### Pull Request Process
 
 1. **Update your branch**
+
    ```bash
    git checkout main
    git pull upstream main
@@ -383,6 +398,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
    ```
 
 2. **Ensure tests pass**
+
    ```bash
    fvm flutter test
    fvm flutter analyze
@@ -408,7 +424,6 @@ When reporting issues, please include:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
 ## 🙏 Acknowledgments
 
