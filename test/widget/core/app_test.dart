@@ -21,8 +21,9 @@ void main() {
       expect(find.text('LingoDesk'), findsOneWidget);
     });
 
-    testWidgets('Placeholder home page displays welcome message',
-        (WidgetTester tester) async {
+    testWidgets('Placeholder home page displays welcome message', (
+      WidgetTester tester,
+    ) async {
       // Build our app and trigger a frame.
       await tester.pumpWidget(const LingoDeskApp());
 
@@ -56,4 +57,3 @@ void main() {
     });
   });
 }
-

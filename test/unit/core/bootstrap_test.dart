@@ -5,10 +5,7 @@ void main() {
   group('Bootstrap', () {
     test('initialize completes without errors', () async {
       // This test verifies that bootstrap initialization doesn't throw
-      expect(
-        () => Bootstrap.initialize(),
-        returnsNormally,
-      );
+      expect(() => Bootstrap.initialize(), returnsNormally);
     });
 
     test('initialize is async and completes', () async {
@@ -19,4 +16,3 @@ void main() {
     });
   });
 }
-

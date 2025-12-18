@@ -7,8 +7,9 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('LingoDesk Integration Tests', () {
-    testWidgets('App launches and displays welcome screen',
-        (WidgetTester tester) async {
+    testWidgets('App launches and displays welcome screen', (
+      WidgetTester tester,
+    ) async {
       // Start the app
       app.main();
       await tester.pumpAndSettle();
@@ -36,4 +37,3 @@ void main() {
     // });
   });
 }
-

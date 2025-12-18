@@ -1,10 +1,10 @@
 /// Mock factory functions for creating test data
-/// 
+///
 /// Use these factories to create consistent test data across tests.
 /// This helps maintain test data consistency and makes tests more readable.
 
 // Example mock factories - customize based on your entities
-// 
+//
 // class MockAppFactory {
 //   static App create({
 //     String? id,
@@ -30,4 +30,3 @@
 //     );
 //   }
 // }
-

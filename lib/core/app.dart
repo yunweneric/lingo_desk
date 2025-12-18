@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Root application widget
-/// 
+///
 /// This widget is the entry point of the application UI.
 /// It configures the MaterialApp with theme, routes, and global settings.
 class LingoDeskApp extends StatelessWidget {
@@ -42,33 +42,21 @@ class _PlaceholderHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LingoDesk'),
-      ),
+      appBar: AppBar(title: const Text('LingoDesk')),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.translate,
-              size: 64,
-              color: Colors.blue,
-            ),
+            Icon(Icons.translate, size: 64, color: Colors.blue),
             SizedBox(height: 16),
             Text(
               'Welcome to LingoDesk',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'Localization Management Tool',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -76,4 +64,3 @@ class _PlaceholderHome extends StatelessWidget {
     );
   }
 }
-

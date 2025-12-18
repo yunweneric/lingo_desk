@@ -22,9 +22,7 @@ void main() {
 
     test('reset clears all registered dependencies', () async {
       // Register a test dependency
-      getIt.registerLazySingleton<String>(
-        () => 'test',
-      );
+      getIt.registerLazySingleton<String>(() => 'test');
 
       // Verify it's registered
       expect(getIt<String>(), equals('test'));
@@ -33,10 +31,7 @@ void main() {
       await reset();
 
       // Verify it's no longer registered
-      expect(
-        () => getIt<String>(),
-        throwsA(isA<AssertionError>()),
-      );
+      expect(() => getIt<String>(), throwsA(isA<AssertionError>()));
     });
 
     test('getIt instance is accessible', () {
@@ -46,4 +41,3 @@ void main() {
     });
   });
 }
-
