@@ -56,6 +56,33 @@ Builds Android APK and App Bundle (AAB) files.
 
 **Note:** The AAB build may fail if signing keys are not configured. This is expected for unsigned builds and the workflow will continue.
 
+### build_dmg.yml
+
+Builds macOS DMG files for distribution.
+
+**Triggers:**
+- Pushes to `main` branch
+- Version tags (e.g., `v1.0.0`)
+- Manual workflow dispatch
+
+**What it does:**
+1. Checks out the code
+2. Installs FVM (Flutter Version Management)
+3. Sets up Flutter via FVM
+4. Gets dependencies
+5. Verifies code formatting
+6. Analyzes code
+7. Runs all tests
+8. Builds macOS App (Release)
+9. Creates DMG file with app and Applications folder link
+10. Uploads DMG as artifact
+11. Creates GitHub Release (on tag push)
+
+**Artifacts:**
+- `lingodesk-macos-dmg` - macOS DMG file (90 days retention)
+
+**Note:** This workflow requires a macOS runner (`macos-latest`).
+
 ### Android Signing (Optional)
 
 To build signed APKs and AABs for production, you need to configure signing keys:
@@ -127,6 +154,73 @@ You can manually trigger any workflow from the GitHub Actions tab:
 1. Go to the "Actions" tab in your repository
 2. Select the workflow you want to run (e.g., "Flutter Tests" or "Build Android APK")
 3. Click "Run workflow"
+
+## Testing Workflows Locally
+
+### Option 1: Using Test Scripts (Recommended)
+
+We provide test scripts that simulate the workflow steps locally:
+
+**For DMG Build:**
+```bash
+./scripts/test_dmg_build.sh
+```
+
+**For CI Tests:**
+```bash
+./scripts/test_ci.sh
+```
+
+These scripts will:
+- Run all the same checks as the workflow
+- Actually build the DMG/APK locally
+- Provide colored output showing what passed/failed
+- Create the actual build artifacts you can test
+
+### Option 2: Using `act` (GitHub Actions Local Runner)
+
+You can use [`act`](https://github.com/nektos/act) to run GitHub Actions workflows locally:
+
+1. **Install act:**
+   ```bash
+   # macOS
+   brew install act
+   
+   # Or using the install script
+   curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+   ```
+
+2. **Run a workflow:**
+   ```bash
+   # List available workflows
+   act -l
+   
+   # Run a specific workflow (e.g., test workflow)
+   act pull_request
+   
+   # Run a specific job
+   act -j test
+   
+   # Run with a specific event
+   act push -e .github/workflows/test-event.json
+   ```
+
+3. **Limitations:**
+   - `act` runs workflows in Docker containers, so macOS-specific workflows (like `build_dmg.yml`) won't work with `act` since it can't run macOS runners
+   - For macOS workflows, use the test scripts instead
+   - Some actions may not work perfectly in local Docker environment
+
+### Option 3: Manual Step-by-Step
+
+You can also manually run each step from the workflow:
+
+1. Setup FVM and Flutter (see workflow steps)
+2. Run `fvm flutter pub get`
+3. Run `fvm dart format --set-exit-if-changed .`
+4. Run `fvm flutter analyze`
+5. Run `fvm flutter test`
+6. Run `fvm flutter build macos --release` (for DMG) or `fvm flutter build apk --release` (for APK)
+7. Create DMG manually (for macOS builds)
 
 ## Extending Workflows
 

@@ -1,0 +1,175 @@
+name: Build macOS DMG
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    name: Build DMG
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install FVM
+        run: |
+          dart pub global activate fvm
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
+      - name: Setup Flutter via FVM
+        run: |
+          # Try to read Flutter version from FVM config files
+          if [ -f ".fvmrc" ]; then
+            FLUTTER_VERSION=$(grep -o '"flutter":"[^"]*"' .fvmrc | cut -d'"' -f4)
+            echo "Using Flutter version from .fvmrc: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          elif [ -f ".fvm/fvm_config.json" ]; then
+            FLUTTER_VERSION=$(grep -o '"flutterSdkVersion":"[^"]*"' .fvm/fvm_config.json | cut -d'"' -f4)
+            echo "Using Flutter version from FVM config: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          else
+            # Fallback: use a specific version
+            FLUTTER_VERSION="3.29.3"
+            echo "FVM config not found, using Flutter version: $FLUTTER_VERSION"
+            fvm install $FLUTTER_VERSION
+            fvm use $FLUTTER_VERSION --force
+          fi
+          fvm flutter --version
+
+      - name: Get dependencies
+        run: fvm flutter pub get
+
+      - name: Verify formatting
+        run: fvm dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: fvm flutter analyze
+
+      - name: Run tests
+        run: fvm flutter test
+
+      - name: Build macOS App (Release)
+        run: fvm flutter build macos --release
+
+      - name: Create DMG
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          # Read app name from macOS config or use default
+          if [ -f "macos/Runner/Configs/AppInfo.xcconfig" ]; then
+            APP_NAME=$(grep "PRODUCT_NAME" macos/Runner/Configs/AppInfo.xcconfig | cut -d'=' -f2 | xargs)
+          else
+            APP_NAME="lingo_desk"
+          fi
+          
+          APP_PATH="build/macos/Build/Products/Release/${APP_NAME}.app"
+          
+          # Generate DMG name based on ref type
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            DMG_NAME="${APP_NAME}-${VERSION}.dmg"
+          else
+            SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
+            DMG_NAME="${APP_NAME}-${GITHUB_REF_NAME}-${SHORT_SHA}.dmg"
+          fi
+          
+          DMG_PATH="build/${DMG_NAME}"
+          
+          # Create a temporary directory for DMG contents
+          DMG_TEMP_DIR=$(mktemp -d)
+          
+          # Copy the app to the temporary directory
+          cp -R "${APP_PATH}" "${DMG_TEMP_DIR}/"
+          
+          # Create a symbolic link to Applications folder
+          ln -s /Applications "${DMG_TEMP_DIR}/Applications"
+          
+          # Create the DMG
+          # Use a display name for the volume (replace underscores with spaces and title case)
+          VOLUME_NAME=$(echo "${APP_NAME}" | sed 's/_/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2));}1')
+          hdiutil create -volname "${VOLUME_NAME}" \
+            -srcfolder "${DMG_TEMP_DIR}" \
+            -ov -format UDZO \
+            "${DMG_PATH}"
+          
+          # Clean up temporary directory
+          rm -rf "${DMG_TEMP_DIR}"
+          
+          echo "DMG created at: ${DMG_PATH}"
+          ls -lh "${DMG_PATH}"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lingodesk-macos-dmg
+          path: build/lingo_desk-*.dmg
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Extract version from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Tag version: $VERSION"
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ steps.tag_version.outputs.version }}
+          tag_name: ${{ steps.tag_version.outputs.version }}
+          body: |
+            ## 🚀 LingoDesk ${{ steps.tag_version.outputs.version }}
+            
+            ### 📦 Downloads
+            
+            - **macOS DMG**: Install the latest release on macOS
+            - **Android APK**: Available in the [Build Android APK](https://github.com/${{ github.repository }}/actions/workflows/build_apk.yml) workflow
+            
+            ### 📝 Changes
+            
+            See the commit history for detailed changes.
+          files: |
+            build/lingo_desk-*.dmg
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Summary
+        if: always()
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          echo "## 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following artifacts are available for download:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### macOS DMG" >> $GITHUB_STEP_SUMMARY
+          echo "- **DMG File**: \`lingodesk-macos-dmg\` (Ready for installation)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "### 🎉 GitHub Release" >> $GITHUB_STEP_SUMMARY
+            echo "A GitHub Release has been created with the DMG file attached!" >> $GITHUB_STEP_SUMMARY
+            echo "Visit the [Releases](https://github.com/${{ github.repository }}/releases) page to download." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "> 💡 Go to the **Actions** tab → Select this workflow run → Scroll down to **Artifacts** section to download." >> $GITHUB_STEP_SUMMARY
+
