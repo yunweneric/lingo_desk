@@ -44,13 +44,15 @@ Refer to the design for visual reference when implementing features.
 
 ## 📸 Screenshots
 
+![Dashboard - Dark Mode](./screenshots/dashboard-dark.png)
+
 ### Dashboard
 
-![LingoDesk dashboard in dark mode](screenshots/dashboard-dark.png)
+LingoDesk dashboard in dark mode
 
 ### Onboarding
 
-![LingoDesk onboarding in dark mode](screenshots/onboarding-dark.png)
+LingoDesk onboarding in dark mode
 
 ## 📋 Prerequisites
 
@@ -358,9 +360,10 @@ When you create a version tag (e.g., `v1.0.0`), a GitHub Release is automaticall
 1. Go to the **Releases** page in your GitHub repository
 2. Find the release version you want
 3. Download the APK files from the **Assets** section:
-   - **`app-release.apk`** - Release APK (recommended for testing)
-   - **`app-debug.apk`** - Debug APK
-   - **`app-release.aab`** - App Bundle for Google Play Store (if available)
+
+- `app-release.apk` - Release APK (recommended for testing)
+- `app-debug.apk` - Debug APK
+- `app-release.aab` - App Bundle for Google Play Store (if available)
 
 **Downloading from Workflow Artifacts:**
 
@@ -368,9 +371,10 @@ When you create a version tag (e.g., `v1.0.0`), a GitHub Release is automaticall
 2. Select the latest **"Build Android APK"** workflow run
 3. Scroll down to the **Artifacts** section
 4. Download the desired artifact:
-   - **`lingodesk-release-apk`** - Release APK (recommended for testing)
-   - **`lingodesk-debug-apk`** - Debug APK
-   - **`lingodesk-release-bundle`** - App Bundle for Google Play Store
+
+- `lingodesk-release-apk` - Release APK (recommended for testing)
+- `lingodesk-debug-apk` - Debug APK
+- `lingodesk-release-bundle` - App Bundle for Google Play Store
 
 **Creating a Release:**
 
@@ -396,20 +400,25 @@ We welcome contributions to LingoDesk! Please follow these guidelines:
 
 1. **Fork the repository**
 2. **Clone your fork**
-   ```bash
-   git clone https://github.com/your-username/lingo_desk.git
-   cd lingo_desk
-   ```
+
+```bash
+ git clone https://github.com/your-username/lingo_desk.git
+ cd lingo_desk
+```
+
 3. **Create a branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+
+```bash
+ git checkout -b feature/your-feature-name
+```
+
 4. **Setup the project**
-   ```bash
-   fvm install
-   fvm use <version>
-   fvm flutter pub get
-   ```
+
+```bash
+ fvm install
+ fvm use <version>
+ fvm flutter pub get
+```
 
 ### Development Guidelines
 
@@ -458,34 +467,35 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 1. **Update your branch**
 
-   ```bash
-   git checkout main
-   git pull upstream main
-   git checkout your-branch
-   git rebase main
-   ```
+```bash
+ git checkout main
+ git pull upstream main
+ git checkout your-branch
+ git rebase main
+```
 
 2. **Ensure tests pass and code is formatted**
 
-   ```bash
-   # Format code
-   fvm dart format .
+```bash
+ # Format code
+ fvm dart format .
 
-   # Verify formatting (should exit with 0)
-   fvm dart format --set-exit-if-changed .
+ # Verify formatting (should exit with 0)
+ fvm dart format --set-exit-if-changed .
 
-   # Run tests
-   fvm flutter test
+ # Run tests
+ fvm flutter test
 
-   # Analyze code
-   fvm flutter analyze
-   ```
+ # Analyze code
+ fvm flutter analyze
+```
 
 3. **Create Pull Request**
-   - Provide a clear description of changes
-   - Reference any related issues
-   - Include screenshots for UI changes
-   - Ensure CI checks pass
+
+- Provide a clear description of changes
+- Reference any related issues
+- Include screenshots for UI changes
+- Ensure CI checks pass
 
 ### Reporting Issues
 
