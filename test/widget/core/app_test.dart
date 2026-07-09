@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lingo_desk/core/app.dart';
 import '../../helpers/test_helpers.dart';
 
@@ -13,26 +14,23 @@ void main() {
       await TestHelpers.tearDown();
     });
 
-    testWidgets('App renders with correct title', (WidgetTester tester) async {
+    testWidgets('App renders onboarding title', (WidgetTester tester) async {
       // Build our app and trigger a frame.
       await tester.pumpWidget(const LingoDeskApp());
 
-      // Verify that the app title is displayed in the AppBar
-      expect(find.text('LingoDesk'), findsOneWidget);
+      expect(find.text('Translate everything, once'), findsOneWidget);
+      expect(find.byType(Image), findsWidgets);
     });
 
-    testWidgets('Placeholder home page displays welcome message', (
+    testWidgets('Onboarding displays brand-aligned setup copy', (
       WidgetTester tester,
     ) async {
       // Build our app and trigger a frame.
       await tester.pumpWidget(const LingoDeskApp());
 
-      // Verify that the welcome text is displayed
-      expect(find.text('Welcome to LingoDesk'), findsOneWidget);
-      expect(find.text('Localization Management Tool'), findsOneWidget);
-
-      // Verify that the translate icon is displayed
-      expect(find.byIcon(Icons.translate), findsOneWidget);
+      expect(find.text('Translation workspace'.toUpperCase()), findsOneWidget);
+      expect(find.textContaining('home.hero.title'), findsOneWidget);
+      expect(find.byType(HugeIcon), findsWidgets);
     });
 
     testWidgets('App uses Material 3 theme', (WidgetTester tester) async {
