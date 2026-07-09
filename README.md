@@ -50,10 +50,6 @@ Refer to the design for visual reference when implementing features.
 
 LingoDesk dashboard in dark mode
 
-### Onboarding
-
-LingoDesk onboarding in dark mode
-
 ## 📋 Prerequisites
 
 - [Dart SDK](https://dart.dev/get-dart)
