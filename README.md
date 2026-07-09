@@ -42,6 +42,16 @@ This design guide includes:
 
 Refer to the design for visual reference when implementing features.
 
+## 📸 Screenshots
+
+### Dashboard
+
+![LingoDesk dashboard in dark mode](screenshots/dashboard-dark.png)
+
+### Onboarding
+
+![LingoDesk onboarding in dark mode](screenshots/onboarding-dark.png)
+
 ## 📋 Prerequisites
 
 - [Dart SDK](https://dart.dev/get-dart)
@@ -373,7 +383,8 @@ git push origin v1.0.0
 
 This will trigger the build workflow and automatically create a GitHub Release with the APK files attached.
 
-**Artifact Retention:** 
+**Artifact Retention:**
+
 - **Releases**: Permanent (available indefinitely)
 - **Workflow Artifacts**: 90 days
 
