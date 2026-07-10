@@ -1,5 +1,7 @@
 # LingoDesk: Localization Management Tool
 
+![Dashboard - Dark Mode](./screenshots/dashboard-dark.png)
+
 LingoDesk is a lightweight, project-based translation manager designed to eliminate the manual overhead of syncing multiple JSON localization files. It provides a centralized UI to manage keys and translations across various languages with real-time progress tracking.
 
 Built with **Flutter** for web, desktop, and mobile platforms.
@@ -42,9 +44,6 @@ This design guide includes:
 
 Refer to the design for visual reference when implementing features.
 
-## 📸 Screenshots
-
-![Dashboard - Dark Mode](./screenshots/dashboard-dark.png)
 
 ### Dashboard
 
