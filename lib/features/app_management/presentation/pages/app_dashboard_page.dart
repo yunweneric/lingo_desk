@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/constants/languages.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';

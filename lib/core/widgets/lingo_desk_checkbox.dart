@@ -57,14 +57,12 @@ class _LingoDeskCheckboxState extends State<LingoDeskCheckbox> {
     final size = widget.size;
 
     final fill = checked
-        ? (enabled
-              ? LingoDeskColors.brandTeal
-              : LingoDeskColors.brandTeal.withValues(alpha: 0.4))
+        ? (enabled ? tokens.accent : tokens.accent.withValues(alpha: 0.4))
         : Colors.transparent;
     final border = checked
         ? fill
         : enabled && _hovered
-        ? LingoDeskColors.brandTeal
+        ? tokens.accent
         : tokens.border;
 
     final box = AnimatedContainer(
@@ -82,7 +80,7 @@ class _LingoDeskCheckboxState extends State<LingoDeskCheckbox> {
         boxShadow: enabled && _hovered
             ? [
                 BoxShadow(
-                  color: LingoDeskColors.brandTeal.withValues(alpha: 0.16),
+                  color: tokens.accent.withValues(alpha: 0.16),
                   spreadRadius: size * 0.16,
                 ),
               ]
@@ -180,14 +178,14 @@ class _LingoDeskCheckboxTileState extends State<LingoDeskCheckboxTile> {
           padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
           decoration: BoxDecoration(
             color: checked
-                ? LingoDeskColors.brandTeal.withValues(alpha: 0.08)
+                ? tokens.accent.withValues(alpha: 0.08)
                 : _hovered
                 ? tokens.active.withValues(alpha: 0.6)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: checked
-                  ? LingoDeskColors.brandTeal.withValues(alpha: 0.35)
+                  ? tokens.accent.withValues(alpha: 0.35)
                   : Colors.transparent,
             ),
           ),

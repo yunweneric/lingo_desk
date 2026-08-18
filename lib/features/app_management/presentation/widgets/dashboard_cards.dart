@@ -84,7 +84,11 @@ class _CoverageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     // Most recently active apps first, capped to keep the chart readable.
-    final apps = state.overviews.take(8).toList();
+    // Eight bars across a phone is 33px each — present, but not a chart
+    // you can read. Fewer, wider bars say the same thing.
+    final apps = state.overviews
+        .take(context.windowSize.isCompact ? 4 : 8)
+        .toList();
     final translated = state.totalCells - state.totalMissing;
 
     return WorkspaceSurface(
@@ -99,7 +103,10 @@ class _CoverageCard extends StatelessWidget {
           ),
           const SizedBox(height: 26),
           SizedBox(
-            height: 220,
+            // A phone has the height to spare far less than a desktop
+            // window does, and the bars are read by their proportions
+            // rather than their absolute size.
+            height: context.windowSize.isCompact ? 150.0 : 220.0,
             child: apps.isEmpty
                 ? Center(
                     child: Text(
@@ -203,10 +210,8 @@ class _ChartBarState extends State<_ChartBar> {
                         curve: LingoDeskMotion.curve,
                         decoration: BoxDecoration(
                           color: _hovered
-                              ? LingoDeskColors.brandTeal
-                              : LingoDeskColors.brandTeal.withValues(
-                                  alpha: 0.82,
-                                ),
+                              ? tokens.accent
+                              : tokens.accent.withValues(alpha: 0.82),
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),

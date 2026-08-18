@@ -127,8 +127,19 @@ class _EditorViewState extends State<_EditorView> {
       // controls.
       actions: _headerActions(context, state, compact: false),
       // Three named buttons will not share a phone's width; the same three
-      // glyphs will, and each keeps its name in a tooltip.
-      compactActions: _headerActions(context, state, compact: true),
+      // glyphs will, on one line, each keeping its name in a tooltip.
+      compactActions: [
+        Row(
+          children: [
+            for (final action in _headerActions(
+              context,
+              state,
+              compact: true,
+            )) ...[action, const SizedBox(width: 8)],
+            const Spacer(),
+          ],
+        ),
+      ],
       body: ResponsiveBuilder(
         builder: (context, size, _) {
           return Padding(
@@ -647,17 +658,15 @@ class _AiJobBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: tokens.card,
         borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
-        border: Border.all(
-          color: LingoDeskColors.brandTeal.withValues(alpha: 0.4),
-        ),
+        border: Border.all(color: tokens.accent.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
-          const SizedBox.square(
+          SizedBox.square(
             dimension: 16,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: LingoDeskColors.brandTeal,
+              color: tokens.accent,
             ),
           ),
           const SizedBox(width: 12),

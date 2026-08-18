@@ -41,18 +41,26 @@ class _LingoDeskAppState extends State<LingoDeskApp> {
     return ListenableBuilder(
       listenable: _settings,
       builder: (context, _) {
+        final palette = _settings.themeVariant.palette;
         return MaterialApp.router(
           title: 'LingoDesk',
           debugShowCheckedModeBanner: false,
-          theme: LingoDeskTheme.light(),
-          darkTheme: LingoDeskTheme.dark(),
+          theme: LingoDeskTheme.light(palette),
+          darkTheme: LingoDeskTheme.dark(palette),
           themeMode: _settings.themeMode,
           locale: Locale(_settings.uiLanguage),
           routerConfig: _router,
           // Above the router, so a toast survives the navigation that
           // often triggers it and paints over dialogs.
-          builder: (context, child) =>
-              LingoDeskToastHost(child: child ?? const SizedBox.shrink()),
+          //
+          // Text scaling is capped on the way in: the grids and tables are
+          // laid out in real pixels, and a 2x accessibility scale turns a
+          // row of columns into a row of overflows. 1.4 is generous enough
+          // to be worth having and small enough to still fit.
+          builder: (context, child) => MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.4,
+            child: LingoDeskToastHost(child: child ?? const SizedBox.shrink()),
+          ),
         );
       },
     );

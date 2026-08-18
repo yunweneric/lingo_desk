@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../widgets/onboarding_content_pane.dart';
 import '../widgets/onboarding_stage.dart';
 import '../widgets/onboarding_step.dart';
@@ -20,11 +21,6 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  /// Two-pane needs room for a 3:2 stage *and* readable copy; below this
-  /// the stage becomes a banner inside the slide instead.
-  static const _wideBreakpoint = 960.0;
-  static const _tabletBreakpoint = 640.0;
-
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
@@ -46,10 +42,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SingleActivator(LogicalKeyboardKey.enter): _handleNext,
             const SingleActivator(LogicalKeyboardKey.escape): _handleSkip,
           },
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isWide = constraints.maxWidth >= _wideBreakpoint;
-              final isTablet = constraints.maxWidth >= _tabletBreakpoint;
+          child: ResponsiveBuilder(
+            builder: (context, size, constraints) {
+              // Two panes need room for a 3:2 stage *and* readable copy;
+              // below that the stage becomes a banner inside the slide.
+              final isWide = size.atLeast(WindowSizeClass.expanded);
+              final isTablet = size.atLeast(WindowSizeClass.medium);
 
               final contentPane = OnboardingContentPane(
                 pages: onboardingSteps,

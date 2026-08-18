@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
@@ -158,16 +159,14 @@ class _AppSettingsBody extends StatelessWidget {
   final TextEditingController nameController;
   final VoidCallback onSubmitted;
 
-  /// Below this the general card would be too narrow to sit beside the
-  /// language grid.
-  static const _twoColumnBreakpoint = 1040.0;
-
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final horizontal = constraints.maxWidth < 780 ? 16.0 : 24.0;
-        final isWide = constraints.maxWidth >= _twoColumnBreakpoint;
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        final horizontal = size.pagePadding;
+        // Below large the general card would be too narrow to sit beside
+        // the language grid, so the two stack instead.
+        final isWide = size.atLeast(WindowSizeClass.large);
 
         final general = FadeSlideIn(
           child: AppSettingsGeneralCard(

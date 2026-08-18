@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/preferences/app_settings_controller.dart';
-import '../../../../core/theme/lingo_desk_theme.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
@@ -63,13 +63,13 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
                 height: 56,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: LingoDeskColors.brandTeal,
+                  color: tokens.brand,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   widget.settings.profileInitials,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: tokens.onBrand,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -113,7 +113,9 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
                 ],
               );
 
-              if (constraints.maxWidth < 520) {
+              // The avatar beside the fields needs a phone's full width
+              // and then some; below that it sits above them.
+              if (WindowSizeClass.fromWidth(constraints.maxWidth).isCompact) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [avatar, const SizedBox(height: 18), fields],

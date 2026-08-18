@@ -42,14 +42,10 @@ class _HighlightRow extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: tokens.isDark
-                ? LingoDeskColors.activeDeep
-                : LingoDeskColors.brandTealSoft,
+            color: tokens.isDark ? tokens.active : tokens.brandFill,
             borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
             border: Border.all(
-              color: tokens.isDark
-                  ? Colors.white12
-                  : LingoDeskColors.brandTealSoftBorder,
+              color: tokens.isDark ? Colors.white12 : tokens.brandFillBorder,
             ),
           ),
           child: SizedBox.square(
@@ -58,7 +54,7 @@ class _HighlightRow extends StatelessWidget {
               child: LingoDeskIcon(
                 highlight.icon,
                 size: 17,
-                color: tokens.isDark ? Colors.white : LingoDeskColors.brandTeal,
+                color: tokens.isDark ? Colors.white : tokens.accent,
               ),
             ),
           ),

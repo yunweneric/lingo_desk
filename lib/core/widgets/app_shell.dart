@@ -13,7 +13,6 @@ import '../responsive/breakpoints.dart';
 import '../responsive/touch.dart';
 import '../router/app_router.dart';
 import '../theme/lingo_desk_motion.dart';
-import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_animations.dart';
 import 'app_shell_scope.dart';
@@ -325,7 +324,7 @@ class AppBottomNav extends StatelessWidget {
               selectedIcon: LingoDeskIcon(
                 destination.icon,
                 size: 22,
-                color: LingoDeskColors.brandTeal,
+                color: tokens.accent,
               ),
               label: destination.label,
             ),
@@ -572,7 +571,7 @@ class _SidebarItemState extends State<_SidebarItem> {
           width: 3,
           height: widget.isActive ? 18 : 0,
           decoration: BoxDecoration(
-            color: LingoDeskColors.brandTeal,
+            color: tokens.accent,
             borderRadius: BorderRadius.circular(99),
           ),
         ),
@@ -623,13 +622,16 @@ class _SidebarFooter extends StatelessWidget {
           height: 34,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: LingoDeskColors.brandTeal,
+            // brand/onBrand rather than the accent: this is a solid tile
+            // with text on it, and the graphite variant's dark accent is
+            // near-white.
+            color: tokens.brand,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             settings.profileInitials,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: tokens.onBrand,
               fontWeight: FontWeight.w800,
             ),
           ),

@@ -109,7 +109,7 @@ Purpose: the core grid where translation happens.
 
 - **Theming**: full light + dark themes (`LingoDeskTheme`), user-selectable System/Light/Dark from the dashboard header, persisted across launches. All screens resolve colors through shared tokens (`LingoDeskTokens`): background, card, border, foreground, muted, active.
 - **Persistence**: apps *and* translation content are stored locally, so the dashboard's stats survive restarts. Theme, UI language, and onboarding completion are also persisted. Deleting an app deletes its translations.
-- **Responsiveness**: sidebar ≥1024 px; header compacts <780 px; metric grid 4/2/1 columns; tables scroll horizontally on narrow widths.
+- **Responsiveness**: laid out against Material 3 window size classes (`lib/core/responsive/breakpoints.dart`) — compact <600, medium 600, expanded 840, large 1200, extra-large 1600. Navigation is a bottom bar on compact, a 72px icon rail through expanded, and the full 284px sidebar from large up. Page headers stack below expanded. The metric grid runs 1/2/4 columns. Tables never scroll horizontally: on a wide pane they reflow and fold surplus columns into an expandable section per row, and on compact each row becomes a stacked card.
 - **Confirmation guards**: destructive actions (delete app, delete key) always require dialog confirmation.
 - **Relative timestamps**: "Just now", "2 min ago", "Yesterday", "3 days ago".
 

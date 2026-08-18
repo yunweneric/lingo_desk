@@ -157,9 +157,7 @@ class _TranslationCellFieldState extends State<TranslationCellField>
               // Kept at a constant width so gaining focus never nudges the
               // text sideways.
               border: Border.all(
-                color: hasFocus
-                    ? LingoDeskColors.brandTeal
-                    : Colors.transparent,
+                color: hasFocus ? tokens.accent : Colors.transparent,
               ),
               boxShadow: glow == 0
                   ? null
@@ -195,7 +193,7 @@ class _TranslationCellFieldState extends State<TranslationCellField>
                     // The AI is mid-write; typing here would race the value
                     // that is about to land.
                     readOnly: widget.isTranslating,
-                    cursorColor: LingoDeskColors.brandTeal,
+                    cursorColor: tokens.accent,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: tokens.foreground,
                       fontSize: 13,
@@ -208,7 +206,7 @@ class _TranslationCellFieldState extends State<TranslationCellField>
                           : (showMissing ? 'Missing' : null),
                       hintStyle: TextStyle(
                         color: widget.isTranslating
-                            ? LingoDeskColors.brandTeal.withAlpha(190)
+                            ? tokens.accent.withAlpha(190)
                             : LingoDeskColors.warning.withAlpha(170),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -273,11 +271,11 @@ class _CellAiAction extends StatelessWidget {
       child: SizedBox.square(
         dimension: 24,
         child: isTranslating
-            ? const Padding(
-                padding: EdgeInsets.all(5),
+            ? Padding(
+                padding: const EdgeInsets.all(5),
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: LingoDeskColors.brandTeal,
+                  color: tokens.accent,
                 ),
               )
             : IgnorePointer(
@@ -293,9 +291,7 @@ class _CellAiAction extends StatelessWidget {
                   icon: LingoDeskIcon(
                     HugeIcons.strokeRoundedSparkles,
                     size: 15,
-                    color: emphasized
-                        ? LingoDeskColors.warning
-                        : LingoDeskColors.brandTeal,
+                    color: emphasized ? LingoDeskColors.warning : tokens.accent,
                   ),
                 ),
               ),

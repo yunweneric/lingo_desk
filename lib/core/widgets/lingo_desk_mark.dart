@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../theme/lingo_desk_theme.dart';
+import '../theme/lingo_desk_tokens.dart';
 
-/// The LingoDesk brand mark (2026 teal rebrand): a teal rounded square
+/// The LingoDesk brand mark: a brand-coloured rounded square
 /// holding two overlapping locale tiles, the front tile carrying two
 /// dots — a quiet umlaut/translation nod.
 ///
 /// Drawn natively from the brand SVG geometry (viewBox 64) so it stays
 /// crisp at every size. The lockup is not an image: the wordmark is set
-/// live at weight 700 in the app font (from the theme) beside the mark.
+/// live at weight 700 in the app font (from the theme) beside the mark,
+/// and the square takes the accent of whichever theme variant is active.
 class LingoDeskMark extends StatelessWidget {
   const LingoDeskMark({
     super.key,
@@ -23,12 +24,12 @@ class LingoDeskMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final useReversed =
-        reversed || Theme.of(context).brightness == Brightness.dark;
+    final tokens = LingoDeskTokens.of(context);
+    final useReversed = reversed || tokens.isDark;
 
     final mark = CustomPaint(
       size: Size.square(size),
-      painter: _MarkPainter(reversed: useReversed),
+      painter: _MarkPainter(reversed: useReversed, accent: tokens.accent),
     );
 
     if (!showWordmark) {
@@ -48,7 +49,7 @@ class LingoDeskMark extends StatelessWidget {
             fontWeight: FontWeight.w700,
             letterSpacing: -0.01 * wordmarkSize,
             height: 1,
-            color: useReversed ? Colors.white : LingoDeskColors.ink,
+            color: useReversed ? Colors.white : tokens.foreground,
           ),
         ),
       ],
@@ -57,20 +58,21 @@ class LingoDeskMark extends StatelessWidget {
 }
 
 class _MarkPainter extends CustomPainter {
-  const _MarkPainter({required this.reversed});
+  const _MarkPainter({required this.reversed, required this.accent});
 
   final bool reversed;
+  final Color accent;
 
   @override
   void paint(Canvas canvas, Size size) {
     // Brand SVG geometry on a 64x64 viewBox.
     final unit = size.width / 64;
-    final square = reversed ? Colors.white : LingoDeskColors.brandTeal;
+    final square = reversed ? Colors.white : accent;
     final backTile = reversed
-        ? LingoDeskColors.brandTeal.withValues(alpha: 0.4)
+        ? accent.withValues(alpha: 0.4)
         : Colors.white.withValues(alpha: 0.45);
-    final frontTile = reversed ? LingoDeskColors.brandTeal : Colors.white;
-    final dots = reversed ? Colors.white : LingoDeskColors.brandTeal;
+    final frontTile = reversed ? accent : Colors.white;
+    final dots = reversed ? Colors.white : accent;
 
     RRect tile(double x, double y, double w, double h, double r) {
       return RRect.fromRectAndRadius(
@@ -97,5 +99,5 @@ class _MarkPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_MarkPainter oldDelegate) =>
-      oldDelegate.reversed != reversed;
+      oldDelegate.reversed != reversed || oldDelegate.accent != accent;
 }

@@ -129,19 +129,15 @@ class _LanguageTileState extends State<_LanguageTile> {
     final borderColor = widget.isSource
         ? tokens.border
         : selected
-        ? (tokens.isDark
-              ? LingoDeskColors.brandTealDeepBorder
-              : LingoDeskColors.brandTeal)
+        ? (tokens.isDark ? tokens.brandFillBorder : tokens.accent)
         : _hovered
-        ? LingoDeskColors.brandTeal.withValues(alpha: 0.55)
+        ? tokens.accent.withValues(alpha: 0.55)
         : tokens.border;
 
     final fill = widget.isSource
         ? tokens.active
         : selected
-        ? (tokens.isDark
-              ? LingoDeskColors.brandTealDeep
-              : LingoDeskColors.brandTealSoft)
+        ? tokens.brandFill
         : _hovered
         ? tokens.active
         : tokens.card;

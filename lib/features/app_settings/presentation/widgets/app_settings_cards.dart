@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/constants/languages.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/utils/date_formatter.dart';
@@ -109,9 +110,7 @@ class AppSettingsLanguagesCard extends StatelessWidget {
               const SizedBox(width: 12),
               WorkspaceBadge(
                 label: '$selected of $selectable selected',
-                color: selected == 0
-                    ? LingoDeskColors.warning
-                    : LingoDeskColors.brandTeal,
+                color: selected == 0 ? LingoDeskColors.warning : tokens.accent,
               ),
               const SizedBox(width: 4),
               TextButton(
@@ -171,9 +170,6 @@ class AppSettingsMetaStrip extends StatelessWidget {
   final AppSettingsReady state;
   final DateTime updatedAt;
 
-  /// Below this the three facts stop fitting side by side.
-  static const _rowBreakpoint = 720.0;
-
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
@@ -208,9 +204,11 @@ class AppSettingsMetaStrip extends StatelessWidget {
       ),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isRow = constraints.maxWidth >= _rowBreakpoint;
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        // Three facts side by side need a tablet's width; below that they
+        // stack.
+        final isRow = size.atLeast(WindowSizeClass.medium);
 
         return Container(
           decoration: BoxDecoration(

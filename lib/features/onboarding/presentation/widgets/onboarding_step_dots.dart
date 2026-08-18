@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 
 /// Progress dots that also work as a control — tapping one jumps
@@ -43,10 +42,8 @@ class OnboardingStepDots extends StatelessWidget {
                 height: 8,
                 decoration: BoxDecoration(
                   color: isActive
-                      ? LingoDeskColors.brandTeal
-                      : (tokens.isDark
-                            ? Colors.white24
-                            : LingoDeskColors.border),
+                      ? tokens.accent
+                      : (tokens.isDark ? Colors.white24 : tokens.border),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),

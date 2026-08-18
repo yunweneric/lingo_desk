@@ -22,9 +22,11 @@ class _HeaderOverview extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: tokens.border),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isTight = constraints.maxWidth < 760;
+      child: ResponsiveBuilder(
+        builder: (context, size, constraints) {
+          // The stats block needs a tablet's width to sit beside the
+          // title; below that it drops under it.
+          final isTight = size.isBelow(WindowSizeClass.expanded);
           final title = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

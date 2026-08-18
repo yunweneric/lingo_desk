@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/storage_keys.dart';
+import '../theme/lingo_desk_palette.dart';
 
 /// Thin wrapper around [SharedPreferences] for app-level preferences:
-/// theme mode, UI language, the onboarding-completed flag, the local
+/// theme mode, theme variant, UI language, the onboarding-completed flag, the local
 /// profile, the default target locales for new apps, and the non-secret
 /// half of the AI settings (the keys themselves live in [AiCredentialStore]).
 class AppPreferences {
@@ -23,6 +24,14 @@ class AppPreferences {
 
   Future<void> setThemeMode(ThemeMode mode) {
     return _preferences.setString(StorageKeys.themeMode, mode.name);
+  }
+
+  LingoDeskThemeVariant get themeVariant => LingoDeskThemeVariant.fromId(
+    _preferences.getString(StorageKeys.themeVariant),
+  );
+
+  Future<void> setThemeVariant(LingoDeskThemeVariant variant) {
+    return _preferences.setString(StorageKeys.themeVariant, variant.id);
   }
 
   String get uiLanguage =>

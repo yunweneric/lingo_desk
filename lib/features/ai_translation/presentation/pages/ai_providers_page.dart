@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/ai_credential_store.dart';
 import '../../../../core/preferences/ai_settings_controller.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
@@ -203,11 +204,9 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
                     false)
                   const SettingsPaneSwitcher(),
                 Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final horizontal = constraints.maxWidth < 780
-                          ? 16.0
-                          : 24.0;
+                  child: ResponsiveBuilder(
+                    builder: (context, size, constraints) {
+                      final horizontal = size.pagePadding;
 
                       return SingleChildScrollView(
                         padding: EdgeInsets.fromLTRB(

@@ -61,7 +61,7 @@ BoxDecoration lingoDeskFieldDecoration({
   bool hasError = false,
   bool enabled = true,
 }) {
-  final accent = hasError ? LingoDeskColors.error : LingoDeskColors.brandTeal;
+  final accent = hasError ? LingoDeskColors.error : tokens.accent;
   final highlighted = enabled && (focused || hasError);
 
   return BoxDecoration(
@@ -69,7 +69,7 @@ BoxDecoration lingoDeskFieldDecoration({
         ? tokens.card
         : (tokens.isDark
               ? Colors.white.withValues(alpha: 0.04)
-              : LingoDeskColors.surface),
+              : tokens.background),
     borderRadius: BorderRadius.circular(size.radius),
     border: Border.all(
       color: highlighted ? accent : tokens.border,

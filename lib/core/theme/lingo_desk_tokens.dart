@@ -9,7 +9,7 @@ import 'lingo_desk_theme.dart';
 /// switching variants in Settings → Appearance repaints every widget
 /// that reads tokens — which is all of them.
 class LingoDeskTokens {
-  const LingoDeskTokens({required this.palette, required this.isDark})
+  LingoDeskTokens({required this.palette, required this.isDark})
     : _scheme = isDark ? palette.dark : palette.light;
 
   final LingoDeskPalette palette;
@@ -114,7 +114,9 @@ class LingoDeskStatusStyle {
         );
       case LingoDeskStatus.warning:
         return LingoDeskStatusStyle(
-          accent: isDark ? LingoDeskColors.warningLift : LingoDeskColors.warning,
+          accent: isDark
+              ? LingoDeskColors.warningLift
+              : LingoDeskColors.warning,
           fill: isDark
               ? LingoDeskColors.warningDeep
               : LingoDeskColors.warningSoft,

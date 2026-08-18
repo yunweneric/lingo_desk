@@ -518,7 +518,7 @@ class _GroupBandState extends State<_GroupBand> {
     if (tokens.isDark) {
       return Colors.white.withAlpha(_hovered ? 16 : 8);
     }
-    return _hovered ? LingoDeskColors.activeLight : tokens.active;
+    return tokens.active;
   }
 }
 

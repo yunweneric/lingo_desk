@@ -8,14 +8,18 @@ import '../bloc/app_management_event.dart';
 
 /// Filters the apps table by name through [SearchAppsEvent].
 class AppsSearchField extends StatelessWidget {
-  const AppsSearchField({super.key, this.width = 280});
+  const AppsSearchField({super.key, this.width = 280, this.expand = false});
 
   final double width;
+
+  /// Fills whatever width it is given instead of holding [width] — what a
+  /// phone wants, where 280px of field is most of the screen anyway.
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
+      width: expand ? double.infinity : width,
       child: LingoDeskTextField(
         hintText: 'Search apps',
         prefixIcon: HugeIcons.strokeRoundedGlobalSearch,

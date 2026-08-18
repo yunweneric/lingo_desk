@@ -153,7 +153,7 @@ class _LingoDeskTextFieldState extends State<LingoDeskTextField> {
       inputFormatters: widget.inputFormatters,
       textAlign: widget.textAlign,
       style: textStyle,
-      cursorColor: LingoDeskColors.brandTeal,
+      cursorColor: tokens.accent,
       cursorWidth: 1.6,
       cursorRadius: const Radius.circular(2),
       onChanged: widget.onChanged,
@@ -179,7 +179,7 @@ class _LingoDeskTextFieldState extends State<LingoDeskTextField> {
           LingoDeskIcon(
             widget.prefixIcon!,
             size: size.iconSize,
-            color: _focused ? LingoDeskColors.brandTeal : tokens.muted,
+            color: _focused ? tokens.accent : tokens.muted,
           ),
           SizedBox(width: size.gap),
         ],

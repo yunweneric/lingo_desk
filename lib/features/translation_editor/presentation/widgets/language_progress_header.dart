@@ -34,10 +34,10 @@ class LanguageProgressHeader extends StatelessWidget {
         // tiles as the pane takes and let them share it out evenly.
         const spacing = 12.0;
         const minTileWidth = 170.0;
-        final columns = ((constraints.maxWidth + spacing) /
-                (minTileWidth + spacing))
-            .floor()
-            .clamp(1, 8);
+        final columns =
+            ((constraints.maxWidth + spacing) / (minTileWidth + spacing))
+                .floor()
+                .clamp(1, 8);
         final tileWidth =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
 
@@ -140,10 +140,10 @@ class _LanguageProgressTile extends StatelessWidget {
                       onPressed: () => context
                           .read<TranslationEditorBloc>()
                           .add(AiTranslateEvent([language])),
-                      icon: const LingoDeskIcon(
+                      icon: LingoDeskIcon(
                         HugeIcons.strokeRoundedSparkles,
                         size: 14,
-                        color: LingoDeskColors.brandTeal,
+                        color: tokens.accent,
                       ),
                     ),
                   ),

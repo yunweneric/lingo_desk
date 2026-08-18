@@ -75,9 +75,7 @@ class LingoDeskMenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final selectedColor = tokens.isDark
-        ? LingoDeskColors.brandTealDeep
-        : LingoDeskColors.brandTealSoft;
+    final selectedColor = tokens.brandFill;
     final contentColor = !enabled
         ? tokens.muted
         : destructive
@@ -107,7 +105,7 @@ class LingoDeskMenuTile extends StatelessWidget {
                 ? LingoDeskColors.error.withValues(alpha: 0.1)
                 : (tokens.isDark
                       ? Colors.white.withValues(alpha: 0.06)
-                      : LingoDeskColors.activeLight),
+                      : tokens.active),
           ),
           padding: WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 10, vertical: size.gap),
@@ -137,7 +135,7 @@ class LingoDeskMenuTile extends StatelessWidget {
                   color: destructive
                       ? LingoDeskColors.error
                       : selected
-                      ? LingoDeskColors.brandTeal
+                      ? tokens.accent
                       : tokens.muted,
                 ),
                 SizedBox(width: size.gap),
@@ -186,7 +184,7 @@ class LingoDeskMenuTile extends StatelessWidget {
                       ? LingoDeskIcon(
                           HugeIcons.strokeRoundedTick02,
                           size: size.iconSize,
-                          color: LingoDeskColors.brandTeal,
+                          color: tokens.accent,
                         )
                       : null,
                 ),
@@ -417,9 +415,7 @@ class _MenuIconState extends State<_MenuIcon> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: widget.open
-              ? (tokens.isDark
-                    ? LingoDeskColors.brandTealDeep
-                    : LingoDeskColors.brandTealSoft)
+              ? tokens.brandFill
               : tinted
               ? tokens.active
               : Colors.transparent,
@@ -429,7 +425,7 @@ class _MenuIconState extends State<_MenuIcon> {
           color: !widget.enabled
               ? tokens.muted.withValues(alpha: 0.4)
               : widget.open
-              ? LingoDeskColors.brandTeal
+              ? tokens.accent
               : tokens.foreground.withValues(alpha: _hovered ? 1 : 0.75),
           duration: LingoDeskMotion.fast,
           builder: (context, tint) =>

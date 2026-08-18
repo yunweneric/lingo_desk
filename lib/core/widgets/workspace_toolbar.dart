@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../theme/lingo_desk_motion.dart';
-import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
@@ -36,7 +35,7 @@ class _WorkspaceToolbarButtonState extends State<WorkspaceToolbarButton> {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     final compact = widget.compact;
-    final accent = _hovered ? LingoDeskColors.brandTeal : tokens.muted;
+    final accent = _hovered ? tokens.accent : tokens.muted;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -51,9 +50,7 @@ class _WorkspaceToolbarButtonState extends State<WorkspaceToolbarButton> {
         decoration: BoxDecoration(
           color: tokens.card,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: _hovered ? LingoDeskColors.brandTeal : tokens.border,
-          ),
+          border: Border.all(color: _hovered ? tokens.accent : tokens.border),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

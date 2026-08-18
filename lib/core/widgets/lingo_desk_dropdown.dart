@@ -263,7 +263,7 @@ class _DropdownTrigger<T> extends StatelessWidget {
                 LingoDeskIcon(
                   leadingIcon,
                   size: size.iconSize,
-                  color: open ? LingoDeskColors.brandTeal : tokens.muted,
+                  color: open ? tokens.accent : tokens.muted,
                 ),
                 SizedBox(width: size.gap),
               ],
@@ -297,7 +297,7 @@ class _DropdownTrigger<T> extends StatelessWidget {
                 child: LingoDeskIcon(
                   HugeIcons.strokeRoundedArrowDown01,
                   size: size.iconSize,
-                  color: open ? LingoDeskColors.brandTeal : tokens.muted,
+                  color: open ? tokens.accent : tokens.muted,
                 ),
               ),
             ],

@@ -131,10 +131,11 @@ class _Initials extends StatelessWidget {
   }
 }
 
-/// Fallback colours. Brand teal leads; the rest are chosen to sit beside
-/// it without competing, and to stay legible as text on their own tint.
+/// Fallback colours for app avatars. Deliberately fixed rather than
+/// derived from the theme variant: an app's avatar colour is its
+/// identity, and should not change when the user restyles the app.
 const List<Color> _palette = [
-  LingoDeskColors.brandTeal,
+  Color(0xFF0F766E), // teal
   Color(0xFF4F46E5), // indigo
   Color(0xFFB45309), // amber
   Color(0xFFBE185D), // rose

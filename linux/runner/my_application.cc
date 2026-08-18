@@ -65,6 +65,9 @@ static void my_application_activate(GApplication* application) {
   // Resolved from the hicolor set installed by linux/CMakeLists.txt.
   gtk_window_set_icon_name(window, "lingo_desk");
   gtk_window_set_default_size(window, 1280, 720);
+  // The compact layouts have a floor of their own; below this the window
+  // is narrower than anything the app is designed to draw.
+  gtk_widget_set_size_request(GTK_WIDGET(window), 480, 600);
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();

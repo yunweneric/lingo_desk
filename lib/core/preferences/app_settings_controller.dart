@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../theme/lingo_desk_palette.dart';
 import 'app_preferences.dart';
 
-/// App-level settings (theme mode, UI language, onboarding completion,
+/// App-level settings (theme mode, theme variant, UI language, onboarding completion,
 /// local profile, default target locales) as a [ChangeNotifier], so the
 /// router can redirect on onboarding completion and the UI rebuilds when
 /// the user switches theme/language.
@@ -11,6 +12,7 @@ import 'app_preferences.dart';
 class AppSettingsController extends ChangeNotifier {
   AppSettingsController(this._preferences)
     : _themeMode = _preferences.themeMode,
+      _themeVariant = _preferences.themeVariant,
       _uiLanguage = _preferences.uiLanguage,
       _onboardingComplete = _preferences.onboardingComplete,
       _profileName = _preferences.profileName,
@@ -20,6 +22,7 @@ class AppSettingsController extends ChangeNotifier {
   final AppPreferences _preferences;
 
   ThemeMode _themeMode;
+  LingoDeskThemeVariant _themeVariant;
   String _uiLanguage;
   bool _onboardingComplete;
   String _profileName;
@@ -27,6 +30,7 @@ class AppSettingsController extends ChangeNotifier {
   List<String> _defaultTargetLanguages;
 
   ThemeMode get themeMode => _themeMode;
+  LingoDeskThemeVariant get themeVariant => _themeVariant;
   String get uiLanguage => _uiLanguage;
   bool get onboardingComplete => _onboardingComplete;
   String get profileName => _profileName;
@@ -58,6 +62,15 @@ class AppSettingsController extends ChangeNotifier {
     }
     _themeMode = mode;
     _preferences.setThemeMode(mode);
+    notifyListeners();
+  }
+
+  void setThemeVariant(LingoDeskThemeVariant variant) {
+    if (variant == _themeVariant) {
+      return;
+    }
+    _themeVariant = variant;
+    _preferences.setThemeVariant(variant);
     notifyListeners();
   }
 

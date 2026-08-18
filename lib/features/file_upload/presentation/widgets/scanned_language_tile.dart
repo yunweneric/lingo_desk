@@ -50,7 +50,7 @@ class ScannedLanguageTile extends StatelessWidget {
         ? tokens.muted
         : progress == 1
         ? LingoDeskColors.complete
-        : LingoDeskColors.brandTeal;
+        : tokens.accent;
 
     // Excluding a locale is reversible and easy to do by accident, so the
     // tile dims and its accent border drains away rather than blinking
@@ -98,9 +98,9 @@ class ScannedLanguageTile extends StatelessWidget {
                           ),
                           if (isSource) ...[
                             const SizedBox(width: 8),
-                            const WorkspaceBadge(
+                            WorkspaceBadge(
                               label: 'SOURCE',
-                              color: LingoDeskColors.brandTeal,
+                              color: tokens.accent,
                             ),
                           ],
                         ],

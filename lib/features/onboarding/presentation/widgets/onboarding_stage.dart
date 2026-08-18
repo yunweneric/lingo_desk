@@ -21,7 +21,7 @@ class OnboardingStage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: LingoDeskColors.darkInk,
+      color: LingoDeskTokens.of(context).darkStage.background,
       child: SafeArea(
         right: false,
         child: Padding(
@@ -184,7 +184,7 @@ class _ProofItem extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const _TealDot(),
+        const _AccentDot(),
         const SizedBox(width: 8),
         Text(
           label,
@@ -200,17 +200,17 @@ class _ProofItem extends StatelessWidget {
   }
 }
 
-class _TealDot extends StatelessWidget {
-  const _TealDot();
+class _AccentDot extends StatelessWidget {
+  const _AccentDot();
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: LingoDeskColors.brandTeal,
+        color: LingoDeskTokens.of(context).accent,
         shape: BoxShape.circle,
       ),
-      child: SizedBox.square(dimension: 6),
+      child: const SizedBox.square(dimension: 6),
     );
   }
 }
@@ -237,7 +237,7 @@ class OnboardingBanner extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               // darkInk only shows while the asset decodes.
-              color: LingoDeskColors.darkInk,
+              color: tokens.darkStage.background,
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
               border: Border.all(color: tokens.border),
             ),
@@ -266,9 +266,7 @@ class OnboardingBanner extends StatelessWidget {
                     step.photoCaption,
                     overflow: TextOverflow.ellipsis,
                     style: LingoDeskTheme.codeStyle.copyWith(
-                      color: tokens.isDark
-                          ? Colors.white54
-                          : LingoDeskColors.slate,
+                      color: tokens.isDark ? Colors.white54 : tokens.muted,
                       fontSize: 11,
                     ),
                   ),
@@ -278,9 +276,7 @@ class OnboardingBanner extends StatelessWidget {
                   Text(
                     step.photoCredit,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: tokens.isDark
-                          ? Colors.white38
-                          : LingoDeskColors.slate,
+                      color: tokens.isDark ? Colors.white38 : tokens.muted,
                       fontSize: 11,
                       height: 1.2,
                     ),

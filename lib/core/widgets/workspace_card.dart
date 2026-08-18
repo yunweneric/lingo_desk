@@ -82,9 +82,7 @@ class WorkspaceProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final target = isComplete
-        ? LingoDeskColors.complete
-        : LingoDeskColors.brandTeal;
+    final target = isComplete ? LingoDeskColors.complete : tokens.accent;
 
     // The fill sweeps to its value on first paint and slides between
     // values afterwards, so translating a key visibly moves the bar
@@ -253,14 +251,10 @@ class WorkspaceEmptyState extends StatelessWidget {
                 height: 56,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: LingoDeskColors.brandTeal.withAlpha(26),
+                  color: tokens.accent.withAlpha(26),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: LingoDeskIcon(
-                  icon,
-                  color: LingoDeskColors.brandTeal,
-                  size: 28,
-                ),
+                child: LingoDeskIcon(icon, color: tokens.accent, size: 28),
               ),
             ),
           ),

@@ -242,14 +242,14 @@ class _EmptyState extends StatelessWidget {
                 height: 56,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: LingoDeskColors.brandTeal.withAlpha(26),
+                  color: tokens.accent.withAlpha(26),
                   borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
                 ),
                 child: LingoDeskIcon(
                   isProject
                       ? HugeIcons.strokeRoundedFolder02
                       : HugeIcons.strokeRoundedFileUpload,
-                  color: LingoDeskColors.brandTeal,
+                  color: tokens.accent,
                   size: 28,
                 ),
               ),

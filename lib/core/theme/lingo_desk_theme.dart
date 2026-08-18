@@ -2,34 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'lingo_desk_motion.dart';
+import 'lingo_desk_palette.dart';
+import 'lingo_desk_tokens.dart';
 
-/// LingoDesk palette — teal rebrand (Aug 2026).
-///
-/// One saturated accent (`brandTeal`), warm stone neutrals, literal
-/// status colors, and deep teal-ink stage surfaces. Values mirror the
-/// design system's `tokens/colors.css`.
+/// Status colours — the one part of the palette that does *not* follow the
+/// chosen theme variant. A failure is red and a complete language is green
+/// in all six looks; only the brand roles change, and those live on
+/// [LingoDeskPalette] / [LingoDeskTokens].
 class LingoDeskColors {
   const LingoDeskColors._();
 
-  static const brandTeal = Color(0xFF0F766E);
-  static const brandTealSoft = Color(0xFFE7F3F0);
-  static const brandTealSoftBorder = Color(0xFFCFE6E0);
-  static const brandTealDeep = Color(0xFF14433D); // dark-mode selected fill
-  static const brandTealDeepBorder = Color(0xFF2A7F73);
-  static const ink = Color(0xFF1C1917);
-  static const darkInk = Color(0xFF0E1B18); // deep-ink stage pane
-  static const slate = Color(0xFF78716C);
-  static const slateLight = Color(0xFFD6D3D1);
-  static const surface = Color(0xFFFAFAF9);
-  static const darkSurface = Color(0xFF16241F); // deep-surface
-  static const sidebarDeep = Color(0xFF0C1714);
-  static const activeLight = Color(0xFFF0EFEC);
-  static const activeDeep = Color(0xFF1C2B26);
   static const missing = Color(0xFFFEF3C7);
   static const complete = Color(0xFF15803D);
   static const error = Color(0xFFDC2626);
   static const warning = Color(0xFFB45309);
-  static const border = Color(0xFFE7E5E4);
 
   // Status tints. Each status carries a soft fill and hairline for the
   // light chassis, a deep fill and hairline for the dark stage, and a
@@ -52,10 +38,6 @@ class LingoDeskColors {
   static const warningDeep = Color(0xFF33240F);
   static const warningDeepBorder = Color(0xFF8E5F1E);
   static const warningLift = Color(0xFFFBBF24);
-
-  /// Info borrows the brand teal wholesale; only the dark-stage accent
-  /// needs its own value.
-  static const infoLift = Color(0xFF5EEAD4);
 }
 
 class LingoDeskTheme {
@@ -66,149 +48,130 @@ class LingoDeskTheme {
   static const radiusSm = 8.0;
   static const radiusLg = 16.0;
 
-  static ThemeData light() => _build(Brightness.light);
+  static ThemeData light(LingoDeskPalette palette) =>
+      _build(Brightness.light, palette);
 
-  static ThemeData dark() => _build(Brightness.dark);
+  static ThemeData dark(LingoDeskPalette palette) =>
+      _build(Brightness.dark, palette);
 
-  static ThemeData _build(Brightness brightness) {
+  static ThemeData _build(Brightness brightness, LingoDeskPalette palette) {
     final isDark = brightness == Brightness.dark;
+    final t = LingoDeskTokens(palette: palette, isDark: isDark);
     // Urbanist is the app's only family — declared once, here.
     final urbanist = GoogleFonts.urbanist();
-    final textColor = isDark ? Colors.white : LingoDeskColors.ink;
+    final textColor = t.foreground;
     final scheme = ColorScheme(
       brightness: brightness,
-      primary: LingoDeskColors.brandTeal,
-      onPrimary: Colors.white,
-      secondary: isDark ? Colors.white : LingoDeskColors.ink,
-      onSecondary: isDark ? LingoDeskColors.ink : Colors.white,
+      primary: t.brand,
+      onPrimary: t.onBrand,
+      secondary: t.foreground,
+      onSecondary: t.background,
       error: LingoDeskColors.error,
       onError: Colors.white,
-      surface: isDark ? LingoDeskColors.darkSurface : Colors.white,
-      onSurface: isDark ? Colors.white : LingoDeskColors.ink,
+      surface: t.card,
+      onSurface: t.foreground,
     );
     final base = ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       brightness: brightness,
-      scaffoldBackgroundColor: isDark
-          ? LingoDeskColors.darkInk
-          : LingoDeskColors.surface,
+      scaffoldBackgroundColor: t.background,
       fontFamily: urbanist.fontFamily,
       fontFamilyFallback: urbanist.fontFamilyFallback,
       textTheme: GoogleFonts.urbanistTextTheme(),
+      // Carried on the theme so LingoDeskTokens.of(context) — and every
+      // widget through it — resolves the palette the user picked.
+      extensions: [palette],
     );
 
     return base.copyWith(
       appBarTheme: AppBarTheme(
-        backgroundColor: isDark ? LingoDeskColors.darkInk : Colors.white,
-        foregroundColor: isDark ? Colors.white : LingoDeskColors.ink,
+        backgroundColor: isDark ? t.background : t.card,
+        foregroundColor: t.foreground,
         elevation: 0,
         centerTitle: false,
         surfaceTintColor: Colors.transparent,
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: isDark ? LingoDeskColors.darkSurface : Colors.white,
+        color: t.card,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
-          side: BorderSide(
-            color: isDark ? Colors.white12 : LingoDeskColors.border,
-          ),
+          side: BorderSide(color: t.border),
         ),
       ),
       // Round, so every checkbox in the app reads as one family with the
       // radios and the selection dots instead of a stray square.
       checkboxTheme: base.checkboxTheme.copyWith(
         shape: const CircleBorder(),
-        side: BorderSide(
-          color: isDark ? Colors.white38 : LingoDeskColors.border,
-          width: 1.4,
-        ),
+        side: BorderSide(color: isDark ? Colors.white38 : t.border, width: 1.4),
         fillColor: WidgetStateProperty.resolveWith((states) {
           if (!states.contains(WidgetState.selected)) {
             return Colors.transparent;
           }
           return states.contains(WidgetState.disabled)
-              ? LingoDeskColors.brandTeal.withValues(alpha: 0.4)
-              : LingoDeskColors.brandTeal;
+              ? t.brand.withValues(alpha: 0.4)
+              : t.brand;
         }),
-        checkColor: const WidgetStatePropertyAll(Colors.white),
+        checkColor: WidgetStatePropertyAll(t.onBrand),
       ),
       chipTheme: base.chipTheme.copyWith(
         // Resolved per state so selected chips stay legible in both
-        // brightnesses: a mint fill with teal ink in light, a deep teal
-        // fill with mint ink in dark.
+        // brightnesses: a tinted fill with brand ink in light, a deep
+        // brand fill with a lifted ink in dark.
         color: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return isDark
-                ? LingoDeskColors.brandTealDeep
-                : LingoDeskColors.brandTealSoft;
+            return t.brandFill;
           }
           if (states.contains(WidgetState.disabled)) {
-            return isDark
-                ? LingoDeskColors.darkSurface
-                : LingoDeskColors.surface;
+            return isDark ? t.card : t.background;
           }
-          return isDark ? LingoDeskColors.activeDeep : Colors.white;
+          return isDark ? t.active : t.card;
         }),
         side: WidgetStateBorderSide.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return BorderSide(
-              color: isDark
-                  ? LingoDeskColors.brandTealDeepBorder
-                  : LingoDeskColors.brandTealSoftBorder,
-            );
+            return BorderSide(color: t.brandFillBorder);
           }
           return BorderSide(
             color: states.contains(WidgetState.disabled)
-                ? (isDark ? Colors.white10 : LingoDeskColors.border)
-                : (isDark ? Colors.white24 : LingoDeskColors.border),
+                ? (isDark ? Colors.white10 : t.border)
+                : (isDark ? Colors.white24 : t.border),
           );
         }),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
-        checkmarkColor: isDark
-            ? LingoDeskColors.brandTealSoft
-            : LingoDeskColors.brandTeal,
+        checkmarkColor: t.onBrandFill,
         labelStyle: GoogleFonts.urbanist(
           color: WidgetStateColor.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return isDark
-                  ? LingoDeskColors.brandTealSoft
-                  : LingoDeskColors.brandTeal;
+              return t.onBrandFill;
             }
             if (states.contains(WidgetState.disabled)) {
-              return isDark ? Colors.white38 : LingoDeskColors.slate;
+              return t.muted;
             }
-            return isDark ? Colors.white : LingoDeskColors.ink;
+            return t.foreground;
           }),
           fontWeight: FontWeight.w600,
         ),
       ),
       dialogTheme: DialogThemeData(
         elevation: 0,
-        backgroundColor: isDark ? LingoDeskColors.darkSurface : Colors.white,
+        backgroundColor: t.card,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLg),
-          side: BorderSide(
-            color: isDark ? Colors.white12 : LingoDeskColors.border,
-          ),
+          side: BorderSide(color: t.border),
         ),
       ),
-      dividerTheme: DividerThemeData(
-        color: isDark ? Colors.white12 : LingoDeskColors.border,
-        thickness: 1,
-        space: 1,
-      ),
-      // Primary actions pick up a soft teal glow under the pointer and
+      dividerTheme: DividerThemeData(color: t.border, thickness: 1, space: 1),
+      // Primary actions pick up a soft brand glow under the pointer and
       // settle flat again when pressed.
       filledButtonTheme: FilledButtonThemeData(
         style:
             FilledButton.styleFrom(
-              backgroundColor: LingoDeskColors.brandTeal,
-              foregroundColor: Colors.white,
+              backgroundColor: t.brand,
+              foregroundColor: t.onBrand,
               minimumSize: const Size(48, 48),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               shape: RoundedRectangleBorder(
@@ -228,7 +191,7 @@ class LingoDeskTheme {
                 return states.contains(WidgetState.hovered) ? 4.0 : 0.0;
               }),
               shadowColor: WidgetStatePropertyAll(
-                LingoDeskColors.brandTeal.withValues(alpha: 0.5),
+                t.brand.withValues(alpha: 0.5),
               ),
             ),
       ),
@@ -237,7 +200,7 @@ class LingoDeskTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style:
             OutlinedButton.styleFrom(
-              foregroundColor: isDark ? Colors.white : LingoDeskColors.ink,
+              foregroundColor: t.foreground,
               minimumSize: const Size(48, 48),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               shape: RoundedRectangleBorder(
@@ -251,25 +214,21 @@ class LingoDeskTheme {
             ).copyWith(
               side: WidgetStateBorderSide.resolveWith((states) {
                 if (states.contains(WidgetState.disabled)) {
-                  return BorderSide(
-                    color: isDark ? Colors.white10 : LingoDeskColors.border,
-                  );
+                  return BorderSide(color: isDark ? Colors.white10 : t.border);
                 }
                 if (states.contains(WidgetState.hovered) ||
                     states.contains(WidgetState.focused) ||
                     states.contains(WidgetState.pressed)) {
-                  return const BorderSide(color: LingoDeskColors.brandTeal);
+                  return BorderSide(color: t.accent);
                 }
-                return BorderSide(
-                  color: isDark ? Colors.white24 : LingoDeskColors.border,
-                );
+                return BorderSide(color: isDark ? Colors.white24 : t.border);
               }),
             ),
       ),
       tooltipTheme: TooltipThemeData(
         waitDuration: const Duration(milliseconds: 400),
         decoration: BoxDecoration(
-          color: isDark ? LingoDeskColors.activeDeep : LingoDeskColors.ink,
+          color: isDark ? t.active : t.foreground,
           borderRadius: BorderRadius.circular(radiusSm),
           border: Border.all(
             color: isDark ? Colors.white24 : Colors.transparent,
@@ -277,14 +236,14 @@ class LingoDeskTheme {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         textStyle: GoogleFonts.urbanist(
-          color: Colors.white,
+          color: isDark ? Colors.white : t.background,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
       ),
-      textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: LingoDeskColors.brandTealSoft,
-        cursorColor: LingoDeskColors.brandTeal,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: t.brandFill,
+        cursorColor: t.accent,
       ),
       textTheme: base.textTheme
           .copyWith(
@@ -343,9 +302,10 @@ class LingoDeskTheme {
   }
 
   /// Machine strings: same Urbanist family as everything else, set bold
-  /// and small so keys still read as machine text.
+  /// and small so keys still read as machine text. No colour — it
+  /// inherits the surrounding text colour, which is what keeps keys
+  /// legible across all six variants in both brightnesses.
   static TextStyle codeStyle = GoogleFonts.urbanist(
-    color: LingoDeskColors.ink,
     fontSize: 13,
     fontWeight: FontWeight.w700,
     letterSpacing: 0,

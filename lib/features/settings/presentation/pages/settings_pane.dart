@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/touch.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -63,11 +64,9 @@ class SettingsPane extends StatelessWidget {
               child: ListenableBuilder(
                 listenable: listenable,
                 builder: (context, _) {
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      final horizontal = constraints.maxWidth < 780
-                          ? 16.0
-                          : 24.0;
+                  return ResponsiveBuilder(
+                    builder: (context, size, constraints) {
+                      final horizontal = size.pagePadding;
 
                       return SingleChildScrollView(
                         padding: EdgeInsets.fromLTRB(

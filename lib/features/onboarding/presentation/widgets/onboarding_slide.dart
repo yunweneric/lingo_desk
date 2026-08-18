@@ -93,14 +93,10 @@ class _EyebrowChip extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: tokens.isDark
-            ? LingoDeskColors.activeDeep
-            : LingoDeskColors.brandTealSoft,
+        color: tokens.isDark ? tokens.active : tokens.brandFill,
         borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
         border: Border.all(
-          color: tokens.isDark
-              ? Colors.white12
-              : LingoDeskColors.brandTealSoftBorder,
+          color: tokens.isDark ? Colors.white12 : tokens.brandFillBorder,
         ),
       ),
       child: Padding(
@@ -108,7 +104,7 @@ class _EyebrowChip extends StatelessWidget {
         child: Text(
           label.toUpperCase(),
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: tokens.isDark ? Colors.white : LingoDeskColors.brandTeal,
+            color: tokens.isDark ? Colors.white : tokens.accent,
             fontSize: 11,
             height: 1,
           ),

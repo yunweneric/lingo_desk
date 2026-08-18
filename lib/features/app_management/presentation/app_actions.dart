@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/lingo_desk_theme.dart';
+import '../../../core/theme/lingo_desk_tokens.dart';
 import '../../app_settings/presentation/widgets/create_app_dialog.dart';
 import '../domain/entities/app_overview.dart';
 import 'bloc/app_management_bloc.dart';
@@ -95,10 +96,14 @@ Future<void> confirmDeleteApp(
   }
 }
 
-/// Derived status of an app for the apps table.
-({String label, Color color}) appStatusOf(AppOverview overview) {
+/// Derived status of an app for the apps table. Takes [tokens] rather
+/// than a context so the "New" badge follows the active theme variant.
+({String label, Color color}) appStatusOf(
+  AppOverview overview,
+  LingoDeskTokens tokens,
+) {
   if (overview.keyCount == 0) {
-    return (label: 'New', color: LingoDeskColors.brandTeal);
+    return (label: 'New', color: tokens.accent);
   }
   if (overview.isComplete) {
     return (label: 'Complete', color: LingoDeskColors.complete);

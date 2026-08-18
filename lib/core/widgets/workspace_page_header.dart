@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 
 import '../responsive/breakpoints.dart';
 import '../theme/lingo_desk_motion.dart';
-import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import '../router/app_router.dart';
 
@@ -31,8 +30,11 @@ class WorkspacePageHeader extends StatelessWidget {
   final List<Widget> actions;
 
   /// What the band carries on a phone, when the full [actions] set would
-  /// take more height than the page beneath it can spare. Defaults to
-  /// [actions].
+  /// take more height than the page beneath it can spare.
+  ///
+  /// Laid out as a stretched column rather than a wrap, so each entry gets
+  /// the band's whole width and a page can hand over a full-width search
+  /// field or a row it has balanced itself. Defaults to [actions].
   final List<Widget>? compactActions;
 
   /// Optional block rendered below the breadcrumb row.
@@ -54,7 +56,7 @@ class WorkspacePageHeader extends StatelessWidget {
           final horizontalPadding = size.pagePadding;
 
           if (isCompact) {
-            final visibleActions = compactActions ?? actions;
+            final stacked = compactActions;
 
             return Padding(
               padding: EdgeInsets.fromLTRB(
@@ -67,9 +69,15 @@ class WorkspacePageHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _Breadcrumb(segments: breadcrumb),
-                  if (visibleActions.isNotEmpty) ...[
+                  if (stacked != null && stacked.isNotEmpty) ...[
                     const SizedBox(height: 14),
-                    Wrap(spacing: 8, runSpacing: 8, children: visibleActions),
+                    for (var index = 0; index < stacked.length; index++) ...[
+                      if (index != 0) const SizedBox(height: 10),
+                      stacked[index],
+                    ],
+                  ] else if (actions.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    Wrap(spacing: 8, runSpacing: 8, children: actions),
                   ],
                   if (hero != null) ...[const SizedBox(height: 16), hero],
                 ],
@@ -207,7 +215,7 @@ class _CrumbLinkState extends State<_CrumbLink> {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final color = _hovered ? LingoDeskColors.brandTeal : tokens.foreground;
+    final color = _hovered ? tokens.accent : tokens.foreground;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -262,7 +270,7 @@ class _CrumbUnderline extends StatelessWidget {
           widthFactor: extent,
           child: Container(
             height: 1,
-            color: LingoDeskColors.brandTeal.withValues(alpha: extent),
+            color: LingoDeskTokens.of(context).accent.withValues(alpha: extent),
           ),
         );
       },

@@ -479,11 +479,11 @@ class _TestingSpinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.square(
+    return SizedBox.square(
       dimension: 13,
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: LingoDeskColors.brandTeal,
+        color: LingoDeskTokens.of(context).accent,
       ),
     );
   }
@@ -494,19 +494,18 @@ class _ActiveBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: LingoDeskColors.brandTeal.withValues(alpha: 0.12),
+        color: tokens.accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: LingoDeskColors.brandTeal.withValues(alpha: 0.4),
-        ),
+        border: Border.all(color: tokens.accent.withValues(alpha: 0.4)),
       ),
       child: Text(
         'Active',
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: LingoDeskColors.brandTeal,
+          color: tokens.accent,
           fontWeight: FontWeight.w700,
           fontSize: 10,
         ),

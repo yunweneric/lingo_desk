@@ -97,6 +97,33 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                           label: const Text('New app'),
                         ),
                       ],
+                      // Four controls, one of them 280px wide, would take
+                      // three rows of a phone's header before the table
+                      // got a pixel. Search is what this page is for, so
+                      // it keeps the full width; creating an app sits
+                      // beside it and importing moves to the bottom nav's
+                      // own Import destination.
+                      compactActions: [
+                        const AppsSearchField(expand: true),
+                        Row(
+                          children: [
+                            ThemeModeSwitcher(
+                              themeMode: _settings.themeMode,
+                              onChanged: _settings.setThemeMode,
+                            ),
+                            const Spacer(),
+                            FilledButton.icon(
+                              onPressed: () => openCreateApp(context),
+                              icon: const LingoDeskIcon(
+                                HugeIcons.strokeRoundedAdd01,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              label: const Text('New app'),
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   },
                 ),

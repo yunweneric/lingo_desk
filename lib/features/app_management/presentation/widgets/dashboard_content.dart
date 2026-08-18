@@ -81,9 +81,9 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final metrics = _dashboardMetrics(state);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final horizontal = constraints.maxWidth < 780 ? 16.0 : 24.0;
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        final horizontal = size.pagePadding;
 
         return CustomScrollView(
           controller: scrollController,
@@ -92,12 +92,11 @@ class _DashboardBody extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 0),
               sliver: SliverLayoutBuilder(
                 builder: (context, constraints) {
-                  final width = constraints.crossAxisExtent;
-                  final columns = width >= 1180
-                      ? 4
-                      : width >= 760
-                      ? 2
-                      : 1;
+                  // One metric per line on a phone, two once a tablet
+                  // can hold a pair side by side, four across a desktop.
+                  final columns = WindowSizeClass.fromWidth(
+                    constraints.crossAxisExtent,
+                  ).resolve(compact: 1, medium: 2, large: 4);
 
                   return SliverGrid.builder(
                     itemCount: metrics.length,

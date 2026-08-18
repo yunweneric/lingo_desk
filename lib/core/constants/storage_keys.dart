@@ -14,6 +14,9 @@ class StorageKeys {
 
   /// App-level preferences.
   static const themeMode = 'lingo_desk_theme_mode';
+
+  /// Id of the chosen palette (see `LingoDeskThemeVariant.id`).
+  static const themeVariant = 'lingo_desk_theme_variant';
   static const uiLanguage = 'lingo_desk_ui_language';
   static const onboardingComplete = 'lingo_desk_onboarding_complete';
 

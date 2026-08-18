@@ -164,13 +164,12 @@ class AppsTable extends StatelessWidget {
                 for (var index = 0; index < overviews.length; index++) ...[
                   FadeSlideIn.staggered(
                     index: index,
-                    child:
-                        asCards
-                            ? _AppCard(overview: overviews[index])
-                            : _AppRow(
-                              overview: overviews[index],
-                              inlineLimit: inlineLimit,
-                            ),
+                    child: asCards
+                        ? _AppCard(overview: overviews[index])
+                        : _AppRow(
+                            overview: overviews[index],
+                            inlineLimit: inlineLimit,
+                          ),
                   ),
                   if (index != overviews.length - 1)
                     Divider(height: 1, color: tokens.border),
@@ -271,7 +270,7 @@ class _AppRowState extends State<_AppRow> {
     final tokens = LingoDeskTokens.of(context);
     final overview = widget.overview;
     final app = overview.app;
-    final status = appStatusOf(overview);
+    final status = appStatusOf(overview, tokens);
     final languages = app.targetLanguages;
     final overflow = languages.length - widget.inlineLimit;
     final canExpand = overflow > 0;
@@ -289,7 +288,7 @@ class _AppRowState extends State<_AppRow> {
               left: BorderSide(
                 width: 3,
                 color: hovered || _expanded
-                    ? LingoDeskColors.brandTeal
+                    ? tokens.accent
                     : Colors.transparent,
               ),
             ),
@@ -497,7 +496,7 @@ class _AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     final app = overview.app;
-    final status = appStatusOf(overview);
+    final status = appStatusOf(overview, tokens);
 
     return InkWell(
       onTap: () => openEditor(context, overview),
@@ -569,9 +568,10 @@ class _AppCard extends StatelessWidget {
               'complete - ${DateFormatter.relative(overview.lastActivity)}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: tokens.muted,
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -650,7 +650,7 @@ class _OverflowChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = expanded ? LingoDeskColors.brandTeal : tokens.foreground;
+    final color = expanded ? tokens.accent : tokens.foreground;
 
     return InkWell(
       onTap: onTap,
