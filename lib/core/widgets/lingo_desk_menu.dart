@@ -354,19 +354,18 @@ class _LingoDeskMenuButtonState<T> extends State<LingoDeskMenuButton<T>> {
               iconSize: widget.iconSize,
             );
 
+        // No press transform on a menu trigger: the open menu is anchored
+        // to this box, so scaling it drags the menu out from under the
+        // pointer that is reaching for an item.
         return Tooltip(
           message: widget.tooltip,
-          child: PressableScale(
-            child: MouseRegion(
-              cursor:
-                  isEnabled
-                      ? SystemMouseCursors.click
-                      : SystemMouseCursors.basic,
-              child: GestureDetector(
-                onTap: isEnabled ? _toggle : null,
-                behavior: HitTestBehavior.opaque,
-                child: trigger,
-              ),
+          child: MouseRegion(
+            cursor:
+                isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+            child: GestureDetector(
+              onTap: isEnabled ? _toggle : null,
+              behavior: HitTestBehavior.opaque,
+              child: trigger,
             ),
           ),
         );

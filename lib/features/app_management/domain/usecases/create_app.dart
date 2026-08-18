@@ -11,11 +11,15 @@ class CreateAppParams {
     required this.name,
     required this.sourceLanguage,
     required this.targetLanguages,
+    this.iconImage,
   });
 
   final String name;
   final String sourceLanguage;
   final List<String> targetLanguages;
+
+  /// Base64 PNG chosen for the app, or null to fall back to initials.
+  final String? iconImage;
 }
 
 /// Creates a new app after validating its configuration.
@@ -43,6 +47,7 @@ class CreateApp implements UseCase<App, CreateAppParams> {
       targetLanguages: List.unmodifiable(params.targetLanguages),
       createdAt: now,
       updatedAt: now,
+      iconImage: params.iconImage,
     );
     return repository.createApp(app);
   }

@@ -7,6 +7,7 @@ import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../bloc/app_settings_bloc.dart';
 import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
+import 'app_icon_field.dart';
 import 'language_target_selector.dart';
 
 /// The app-configuration form fields (name, source language, target
@@ -32,6 +33,8 @@ class AppSettingsFormFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        AppIconField(state: state, nameController: nameController, size: 56),
+        const SizedBox(height: 22),
         LingoDeskTextField(
           controller: nameController,
           label: 'App name',

@@ -37,6 +37,7 @@ class UpdateApp implements UseCase<App, UpdateAppParams> {
       targetLanguages: List.unmodifiable(app.targetLanguages),
       createdAt: app.createdAt,
       updatedAt: DateTime.now(),
+      iconImage: app.iconImage,
     );
     return repository.updateApp(updated);
   }

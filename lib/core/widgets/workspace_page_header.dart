@@ -7,7 +7,6 @@ import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import '../router/app_router.dart';
 import 'app_shell_scope.dart';
-import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
 
 /// Bordered header band for the pages rendered inside [AppShell]:
@@ -35,11 +34,6 @@ class WorkspacePageHeader extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final shell = AppShellScope.maybeOf(context);
     final hero = child;
-    // Wrapped here rather than at each call site, so every page's header
-    // buttons answer a press the same way.
-    final pressableActions = [
-      for (final action in actions) PressableScale(child: action),
-    ];
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -84,7 +78,7 @@ class WorkspacePageHeader extends StatelessWidget {
                   ),
                   if (actions.isNotEmpty) ...[
                     const SizedBox(height: 14),
-                    Wrap(spacing: 8, runSpacing: 8, children: pressableActions),
+                    Wrap(spacing: 8, runSpacing: 8, children: actions),
                   ],
                   if (hero != null) ...[const SizedBox(height: 16), hero],
                 ],
@@ -100,12 +94,15 @@ class WorkspacePageHeader extends StatelessWidget {
               hero == null ? 16 : 20,
             ),
             child: Column(
+              // The hero spans the band and starts where the breadcrumb
+              // does; centred, it reads as belonging to nothing.
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
                     ...leading,
                     Expanded(child: _Breadcrumb(segments: breadcrumb)),
-                    for (final action in pressableActions) ...[
+                    for (final action in actions) ...[
                       const SizedBox(width: 8),
                       action,
                     ],

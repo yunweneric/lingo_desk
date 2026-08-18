@@ -118,7 +118,7 @@ class _CoverageCard extends StatelessWidget {
                           Expanded(
                             child: _ChartBar(
                               value: apps[index].progress,
-                              label: _appInitials(apps[index].app.name),
+                              label: apps[index].app.initials,
                               name: apps[index].app.name,
                               index: index,
                             ),
@@ -144,15 +144,6 @@ class _CoverageCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  static String _appInitials(String name) {
-    final words = name.trim().split(RegExp(r'\s+'));
-    if (words.length == 1) {
-      final word = words.first;
-      return word.substring(0, word.length >= 2 ? 2 : 1).toUpperCase();
-    }
-    return (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
   }
 }
 

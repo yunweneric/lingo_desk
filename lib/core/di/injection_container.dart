@@ -45,6 +45,9 @@ Future<void> init() async {
   // ==========================================
   // Data Sources
   // ==========================================
+  getIt.registerLazySingleton<AppIconDataSource>(
+    () => const AppIconDataSourceImpl(),
+  );
   getIt.registerLazySingleton<AppLocalDataSource>(
     () => AppLocalDataSourceImpl(preferences: getIt()),
   );
@@ -63,6 +66,9 @@ Future<void> init() async {
   // ==========================================
   getIt.registerLazySingleton<AppRepository>(
     () => AppRepositoryImpl(localDataSource: getIt()),
+  );
+  getIt.registerLazySingleton<AppIconRepository>(
+    () => AppIconRepositoryImpl(dataSource: getIt()),
   );
   getIt.registerLazySingleton<TranslationRepository>(
     () => TranslationRepositoryImpl(
@@ -83,6 +89,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => CreateApp(getIt()));
   getIt.registerLazySingleton(() => UpdateApp(getIt()));
   getIt.registerLazySingleton(() => DeleteApp(getIt()));
+  getIt.registerLazySingleton(() => PickAppIcon(getIt()));
 
   // Translation editor
   getIt.registerLazySingleton(() => GetTranslations(getIt()));
@@ -104,7 +111,11 @@ Future<void> init() async {
     () => AppManagementBloc(getAppOverviews: getIt(), deleteApp: getIt()),
   );
   getIt.registerFactory(
-    () => AppSettingsBloc(createApp: getIt(), updateApp: getIt()),
+    () => AppSettingsBloc(
+      createApp: getIt(),
+      updateApp: getIt(),
+      pickAppIcon: getIt(),
+    ),
   );
   getIt.registerFactory(
     () => TranslationEditorBloc(

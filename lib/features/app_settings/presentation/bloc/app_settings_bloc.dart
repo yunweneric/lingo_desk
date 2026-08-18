@@ -2,23 +2,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/languages.dart';
 import '../../../app_management/domain/entities/app.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../../../app_management/domain/usecases/create_app.dart';
+import '../../../app_management/domain/usecases/pick_app_icon.dart';
 import '../../../app_management/domain/usecases/update_app.dart';
 import 'app_settings_event.dart';
 import 'app_settings_state.dart';
 
 class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
-  AppSettingsBloc({required this.createApp, required this.updateApp})
-    : super(AppSettingsInitial()) {
+  AppSettingsBloc({
+    required this.createApp,
+    required this.updateApp,
+    required this.pickAppIcon,
+  }) : super(AppSettingsInitial()) {
     on<InitializeAppSettingsEvent>(_onInitialize);
     on<SourceLanguageChangedEvent>(_onSourceLanguageChanged);
     on<TargetLanguageToggledEvent>(_onTargetLanguageToggled);
     on<AllTargetLanguagesToggledEvent>(_onAllTargetLanguagesToggled);
+    on<AppIconPickRequestedEvent>(_onPickIcon);
+    on<AppIconClearedEvent>(_onClearIcon);
     on<SaveAppSettingsEvent>(_onSave);
   }
 
   final CreateApp createApp;
   final UpdateApp updateApp;
+  final PickAppIcon pickAppIcon;
 
   void _onInitialize(
     InitializeAppSettingsEvent event,
@@ -37,6 +45,7 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
         editingApp: app,
         sourceLanguage: source,
         targetLanguages: List.of(targets),
+        iconImage: app?.iconImage,
       ),
     );
   }
@@ -101,6 +110,43 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
     );
   }
 
+  Future<void> _onPickIcon(
+    AppIconPickRequestedEvent event,
+    Emitter<AppSettingsState> emit,
+  ) async {
+    final current = state;
+    if (current is! AppSettingsReady || current.isPickingIcon) {
+      return;
+    }
+
+    emit(current.copyWith(isPickingIcon: true, clearError: true));
+    final result = await pickAppIcon(const NoParams());
+
+    final settled = state;
+    if (settled is! AppSettingsReady) {
+      return;
+    }
+    result.fold(
+      (failure) => emit(
+        settled.copyWith(isPickingIcon: false, errorMessage: failure.message),
+      ),
+      // A canceled picker leaves the current icon alone.
+      (icon) => emit(
+        icon == null
+            ? settled.copyWith(isPickingIcon: false)
+            : settled.copyWith(isPickingIcon: false, iconImage: icon),
+      ),
+    );
+  }
+
+  void _onClearIcon(AppIconClearedEvent event, Emitter<AppSettingsState> emit) {
+    final current = state;
+    if (current is! AppSettingsReady) {
+      return;
+    }
+    emit(current.copyWith(clearIcon: true, clearError: true));
+  }
+
   Future<void> _onSave(
     SaveAppSettingsEvent event,
     Emitter<AppSettingsState> emit,
@@ -120,6 +166,7 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
                 name: event.name,
                 sourceLanguage: current.sourceLanguage,
                 targetLanguages: current.targetLanguages,
+                iconImage: current.iconImage,
               ),
             )
             : await updateApp(
@@ -131,6 +178,7 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
                   targetLanguages: current.targetLanguages,
                   createdAt: editingApp.createdAt,
                   updatedAt: editingApp.updatedAt,
+                  iconImage: current.iconImage,
                 ),
               ),
             );

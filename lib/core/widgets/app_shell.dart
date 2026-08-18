@@ -393,12 +393,10 @@ class _SidebarFooter extends StatelessWidget {
         if (collapsed) {
           return Tooltip(
             message: settings.profileName,
-            child: PressableScale(
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(12),
-                child: avatar,
-              ),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(12),
+              child: avatar,
             ),
           );
         }
@@ -408,49 +406,52 @@ class _SidebarFooter extends StatelessWidget {
                 ? 'Local storage'
                 : settings.profileEmail;
 
-        return HoverLift(
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: tokens.card,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: tokens.border),
-              ),
-              child: Row(
-                children: [
-                  avatar,
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          settings.profileName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge,
+        // Deliberately not lifted on hover: this card is a button, and a
+        // target that rises out from under the pointer is a target you
+        // have to chase.
+        return InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: tokens.card,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: tokens.border),
+            ),
+            child: Row(
+              children: [
+                avatar,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        settings.profileName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: tokens.muted,
+                          fontSize: 12,
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          subtitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: tokens.muted, fontSize: 12),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  LingoDeskIcon(
-                    HugeIcons.strokeRoundedMoreHorizontal,
-                    size: 18,
-                    color: tokens.muted,
-                  ),
-                ],
-              ),
+                ),
+                LingoDeskIcon(
+                  HugeIcons.strokeRoundedMoreHorizontal,
+                  size: 18,
+                  color: tokens.muted,
+                ),
+              ],
             ),
           ),
         );

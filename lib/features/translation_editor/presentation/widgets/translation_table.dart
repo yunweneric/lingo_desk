@@ -633,18 +633,36 @@ class _TranslationRowState extends State<_TranslationRow> {
                         16 -
                         indent -
                         TranslationTableWidget._expanderWidth,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Tooltip(
-                        message: widget.entry.key,
-                        waitDuration: const Duration(milliseconds: 500),
-                        child: Text(
-                          widget.leaf,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: LingoDeskTheme.codeStyle.copyWith(
-                            color: tokens.foreground,
-                            fontSize: 12,
+                    // The key is the row's own handle, so it opens the
+                    // section too — a chevron-sized target is a lot to
+                    // ask for something the whole row is about. The
+                    // language cells stay untouched: a click there is
+                    // aimed at the field.
+                    child: InkWell(
+                      onTap: canExpand ? _toggle : null,
+                      hoverColor: Colors.transparent,
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Tooltip(
+                            message:
+                                canExpand
+                                    ? '${widget.entry.key}\nClick to '
+                                        '${_expanded ? 'hide' : 'show'} the '
+                                        'other languages'
+                                    : widget.entry.key,
+                            waitDuration: const Duration(milliseconds: 500),
+                            child: Text(
+                              widget.leaf,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: LingoDeskTheme.codeStyle.copyWith(
+                                color: tokens.foreground,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -954,9 +972,13 @@ class _PaginationBar extends StatelessWidget {
         border: Border(top: BorderSide(color: _hairline(tokens))),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      // The count anchors the left edge and the controls the right, with
+      // all the slack between them: a Flexible label next to a Spacer
+      // splits that slack in two and leaves the controls stranded
+      // mid-bar.
       child: Row(
         children: [
-          Flexible(
+          Expanded(
             child: Text(
               total == 0
                   ? 'No keys'
@@ -966,7 +988,7 @@ class _PaginationBar extends StatelessWidget {
               style: mutedStyle,
             ),
           ),
-          const Spacer(),
+          const SizedBox(width: 16),
           Text('Rows', style: mutedStyle),
           const SizedBox(width: 8),
           LingoDeskDropdown<int>(
@@ -1026,21 +1048,18 @@ class _PageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PressableScale(
-      child: IconButton(
-        tooltip: tooltip,
-        onPressed: onPressed,
-        visualDensity: VisualDensity.compact,
-        constraints: const BoxConstraints.tightFor(width: 32, height: 32),
-        padding: EdgeInsets.zero,
-        icon: AnimatedTint(
-          // Reaching the first or last page dims the arrow rather than
-          // greying it out in one frame.
-          color: onPressed == null ? tokens.muted.withAlpha(90) : tokens.muted,
-          duration: LingoDeskMotion.standard,
-          builder:
-              (context, tint) => LingoDeskIcon(icon, size: 17, color: tint),
-        ),
+    return IconButton(
+      tooltip: tooltip,
+      onPressed: onPressed,
+      visualDensity: VisualDensity.compact,
+      constraints: const BoxConstraints.tightFor(width: 32, height: 32),
+      padding: EdgeInsets.zero,
+      icon: AnimatedTint(
+        // Reaching the first or last page dims the arrow rather than
+        // greying it out in one frame.
+        color: onPressed == null ? tokens.muted.withAlpha(90) : tokens.muted,
+        duration: LingoDeskMotion.standard,
+        builder: (context, tint) => LingoDeskIcon(icon, size: 17, color: tint),
       ),
     );
   }

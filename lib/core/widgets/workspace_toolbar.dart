@@ -88,15 +88,10 @@ class _WorkspaceToolbarButtonState extends State<WorkspaceToolbarButton> {
             ),
             if (!compact) ...[
               const SizedBox(width: 8),
-              AnimatedSize(
-                duration: LingoDeskMotion.standard,
-                curve: LingoDeskMotion.curve,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.label,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
+              // Deliberately not animated: this button opens a menu, and a
+              // trigger whose width glides drags every neighbouring header
+              // button sideways while you are aiming at one.
+              Text(widget.label, style: Theme.of(context).textTheme.labelLarge),
             ],
           ],
         ),

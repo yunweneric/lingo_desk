@@ -9,7 +9,9 @@ class AppSettingsReady extends AppSettingsState {
     this.editingApp,
     required this.sourceLanguage,
     required this.targetLanguages,
+    this.iconImage,
     this.isSaving = false,
+    this.isPickingIcon = false,
     this.errorMessage,
   });
 
@@ -18,7 +20,12 @@ class AppSettingsReady extends AppSettingsState {
 
   final String sourceLanguage;
   final List<String> targetLanguages;
+
+  /// Base64 PNG for the app's icon; null falls back to its initials.
+  final String? iconImage;
+
   final bool isSaving;
+  final bool isPickingIcon;
   final String? errorMessage;
 
   bool get isCreateMode => editingApp == null;
@@ -26,15 +33,20 @@ class AppSettingsReady extends AppSettingsState {
   AppSettingsReady copyWith({
     String? sourceLanguage,
     List<String>? targetLanguages,
+    String? iconImage,
     bool? isSaving,
+    bool? isPickingIcon,
     String? errorMessage,
     bool clearError = false,
+    bool clearIcon = false,
   }) {
     return AppSettingsReady(
       editingApp: editingApp,
       sourceLanguage: sourceLanguage ?? this.sourceLanguage,
       targetLanguages: targetLanguages ?? this.targetLanguages,
+      iconImage: clearIcon ? null : (iconImage ?? this.iconImage),
       isSaving: isSaving ?? this.isSaving,
+      isPickingIcon: isPickingIcon ?? this.isPickingIcon,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }

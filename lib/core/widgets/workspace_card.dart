@@ -279,16 +279,14 @@ class WorkspaceEmptyState extends StatelessWidget {
             const SizedBox(height: 20),
             FadeSlideIn.staggered(
               index: 3,
-              child: PressableScale(
-                child: FilledButton.icon(
-                  onPressed: onAction,
-                  icon: LingoDeskIcon(
-                    actionIcon ?? icon,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  label: Text(label),
+              child: FilledButton.icon(
+                onPressed: onAction,
+                icon: LingoDeskIcon(
+                  actionIcon ?? icon,
+                  color: Colors.white,
+                  size: 18,
                 ),
+                label: Text(label),
               ),
             ),
           ],
@@ -331,12 +329,7 @@ class WorkspaceErrorState extends StatelessWidget {
               ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
             ),
             const SizedBox(height: 16),
-            PressableScale(
-              child: FilledButton(
-                onPressed: onRetry,
-                child: const Text('Retry'),
-              ),
-            ),
+            FilledButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),

@@ -40,3 +40,9 @@ class AllTargetLanguagesToggledEvent extends AppSettingsEvent {
   /// True selects every language except the source; false clears them.
   final bool selectAll;
 }
+
+/// Opens the image picker to set the app's icon.
+class AppIconPickRequestedEvent extends AppSettingsEvent {}
+
+/// Drops the icon so the app falls back to its initials.
+class AppIconClearedEvent extends AppSettingsEvent {}

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
@@ -8,6 +9,7 @@ import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/utils/date_formatter.dart';
+import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/lingo_desk_menu.dart';
@@ -238,10 +240,20 @@ class _AppRow extends StatefulWidget {
 }
 
 class _AppRowState extends State<_AppRow> {
-  bool _hovered = false;
+  /// Hover lives in a notifier rather than in [State] so that moving the
+  /// pointer across the row repaints the tint without rebuilding the
+  /// row's contents — the trailing overflow menu among them, and you
+  /// have to cross the row to reach it.
+  final ValueNotifier<bool> _hovered = ValueNotifier<bool>(false);
   bool _expanded = false;
 
   void _toggle() => setState(() => _expanded = !_expanded);
+
+  @override
+  void dispose() {
+    _hovered.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,33 +265,55 @@ class _AppRowState extends State<_AppRow> {
     final overflow = languages.length - widget.inlineLimit;
     final canExpand = overflow > 0;
 
-    return AnimatedContainer(
-      duration: LingoDeskMotion.fast,
-      curve: LingoDeskMotion.curve,
-      decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-            width: 3,
-            color:
-                _hovered || _expanded
-                    ? LingoDeskColors.brandTeal
-                    : Colors.transparent,
+    return ValueListenableBuilder<bool>(
+      valueListenable: _hovered,
+      // `row` is built once per real change and handed through untouched,
+      // so hovering never reaches the menu anchor inside it.
+      builder: (context, hovered, row) {
+        return AnimatedContainer(
+          duration: LingoDeskMotion.fast,
+          curve: LingoDeskMotion.curve,
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                width: 3,
+                color:
+                    hovered || _expanded
+                        ? LingoDeskColors.brandTeal
+                        : Colors.transparent,
+              ),
+            ),
           ),
-        ),
-      ),
+          child: row,
+        );
+      },
       child: Column(
         children: [
           MouseRegion(
-            onEnter: (_) => setState(() => _hovered = true),
-            onExit: (_) => setState(() => _hovered = false),
+            onEnter: (_) => _hovered.value = true,
+            onExit: (_) => _hovered.value = false,
             child: InkWell(
               onTap: () => openEditor(context, overview),
               hoverColor: Colors.transparent,
-              child: AnimatedContainer(
-                duration: LingoDeskMotion.fast,
-                curve: LingoDeskMotion.curve,
-                color: _hovered ? tokens.active.withValues(alpha: 0.6) : null,
-                padding: const EdgeInsets.fromLTRB(17, 14, 20, 14),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _hovered,
+                builder: (context, hovered, content) {
+                  return AnimatedContainer(
+                    duration: LingoDeskMotion.fast,
+                    curve: LingoDeskMotion.curve,
+                    // Transparent, never null: a null colour makes
+                    // Container drop its ColoredBox, which changes the
+                    // shape of the tree and re-inflates everything below
+                    // it — including the overflow menu's anchor, whose
+                    // open menu dies with it.
+                    color:
+                        hovered
+                            ? tokens.active.withValues(alpha: 0.6)
+                            : Colors.transparent,
+                    padding: const EdgeInsets.fromLTRB(17, 14, 20, 14),
+                    child: content,
+                  );
+                },
                 child: Row(
                   children: [
                     SizedBox(
@@ -296,20 +330,37 @@ class _AppRowState extends State<_AppRow> {
                     ),
                     Expanded(
                       flex: 4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Text(
-                            app.name,
-                            style: Theme.of(context).textTheme.labelLarge,
+                          AppAvatar(
+                            name: app.name,
+                            initials: app.initials,
+                            iconImage: app.iconImage,
+                            size: 34,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${app.sourceLanguage}.json - '
-                            '${overview.keyCount} keys',
-                            style: LingoDeskTheme.codeStyle.copyWith(
-                              color: tokens.muted,
-                              fontSize: 12,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  app.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${app.sourceLanguage}.json - '
+                                  '${overview.keyCount} keys',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: LingoDeskTheme.codeStyle.copyWith(
+                                    color: tokens.muted,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -391,20 +442,17 @@ class _AppRowState extends State<_AppRow> {
                         ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
                       ),
                     ),
-                    // Quiet until the row is under the pointer, but never
-                    // fully hidden — it has to stay reachable without a
-                    // mouse.
                     // Pinned to the gutter the header reserves: the
                     // badge count is derived from the flex space left
                     // over, so this must not vary with the icon.
+                    //
+                    // Kept at full strength rather than fading in on
+                    // hover: it is the only way into this row's settings
+                    // and delete, and a control you have to hunt for is a
+                    // control that is hard to hit.
                     SizedBox(
                       width: _rowMenuWidth,
-                      child: AnimatedOpacity(
-                        duration: LingoDeskMotion.fast,
-                        curve: LingoDeskMotion.curve,
-                        opacity: _hovered ? 1 : 0.45,
-                        child: _AppRowMenu(overview: overview),
-                      ),
+                      child: _AppRowMenu(overview: overview),
                     ),
                   ],
                 ),
@@ -437,7 +485,12 @@ class _ExpanderButton extends StatelessWidget {
   });
 
   final bool expanded;
-  final bool hovered;
+
+  /// The row's hover state. Listened to here rather than passed as a
+  /// bool, so brightening this arrow does not rebuild the rest of the
+  /// row — see [_AppRowState].
+  final ValueListenable<bool> hovered;
+
   final LingoDeskTokens tokens;
   final VoidCallback onTap;
 
@@ -456,10 +509,18 @@ class _ExpanderButton extends StatelessWidget {
               turns: expanded ? 0.25 : 0,
               duration: LingoDeskMotion.standard,
               curve: LingoDeskMotion.curve,
-              child: LingoDeskIcon(
-                HugeIcons.strokeRoundedArrowRight01,
-                size: 16,
-                color: expanded || hovered ? tokens.foreground : tokens.muted,
+              child: ValueListenableBuilder<bool>(
+                valueListenable: hovered,
+                builder: (context, isHovered, _) {
+                  return LingoDeskIcon(
+                    HugeIcons.strokeRoundedArrowRight01,
+                    size: 16,
+                    color:
+                        expanded || isHovered
+                            ? tokens.foreground
+                            : tokens.muted,
+                  );
+                },
               ),
             ),
           ),
