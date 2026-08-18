@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/languages.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../bloc/translation_editor_state.dart';
 
@@ -16,16 +18,21 @@ class LanguageProgressHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
+    final languages = state.app.targetLanguages;
+
     return Wrap(
       spacing: 12,
       runSpacing: 12,
       children: [
-        for (final language in state.app.targetLanguages)
-          _LanguageProgressTile(
-            language: language,
-            progress: state.completionFor(language),
-            missing: state.missingCountFor(language),
-            tokens: tokens,
+        for (var index = 0; index < languages.length; index++)
+          FadeSlideIn.staggered(
+            index: index,
+            child: _LanguageProgressTile(
+              language: languages[index],
+              progress: state.completionFor(languages[index]),
+              missing: state.missingCountFor(languages[index]),
+              tokens: tokens,
+            ),
           ),
       ],
     );
@@ -72,8 +79,9 @@ class _LanguageProgressTile extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Text(
-                '${(progress * 100).round()}%',
+              AnimatedCountText(
+                value: progress * 100,
+                suffix: '%',
                 style: LingoDeskTheme.codeStyle.copyWith(
                   color: tokens.muted,
                   fontSize: 12,
@@ -89,12 +97,17 @@ class _LanguageProgressTile extends StatelessWidget {
             backgroundColor: tokens.card,
           ),
           const SizedBox(height: 6),
-          Text(
-            missing == 0 ? 'Complete' : '$missing missing',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: missing == 0 ? LingoDeskColors.complete : tokens.muted,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
+          AnimatedSwitcher(
+            duration: LingoDeskMotion.standard,
+            switchInCurve: LingoDeskMotion.curve,
+            child: Text(
+              missing == 0 ? 'Complete' : '$missing missing',
+              key: ValueKey<bool>(missing == 0),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: missing == 0 ? LingoDeskColors.complete : tokens.muted,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

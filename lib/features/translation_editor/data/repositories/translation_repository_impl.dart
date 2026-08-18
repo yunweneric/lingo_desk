@@ -83,8 +83,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
   Future<Either<Failure, void>> addKey(
     String appId,
     String key,
-    String language,
-    String value,
+    Map<String, String> values,
   ) async {
     try {
       final entries = await localDataSource.getEntries(appId);
@@ -93,7 +92,11 @@ class TranslationRepositoryImpl implements TranslationRepository {
           ValidationFailure(message: 'The key "$key" already exists.'),
         );
       }
-      entries[key] = {language: value};
+      // Blank values are dropped so the key reads as missing for them.
+      entries[key] = {
+        for (final value in values.entries)
+          if (value.value.trim().isNotEmpty) value.key: value.value,
+      };
       await localDataSource.saveEntries(appId, entries);
       return const Right(null);
     } on CacheException catch (e) {

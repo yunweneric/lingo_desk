@@ -9,14 +9,14 @@ class AddTranslationKeyParams {
   const AddTranslationKeyParams({
     required this.appId,
     required this.key,
-    required this.sourceLanguage,
-    this.sourceValue = '',
+    this.values = const {},
   });
 
   final String appId;
   final String key;
-  final String sourceLanguage;
-  final String sourceValue;
+
+  /// Initial values by language code; languages left out stay missing.
+  final Map<String, String> values;
 }
 
 /// Adds a new translation key across all languages.
@@ -39,11 +39,6 @@ class AddTranslationKey implements UseCase<void, AddTranslationKeyParams> {
         ),
       );
     }
-    return repository.addKey(
-      params.appId,
-      key,
-      params.sourceLanguage,
-      params.sourceValue,
-    );
+    return repository.addKey(params.appId, key, params.values);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'lingo_desk_motion.dart';
+
 /// LingoDesk palette — teal rebrand (Aug 2026).
 ///
 /// One saturated accent (`brandTeal`), warm stone neutrals, literal
@@ -12,6 +14,8 @@ class LingoDeskColors {
   static const brandTeal = Color(0xFF0F766E);
   static const brandTealSoft = Color(0xFFE7F3F0);
   static const brandTealSoftBorder = Color(0xFFCFE6E0);
+  static const brandTealDeep = Color(0xFF14433D); // dark-mode selected fill
+  static const brandTealDeepBorder = Color(0xFF2A7F73);
   static const ink = Color(0xFF1C1917);
   static const darkInk = Color(0xFF0E1B18); // deep-ink stage pane
   static const slate = Color(0xFF78716C);
@@ -84,17 +88,55 @@ class LingoDeskTheme {
         ),
       ),
       chipTheme: base.chipTheme.copyWith(
-        backgroundColor:
-            isDark ? LingoDeskColors.activeDeep : LingoDeskColors.surface,
-        selectedColor: LingoDeskColors.brandTealSoft,
-        side: BorderSide(
-          color: isDark ? Colors.white12 : LingoDeskColors.border,
-        ),
+        // Resolved per state so selected chips stay legible in both
+        // brightnesses: a mint fill with teal ink in light, a deep teal
+        // fill with mint ink in dark.
+        color: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return isDark
+                ? LingoDeskColors.brandTealDeep
+                : LingoDeskColors.brandTealSoft;
+          }
+          if (states.contains(WidgetState.disabled)) {
+            return isDark
+                ? LingoDeskColors.darkSurface
+                : LingoDeskColors.surface;
+          }
+          return isDark ? LingoDeskColors.activeDeep : Colors.white;
+        }),
+        side: WidgetStateBorderSide.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BorderSide(
+              color:
+                  isDark
+                      ? LingoDeskColors.brandTealDeepBorder
+                      : LingoDeskColors.brandTealSoftBorder,
+            );
+          }
+          return BorderSide(
+            color:
+                states.contains(WidgetState.disabled)
+                    ? (isDark ? Colors.white10 : LingoDeskColors.border)
+                    : (isDark ? Colors.white24 : LingoDeskColors.border),
+          );
+        }),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
+        checkmarkColor:
+            isDark ? LingoDeskColors.brandTealSoft : LingoDeskColors.brandTeal,
         labelStyle: TextStyle(
-          color: isDark ? Colors.white : LingoDeskColors.ink,
+          color: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return isDark
+                  ? LingoDeskColors.brandTealSoft
+                  : LingoDeskColors.brandTeal;
+            }
+            if (states.contains(WidgetState.disabled)) {
+              return isDark ? Colors.white38 : LingoDeskColors.slate;
+            }
+            return isDark ? Colors.white : LingoDeskColors.ink;
+          }),
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -113,6 +155,8 @@ class LingoDeskTheme {
         thickness: 1,
         space: 1,
       ),
+      // Primary actions pick up a soft teal glow under the pointer and
+      // settle flat again when pressed.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: LingoDeskColors.brandTeal,
@@ -126,16 +170,27 @@ class LingoDeskTheme {
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
           ),
+          animationDuration: LingoDeskMotion.fast,
+        ).copyWith(
+          elevation: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled) ||
+                states.contains(WidgetState.pressed)) {
+              return 0.0;
+            }
+            return states.contains(WidgetState.hovered) ? 4.0 : 0.0;
+          }),
+          shadowColor: WidgetStatePropertyAll(
+            LingoDeskColors.brandTeal.withValues(alpha: 0.5),
+          ),
         ),
       ),
+      // Secondary actions answer the pointer by taking on the brand
+      // border instead of changing weight or size.
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: isDark ? Colors.white : LingoDeskColors.ink,
           minimumSize: const Size(48, 48),
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          side: BorderSide(
-            color: isDark ? Colors.white24 : LingoDeskColors.border,
-          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),
@@ -143,6 +198,53 @@ class LingoDeskTheme {
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
           ),
+          animationDuration: LingoDeskMotion.fast,
+        ).copyWith(
+          side: WidgetStateBorderSide.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return BorderSide(
+                color: isDark ? Colors.white10 : LingoDeskColors.border,
+              );
+            }
+            if (states.contains(WidgetState.hovered) ||
+                states.contains(WidgetState.focused) ||
+                states.contains(WidgetState.pressed)) {
+              return const BorderSide(color: LingoDeskColors.brandTeal);
+            }
+            return BorderSide(
+              color: isDark ? Colors.white24 : LingoDeskColors.border,
+            );
+          }),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        elevation: 6,
+        backgroundColor:
+            isDark ? LingoDeskColors.activeDeep : LingoDeskColors.ink,
+        contentTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        insetPadding: const EdgeInsets.all(20),
+      ),
+      tooltipTheme: TooltipThemeData(
+        waitDuration: const Duration(milliseconds: 400),
+        decoration: BoxDecoration(
+          color: isDark ? LingoDeskColors.activeDeep : LingoDeskColors.ink,
+          borderRadius: BorderRadius.circular(radiusSm),
+          border: Border.all(
+            color: isDark ? Colors.white24 : Colors.transparent,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        textStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
         ),
       ),
       textSelectionTheme: const TextSelectionThemeData(

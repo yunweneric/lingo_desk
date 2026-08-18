@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage>
             return Column(
               children: [
                 const WorkspacePageHeader(
-                  breadcrumb: ['Workspace', 'Settings'],
+                  breadcrumb: [Crumb.workspace, Crumb('Settings')],
                 ),
                 _SettingsTabStrip(
                   child: _SettingsTabBar(tokens: tokens, controller: _tabs),

@@ -1,33 +1,43 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/lingo_desk_theme.dart';
+import '../../../../core/constants/languages.dart';
+import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/utils/json_flattener.dart';
+import '../../../../core/widgets/lingo_desk_field.dart';
+import '../../../../core/widgets/lingo_desk_text_field.dart';
 
-/// The values collected by [AddKeyDialog].
+/// The values collected by [AddKeyDialog]: the key plus whatever
+/// translations were typed, mapped by language code.
 class AddKeyRequest {
-  const AddKeyRequest({required this.key, required this.sourceValue});
+  const AddKeyRequest({required this.key, required this.values});
 
   final String key;
-  final String sourceValue;
+  final Map<String, String> values;
 }
 
-/// Dialog to add a translation key with an optional source value.
+/// Dialog to add a translation key with a value per language.
 ///
 /// Validates dot-notation format and uniqueness before submitting.
 class AddKeyDialog extends StatefulWidget {
   const AddKeyDialog({
     super.key,
     required this.existingKeys,
+    required this.languages,
     required this.sourceLanguage,
   });
 
   final Set<String> existingKeys;
+
+  /// Every language of the app, source first.
+  final List<String> languages;
+
   final String sourceLanguage;
 
   /// Shows the dialog and returns the request, or null when canceled.
   static Future<AddKeyRequest?> show(
     BuildContext context, {
     required Set<String> existingKeys,
+    required List<String> languages,
     required String sourceLanguage,
   }) {
     return showDialog<AddKeyRequest>(
@@ -35,6 +45,7 @@ class AddKeyDialog extends StatefulWidget {
       builder:
           (_) => AddKeyDialog(
             existingKeys: existingKeys,
+            languages: languages,
             sourceLanguage: sourceLanguage,
           ),
     );
@@ -46,13 +57,17 @@ class AddKeyDialog extends StatefulWidget {
 
 class _AddKeyDialogState extends State<AddKeyDialog> {
   final _keyController = TextEditingController();
-  final _valueController = TextEditingController();
+  late final Map<String, TextEditingController> _valueControllers = {
+    for (final language in widget.languages) language: TextEditingController(),
+  };
   String? _error;
 
   @override
   void dispose() {
     _keyController.dispose();
-    _valueController.dispose();
+    for (final controller in _valueControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -69,33 +84,41 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
       setState(() => _error = 'The key "$key" already exists.');
       return;
     }
-    Navigator.of(
-      context,
-    ).pop(AddKeyRequest(key: key, sourceValue: _valueController.text));
+
+    // Blank fields stay missing rather than being stored as empty text.
+    final values = <String, String>{
+      for (final entry in _valueControllers.entries)
+        if (entry.value.text.trim().isNotEmpty) entry.key: entry.value.text,
+    };
+    Navigator.of(context).pop(AddKeyRequest(key: key, values: values));
   }
 
   @override
   Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final theme = Theme.of(context);
+
     return AlertDialog(
       title: const Text('Add key'),
+      // Wide enough for full sentences, since every language is edited
+      // here rather than only the source.
+      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
       content: SizedBox(
-        width: 420,
+        width: 620,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
+            LingoDeskTextField(
               controller: _keyController,
+              label: 'Key',
+              hintText: 'nav.home',
+              helperText: 'Dot notation groups keys into nested JSON.',
+              errorText: _error,
+              size: LingoDeskFieldSize.large,
+              monospace: true,
               autofocus: true,
-              style: LingoDeskTheme.codeStyle.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              decoration: InputDecoration(
-                labelText: 'Key',
-                hintText: 'nav.home',
-                border: const OutlineInputBorder(),
-                errorText: _error,
-              ),
+              isRequired: true,
               onChanged: (_) {
                 if (_error != null) {
                   setState(() => _error = null);
@@ -103,15 +126,44 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
               },
               onSubmitted: (_) => _submit(),
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _valueController,
-              decoration: InputDecoration(
-                labelText: 'Value (${widget.sourceLanguage})',
-                hintText: 'Source text - optional',
-                border: const OutlineInputBorder(),
+            const SizedBox(height: 20),
+            Text(
+              'Translations',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: tokens.foreground,
               ),
-              onSubmitted: (_) => _submit(),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Fill in what you have now - anything left blank stays missing '
+              'and can be translated later in the grid.',
+              style: theme.textTheme.bodySmall?.copyWith(color: tokens.muted),
+            ),
+            const SizedBox(height: 12),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final language in widget.languages)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: LingoDeskTextField(
+                          controller: _valueControllers[language],
+                          label: _labelFor(language),
+                          hintText:
+                              language == widget.sourceLanguage
+                                  ? 'Source text'
+                                  : 'Translation - optional',
+                          size: LingoDeskFieldSize.large,
+                          maxLines: 3,
+                          minLines: 1,
+                          textInputAction: TextInputAction.next,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -124,5 +176,12 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
         FilledButton(onPressed: _submit, child: const Text('Add key')),
       ],
     );
+  }
+
+  String _labelFor(String language) {
+    final label =
+        '${SupportedLanguages.flagOf(language)}  '
+        '${SupportedLanguages.nameOf(language)} ($language)';
+    return language == widget.sourceLanguage ? '$label - source' : label;
   }
 }

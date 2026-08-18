@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
+import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
 
 /// Icon + title + subtitle heading used at the top of every card.
@@ -80,31 +82,51 @@ class WorkspaceProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
+    final target =
+        isComplete ? LingoDeskColors.complete : LingoDeskColors.brandTeal;
 
-    final bar = LinearProgressIndicator(
-      value: value,
-      minHeight: minHeight,
-      borderRadius: BorderRadius.circular(99),
-      color: isComplete ? LingoDeskColors.complete : LingoDeskColors.brandTeal,
-      backgroundColor: backgroundColor ?? tokens.active,
-    );
+    // The fill sweeps to its value on first paint and slides between
+    // values afterwards, so translating a key visibly moves the bar
+    // instead of teleporting it. The colour tweens too, so crossing into
+    // "complete" is a wash from teal to green rather than a snap.
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: value.clamp(0.0, 1.0)),
+      duration: LingoDeskMotion.slow,
+      curve: LingoDeskMotion.entrance,
+      builder: (context, animated, _) {
+        final bar = TweenAnimationBuilder<Color?>(
+          tween: ColorTween(end: target),
+          duration: LingoDeskMotion.standard,
+          curve: LingoDeskMotion.curve,
+          builder: (context, color, _) {
+            return LinearProgressIndicator(
+              value: animated,
+              minHeight: minHeight,
+              borderRadius: BorderRadius.circular(99),
+              color: color ?? target,
+              backgroundColor: backgroundColor ?? tokens.active,
+            );
+          },
+        );
 
-    if (!showPercentage) {
-      return bar;
-    }
+        if (!showPercentage) {
+          return bar;
+        }
 
-    return Row(
-      children: [
-        Expanded(child: bar),
-        const SizedBox(width: 10),
-        Text(
-          '${(value * 100).round()}%',
-          style: LingoDeskTheme.codeStyle.copyWith(
-            color: tokens.foreground,
-            fontSize: 12,
-          ),
-        ),
-      ],
+        return Row(
+          children: [
+            Expanded(child: bar),
+            const SizedBox(width: 10),
+            Text(
+              '${(animated * 100).round()}%',
+              style: LingoDeskTheme.codeStyle.copyWith(
+                color: tokens.foreground,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -208,42 +230,66 @@ class WorkspaceEmptyState extends StatelessWidget {
         border: Border.all(color: tokens.border),
       ),
       padding: const EdgeInsets.all(40),
+      // An empty state is the one place with nothing to look at, so its
+      // three parts arrive in reading order instead of all at once.
       child: Column(
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: LingoDeskColors.brandTeal.withAlpha(26),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: LingoDeskIcon(
-              icon,
-              color: LingoDeskColors.brandTeal,
-              size: 28,
+          FadeSlideIn(
+            offset: 0,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0.85, end: 1),
+              duration: LingoDeskMotion.slow,
+              curve: LingoDeskMotion.entrance,
+              builder:
+                  (context, scale, child) =>
+                      Transform.scale(scale: scale, child: child),
+              child: Container(
+                width: 56,
+                height: 56,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: LingoDeskColors.brandTeal.withAlpha(26),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: LingoDeskIcon(
+                  icon,
+                  color: LingoDeskColors.brandTeal,
+                  size: 28,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          Text(title, style: Theme.of(context).textTheme.titleLarge),
+          FadeSlideIn.staggered(
+            index: 1,
+            child: Text(title, style: Theme.of(context).textTheme.titleLarge),
+          ),
           const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+          FadeSlideIn.staggered(
+            index: 2,
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+            ),
           ),
           if (label != null && onAction != null) ...[
             const SizedBox(height: 20),
-            FilledButton.icon(
-              onPressed: onAction,
-              icon: LingoDeskIcon(
-                actionIcon ?? icon,
-                color: Colors.white,
-                size: 18,
+            FadeSlideIn.staggered(
+              index: 3,
+              child: PressableScale(
+                child: FilledButton.icon(
+                  onPressed: onAction,
+                  icon: LingoDeskIcon(
+                    actionIcon ?? icon,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  label: Text(label),
+                ),
               ),
-              label: Text(label),
             ),
           ],
         ],
@@ -268,24 +314,31 @@ class WorkspaceErrorState extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
 
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const LingoDeskIcon(
-            HugeIcons.strokeRoundedAlertCircle,
-            color: LingoDeskColors.error,
-            size: 32,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Error: $message',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
-          ),
-          const SizedBox(height: 16),
-          FilledButton(onPressed: onRetry, child: const Text('Retry')),
-        ],
+      child: FadeSlideIn(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const LingoDeskIcon(
+              HugeIcons.strokeRoundedAlertCircle,
+              color: LingoDeskColors.error,
+              size: 32,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Error: $message',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+            ),
+            const SizedBox(height: 16),
+            PressableScale(
+              child: FilledButton(
+                onPressed: onRetry,
+                child: const Text('Retry'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

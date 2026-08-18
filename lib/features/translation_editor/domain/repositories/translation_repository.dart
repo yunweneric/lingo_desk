@@ -24,12 +24,12 @@ abstract class TranslationRepository {
     String value,
   );
 
-  /// Adds a new key with a value for [language] (usually the source).
+  /// Adds a new key with its initial [values] (language code -> value);
+  /// languages left out of the map stay missing.
   Future<Either<Failure, void>> addKey(
     String appId,
     String key,
-    String language,
-    String value,
+    Map<String, String> values,
   );
 
   Future<Either<Failure, void>> deleteKey(String appId, String key);

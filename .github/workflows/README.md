@@ -56,32 +56,41 @@ Builds Android APK and App Bundle (AAB) files.
 
 **Note:** The AAB build may fail if signing keys are not configured. This is expected for unsigned builds and the workflow will continue.
 
-### build_dmg.yml
+### release.yml — Build Desktop Apps
 
-Builds macOS DMG files for distribution.
+Builds the macOS `.dmg` and the Windows `.exe` installer, and publishes a GitHub Release on tags.
 
 **Triggers:**
 - Pushes to `main` branch
 - Version tags (e.g., `v1.0.0`)
 - Manual workflow dispatch
 
-**What it does:**
-1. Checks out the code
-2. Installs FVM (Flutter Version Management)
-3. Sets up Flutter via FVM
-4. Gets dependencies
-5. Verifies code formatting
-6. Analyzes code
-7. Runs all tests
-8. Builds macOS App (Release)
-9. Creates DMG file with app and Applications folder link
-10. Uploads DMG as artifact
-11. Creates GitHub Release (on tag push)
+**Jobs:**
 
-**Artifacts:**
-- `lingodesk-macos-dmg` - macOS DMG file (90 days retention)
+| Job | Runner | What it does |
+| --- | --- | --- |
+| `prepare` | ubuntu | Resolves the Flutter SDK version from `.fvmrc` and the artifact version (tag name on tags, `pubspec` version + short SHA otherwise) |
+| `verify` | ubuntu | `pub get`, format check, `flutter analyze`, `flutter test` — gates both builds |
+| `build-macos` | macos | `flutter build macos --release`, packages the `.app` + `/Applications` symlink into a compressed DMG via `hdiutil` |
+| `build-windows` | windows | `flutter build windows --release`, compiles `windows/installer/lingo_desk.iss` with Inno Setup into a setup `.exe`, plus a portable `.zip` |
+| `release` | ubuntu | Tags only: downloads both artifacts and creates the GitHub Release |
+| `summary` | ubuntu | Writes a build summary to the run page |
 
-**Note:** This workflow requires a macOS runner (`macos-latest`).
+**Artifacts** (90 days retention):
+- `lingodesk-macos-dmg` — `LingoDesk-<version>-macos.dmg`
+- `lingodesk-windows` — `LingoDesk-<version>-windows-setup.exe` and `LingoDesk-<version>-windows-portable.zip`
+
+**Cutting a release:**
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+The tag name (minus the leading `v`) becomes the version, and the release is published with all three files attached.
+
+**Notes:**
+- Builds are **unsigned**. macOS users need right-click → Open on first launch; Windows users get a SmartScreen warning ("More info" → "Run anyway"). Add an Apple Developer ID / Windows code-signing certificate as secrets to remove these.
+- The Windows installer definition lives in [`windows/installer/lingo_desk.iss`](../../windows/installer/lingo_desk.iss). Version, source dir and output name are passed in from the workflow via `/D` defines, so it can also be compiled locally with `ISCC`.
+- This workflow uses `subosito/flutter-action` with the version pinned in `.fvmrc` instead of installing FVM on the runner.
 
 ### Android Signing (Optional)
 
@@ -206,7 +215,7 @@ You can use [`act`](https://github.com/nektos/act) to run GitHub Actions workflo
    ```
 
 3. **Limitations:**
-   - `act` runs workflows in Docker containers, so macOS-specific workflows (like `build_dmg.yml`) won't work with `act` since it can't run macOS runners
+   - `act` runs workflows in Docker containers, so the macOS and Windows jobs in `release.yml` won't work with `act` since it can't run macOS or Windows runners
    - For macOS workflows, use the test scripts instead
    - Some actions may not work perfectly in local Docker environment
 
@@ -219,8 +228,8 @@ You can also manually run each step from the workflow:
 3. Run `fvm dart format --set-exit-if-changed .`
 4. Run `fvm flutter analyze`
 5. Run `fvm flutter test`
-6. Run `fvm flutter build macos --release` (for DMG) or `fvm flutter build apk --release` (for APK)
-7. Create DMG manually (for macOS builds)
+6. Run `flutter build macos --release` (for DMG), `flutter build windows --release` (for EXE) or `flutter build apk --release` (for APK)
+7. Create the DMG with `hdiutil create`, or the installer with `ISCC windows\installer\lingo_desk.iss`
 
 ## Extending Workflows
 

@@ -4,6 +4,8 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_field.dart';
+import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 
@@ -77,46 +79,27 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
               final fields = Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Display name',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Focus(
-                    onFocusChange: (hasFocus) {
-                      if (!hasFocus) {
-                        _commitName();
-                      }
-                    },
-                    child: TextField(
-                      controller: _nameController,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _commitName(),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Local workspace',
-                      ),
-                    ),
+                  LingoDeskTextField(
+                    controller: _nameController,
+                    label: 'Display name',
+                    hintText: 'Local workspace',
+                    prefixIcon: HugeIcons.strokeRoundedUser,
+                    size: LingoDeskFieldSize.large,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _commitName(),
+                    onFocusLost: (_) => _commitName(),
                   ),
                   const SizedBox(height: 16),
-                  Text('Email', style: Theme.of(context).textTheme.labelLarge),
-                  const SizedBox(height: 8),
-                  Focus(
-                    onFocusChange: (hasFocus) {
-                      if (!hasFocus) {
-                        _commitEmail();
-                      }
-                    },
-                    child: TextField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _commitEmail(),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'optional',
-                      ),
-                    ),
+                  LingoDeskTextField(
+                    controller: _emailController,
+                    label: 'Email',
+                    hintText: 'optional',
+                    prefixIcon: HugeIcons.strokeRoundedMail01,
+                    size: LingoDeskFieldSize.large,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _commitEmail(),
+                    onFocusLost: (_) => _commitEmail(),
                   ),
                   const SizedBox(height: 10),
                   Text(

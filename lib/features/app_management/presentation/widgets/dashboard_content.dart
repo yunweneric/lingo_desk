@@ -25,7 +25,7 @@ class _DashboardContent extends StatelessWidget {
             return Column(
               children: [
                 WorkspacePageHeader(
-                  breadcrumb: const ['Workspace', 'Dashboard'],
+                  breadcrumb: const [Crumb.workspace, Crumb('Dashboard')],
                   actions: [
                     ThemeModeSwitcher(
                       themeMode: themeMode,
@@ -44,16 +44,30 @@ class _DashboardContent extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, AppManagementState state) {
+    final Widget body;
     if (state is AppManagementError) {
-      return WorkspaceErrorState(
+      body = WorkspaceErrorState(
         message: state.message,
         onRetry: () => context.read<AppManagementBloc>().add(LoadAppsEvent()),
       );
+    } else if (state is! AppManagementLoaded) {
+      body = const Center(child: CircularProgressIndicator());
+    } else {
+      body = _DashboardBody(state: state, scrollController: scrollController);
     }
-    if (state is! AppManagementLoaded) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return _DashboardBody(state: state, scrollController: scrollController);
+
+    // Cross-fade rather than swap: the spinner dissolving into the stats
+    // is what makes a fast load feel finished instead of interrupted.
+    return AnimatedSwitcher(
+      duration: LingoDeskMotion.standard,
+      switchInCurve: LingoDeskMotion.curve,
+      switchOutCurve: LingoDeskMotion.curve,
+      layoutBuilder: topAlignedSwitcherLayout,
+      child: KeyedSubtree(
+        key: ValueKey<String>(state.runtimeType.toString()),
+        child: body,
+      ),
+    );
   }
 }
 
@@ -95,7 +109,7 @@ class _DashboardBody extends StatelessWidget {
                       mainAxisExtent: 136,
                     ),
                     itemBuilder: (context, index) {
-                      return _MetricCard(metric: metrics[index]);
+                      return _MetricCard(metric: metrics[index], index: index);
                     },
                   );
                 },
@@ -116,9 +130,15 @@ class _DashboardBody extends StatelessWidget {
                     if (!isWide) {
                       return Column(
                         children: [
-                          _CoverageCard(state: state),
+                          FadeSlideIn.staggered(
+                            index: 4,
+                            child: _CoverageCard(state: state),
+                          ),
                           const SizedBox(height: 12),
-                          languageHealth,
+                          FadeSlideIn.staggered(
+                            index: 5,
+                            child: languageHealth,
+                          ),
                         ],
                       );
                     }
@@ -126,9 +146,21 @@ class _DashboardBody extends StatelessWidget {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(flex: 7, child: _CoverageCard(state: state)),
+                        Expanded(
+                          flex: 7,
+                          child: FadeSlideIn.staggered(
+                            index: 4,
+                            child: _CoverageCard(state: state),
+                          ),
+                        ),
                         const SizedBox(width: 12),
-                        Expanded(flex: 4, child: languageHealth),
+                        Expanded(
+                          flex: 4,
+                          child: FadeSlideIn.staggered(
+                            index: 5,
+                            child: languageHealth,
+                          ),
+                        ),
                       ],
                     );
                   },
@@ -138,20 +170,23 @@ class _DashboardBody extends StatelessWidget {
             SliverPadding(
               padding: EdgeInsets.fromLTRB(horizontal, 16, horizontal, 28),
               sliver: SliverToBoxAdapter(
-                child:
-                    state.overviews.isEmpty
-                        ? WorkspaceEmptyState(
-                          icon: HugeIcons.strokeRoundedFolder02,
-                          title: 'Create your first app',
-                          message:
-                              'An app groups the translation files of one '
-                              'project. Set a source language, pick your '
-                              'targets, and start translating.',
-                          actionLabel: 'New app',
-                          actionIcon: HugeIcons.strokeRoundedAdd01,
-                          onAction: () => openCreateApp(context),
-                        )
-                        : _AppsShortcutCard(state: state),
+                child: FadeSlideIn.staggered(
+                  index: 6,
+                  child:
+                      state.overviews.isEmpty
+                          ? WorkspaceEmptyState(
+                            icon: HugeIcons.strokeRoundedFolder02,
+                            title: 'Create your first app',
+                            message:
+                                'An app groups the translation files of one '
+                                'project. Set a source language, pick your '
+                                'targets, and start translating.',
+                            actionLabel: 'New app',
+                            actionIcon: HugeIcons.strokeRoundedAdd01,
+                            onAction: () => openCreateApp(context),
+                          )
+                          : _AppsShortcutCard(state: state),
+                ),
               ),
             ),
           ],

@@ -20,12 +20,13 @@ class UpdateCellEvent extends TranslationEditorEvent {
   final String value;
 }
 
-/// Adds a new key across all languages.
+/// Adds a new key across all languages, with an optional initial value
+/// per language code.
 class AddKeyEvent extends TranslationEditorEvent {
-  AddKeyEvent({required this.key, this.sourceValue = ''});
+  AddKeyEvent({required this.key, this.values = const {}});
 
   final String key;
-  final String sourceValue;
+  final Map<String, String> values;
 }
 
 /// Deletes a key across all languages.

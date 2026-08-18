@@ -4,12 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/lingo_desk_theme.dart';
-import '../../../core/theme/lingo_desk_tokens.dart';
 import '../../app_settings/presentation/widgets/create_app_dialog.dart';
 import '../domain/entities/app_overview.dart';
 import 'bloc/app_management_bloc.dart';
 import 'bloc/app_management_event.dart';
-import 'bloc/app_management_state.dart';
 
 /// Navigation and dialog helpers shared by the shell sidebar, the apps
 /// table and the dashboard. They all read the shell-scoped
@@ -47,57 +45,6 @@ Future<void> openCreateApp(BuildContext context) async {
   if (uploadNow == true && context.mounted) {
     context.push(AppRoutes.fileUpload(app.id), extra: app);
   }
-}
-
-/// Resolves which app a sidebar action should target: directly with a
-/// single app, via a chooser with several, or the create modal when none.
-Future<AppOverview?> pickApp(BuildContext context) async {
-  final state = context.read<AppManagementBloc>().state;
-  final overviews =
-      state is AppManagementLoaded ? state.overviews : const <AppOverview>[];
-
-  if (overviews.isEmpty) {
-    await openCreateApp(context);
-    return null;
-  }
-  if (overviews.length == 1) {
-    return overviews.first;
-  }
-
-  return showDialog<AppOverview>(
-    context: context,
-    builder:
-        (dialogContext) => SimpleDialog(
-          title: const Text('Choose an app'),
-          children: [
-            for (final overview in overviews)
-              SimpleDialogOption(
-                onPressed: () => Navigator.of(dialogContext).pop(overview),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        overview.app.name,
-                        style: Theme.of(dialogContext).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${overview.app.sourceLanguage}.json - '
-                        '${overview.keyCount} keys',
-                        style: LingoDeskTheme.codeStyle.copyWith(
-                          fontSize: 12,
-                          color: LingoDeskTokens.of(dialogContext).muted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
-  );
 }
 
 /// Opens the project import page, which creates the app from a scanned
@@ -161,12 +108,4 @@ Future<void> confirmDeleteApp(
     return (label: 'Complete', color: LingoDeskColors.complete);
   }
   return (label: 'Missing', color: LingoDeskColors.warning);
-}
-
-/// Opens the app chooser, then the translation editor for the choice.
-Future<void> pickAppAndOpenEditor(BuildContext context) async {
-  final overview = await pickApp(context);
-  if (overview != null && context.mounted) {
-    openEditor(context, overview);
-  }
 }

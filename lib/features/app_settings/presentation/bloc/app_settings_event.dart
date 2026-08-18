@@ -32,3 +32,11 @@ class SaveAppSettingsEvent extends AppSettingsEvent {
 
   final String name;
 }
+
+/// Selects every supported target at once, or clears the selection.
+class AllTargetLanguagesToggledEvent extends AppSettingsEvent {
+  AllTargetLanguagesToggledEvent({required this.selectAll});
+
+  /// True selects every language except the source; false clears them.
+  final bool selectAll;
+}

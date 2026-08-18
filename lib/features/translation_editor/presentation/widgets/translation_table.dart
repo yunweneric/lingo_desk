@@ -1,12 +1,19 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../../../core/constants/languages.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
+import '../../../../core/widgets/lingo_desk_dropdown.dart';
+import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/lingo_desk_menu.dart';
 import '../../domain/entities/translation_entry.dart';
 import '../bloc/translation_editor_bloc.dart';
 import '../bloc/translation_editor_event.dart';
@@ -26,11 +33,21 @@ class TranslationTableWidget extends StatefulWidget {
   final TranslationEditorLoaded state;
 
   static const _keyWidth = 300.0;
-  static const _languageWidth = 230.0;
+
+  /// How far the key column gives way before the language columns start
+  /// dropping into the collapsible section.
+  static const _keyMinWidth = 190.0;
+
+  /// A language column narrower than this stops being editable, so the
+  /// table hides the column instead of shrinking past it.
+  static const _languageMinWidth = 210.0;
 
   // Budget for the trailing delete button plus the row's horizontal
   // padding, so rows never overflow at the table's minimum width.
   static const _actionWidth = 72.0;
+
+  /// Leading column holding the row's expander chevron.
+  static const _expanderWidth = 28.0;
 
   /// Nesting inset per namespace level, capped so deep trees still leave
   /// the leaf readable.
@@ -74,21 +91,32 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Fixed columns leave a dead strip on the right of a wide window,
-        // so share out any slack between the language columns and only
-        // fall back to scrolling once they hit their minimum.
-        final slack =
-            constraints.maxWidth -
-            TranslationTableWidget._keyWidth -
-            TranslationTableWidget._actionWidth;
-        final languageWidth = math.max(
-          TranslationTableWidget._languageWidth,
-          slack / languages.length,
+        // Everything fits the pane: the key column gives way first, then
+        // the language columns share out what is left. Languages past
+        // what fits move into each row's collapsible section rather than
+        // off the right edge, so the table never scrolls sideways.
+        final keyWidth = math.min(
+          TranslationTableWidget._keyWidth,
+          math.max(
+            TranslationTableWidget._keyMinWidth,
+            constraints.maxWidth * 0.3,
+          ),
         );
-        final tableWidth =
-            TranslationTableWidget._keyWidth +
-            TranslationTableWidget._actionWidth +
-            languageWidth * languages.length;
+        final slack = math.max(
+          TranslationTableWidget._languageMinWidth,
+          constraints.maxWidth -
+              keyWidth -
+              TranslationTableWidget._actionWidth -
+              TranslationTableWidget._expanderWidth,
+        );
+        final visibleCount = (slack / TranslationTableWidget._languageMinWidth)
+            .floor()
+            .clamp(1, languages.length);
+        final languageWidth = slack / visibleCount;
+        final visibleLanguages = languages.sublist(0, visibleCount);
+        // The source language leads [allLanguages], so the columns that
+        // drop out are always targets — the reference stays on screen.
+        final hiddenLanguages = languages.sublist(visibleCount);
 
         return Container(
           decoration: BoxDecoration(
@@ -99,51 +127,40 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: tableWidth,
-                    child: Column(
-                      children: [
-                        _TableHeaderRow(
-                          languages: languages,
-                          languageWidth: languageWidth,
-                          sourceLanguage: widget.state.app.sourceLanguage,
-                          tokens: tokens,
-                        ),
-                        if (carriedGroup != null)
-                          _GroupBand(
-                            group: carriedGroup,
-                            tokens: tokens,
-                            isCollapsed: false,
-                            isContinuation: true,
-                            onToggle: () => _toggle(carriedGroup.prefix),
-                          ),
-                        Expanded(
-                          child:
-                              slots.isEmpty
-                                  ? _EmptyRows(
-                                    state: widget.state,
-                                    tokens: tokens,
-                                  )
-                                  : ListView.builder(
-                                    itemCount: pageSlots.length,
-                                    itemBuilder: (context, index) {
-                                      return _buildSlot(
-                                        context,
-                                        pageSlots[index],
-                                        languages,
-                                        languageWidth,
-                                        tokens,
-                                      );
-                                    },
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
+              _TableHeaderRow(
+                languages: visibleLanguages,
+                hiddenCount: hiddenLanguages.length,
+                keyWidth: keyWidth,
+                languageWidth: languageWidth,
+                sourceLanguage: widget.state.app.sourceLanguage,
+                tokens: tokens,
+              ),
+              if (carriedGroup != null)
+                _GroupBand(
+                  group: carriedGroup,
+                  tokens: tokens,
+                  isCollapsed: false,
+                  isContinuation: true,
+                  onToggle: () => _toggle(carriedGroup.prefix),
                 ),
+              Expanded(
+                child:
+                    slots.isEmpty
+                        ? _EmptyRows(state: widget.state, tokens: tokens)
+                        : ListView.builder(
+                          itemCount: pageSlots.length,
+                          itemBuilder: (context, index) {
+                            return _buildSlot(
+                              context,
+                              pageSlots[index],
+                              visibleLanguages,
+                              hiddenLanguages,
+                              keyWidth,
+                              languageWidth,
+                              tokens,
+                            );
+                          },
+                        ),
               ),
               _PaginationBar(
                 tokens: tokens,
@@ -172,7 +189,9 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
   Widget _buildSlot(
     BuildContext context,
     _Slot slot,
-    List<String> languages,
+    List<String> visibleLanguages,
+    List<String> hiddenLanguages,
+    double keyWidth,
     double languageWidth,
     LingoDeskTokens tokens,
   ) {
@@ -192,7 +211,9 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
       entry: row.entry,
       leaf: row.leaf,
       depth: row.group.depth,
-      languages: languages,
+      languages: visibleLanguages,
+      hiddenLanguages: hiddenLanguages,
+      keyWidth: keyWidth,
       languageWidth: languageWidth,
       sourceLanguage: widget.state.app.sourceLanguage,
       tokens: tokens,
@@ -315,12 +336,20 @@ Color _hairline(LingoDeskTokens tokens) =>
 class _TableHeaderRow extends StatelessWidget {
   const _TableHeaderRow({
     required this.languages,
+    required this.hiddenCount,
+    required this.keyWidth,
     required this.languageWidth,
     required this.sourceLanguage,
     required this.tokens,
   });
 
   final List<String> languages;
+
+  /// Languages that did not fit, and so live in the rows' collapsible
+  /// sections instead of in a column here.
+  final int hiddenCount;
+
+  final double keyWidth;
   final double languageWidth;
   final String sourceLanguage;
   final LingoDeskTokens tokens;
@@ -341,8 +370,9 @@ class _TableHeaderRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
       child: Row(
         children: [
+          const SizedBox(width: TranslationTableWidget._expanderWidth),
           SizedBox(
-            width: TranslationTableWidget._keyWidth - 16,
+            width: keyWidth - 16 - TranslationTableWidget._expanderWidth,
             child: Text('Key', style: headerStyle),
           ),
           for (final language in languages)
@@ -350,15 +380,29 @@ class _TableHeaderRow extends StatelessWidget {
               width: languageWidth,
               child: Padding(
                 padding: const EdgeInsets.only(right: 10),
-                child: Text(
-                  language == sourceLanguage
-                      ? '${language.toUpperCase()} - source'
-                      : language.toUpperCase(),
+                child: _LanguageLabel(
+                  language: language,
+                  label:
+                      language == sourceLanguage
+                          ? '${language.toUpperCase()} - source'
+                          : language.toUpperCase(),
                   style: headerStyle,
                 ),
               ),
             ),
           const Spacer(),
+          // Says where the missing columns went, so a narrow window reads
+          // as folded rather than truncated. It has to live inside the
+          // gutter the row menus use, so the count carries it and the
+          // sentence goes in the tooltip.
+          if (hiddenCount > 0)
+            Tooltip(
+              message:
+                  '$hiddenCount more '
+                  '${hiddenCount == 1 ? 'language' : 'languages'}, '
+                  'inside each row',
+              child: Text('+$hiddenCount', style: headerStyle),
+            ),
         ],
       ),
     );
@@ -366,7 +410,7 @@ class _TableHeaderRow extends StatelessWidget {
 }
 
 /// The shared namespace lifted out of its rows, as a collapsible band.
-class _GroupBand extends StatelessWidget {
+class _GroupBand extends StatefulWidget {
   const _GroupBand({
     required this.group,
     required this.tokens,
@@ -385,44 +429,75 @@ class _GroupBand extends StatelessWidget {
   final VoidCallback onToggle;
 
   @override
+  State<_GroupBand> createState() => _GroupBandState();
+}
+
+class _GroupBandState extends State<_GroupBand> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
+    final group = widget.group;
+    final tokens = widget.tokens;
+    final isCollapsed = widget.isCollapsed;
     final indent = TranslationTableWidget.indentFor(group.depth - 1);
     final count = group.entries.length;
 
-    return InkWell(
-      onTap: onToggle,
-      child: Container(
-        decoration: BoxDecoration(
-          color: tokens.isDark ? Colors.white.withAlpha(8) : tokens.active,
-          border: Border(bottom: BorderSide(color: _hairline(tokens))),
-        ),
-        padding: EdgeInsets.fromLTRB(16 + indent, 9, 16, 9),
-        child: Row(
-          children: [
-            LingoDeskIcon(
-              isCollapsed
-                  ? HugeIcons.strokeRoundedArrowRight01
-                  : HugeIcons.strokeRoundedArrowDown01,
-              size: 15,
-              color: tokens.muted,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: _Breadcrumb(segments: group.segments, tokens: tokens),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              isContinuation ? '$count keys, continued' : '$count keys',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: tokens.muted,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: InkWell(
+        onTap: widget.onToggle,
+        hoverColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: LingoDeskMotion.fast,
+          curve: LingoDeskMotion.curve,
+          decoration: BoxDecoration(
+            color: _bandColor(tokens),
+            border: Border(bottom: BorderSide(color: _hairline(tokens))),
+          ),
+          padding: EdgeInsets.fromLTRB(16 + indent, 9, 16, 9),
+          child: Row(
+            children: [
+              // One arrow that turns, rather than two that swap: the
+              // rotation is what says "this opens and closes".
+              AnimatedRotation(
+                turns: isCollapsed ? 0 : 0.25,
+                duration: LingoDeskMotion.standard,
+                curve: LingoDeskMotion.curve,
+                child: LingoDeskIcon(
+                  HugeIcons.strokeRoundedArrowRight01,
+                  size: 15,
+                  color: _hovered ? tokens.foreground : tokens.muted,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Flexible(
+                child: _Breadcrumb(segments: group.segments, tokens: tokens),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                widget.isContinuation
+                    ? '$count keys, continued'
+                    : '$count keys',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: tokens.muted,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Color _bandColor(LingoDeskTokens tokens) {
+    if (tokens.isDark) {
+      return Colors.white.withAlpha(_hovered ? 16 : 8);
+    }
+    return _hovered ? LingoDeskColors.activeLight : tokens.active;
   }
 }
 
@@ -469,6 +544,8 @@ class _TranslationRow extends StatefulWidget {
     required this.leaf,
     required this.depth,
     required this.languages,
+    required this.hiddenLanguages,
+    required this.keyWidth,
     required this.languageWidth,
     required this.sourceLanguage,
     required this.tokens,
@@ -478,7 +555,15 @@ class _TranslationRow extends StatefulWidget {
   final TranslationEntry entry;
   final String leaf;
   final int depth;
+
+  /// Languages with a column of their own on this row.
   final List<String> languages;
+
+  /// Languages that did not fit a column; they live in the section that
+  /// opens under the row.
+  final List<String> hiddenLanguages;
+
+  final double keyWidth;
   final double languageWidth;
   final String sourceLanguage;
   final LingoDeskTokens tokens;
@@ -490,85 +575,158 @@ class _TranslationRow extends StatefulWidget {
 
 class _TranslationRowState extends State<_TranslationRow> {
   bool _hovered = false;
+  bool _expanded = false;
+
+  void _toggle() => setState(() => _expanded = !_expanded);
 
   @override
   Widget build(BuildContext context) {
     final tokens = widget.tokens;
     final indent = TranslationTableWidget.indentFor(widget.depth);
+    final hidden = widget.hiddenLanguages;
+    final canExpand = hidden.isNotEmpty;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
-      child: Container(
+      child: AnimatedContainer(
+        duration: LingoDeskMotion.fast,
+        curve: LingoDeskMotion.curve,
         decoration: BoxDecoration(
+          // A whisper of fill, just enough to tie a key to its cells
+          // across a wide grid without turning the table into zebra
+          // stripes.
+          color:
+              _hovered || _expanded
+                  ? (tokens.isDark
+                      ? Colors.white.withValues(alpha: 0.03)
+                      : tokens.active.withValues(alpha: 0.5))
+                  : null,
           // Siblings sit flush; only the seam between groups is drawn.
           border:
               widget.isFirstInGroup
                   ? null
                   : Border(top: BorderSide(color: _hairline(tokens))),
         ),
-        padding: EdgeInsets.fromLTRB(16 + indent, 5, 16, 5),
-        child: Row(
+        child: Column(
           children: [
-            SizedBox(
-              width: TranslationTableWidget._keyWidth - 16 - indent,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Tooltip(
-                  message: widget.entry.key,
-                  waitDuration: const Duration(milliseconds: 500),
-                  child: Text(
-                    widget.leaf,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: LingoDeskTheme.codeStyle.copyWith(
-                      color: tokens.foreground,
-                      fontSize: 12,
+            Padding(
+              padding: EdgeInsets.fromLTRB(16 + indent, 5, 16, 5),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: TranslationTableWidget._expanderWidth,
+                    child:
+                        canExpand
+                            ? _RowExpander(
+                              expanded: _expanded,
+                              hovered: _hovered,
+                              hiddenCount: hidden.length,
+                              tokens: tokens,
+                              onTap: _toggle,
+                            )
+                            : null,
+                  ),
+                  SizedBox(
+                    width:
+                        widget.keyWidth -
+                        16 -
+                        indent -
+                        TranslationTableWidget._expanderWidth,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Tooltip(
+                        message: widget.entry.key,
+                        waitDuration: const Duration(milliseconds: 500),
+                        child: Text(
+                          widget.leaf,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: LingoDeskTheme.codeStyle.copyWith(
+                            color: tokens.foreground,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  for (final language in widget.languages)
+                    SizedBox(
+                      width: widget.languageWidth,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: TranslationCellFieldForRow(
+                          entryKey: widget.entry.key,
+                          language: language,
+                          value: widget.entry.valueFor(language),
+                          highlightMissing: language != widget.sourceLanguage,
+                        ),
+                      ),
+                    ),
+                  const Spacer(),
+                  // Destructive and permanent, so it stays quiet until the
+                  // row is under the pointer — but never fully hidden, or
+                  // it would be undiscoverable without a mouse.
+                  AnimatedOpacity(
+                    duration: LingoDeskMotion.fast,
+                    curve: LingoDeskMotion.curve,
+                    opacity: _hovered ? 1 : 0.3,
+                    child: LingoDeskMenuButton<String>(
+                      tooltip: 'Key actions',
+                      menuWidth: 190,
+                      items: const [
+                        LingoDeskMenuItem(
+                          value: 'copy',
+                          label: 'Copy key',
+                          icon: HugeIcons.strokeRoundedCopy01,
+                        ),
+                        LingoDeskMenuItem.divider(),
+                        LingoDeskMenuItem(
+                          value: 'delete',
+                          label: 'Delete key',
+                          icon: HugeIcons.strokeRoundedDelete02,
+                          destructive: true,
+                        ),
+                      ],
+                      onSelected: (action) {
+                        switch (action) {
+                          case 'copy':
+                            _copyKey(context);
+                          case 'delete':
+                            _confirmDelete(context);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            for (final language in widget.languages)
-              SizedBox(
-                width: widget.languageWidth,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: TranslationCellFieldForRow(
-                    entryKey: widget.entry.key,
-                    language: language,
-                    value: widget.entry.valueFor(language),
-                    highlightMissing: language != widget.sourceLanguage,
-                  ),
-                ),
-              ),
-            const Spacer(),
-            // Destructive and permanent, so it stays quiet until the row is
-            // under the pointer — but never fully hidden, or it would be
-            // undiscoverable without a mouse.
-            AnimatedOpacity(
-              duration: const Duration(milliseconds: 120),
-              opacity: _hovered ? 1 : 0.3,
-              child: IconButton(
-                tooltip: 'Delete key',
-                onPressed: () => _confirmDelete(context),
-                visualDensity: VisualDensity.compact,
-                constraints: const BoxConstraints.tightFor(
-                  width: 32,
-                  height: 32,
-                ),
-                padding: EdgeInsets.zero,
-                icon: LingoDeskIcon(
-                  HugeIcons.strokeRoundedDelete02,
-                  color: tokens.muted,
-                  size: 17,
-                ),
-              ),
+            AnimatedSize(
+              duration: LingoDeskMotion.standard,
+              curve: LingoDeskMotion.curve,
+              alignment: Alignment.topCenter,
+              child:
+                  _expanded && canExpand
+                      ? _HiddenLanguages(
+                        entry: widget.entry,
+                        languages: hidden,
+                        indent: indent,
+                        cellWidth: widget.languageWidth,
+                        tokens: tokens,
+                      )
+                      : const SizedBox(width: double.infinity),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _copyKey(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: widget.entry.key));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('Copied "${widget.entry.key}"')));
   }
 
   Future<void> _confirmDelete(BuildContext context) async {
@@ -600,6 +758,155 @@ class _TranslationRowState extends State<_TranslationRow> {
     if (confirmed ?? false) {
       bloc.add(DeleteKeyEvent(widget.entry.key));
     }
+  }
+}
+
+/// A language column's label: its flag, then its code. The flag is what
+/// the eye finds first once a row carries more locales than columns.
+class _LanguageLabel extends StatelessWidget {
+  const _LanguageLabel({
+    required this.language,
+    required this.label,
+    required this.style,
+  });
+
+  final String language;
+  final String label;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          SupportedLanguages.flagOf(language),
+          style: TextStyle(fontSize: (style?.fontSize ?? 12) + 1),
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The chevron at the start of a row whose languages did not all fit.
+/// One arrow that turns, matching the namespace bands above it.
+class _RowExpander extends StatelessWidget {
+  const _RowExpander({
+    required this.expanded,
+    required this.hovered,
+    required this.hiddenCount,
+    required this.tokens,
+    required this.onTap,
+  });
+
+  final bool expanded;
+  final bool hovered;
+  final int hiddenCount;
+  final LingoDeskTokens tokens;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Tooltip(
+        message:
+            expanded
+                ? 'Hide the other languages'
+                : '$hiddenCount more '
+                    '${hiddenCount == 1 ? 'language' : 'languages'}',
+        waitDuration: const Duration(milliseconds: 400),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(6),
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: AnimatedRotation(
+              turns: expanded ? 0.25 : 0,
+              duration: LingoDeskMotion.standard,
+              curve: LingoDeskMotion.curve,
+              child: LingoDeskIcon(
+                HugeIcons.strokeRoundedArrowRight01,
+                size: 15,
+                color: expanded || hovered ? tokens.foreground : tokens.muted,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The languages with no column of their own, opened under their row and
+/// fully editable — folding a column must not put a locale out of reach.
+class _HiddenLanguages extends StatelessWidget {
+  const _HiddenLanguages({
+    required this.entry,
+    required this.languages,
+    required this.indent,
+    required this.cellWidth,
+    required this.tokens,
+  });
+
+  final TranslationEntry entry;
+  final List<String> languages;
+  final double indent;
+  final double cellWidth;
+  final LingoDeskTokens tokens;
+
+  @override
+  Widget build(BuildContext context) {
+    final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: tokens.muted,
+      fontSize: 11,
+      fontWeight: FontWeight.w700,
+    );
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(
+        16 + indent + TranslationTableWidget._expanderWidth,
+        2,
+        16,
+        12,
+      ),
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          for (final language in languages)
+            SizedBox(
+              width: math.max(180, cellWidth - 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _LanguageLabel(
+                    language: language,
+                    label: language.toUpperCase(),
+                    style: labelStyle,
+                  ),
+                  const SizedBox(height: 4),
+                  TranslationCellFieldForRow(
+                    entryKey: entry.key,
+                    language: language,
+                    value: entry.valueFor(language),
+                    highlightMissing: true,
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
 
@@ -662,25 +969,17 @@ class _PaginationBar extends StatelessWidget {
           const Spacer(),
           Text('Rows', style: mutedStyle),
           const SizedBox(width: 8),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<int>(
-              value: pageSize,
-              isDense: true,
-              borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
-              style: LingoDeskTheme.codeStyle.copyWith(
-                color: tokens.foreground,
-                fontSize: 12,
-              ),
-              items: [
-                for (final size in pageSizes)
-                  DropdownMenuItem(value: size, child: Text('$size')),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  onPageSizeChanged(value);
-                }
-              },
-            ),
+          LingoDeskDropdown<int>(
+            items: [
+              for (final size in pageSizes)
+                LingoDeskDropdownItem(value: size, label: '$size'),
+            ],
+            value: pageSize,
+            size: LingoDeskFieldSize.compact,
+            expand: false,
+            monospace: true,
+            menuWidth: 96,
+            onChanged: onPageSizeChanged,
           ),
           const SizedBox(width: 16),
           _PageButton(
@@ -727,16 +1026,21 @@ class _PageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      tooltip: tooltip,
-      onPressed: onPressed,
-      visualDensity: VisualDensity.compact,
-      constraints: const BoxConstraints.tightFor(width: 32, height: 32),
-      padding: EdgeInsets.zero,
-      icon: LingoDeskIcon(
-        icon,
-        size: 17,
-        color: onPressed == null ? tokens.muted.withAlpha(90) : tokens.muted,
+    return PressableScale(
+      child: IconButton(
+        tooltip: tooltip,
+        onPressed: onPressed,
+        visualDensity: VisualDensity.compact,
+        constraints: const BoxConstraints.tightFor(width: 32, height: 32),
+        padding: EdgeInsets.zero,
+        icon: AnimatedTint(
+          // Reaching the first or last page dims the arrow rather than
+          // greying it out in one frame.
+          color: onPressed == null ? tokens.muted.withAlpha(90) : tokens.muted,
+          duration: LingoDeskMotion.standard,
+          builder:
+              (context, tint) => LingoDeskIcon(icon, size: 17, color: tint),
+        ),
       ),
     );
   }
@@ -753,29 +1057,31 @@ class _EmptyRows extends StatelessWidget {
     final hasEntries = state.entries.isNotEmpty;
 
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LingoDeskIcon(
-              hasEntries
-                  ? HugeIcons.strokeRoundedSearch01
-                  : HugeIcons.strokeRoundedKey01,
-              color: tokens.muted,
-              size: 28,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              hasEntries
-                  ? 'No keys match the current filters.'
-                  : 'No keys yet. Upload JSON files or add your first key.',
-              textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
-            ),
-          ],
+      child: FadeSlideIn(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              LingoDeskIcon(
+                hasEntries
+                    ? HugeIcons.strokeRoundedSearch01
+                    : HugeIcons.strokeRoundedKey01,
+                color: tokens.muted,
+                size: 28,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                hasEntries
+                    ? 'No keys match the current filters.'
+                    : 'No keys yet. Upload JSON files or add your first key.',
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+              ),
+            ],
+          ),
         ),
       ),
     );

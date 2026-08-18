@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../theme/lingo_desk_motion.dart';
+import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
+import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
+import 'lingo_desk_menu.dart';
 
 /// Bordered 42px control used for header toolbar affordances.
-class WorkspaceToolbarButton extends StatelessWidget {
+///
+/// It sits inside a popup trigger rather than a real button, so it draws
+/// its own hover state: the border picks up the brand colour and the icon
+/// comes up with it, matching what an [OutlinedButton] beside it does.
+class WorkspaceToolbarButton extends StatefulWidget {
   const WorkspaceToolbarButton({
     super.key,
     required this.icon,
@@ -18,51 +26,81 @@ class WorkspaceToolbarButton extends StatelessWidget {
   final bool compact;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = LingoDeskTokens.of(context);
-
-    return Container(
-      constraints: BoxConstraints(minWidth: compact ? 42 : 0),
-      height: 42,
-      padding: EdgeInsets.symmetric(horizontal: compact ? 11 : 13),
-      decoration: BoxDecoration(
-        color: tokens.card,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: tokens.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LingoDeskIcon(icon, color: tokens.muted, size: 18),
-          if (!compact) ...[
-            const SizedBox(width: 8),
-            Text(label, style: Theme.of(context).textTheme.labelLarge),
-          ],
-        ],
-      ),
-    );
-  }
+  State<WorkspaceToolbarButton> createState() => _WorkspaceToolbarButtonState();
 }
 
-/// Icon + label row used inside popup menus.
-class WorkspaceMenuOption extends StatelessWidget {
-  const WorkspaceMenuOption({
-    super.key,
-    required this.icon,
-    required this.label,
-  });
-
-  final List<List<dynamic>> icon;
-  final String label;
+class _WorkspaceToolbarButtonState extends State<WorkspaceToolbarButton> {
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        LingoDeskIcon(icon, size: 18),
-        const SizedBox(width: 10),
-        Text(label),
-      ],
+    final tokens = LingoDeskTokens.of(context);
+    final compact = widget.compact;
+    final accent = _hovered ? LingoDeskColors.brandTeal : tokens.muted;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedContainer(
+        duration: LingoDeskMotion.fast,
+        curve: LingoDeskMotion.curve,
+        constraints: BoxConstraints(minWidth: compact ? 42 : 0),
+        height: 42,
+        padding: EdgeInsets.symmetric(horizontal: compact ? 11 : 13),
+        decoration: BoxDecoration(
+          color: tokens.card,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: _hovered ? LingoDeskColors.brandTeal : tokens.border,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The icon swaps whenever the value behind it changes (theme
+            // mode, mostly); cross-fading keeps that from reading as a
+            // glitch.
+            AnimatedTint(
+              color: accent,
+              builder:
+                  (context, tint) => AnimatedSwitcher(
+                    duration: LingoDeskMotion.standard,
+                    switchInCurve: LingoDeskMotion.curve,
+                    transitionBuilder:
+                        (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: Tween<double>(
+                              begin: 0.7,
+                              end: 1,
+                            ).animate(animation),
+                            child: child,
+                          ),
+                        ),
+                    child: LingoDeskIcon(
+                      widget.icon,
+                      key: ValueKey<String>(widget.label),
+                      color: tint,
+                      size: 18,
+                    ),
+                  ),
+            ),
+            if (!compact) ...[
+              const SizedBox(width: 8),
+              AnimatedSize(
+                duration: LingoDeskMotion.standard,
+                curve: LingoDeskMotion.curve,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.label,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
@@ -83,33 +121,28 @@ class ThemeModeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<ThemeMode>(
+    return LingoDeskMenuButton<ThemeMode>(
       tooltip: 'Theme',
+      selectedValue: themeMode,
+      menuWidth: 180,
       onSelected: onChanged,
-      itemBuilder:
-          (context) => const [
-            PopupMenuItem(
-              value: ThemeMode.system,
-              child: WorkspaceMenuOption(
-                icon: HugeIcons.strokeRoundedComputerSettings,
-                label: 'System',
-              ),
-            ),
-            PopupMenuItem(
-              value: ThemeMode.light,
-              child: WorkspaceMenuOption(
-                icon: HugeIcons.strokeRoundedSun03,
-                label: 'Light',
-              ),
-            ),
-            PopupMenuItem(
-              value: ThemeMode.dark,
-              child: WorkspaceMenuOption(
-                icon: HugeIcons.strokeRoundedMoon02,
-                label: 'Dark',
-              ),
-            ),
-          ],
+      items: const [
+        LingoDeskMenuItem(
+          value: ThemeMode.system,
+          label: 'System',
+          icon: HugeIcons.strokeRoundedComputerSettings,
+        ),
+        LingoDeskMenuItem(
+          value: ThemeMode.light,
+          label: 'Light',
+          icon: HugeIcons.strokeRoundedSun03,
+        ),
+        LingoDeskMenuItem(
+          value: ThemeMode.dark,
+          label: 'Dark',
+          icon: HugeIcons.strokeRoundedMoon02,
+        ),
+      ],
       child: WorkspaceToolbarButton(
         icon: switch (themeMode) {
           ThemeMode.light => HugeIcons.strokeRoundedSun03,

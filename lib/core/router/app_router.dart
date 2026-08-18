@@ -10,6 +10,7 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/translation_editor/presentation/pages/translation_editor_page.dart';
 import '../preferences/app_settings_controller.dart';
+import '../theme/lingo_desk_motion.dart';
 import '../widgets/app_shell.dart';
 
 /// Observes the shell navigator so pages can react to being returned to
@@ -46,7 +47,7 @@ class AppRoutes {
 ///
 /// Every page except onboarding renders inside [AppShell], so the sidebar
 /// is mounted once and persists across navigation. Every navigation is a
-/// fade (240ms, ease-out-cubic — the design system's motion tokens).
+/// fade-and-rise on the shared motion tokens ([LingoDeskMotion.page]).
 /// Onboarding is enforced with a redirect that re-evaluates when
 /// [settings] notifies.
 GoRouter buildAppRouter(AppSettingsController settings) {
@@ -141,16 +142,37 @@ GoRouter buildAppRouter(AppSettingsController settings) {
   );
 }
 
+/// Fade plus a short rise, so a page arrives rather than blinks on.
+///
+/// The outgoing page only fades — sliding both directions at once reads
+/// as the window scrolling, not as one page replacing another.
 CustomTransitionPage<Object?> _fadePage(GoRouterState state, Widget child) {
   return CustomTransitionPage<Object?>(
     key: state.pageKey,
     child: child,
-    transitionDuration: const Duration(milliseconds: 240),
-    reverseTransitionDuration: const Duration(milliseconds: 240),
+    transitionDuration: LingoDeskMotion.page,
+    reverseTransitionDuration: LingoDeskMotion.page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final eased = CurvedAnimation(
+        parent: animation,
+        curve: LingoDeskMotion.entrance,
+        reverseCurve: LingoDeskMotion.curve,
+      );
+
+      if (!LingoDeskMotion.enabled(context)) {
+        return FadeTransition(opacity: eased, child: child);
+      }
+
       return FadeTransition(
-        opacity: CurveTween(curve: Curves.easeOutCubic).animate(animation),
-        child: child,
+        opacity: eased,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            // Fraction of the page height: ~8px on a 700px pane.
+            begin: const Offset(0, 0.012),
+            end: Offset.zero,
+          ).animate(eased),
+          child: child,
+        ),
       );
     },
   );

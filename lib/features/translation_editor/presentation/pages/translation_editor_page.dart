@@ -5,9 +5,12 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
 import '../../domain/usecases/export_translations.dart';
@@ -75,15 +78,26 @@ class _EditorViewState extends State<_EditorView> {
           );
       },
       builder: (context, state) {
+        final Widget view;
         if (state is TranslationEditorLoaded) {
-          return _buildLoaded(context, state);
+          view = _buildLoaded(context, state);
+        } else if (state is TranslationEditorError) {
+          view = _buildError(context, state);
+        } else {
+          view = const _EditorChrome(
+            breadcrumb: [Crumb.workspace, Crumb('Editor')],
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
-        if (state is TranslationEditorError) {
-          return _buildError(context, state);
-        }
-        return const _EditorChrome(
-          breadcrumb: ['Workspace', 'Editor'],
-          body: Center(child: CircularProgressIndicator()),
+
+        return AnimatedSwitcher(
+          duration: LingoDeskMotion.standard,
+          switchInCurve: LingoDeskMotion.curve,
+          switchOutCurve: LingoDeskMotion.curve,
+          child: KeyedSubtree(
+            key: ValueKey<String>(state.runtimeType.toString()),
+            child: view,
+          ),
         );
       },
     );
@@ -91,7 +105,7 @@ class _EditorViewState extends State<_EditorView> {
 
   Widget _buildError(BuildContext context, TranslationEditorError state) {
     return _EditorChrome(
-      breadcrumb: const ['Workspace', 'Editor'],
+      breadcrumb: const [Crumb.workspace, Crumb('Editor')],
       body: WorkspaceErrorState(
         message: state.message,
         onRetry:
@@ -103,13 +117,32 @@ class _EditorViewState extends State<_EditorView> {
   }
 
   Widget _buildLoaded(BuildContext context, TranslationEditorLoaded state) {
-    final tokens = LingoDeskTokens.of(context);
-
     return _EditorChrome(
-      breadcrumb: ['Workspace', state.app.name, 'Editor'],
+      breadcrumb: [
+        Crumb.workspace,
+        const Crumb('Apps', route: AppRoutes.apps),
+        Crumb(state.app.name),
+        const Crumb('Editor'),
+      ],
       // Page-level actions live in the header; the body toolbar keeps only
       // the controls that change what the grid *shows*.
       actions: [
+        Tooltip(
+          message: 'App settings',
+          child: OutlinedButton(
+            onPressed: () => _openAppSettings(context, state),
+            // Icon-only: the header is already crowded, and the gear is
+            // the one action that leaves the editor.
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.zero,
+              fixedSize: const Size.square(48),
+            ),
+            child: const LingoDeskIcon(
+              HugeIcons.strokeRoundedSettings01,
+              size: 19,
+            ),
+          ),
+        ),
         OutlinedButton.icon(
           onPressed: () => _addKey(context, state),
           icon: const LingoDeskIcon(HugeIcons.strokeRoundedAdd01, size: 17),
@@ -136,27 +169,33 @@ class _EditorViewState extends State<_EditorView> {
       ],
       body: Padding(
         padding: const EdgeInsets.all(20),
+        // The grid is the point of this page, so the blocks above it
+        // arrive first and it settles in last.
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _EditorSummary(state: state),
+            FadeSlideIn(child: _EditorSummary(state: state)),
             const SizedBox(height: 14),
             LanguageProgressHeader(state: state),
             const SizedBox(height: 14),
-            _buildToolbar(context, state, tokens),
+            FadeSlideIn.staggered(
+              index: 2,
+              child: _buildToolbar(context, state),
+            ),
             const SizedBox(height: 14),
-            Expanded(child: TranslationTableWidget(state: state)),
+            Expanded(
+              child: FadeSlideIn.staggered(
+                index: 3,
+                child: TranslationTableWidget(state: state),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildToolbar(
-    BuildContext context,
-    TranslationEditorLoaded state,
-    LingoDeskTokens tokens,
-  ) {
+  Widget _buildToolbar(BuildContext context, TranslationEditorLoaded state) {
     final bloc = context.read<TranslationEditorBloc>();
 
     return Wrap(
@@ -166,37 +205,12 @@ class _EditorViewState extends State<_EditorView> {
       children: [
         SizedBox(
           width: 260,
-          height: 42,
-          child: TextField(
+          child: LingoDeskTextField(
             controller: _searchController,
+            hintText: 'Search keys and values',
+            prefixIcon: HugeIcons.strokeRoundedSearch01,
+            clearable: true,
             onChanged: (value) => bloc.add(SearchKeysEvent(value)),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: tokens.foreground),
-            decoration: InputDecoration(
-              hintText: 'Search keys and values',
-              isDense: true,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 6),
-                child: LingoDeskIcon(
-                  HugeIcons.strokeRoundedSearch01,
-                  color: tokens.muted,
-                  size: 18,
-                ),
-              ),
-              prefixIconConstraints: const BoxConstraints(minWidth: 34),
-              filled: true,
-              fillColor: tokens.card,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: tokens.border),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: tokens.border),
-              ),
-            ),
           ),
         ),
         FilterChip(
@@ -220,11 +234,23 @@ class _EditorViewState extends State<_EditorView> {
     final request = await AddKeyDialog.show(
       context,
       existingKeys: state.entries.map((entry) => entry.key).toSet(),
+      languages: state.app.allLanguages,
       sourceLanguage: state.app.sourceLanguage,
     );
     if (request != null) {
-      bloc.add(AddKeyEvent(key: request.key, sourceValue: request.sourceValue));
+      bloc.add(AddKeyEvent(key: request.key, values: request.values));
     }
+  }
+
+  /// Opens the app's settings, then reloads so a changed name or new
+  /// target language shows up in the grid on return.
+  Future<void> _openAppSettings(
+    BuildContext context,
+    TranslationEditorLoaded state,
+  ) async {
+    final bloc = context.read<TranslationEditorBloc>();
+    await context.push(AppRoutes.appSettings(state.app.id), extra: state.app);
+    bloc.add(LoadEditorEvent(widget.appId));
   }
 
   Future<void> _uploadFiles(
@@ -266,7 +292,7 @@ class _EditorChrome extends StatelessWidget {
     this.actions = const [],
   });
 
-  final List<String> breadcrumb;
+  final List<Crumb> breadcrumb;
   final List<Widget> actions;
   final Widget body;
 

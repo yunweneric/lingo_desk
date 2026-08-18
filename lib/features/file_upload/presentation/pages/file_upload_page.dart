@@ -8,7 +8,11 @@ import '../../../../core/di/injection_container.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/language_dropdown.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
+import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../../app_management/domain/entities/app.dart';
@@ -87,10 +91,16 @@ class _FileUploadPageState extends State<FileUploadPage> {
               child: Column(
                 children: [
                   WorkspacePageHeader(
+                    // Importing into an existing app hangs off Apps;
+                    // a fresh project import is a top-level page.
                     breadcrumb: [
-                      'Workspace',
-                      'Import',
-                      widget.app?.name ?? 'New project',
+                      Crumb.workspace,
+                      if (widget.app case final app?) ...[
+                        const Crumb('Apps', route: AppRoutes.apps),
+                        Crumb(app.name),
+                        const Crumb('Import'),
+                      ] else
+                        const Crumb('Import'),
                     ],
                     actions: [
                       OutlinedButton(
@@ -416,14 +426,13 @@ class _ScannedProjectState extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('App name', style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: 8),
-              TextField(
+              LingoDeskTextField(
                 controller: nameController,
+                label: 'App name',
+                hintText: 'e.g. Customer Portal',
+                size: LingoDeskFieldSize.large,
                 enabled: !state.isBusy,
-                decoration: const InputDecoration(
-                  hintText: 'e.g. Customer Portal',
-                ),
+                isRequired: true,
                 onChanged:
                     (value) => context.read<FileUploadBloc>().add(
                       ProjectNameChangedEvent(value),
@@ -462,43 +471,20 @@ class _ScannedProjectState extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 18),
-              Text(
-                'Source language',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                initialValue: source,
-                items: [
-                  for (final group in project.groups)
-                    DropdownMenuItem(
-                      value: group.languageCode,
-                      child: Text(
-                        '${SupportedLanguages.flagOf(group.languageCode)}  '
-                        '${SupportedLanguages.nameOf(group.languageCode)} '
-                        '(${group.languageCode})',
-                      ),
-                    ),
+              LanguageDropdown(
+                label: 'Source language',
+                helperText:
+                    'Everything else becomes a target language you can '
+                    'translate into.',
+                languageCodes: [
+                  for (final group in project.groups) group.languageCode,
                 ],
+                value: source,
+                enabled: !state.isBusy,
                 onChanged:
-                    state.isBusy
-                        ? null
-                        : (value) {
-                          if (value != null) {
-                            context.read<FileUploadBloc>().add(
-                              SourceLanguageSelectedEvent(value),
-                            );
-                          }
-                        },
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Everything else becomes a target language you can translate '
-                'into.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: tokens.muted,
-                  fontSize: 12,
-                ),
+                    (value) => context.read<FileUploadBloc>().add(
+                      SourceLanguageSelectedEvent(value),
+                    ),
               ),
             ],
           ),
@@ -516,18 +502,28 @@ class _ScannedProjectState extends StatelessWidget {
           ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
         ),
         const SizedBox(height: 12),
-        for (final group in project.groups) ...[
-          ScannedLanguageTile(
-            group: group,
-            totalKeys: totalKeys,
-            isIncluded: !state.excludedLanguages.contains(group.languageCode),
-            isSource: group.languageCode == source,
-            onToggle:
-                group.languageCode == source || state.isBusy
-                    ? null
-                    : () => context.read<FileUploadBloc>().add(
-                      ToggleScannedLanguageEvent(group.languageCode),
-                    ),
+        // A scan can turn up a dozen locales at once; letting them land in
+        // sequence makes the result readable instead of a wall.
+        for (var index = 0; index < project.groups.length; index++) ...[
+          FadeSlideIn.staggered(
+            index: index,
+            child: ScannedLanguageTile(
+              group: project.groups[index],
+              totalKeys: totalKeys,
+              isIncluded:
+                  !state.excludedLanguages.contains(
+                    project.groups[index].languageCode,
+                  ),
+              isSource: project.groups[index].languageCode == source,
+              onToggle:
+                  project.groups[index].languageCode == source || state.isBusy
+                      ? null
+                      : () => context.read<FileUploadBloc>().add(
+                        ToggleScannedLanguageEvent(
+                          project.groups[index].languageCode,
+                        ),
+                      ),
+            ),
           ),
           const SizedBox(height: 8),
         ],
@@ -729,13 +725,16 @@ class _StagedState extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        for (final file in state.stagedFiles) ...[
-          StagedFileTile(
-            file: file,
-            onRemove:
-                () => context.read<FileUploadBloc>().add(
-                  RemoveFileEvent(file.fileName),
-                ),
+        for (var index = 0; index < state.stagedFiles.length; index++) ...[
+          FadeSlideIn.staggered(
+            index: index,
+            child: StagedFileTile(
+              file: state.stagedFiles[index],
+              onRemove:
+                  () => context.read<FileUploadBloc>().add(
+                    RemoveFileEvent(state.stagedFiles[index].fileName),
+                  ),
+            ),
           ),
           const SizedBox(height: 8),
         ],

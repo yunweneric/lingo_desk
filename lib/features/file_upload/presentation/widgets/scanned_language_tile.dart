@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/languages.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
@@ -41,14 +42,23 @@ class ScannedLanguageTile extends StatelessWidget {
             ? LingoDeskColors.complete
             : LingoDeskColors.brandTeal;
 
-    return Opacity(
+    // Excluding a locale is reversible and easy to do by accident, so the
+    // tile dims and its accent border drains away rather than blinking
+    // between two states.
+    return AnimatedOpacity(
       opacity: isIncluded ? 1 : 0.55,
-      child: Container(
+      duration: LingoDeskMotion.standard,
+      curve: LingoDeskMotion.curve,
+      child: AnimatedContainer(
+        duration: LingoDeskMotion.standard,
+        curve: LingoDeskMotion.curve,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: tokens.card,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: tokens.border),
+          border: Border.all(
+            color: isIncluded ? accent.withValues(alpha: 0.45) : tokens.border,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,23 +108,41 @@ class ScannedLanguageTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  '${group.filledKeyCount}/$totalKeys',
+                AnimatedDefaultTextStyle(
+                  duration: LingoDeskMotion.standard,
+                  curve: LingoDeskMotion.curve,
                   style: LingoDeskTheme.codeStyle.copyWith(
                     color: accent,
                     fontSize: 12,
                   ),
+                  child: Text('${group.filledKeyCount}/$totalKeys'),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             ClipRRect(
               borderRadius: BorderRadius.circular(999),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 6,
-                backgroundColor: tokens.active,
-                valueColor: AlwaysStoppedAnimation<Color>(accent),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: progress.toDouble()),
+                duration: LingoDeskMotion.slow,
+                curve: LingoDeskMotion.entrance,
+                builder: (context, animated, _) {
+                  return TweenAnimationBuilder<Color?>(
+                    tween: ColorTween(end: accent),
+                    duration: LingoDeskMotion.standard,
+                    curve: LingoDeskMotion.curve,
+                    builder: (context, color, _) {
+                      return LinearProgressIndicator(
+                        value: animated,
+                        minHeight: 6,
+                        backgroundColor: tokens.active,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          color ?? accent,
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
             if (group.conflictCount > 0) ...[

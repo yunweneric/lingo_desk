@@ -7,8 +7,10 @@ import '../../../../core/constants/languages.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
@@ -167,25 +169,26 @@ List<_Metric> _dashboardMetrics(AppManagementLoaded state) {
   return [
     _Metric(
       label: 'Apps',
-      value: state.overviews.length.toString(),
+      value: state.overviews.length,
       detail: 'Local workspace',
       icon: HugeIcons.strokeRoundedFolder02,
     ),
     _Metric(
       label: 'Total keys',
-      value: state.totalKeys.toString(),
+      value: state.totalKeys,
       detail: 'Across all apps',
       icon: HugeIcons.strokeRoundedKey01,
     ),
     _Metric(
       label: 'Coverage',
-      value: '${(state.coverage * 100).round()}%',
+      value: (state.coverage * 100).round(),
+      suffix: '%',
       detail: '${state.activeLanguages.length} target locales',
       icon: HugeIcons.strokeRoundedChartBarIncreasing,
     ),
     _Metric(
       label: 'Missing',
-      value: missing.toString(),
+      value: missing,
       detail: missing == 0 ? 'All clear' : 'Needs review',
       icon: HugeIcons.strokeRoundedAlertCircle,
       isPositive: missing == 0,
@@ -199,11 +202,18 @@ class _Metric {
     required this.value,
     required this.detail,
     required this.icon,
+    this.suffix = '',
     this.isPositive = true,
   });
 
   final String label;
-  final String value;
+
+  /// Kept numeric so the card can count up to it rather than snapping.
+  final num value;
+
+  /// Unit appended to [value], e.g. `%`.
+  final String suffix;
+
   final String detail;
   final List<List<dynamic>> icon;
   final bool isPositive;

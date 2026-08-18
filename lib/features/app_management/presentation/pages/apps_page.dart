@@ -5,7 +5,9 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
@@ -69,7 +71,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                   listenable: _settings,
                   builder: (context, _) {
                     return WorkspacePageHeader(
-                      breadcrumb: const ['Workspace', 'Apps'],
+                      breadcrumb: const [Crumb.workspace, Crumb('Apps')],
                       actions: [
                         const AppsSearchField(),
                         ThemeModeSwitcher(
@@ -107,6 +109,24 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
   }
 
   Widget _buildBody(BuildContext context, AppManagementState state) {
+    // Cross-fade the three states so a reload after returning from the
+    // editor refreshes in place instead of flashing a spinner.
+    return AnimatedSwitcher(
+      duration: LingoDeskMotion.standard,
+      switchInCurve: LingoDeskMotion.curve,
+      switchOutCurve: LingoDeskMotion.curve,
+      // The switcher stacks its children; without this the shrink-wrapped
+      // scroll view floats in the middle of the page instead of starting
+      // under the header.
+      layoutBuilder: topAlignedSwitcherLayout,
+      child: KeyedSubtree(
+        key: ValueKey<String>(state.runtimeType.toString()),
+        child: _bodyFor(context, state),
+      ),
+    );
+  }
+
+  Widget _bodyFor(BuildContext context, AppManagementState state) {
     if (state is AppManagementError) {
       return WorkspaceErrorState(
         message: state.message,
@@ -126,7 +146,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppsSummaryCard(state: state),
+              FadeSlideIn(child: AppsSummaryCard(state: state)),
               const SizedBox(height: 16),
               if (state.overviews.isEmpty)
                 WorkspaceEmptyState(
@@ -141,7 +161,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                   onAction: () => openImportProject(context),
                 )
               else
-                AppsTable(state: state),
+                FadeSlideIn.staggered(index: 1, child: AppsTable(state: state)),
             ],
           ),
         );

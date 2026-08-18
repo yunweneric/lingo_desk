@@ -9,8 +9,10 @@ import '../../features/app_management/presentation/bloc/app_management_event.dar
 import '../di/injection_container.dart';
 import '../preferences/app_settings_controller.dart';
 import '../router/app_router.dart';
+import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
+import 'lingo_desk_animations.dart';
 import 'app_shell_scope.dart';
 import 'lingo_desk_icon.dart';
 import 'lingo_desk_mark.dart';
@@ -103,75 +105,89 @@ class AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
-    return DecoratedBox(
+    final width = collapsed ? 72.0 : 284.0;
+
+    return AnimatedContainer(
+      duration: LingoDeskMotion.standard,
+      curve: LingoDeskMotion.curve,
+      width: width,
       decoration: BoxDecoration(
         color: tokens.sidebar,
         border: Border(right: BorderSide(color: tokens.border)),
       ),
-      child: SizedBox(
-        width: collapsed ? 72 : 284,
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(collapsed ? 10 : 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      collapsed
-                          ? const EdgeInsets.only(bottom: 18)
-                          : const EdgeInsets.fromLTRB(8, 8, 8, 20),
-                  child: LingoDeskMark(
-                    size: collapsed ? 28 : 34,
-                    reversed: tokens.isDark,
-                    showWordmark: !collapsed,
+      // The content is laid out at its final width immediately and
+      // revealed as the rail grows, so labels slide out from behind the
+      // edge instead of reflowing on every frame of the animation.
+      child: ClipRect(
+        child: OverflowBox(
+          alignment: Alignment.centerLeft,
+          minWidth: width,
+          maxWidth: width,
+          child: SafeArea(
+            child: AnimatedPadding(
+              duration: LingoDeskMotion.standard,
+              curve: LingoDeskMotion.curve,
+              padding: EdgeInsets.all(collapsed ? 10 : 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        collapsed
+                            ? const EdgeInsets.only(bottom: 18)
+                            : const EdgeInsets.fromLTRB(8, 8, 8, 20),
+                    child: LingoDeskMark(
+                      size: collapsed ? 28 : 34,
+                      reversed: tokens.isDark,
+                      showWordmark: !collapsed,
+                    ),
                   ),
-                ),
-                _SidebarSection(
-                  collapsed: collapsed,
-                  items: [
-                    _SidebarItemData(
-                      label: 'Dashboard',
-                      icon: HugeIcons.strokeRoundedDashboardSquare01,
-                      isActive: location == AppRoutes.dashboard,
-                      onTap: () => context.go(AppRoutes.dashboard),
-                    ),
-                    _SidebarItemData(
-                      label: 'Apps',
-                      icon: HugeIcons.strokeRoundedFolder02,
-                      // The editor and per-app pages hang off Apps;
-                      // uploading into an app belongs to Import.
-                      isActive:
-                          location.startsWith(AppRoutes.apps) &&
-                          !location.endsWith('/upload'),
-                      onTap: () => context.go(AppRoutes.apps),
-                    ),
-                    _SidebarItemData(
-                      label: 'Import',
-                      icon: HugeIcons.strokeRoundedFileUpload,
-                      isActive:
-                          location == AppRoutes.importProject ||
-                          location.endsWith('/upload'),
-                      onTap: () => openImportProject(context),
-                    ),
-                    _SidebarItemData(
-                      label: 'Settings',
-                      icon: HugeIcons.strokeRoundedSettings01,
-                      isActive: location == AppRoutes.settings,
-                      onTap: () => context.go(AppRoutes.settings),
-                    ),
-                  ],
-                  onItemTap: onItemTap,
-                ),
-                const Spacer(),
-                _SidebarFooter(
-                  collapsed: collapsed,
-                  onTap: () {
-                    context.go(AppRoutes.settings);
-                    onItemTap?.call();
-                  },
-                ),
-              ],
+                  _SidebarSection(
+                    collapsed: collapsed,
+                    items: [
+                      _SidebarItemData(
+                        label: 'Dashboard',
+                        icon: HugeIcons.strokeRoundedDashboardSquare01,
+                        isActive: location == AppRoutes.dashboard,
+                        onTap: () => context.go(AppRoutes.dashboard),
+                      ),
+                      _SidebarItemData(
+                        label: 'Apps',
+                        icon: HugeIcons.strokeRoundedFolder02,
+                        // The editor and per-app pages hang off Apps;
+                        // uploading into an app belongs to Import.
+                        isActive:
+                            location.startsWith(AppRoutes.apps) &&
+                            !location.endsWith('/upload'),
+                        onTap: () => context.go(AppRoutes.apps),
+                      ),
+                      _SidebarItemData(
+                        label: 'Import',
+                        icon: HugeIcons.strokeRoundedFileUpload,
+                        isActive:
+                            location == AppRoutes.importProject ||
+                            location.endsWith('/upload'),
+                        onTap: () => openImportProject(context),
+                      ),
+                      _SidebarItemData(
+                        label: 'Settings',
+                        icon: HugeIcons.strokeRoundedSettings01,
+                        isActive: location == AppRoutes.settings,
+                        onTap: () => context.go(AppRoutes.settings),
+                      ),
+                    ],
+                    onItemTap: onItemTap,
+                  ),
+                  const Spacer(),
+                  _SidebarFooter(
+                    collapsed: collapsed,
+                    onTap: () {
+                      context.go(AppRoutes.settings);
+                      onItemTap?.call();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -200,14 +216,13 @@ class _SidebarSection extends StatelessWidget {
     required this.collapsed,
     this.onItemTap,
   });
+
   final List<_SidebarItemData> items;
   final bool collapsed;
   final VoidCallback? onItemTap;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = LingoDeskTokens.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -218,7 +233,10 @@ class _SidebarSection extends StatelessWidget {
   }
 }
 
-class _SidebarItem extends StatelessWidget {
+/// A nav row that answers the pointer before it is clicked: the fill
+/// warms on hover, the label and icon come up to full contrast, and the
+/// active item grows a teal bar against the rail's inner edge.
+class _SidebarItem extends StatefulWidget {
   const _SidebarItem({
     required this.item,
     required this.collapsed,
@@ -230,52 +248,112 @@ class _SidebarItem extends StatelessWidget {
   final VoidCallback? onItemTap;
 
   @override
+  State<_SidebarItem> createState() => _SidebarItemState();
+}
+
+class _SidebarItemState extends State<_SidebarItem> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final foreground = item.isActive ? tokens.foreground : tokens.muted;
+    final item = widget.item;
+    final collapsed = widget.collapsed;
+    final foreground =
+        item.isActive || _hovered ? tokens.foreground : tokens.muted;
+    final background =
+        item.isActive
+            ? tokens.active
+            : _hovered
+            ? tokens.active.withValues(alpha: 0.6)
+            : Colors.transparent;
 
-    final row = Container(
+    final row = AnimatedContainer(
+      duration: LingoDeskMotion.fast,
+      curve: LingoDeskMotion.curve,
       height: 40,
       padding: EdgeInsets.symmetric(horizontal: collapsed ? 0 : 10),
       decoration: BoxDecoration(
-        color: item.isActive ? tokens.active : Colors.transparent,
+        color: background,
         borderRadius: BorderRadius.circular(12),
       ),
-      child:
-          collapsed
-              ? Center(
-                child: LingoDeskIcon(item.icon, size: 18, color: foreground),
-              )
-              : Row(
-                children: [
-                  LingoDeskIcon(item.icon, size: 18, color: foreground),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      item.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(
+      child: AnimatedTint(
+        color: foreground,
+        builder: (context, tint) {
+          final icon = LingoDeskIcon(item.icon, size: 18, color: tint);
+
+          if (collapsed) {
+            return Center(child: icon);
+          }
+
+          return Row(
+            children: [
+              icon,
+              const SizedBox(width: 10),
+              Expanded(
+                child: AnimatedDefaultTextStyle(
+                  duration: LingoDeskMotion.fast,
+                  curve: LingoDeskMotion.curve,
+                  style:
+                      Theme.of(
                         context,
-                      ).textTheme.labelLarge?.copyWith(color: foreground),
-                    ),
+                      ).textTheme.labelLarge?.copyWith(color: tint) ??
+                      TextStyle(color: tint),
+                  child: Text(
+                    item.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
+                ),
               ),
+            ],
+          );
+        },
+      ),
     );
+
+    final indicator = Positioned(
+      left: 0,
+      top: 0,
+      bottom: 0,
+      child: Center(
+        child: AnimatedContainer(
+          duration: LingoDeskMotion.standard,
+          curve: LingoDeskMotion.curve,
+          width: 3,
+          height: item.isActive ? 18 : 0,
+          decoration: BoxDecoration(
+            color: LingoDeskColors.brandTeal,
+            borderRadius: BorderRadius.circular(99),
+          ),
+        ),
+      ),
+    );
+
+    final content = Stack(children: [row, indicator]);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
-      child: InkWell(
-        onTap:
-            item.onTap == null
-                ? null
-                : () {
-                  item.onTap!.call();
-                  onItemTap?.call();
-                },
-        borderRadius: BorderRadius.circular(12),
-        child: collapsed ? Tooltip(message: item.label, child: row) : row,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: InkWell(
+          onTap:
+              item.onTap == null
+                  ? null
+                  : () {
+                    item.onTap!.call();
+                    widget.onItemTap?.call();
+                  },
+          borderRadius: BorderRadius.circular(12),
+          // The rail's own tint already reads as hover; Material's would
+          // stack a second wash on top of it.
+          hoverColor: Colors.transparent,
+          child:
+              collapsed
+                  ? Tooltip(message: item.label, child: content)
+                  : content,
+        ),
       ),
     );
   }
@@ -315,10 +393,12 @@ class _SidebarFooter extends StatelessWidget {
         if (collapsed) {
           return Tooltip(
             message: settings.profileName,
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(12),
-              child: avatar,
+            child: PressableScale(
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(12),
+                child: avatar,
+              ),
             ),
           );
         }
@@ -328,49 +408,49 @@ class _SidebarFooter extends StatelessWidget {
                 ? 'Local storage'
                 : settings.profileEmail;
 
-        return InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: tokens.card,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: tokens.border),
-            ),
-            child: Row(
-              children: [
-                avatar,
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        settings.profileName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: tokens.muted,
-                          fontSize: 12,
+        return HoverLift(
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: tokens.card,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: tokens.border),
+              ),
+              child: Row(
+                children: [
+                  avatar,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          settings.profileName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: tokens.muted, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                LingoDeskIcon(
-                  HugeIcons.strokeRoundedMoreHorizontal,
-                  size: 18,
-                  color: tokens.muted,
-                ),
-              ],
+                  LingoDeskIcon(
+                    HugeIcons.strokeRoundedMoreHorizontal,
+                    size: 18,
+                    color: tokens.muted,
+                  ),
+                ],
+              ),
             ),
           ),
         );

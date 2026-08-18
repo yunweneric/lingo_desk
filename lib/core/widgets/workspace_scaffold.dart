@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../theme/lingo_desk_tokens.dart';
+import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
 
 /// Shared chrome for workspace pages (settings, upload, editor):
@@ -42,12 +43,14 @@ class WorkspaceScaffold extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    IconButton(
-                      tooltip: 'Back',
-                      onPressed: () => Navigator.of(context).maybePop(),
-                      icon: LingoDeskIcon(
-                        HugeIcons.strokeRoundedArrowLeft01,
-                        color: tokens.foreground,
+                    PressableScale(
+                      child: IconButton(
+                        tooltip: 'Back',
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        icon: LingoDeskIcon(
+                          HugeIcons.strokeRoundedArrowLeft01,
+                          color: tokens.foreground,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -78,7 +81,7 @@ class WorkspaceScaffold extends StatelessWidget {
                     ),
                     for (final action in actions) ...[
                       const SizedBox(width: 8),
-                      action,
+                      PressableScale(child: action),
                     ],
                   ],
                 ),

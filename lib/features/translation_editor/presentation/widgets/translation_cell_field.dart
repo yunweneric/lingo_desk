@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 
@@ -15,6 +16,10 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 /// the only real border on the row, and an empty target cell carries a
 /// warm tint. A grid of outlined boxes reads as a form; this reads as a
 /// document you can type into.
+///
+/// Because the write is debounced there is no button to press and no
+/// spinner to watch, so a green ring blooms and fades once the value
+/// reaches the bloc — the only signal that the edit was kept.
 class TranslationCellField extends StatefulWidget {
   const TranslationCellField({
     super.key,
@@ -34,12 +39,21 @@ class TranslationCellField extends StatefulWidget {
   State<TranslationCellField> createState() => _TranslationCellFieldState();
 }
 
-class _TranslationCellFieldState extends State<TranslationCellField> {
+class _TranslationCellFieldState extends State<TranslationCellField>
+    with SingleTickerProviderStateMixin {
   static const _debounce = Duration(milliseconds: 400);
   static const _height = 36.0;
 
   late final TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
+
+  /// Runs 1 -> 0 once per save; drives the confirmation ring's fade.
+  late final AnimationController _saved = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+    value: 0,
+  );
+
   Timer? _debounceTimer;
   String _lastSent = '';
   bool _hovered = false;
@@ -67,6 +81,7 @@ class _TranslationCellFieldState extends State<TranslationCellField> {
   @override
   void dispose() {
     _debounceTimer?.cancel();
+    _saved.dispose();
     _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();
     _controller.dispose();
@@ -91,6 +106,7 @@ class _TranslationCellFieldState extends State<TranslationCellField> {
     if (_controller.text != _lastSent) {
       _lastSent = _controller.text;
       widget.onChanged(_controller.text);
+      _saved.reverse(from: 1);
     }
   }
 
@@ -115,51 +131,73 @@ class _TranslationCellFieldState extends State<TranslationCellField> {
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        height: _height,
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
-          // Kept at a constant width so gaining focus never nudges the
-          // text sideways.
-          border: Border.all(
-            color: hasFocus ? LingoDeskColors.brandTeal : Colors.transparent,
-          ),
-        ),
-        // isCollapsed strips the decorator's built-in minimums so the box
-        // is exactly _height, leaving real slack for textAlignVertical to
-        // centre into. The line height is pinned too: the theme's 1.45
-        // body leading plus padding overflows this box, and an
-        // over-constrained field silently rides high instead of centring.
+      child: AnimatedBuilder(
+        animation: _saved,
+        builder: (context, child) {
+          final glow = _saved.value;
+
+          return AnimatedContainer(
+            duration: LingoDeskMotion.fast,
+            curve: LingoDeskMotion.curve,
+            height: _height,
+            decoration: BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
+              // Kept at a constant width so gaining focus never nudges the
+              // text sideways.
+              border: Border.all(
+                color:
+                    hasFocus ? LingoDeskColors.brandTeal : Colors.transparent,
+              ),
+              boxShadow:
+                  glow == 0
+                      ? null
+                      : [
+                        BoxShadow(
+                          color: LingoDeskColors.complete.withValues(
+                            alpha: 0.32 * glow,
+                          ),
+                          spreadRadius: 2 * glow,
+                        ),
+                      ],
+            ),
+            child: child,
+          );
+        },
+        // Centre the field ourselves rather than leaning on
+        // textAlignVertical: with isCollapsed the decorator has no slack to
+        // align within, so the text silently rides against the top edge.
+        // Center hands the TextField loose constraints, it takes its
+        // intrinsic single-line height, and the leftover splits evenly.
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 9),
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            onChanged: _handleChanged,
-            onSubmitted: (_) => _flush(),
-            maxLines: 1,
-            cursorColor: LingoDeskColors.brandTeal,
-            textAlignVertical: TextAlignVertical.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: tokens.foreground,
-              fontSize: 13,
-              height: 1.2,
-            ),
-            decoration: InputDecoration(
-              isCollapsed: true,
-              hintText: showMissing ? 'Missing' : null,
-              hintStyle: TextStyle(
-                color: LingoDeskColors.warning.withAlpha(170),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+          child: Center(
+            child: TextField(
+              controller: _controller,
+              focusNode: _focusNode,
+              onChanged: _handleChanged,
+              onSubmitted: (_) => _flush(),
+              maxLines: 1,
+              cursorColor: LingoDeskColors.brandTeal,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: tokens.foreground,
+                fontSize: 13,
                 height: 1.2,
               ),
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                hintText: showMissing ? 'Missing' : null,
+                hintStyle: TextStyle(
+                  color: LingoDeskColors.warning.withAlpha(170),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+              ),
             ),
           ),
         ),

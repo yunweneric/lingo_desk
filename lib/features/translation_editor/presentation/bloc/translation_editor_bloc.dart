@@ -128,8 +128,7 @@ class TranslationEditorBloc
       AddTranslationKeyParams(
         appId: appId,
         key: event.key,
-        sourceLanguage: current.app.sourceLanguage,
-        sourceValue: event.sourceValue,
+        values: event.values,
       ),
     );
 

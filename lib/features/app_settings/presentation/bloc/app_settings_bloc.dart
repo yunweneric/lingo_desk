@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/languages.dart';
 import '../../../app_management/domain/entities/app.dart';
 import '../../../app_management/domain/usecases/create_app.dart';
 import '../../../app_management/domain/usecases/update_app.dart';
@@ -12,6 +13,7 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
     on<InitializeAppSettingsEvent>(_onInitialize);
     on<SourceLanguageChangedEvent>(_onSourceLanguageChanged);
     on<TargetLanguageToggledEvent>(_onTargetLanguageToggled);
+    on<AllTargetLanguagesToggledEvent>(_onAllTargetLanguagesToggled);
     on<SaveAppSettingsEvent>(_onSave);
   }
 
@@ -75,6 +77,28 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
       targets.add(event.languageCode);
     }
     emit(current.copyWith(targetLanguages: targets, clearError: true));
+  }
+
+  void _onAllTargetLanguagesToggled(
+    AllTargetLanguagesToggledEvent event,
+    Emitter<AppSettingsState> emit,
+  ) {
+    final current = state;
+    if (current is! AppSettingsReady) {
+      return;
+    }
+    emit(
+      current.copyWith(
+        targetLanguages:
+            event.selectAll
+                ? [
+                  for (final option in SupportedLanguages.all)
+                    if (option.code != current.sourceLanguage) option.code,
+                ]
+                : const <String>[],
+        clearError: true,
+      ),
+    );
   }
 
   Future<void> _onSave(
