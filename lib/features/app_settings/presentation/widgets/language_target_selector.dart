@@ -5,6 +5,7 @@ import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 
 /// Chip grid to toggle target languages; the source language is disabled.
@@ -221,8 +222,11 @@ class _LanguageTileState extends State<_LanguageTile> {
   }
 }
 
-/// The tile's trailing state marker: an empty box, a teal tick, or a
-/// lock on the source language.
+/// The tile's trailing state marker: the app's checkbox, or a lock on
+/// the source language.
+///
+/// The tile owns the tap, so the box is here to be looked at — it takes
+/// no pointer of its own.
 class _TileCheck extends StatelessWidget {
   const _TileCheck({
     required this.checked,
@@ -244,28 +248,12 @@ class _TileCheck extends StatelessWidget {
       );
     }
 
-    return AnimatedContainer(
-      duration: LingoDeskMotion.fast,
-      curve: LingoDeskMotion.curve,
-      width: 20,
-      height: 20,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: checked ? LingoDeskColors.brandTeal : Colors.transparent,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: checked ? LingoDeskColors.brandTeal : tokens.border,
-          width: checked ? 1.5 : 1,
-        ),
+    return IgnorePointer(
+      child: LingoDeskCheckbox(
+        value: checked,
+        onChanged: (_) {},
+        padding: EdgeInsets.zero,
       ),
-      child:
-          checked
-              ? const LingoDeskIcon(
-                HugeIcons.strokeRoundedTick02,
-                size: 13,
-                color: Colors.white,
-              )
-              : null,
     );
   }
 }

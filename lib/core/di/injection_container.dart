@@ -132,6 +132,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => ExportTranslationsToDownloads(getIt()));
   getIt.registerLazySingleton(() => ExportTranslationsToFolder(getIt()));
   getIt.registerLazySingleton(() => PickExportFolder(getIt()));
+  getIt.registerLazySingleton(() => RevealExportLocation(getIt()));
 
   // AI translation
   getIt.registerLazySingleton(() => TranslateBatch(getIt()));
@@ -165,6 +166,7 @@ Future<void> init() async {
       exportToDownloads: getIt(),
       exportToFolder: getIt(),
       pickExportFolder: getIt(),
+      revealExportLocation: getIt(),
       saveTranslations: getIt(),
       translateBatch: getIt(),
       aiSettings: getIt(),

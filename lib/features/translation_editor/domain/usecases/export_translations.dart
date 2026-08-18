@@ -114,6 +114,17 @@ class PickExportFolder implements UseCase<String?, PickExportFolderParams> {
   }
 }
 
+/// Shows a finished export's location in the file manager.
+class RevealExportLocation implements UseCase<void, String> {
+  RevealExportLocation(this.repository);
+
+  final TranslationRepository repository;
+
+  @override
+  Future<Either<Failure, void>> call(String path) =>
+      repository.revealExportLocation(path);
+}
+
 Failure? _validateLanguages(List<String> languages) {
   if (languages.isEmpty) {
     return const ValidationFailure(

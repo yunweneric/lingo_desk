@@ -8,6 +8,7 @@ import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/ai_key.dart';
@@ -47,7 +48,10 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
       model: draft.model,
     );
     if (mounted) {
-      _notify('Added ${draft.provider.label} key.');
+      context.showSuccessToast(
+        '${draft.provider.label} is ready to translate with.',
+        title: 'Key added',
+      );
     }
   }
 
@@ -63,7 +67,10 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
       model: draft.model,
     );
     if (mounted) {
-      _notify('Saved changes to ${entry.label}.');
+      context.showSuccessToast(
+        'Saved changes to ${entry.label}.',
+        title: 'Key updated',
+      );
     }
   }
 
@@ -102,8 +109,22 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
       return;
     }
     await _settings.deleteKey(entry.id);
-    if (mounted) {
-      _notify('Deleted ${entry.label}.');
+    if (!mounted) {
+      return;
+    }
+    final promoted = _settings.activeKey;
+    // Deleting the live key silently reroutes spend to another one, so the
+    // toast says which — the one thing you would want to know afterwards.
+    if (wasActive && promoted != null) {
+      context.showWarningToast(
+        'Translations now use ${promoted.label}.',
+        title: 'Deleted ${entry.label}',
+      );
+    } else {
+      context.showSuccessToast(
+        '${entry.label} was removed from this device.',
+        title: 'Key deleted',
+      );
     }
   }
 
@@ -117,27 +138,25 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     }
     setState(() => _testingKeyId = null);
     outcome.fold(
-      (failure) => _notify(failure.message, isError: true),
-      (_) => _notify('${entry.label} connected.'),
+      (failure) => context.showErrorToast(
+        failure.message,
+        title: '${entry.label} failed',
+      ),
+      (_) => context.showSuccessToast(
+        '${entry.provider.label} accepted the key.',
+        title: '${entry.label} connected',
+      ),
     );
-  }
-
-  void _notify(String message, {bool isError = false}) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: isError ? LingoDeskColors.error : null,
-        ),
-      );
   }
 
   void _handleAction(AiKeyAction action, AiKey entry) {
     switch (action) {
       case AiKeyAction.use:
         _settings.setActive(entry.id);
-        _notify('Translations now use ${entry.label}.');
+        context.showSuccessToast(
+          '${entry.provider.label} · ${entry.model}',
+          title: 'Translations now use ${entry.label}',
+        );
       case AiKeyAction.test:
         _testKey(entry);
       case AiKeyAction.edit:

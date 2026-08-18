@@ -4,6 +4,7 @@ import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/scanned_project.dart';
 
@@ -76,8 +77,9 @@ class ScannedLanguageTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Checkbox(
+                LingoDeskCheckbox(
                   value: isIncluded,
+                  semanticLabel: SupportedLanguages.nameOf(group.languageCode),
                   // The source language is always part of the import.
                   onChanged: onToggle == null ? null : (_) => onToggle!(),
                 ),

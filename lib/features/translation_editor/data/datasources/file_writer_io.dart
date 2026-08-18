@@ -39,3 +39,47 @@ Future<String?> downloadsDirectoryPath() async {
 /// Whether something already exists at [path].
 Future<bool> pathExists(String path) async =>
     File(path).existsSync() || Directory(path).existsSync();
+
+/// Shows [path] in the platform's file manager.
+///
+/// A file is revealed with its folder open around it where the platform
+/// can do that; a folder is simply opened.
+Future<void> revealInFileManager(String path) async {
+  final isDirectory = Directory(path).existsSync();
+
+  if (Platform.isMacOS) {
+    await _run('open', isDirectory ? [path] : ['-R', path]);
+    return;
+  }
+  if (Platform.isWindows) {
+    // Explorer reports failure even when it worked, so its exit code is
+    // not worth reading; the comma in `/select,` is part of the flag.
+    await Process.run('explorer', [
+      if (!isDirectory) '/select,$path' else path,
+    ]);
+    return;
+  }
+  // xdg-open cannot select a file, so a file opens the folder holding it.
+  await _run('xdg-open', [isDirectory ? path : _parentOf(path)]);
+}
+
+Future<void> _run(String executable, List<String> arguments) async {
+  final ProcessResult result;
+  try {
+    result = await Process.run(executable, arguments);
+  } on ProcessException catch (e) {
+    throw FileSystemException('Could not launch $executable: ${e.message}');
+  }
+  if (result.exitCode != 0) {
+    throw FileSystemException(
+      '$executable failed: ${result.stderr}'.trim(),
+      arguments.last,
+    );
+  }
+}
+
+/// The directory holding [path], or [path] itself when it has no parent.
+String _parentOf(String path) {
+  final index = path.lastIndexOf(Platform.pathSeparator);
+  return index <= 0 ? path : path.substring(0, index);
+}

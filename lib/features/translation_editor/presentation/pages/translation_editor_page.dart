@@ -121,33 +121,32 @@ class _EditorViewState extends State<_EditorView> {
         Crumb(state.app.name),
         const Crumb('Editor'),
       ],
-      // Page-level actions live in the header, as icons: four labelled
-      // buttons plus the breadcrumb left the band with nothing to spare.
-      // Adding a key is not one of them — it changes what is in the grid,
-      // so it sits with the grid's own controls.
+      // Page-level actions live in the header, each naming itself: three
+      // fit the band once importing moved out to the apps list, where it
+      // sits beside the app it fills. Adding a key is not one of them —
+      // it changes what is in the grid, so it sits with the grid's own
+      // controls.
       actions: [
         EditorHeaderAction(
           icon: HugeIcons.strokeRoundedSettings01,
-          tooltip: 'App settings',
+          label: 'Settings',
           onPressed: () => _openAppSettings(context, state),
         ),
         EditorHeaderAction(
           icon: HugeIcons.strokeRoundedSparkles,
+          label: 'AI translate',
+          // The label says what it does; the tooltip is left to say why
+          // it cannot right now.
           tooltip: switch (state) {
             _ when state.aiJob != null => 'AI translation running',
             _ when state.translatableMissing == 0 =>
               'Nothing left to translate',
-            _ => 'AI translate',
+            _ => '',
           },
           onPressed:
               state.aiJob != null || state.translatableMissing == 0
                   ? null
                   : () => _aiTranslate(context, state),
-        ),
-        EditorHeaderAction(
-          icon: HugeIcons.strokeRoundedFileUpload,
-          tooltip: 'Upload files',
-          onPressed: () => _uploadFiles(context, state),
         ),
         _ExportMenuButton(state: state, onSelected: _export),
       ],
@@ -259,18 +258,6 @@ class _EditorViewState extends State<_EditorView> {
   ) async {
     final bloc = context.read<TranslationEditorBloc>();
     await context.push(AppRoutes.appSettings(state.app.id), extra: state.app);
-    bloc.add(LoadEditorEvent(widget.appId));
-  }
-
-  Future<void> _uploadFiles(
-    BuildContext context,
-    TranslationEditorLoaded state,
-  ) async {
-    final bloc = context.read<TranslationEditorBloc>();
-    await context.push(
-      AppRoutes.fileUpload(state.app.id, popOnImport: true),
-      extra: state.app,
-    );
     bloc.add(LoadEditorEvent(widget.appId));
   }
 
@@ -409,6 +396,7 @@ class _ExportMenuButton extends StatelessWidget {
       child: IgnorePointer(
         child: EditorHeaderAction(
           icon: HugeIcons.strokeRoundedDownload04,
+          label: 'Export',
           // The menu trigger above already carries the tooltip.
           tooltip: '',
           primary: true,
@@ -429,25 +417,28 @@ class _ExportMenuButton extends StatelessWidget {
   }
 }
 
-/// One header action: a square icon button carrying its name in a
-/// tooltip, so a band of them reads as a toolbar rather than a sentence.
+/// One header action: an icon beside its name, so the band reads at a
+/// glance instead of asking the pointer to name each glyph.
 ///
-/// A disabled action keeps its tooltip and says why it is disabled —
-/// with no label there is nothing else left to explain it.
+/// The tooltip is reserved for what the label cannot say — why an action
+/// is disabled — and is empty the rest of the time.
 class EditorHeaderAction extends StatelessWidget {
   const EditorHeaderAction({
     super.key,
     required this.icon,
-    required this.tooltip,
+    required this.label,
     required this.onPressed,
+    this.tooltip = '',
     this.primary = false,
     this.child,
   });
 
   final List<List<dynamic>> icon;
 
-  /// Empty when something above already carries the tooltip — a menu
-  /// trigger, say. Two nested tooltips both fire on hover.
+  final String label;
+
+  /// Empty when the label already says it, or when something above
+  /// carries the tooltip — two nested tooltips both fire on hover.
   final String tooltip;
 
   final VoidCallback? onPressed;
@@ -458,8 +449,8 @@ class EditorHeaderAction extends StatelessWidget {
   /// Replaces the icon while something is running, for a spinner.
   final Widget? child;
 
-  /// Square, and the height of the header's other controls.
-  static const size = Size.square(44);
+  /// The height of the header's other controls.
+  static const height = 44.0;
 
   @override
   Widget build(BuildContext context) {
@@ -470,24 +461,29 @@ class EditorHeaderAction extends StatelessWidget {
           size: 19,
           color: primary && onPressed != null ? Colors.white : null,
         );
+    final text = Text(label);
+
+    // Only the metrics are overridden; the rest of each button's look
+    // still comes from the theme.
+    const style = ButtonStyle(
+      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
+      minimumSize: WidgetStatePropertyAll(Size(0, height)),
+      fixedSize: WidgetStatePropertyAll(Size.fromHeight(height)),
+    );
 
     final button =
         primary
-            ? FilledButton(
+            ? FilledButton.icon(
               onPressed: onPressed,
-              style: FilledButton.styleFrom(
-                padding: EdgeInsets.zero,
-                fixedSize: size,
-              ),
-              child: glyph,
+              style: style,
+              icon: glyph,
+              label: text,
             )
-            : OutlinedButton(
+            : OutlinedButton.icon(
               onPressed: onPressed,
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                fixedSize: size,
-              ),
-              child: glyph,
+              style: style,
+              icon: glyph,
+              label: text,
             );
 
     return tooltip.isEmpty ? button : Tooltip(message: tooltip, child: button);

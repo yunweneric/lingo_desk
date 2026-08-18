@@ -58,4 +58,7 @@ abstract class TranslationRepository {
   /// Asks for a destination folder, opening at [initialDirectory] when
   /// one is given. Returns null when the user cancels.
   Future<Either<Failure, String?>> pickExportFolder({String? initialDirectory});
+
+  /// Shows an export's location in the platform's file manager.
+  Future<Either<Failure, void>> revealExportLocation(String path);
 }

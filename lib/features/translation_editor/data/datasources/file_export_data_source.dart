@@ -35,6 +35,10 @@ abstract class FileExportDataSource {
   /// Asks for a destination folder, opening at [initialDirectory] when
   /// one is given. Returns null when the user cancels.
   Future<String?> pickDestinationFolder({String? initialDirectory});
+
+  /// Shows [path] in the platform's file manager, so an export can be
+  /// found without hunting for it.
+  Future<void> revealLocation(String path);
 }
 
 class FileExportDataSourceImpl implements FileExportDataSource {
@@ -99,6 +103,20 @@ class FileExportDataSourceImpl implements FileExportDataSource {
       return (path == null || path.isEmpty) ? null : path;
     } on Exception catch (e) {
       throw FileException('Could not open the folder picker: $e');
+    }
+  }
+
+  @override
+  Future<void> revealLocation(String path) async {
+    try {
+      await revealInFileManager(path);
+    } on Exception catch (e) {
+      throw FileException('Could not open $path: $e');
+      // The web stub reports an unsupported platform as an Error rather
+      // than an Exception, and it still belongs in the toast.
+      // ignore: avoid_catching_errors
+    } on UnsupportedError catch (e) {
+      throw FileException(e.message ?? 'Not available on this platform.');
     }
   }
 

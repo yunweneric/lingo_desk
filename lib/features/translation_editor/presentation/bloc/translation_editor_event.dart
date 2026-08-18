@@ -61,6 +61,13 @@ class ExportToProjectEvent extends TranslationEditorEvent {
   final List<String> languages;
 }
 
+/// Shows a finished export's location in the file manager.
+class RevealExportLocationEvent extends TranslationEditorEvent {
+  RevealExportLocationEvent(this.path);
+
+  final String path;
+}
+
 /// Asks for a destination folder, then writes one `<lang>.json` per
 /// selected language into it.
 class ExportToFolderEvent extends TranslationEditorEvent {

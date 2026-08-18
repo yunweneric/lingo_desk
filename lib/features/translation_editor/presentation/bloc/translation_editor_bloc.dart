@@ -34,6 +34,7 @@ class TranslationEditorBloc
     required this.exportToDownloads,
     required this.exportToFolder,
     required this.pickExportFolder,
+    required this.revealExportLocation,
     required this.saveTranslations,
     required this.translateBatch,
     required this.aiSettings,
@@ -47,6 +48,7 @@ class TranslationEditorBloc
     on<ExportToDownloadsEvent>(_onExportToDownloads);
     on<ExportToProjectEvent>(_onExportToProject);
     on<ExportToFolderEvent>(_onExportToFolder);
+    on<RevealExportLocationEvent>(_onRevealExportLocation);
     on<AiTranslateCellEvent>(_onAiTranslateCell);
     on<AiTranslateEvent>(_onAiTranslate);
     on<CancelAiTranslationEvent>(_onCancelAiTranslation);
@@ -60,6 +62,7 @@ class TranslationEditorBloc
   final ExportTranslationsToDownloads exportToDownloads;
   final ExportTranslationsToFolder exportToFolder;
   final PickExportFolder pickExportFolder;
+  final RevealExportLocation revealExportLocation;
   final SaveTranslations saveTranslations;
   final TranslateBatch translateBatch;
   final AiSettingsController aiSettings;
@@ -241,9 +244,9 @@ class TranslationEditorBloc
         ),
       );
       return result.map(
-        (outcome) => ToastNotice.success(
+        (outcome) => _exportedNotice(
           outcome.location,
-          title: '${_fileCount(event.languages.length)} zipped to Downloads',
+          '${_fileCount(event.languages.length)} zipped to Downloads',
         ),
       );
     });
@@ -273,9 +276,9 @@ class TranslationEditorBloc
         ),
       );
       return result.map(
-        (outcome) => ToastNotice.success(
+        (outcome) => _exportedNotice(
           outcome.location,
-          title: '${_fileCount(outcome.fileCount)} saved to ${app.name}',
+          '${_fileCount(outcome.fileCount)} saved to ${app.name}',
         ),
       );
     });
@@ -307,9 +310,9 @@ class TranslationEditorBloc
             ),
           );
           return result.map(
-            (outcome) => ToastNotice.success(
+            (outcome) => _exportedNotice(
               outcome.location,
-              title: '${_fileCount(outcome.fileCount)} exported',
+              '${_fileCount(outcome.fileCount)} exported',
             ),
           );
         },
@@ -350,6 +353,45 @@ class TranslationEditorBloc
         ),
       ),
     );
+  }
+
+  /// An export's toast: what it wrote, where, and a way straight to it.
+  ///
+  /// The path is the message rather than the title, so the action below
+  /// it reads as being about that path.
+  ToastNotice _exportedNotice(String location, String title) {
+    return ToastNotice.success(
+      location,
+      title: title,
+      actionLabel: 'Show in folder',
+      onAction: () {
+        // A toast outlives the editor that raised it when the user
+        // navigates straight off the page, so a late tap goes to the use
+        // case directly. Only a live bloc can also report a failure back
+        // into the UI, which is the case worth routing through an event.
+        if (isClosed) {
+          revealExportLocation(location);
+        } else {
+          add(RevealExportLocationEvent(location));
+        }
+      },
+    );
+  }
+
+  Future<void> _onRevealExportLocation(
+    RevealExportLocationEvent event,
+    Emitter<TranslationEditorState> emit,
+  ) async {
+    final result = await revealExportLocation(event.path);
+    final current = state;
+    // Only a failure is worth saying anything about; opening the folder
+    // speaks for itself.
+    if (current is TranslationEditorLoaded) {
+      result.leftMap(
+        (failure) =>
+            emit(current.copyWith(notice: ToastNotice.error(failure.message))),
+      );
+    }
   }
 
   String _fileCount(int count) => count == 1 ? '1 file' : '$count files';

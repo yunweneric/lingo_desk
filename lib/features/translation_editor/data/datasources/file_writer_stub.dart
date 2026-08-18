@@ -9,3 +9,8 @@ Future<void> writeBytes(String path, List<int> bytes) async {}
 Future<String?> downloadsDirectoryPath() async => null;
 
 Future<bool> pathExists(String path) async => false;
+
+/// Web has no file manager to show a path in.
+Future<void> revealInFileManager(String path) async {
+  throw UnsupportedError('Showing a folder is not available on this platform.');
+}

@@ -116,6 +116,24 @@ class LingoDeskTheme {
           ),
         ),
       ),
+      // Round, so every checkbox in the app reads as one family with the
+      // radios and the selection dots instead of a stray square.
+      checkboxTheme: base.checkboxTheme.copyWith(
+        shape: const CircleBorder(),
+        side: BorderSide(
+          color: isDark ? Colors.white38 : LingoDeskColors.border,
+          width: 1.4,
+        ),
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (!states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
+          return states.contains(WidgetState.disabled)
+              ? LingoDeskColors.brandTeal.withValues(alpha: 0.4)
+              : LingoDeskColors.brandTeal;
+        }),
+        checkColor: const WidgetStatePropertyAll(Colors.white),
+      ),
       chipTheme: base.chipTheme.copyWith(
         // Resolved per state so selected chips stay legible in both
         // brightnesses: a mint fill with teal ink in light, a deep teal

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_checkbox.dart';
 
 /// Dialog to choose which languages an export covers.
 ///
@@ -91,26 +92,16 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
               ),
             ),
             for (final language in widget.languages)
-              CheckboxListTile(
+              LingoDeskCheckboxTile(
                 value: _selected.contains(language),
-                dense: true,
-                controlAffinity: ListTileControlAffinity.leading,
-                title: Text(
-                  '${SupportedLanguages.flagOf(language)}  '
-                  '${SupportedLanguages.nameOf(language)}'
-                  '${language == widget.sourceLanguage ? ' (source)' : ''}',
-                ),
-                subtitle: Text(
-                  _fileNameFor(language),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: tokens.muted),
-                ),
+                leading: SupportedLanguages.flagOf(language),
+                title:
+                    '${SupportedLanguages.nameOf(language)}'
+                    '${language == widget.sourceLanguage ? ' (source)' : ''}',
+                description: _fileNameFor(language),
                 onChanged: (checked) {
                   setState(() {
-                    if (checked ?? false) {
+                    if (checked) {
                       _selected.add(language);
                     } else {
                       _selected.remove(language);

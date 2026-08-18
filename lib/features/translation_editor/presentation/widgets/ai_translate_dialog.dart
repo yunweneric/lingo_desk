@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../bloc/translation_editor_state.dart';
 
 /// Picks which target languages an AI pass should fill.
@@ -107,15 +108,11 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       for (final entry in _missing.entries)
-                        CheckboxListTile(
+                        LingoDeskCheckboxTile(
                           value: _selected.contains(entry.key),
-                          dense: true,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(
-                            '${SupportedLanguages.flagOf(entry.key)}  '
-                            '${SupportedLanguages.nameOf(entry.key)}',
-                          ),
-                          secondary: Text(
+                          leading: SupportedLanguages.flagOf(entry.key),
+                          title: SupportedLanguages.nameOf(entry.key),
+                          trailing: Text(
                             '${entry.value} missing',
                             style: LingoDeskTheme.codeStyle.copyWith(
                               color: tokens.muted,
@@ -124,7 +121,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
                           ),
                           onChanged: (checked) {
                             setState(() {
-                              if (checked ?? false) {
+                              if (checked) {
                                 _selected.add(entry.key);
                               } else {
                                 _selected.remove(entry.key);

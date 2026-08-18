@@ -175,6 +175,18 @@ class TranslationRepositoryImpl implements TranslationRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, void>> revealExportLocation(String path) async {
+    try {
+      await fileExportDataSource.revealLocation(path);
+      return const Right(null);
+    } on FileException catch (e) {
+      return Left(FileFailure(message: e.message));
+    } on Exception catch (e) {
+      return Left(FileFailure(message: e.toString()));
+    }
+  }
+
   /// Loads the app's entries, guards the empty case, and runs [write],
   /// mapping the shared set of storage and file failures.
   Future<Either<Failure, ExportOutcome>> _export(

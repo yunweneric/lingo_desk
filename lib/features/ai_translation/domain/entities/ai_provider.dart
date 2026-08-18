@@ -19,7 +19,7 @@ extension AiProviderInfo on AiProvider {
   String get defaultModel => switch (this) {
     AiProvider.anthropic => 'claude-opus-5',
     AiProvider.openai => 'gpt-4o-mini',
-    AiProvider.gemini => 'gemini-2.0-flash',
+    AiProvider.gemini => 'gemini-3.7-flash',
   };
 
   /// Offered in the model dropdown. The field stays free-text, so a model
@@ -31,10 +31,13 @@ extension AiProviderInfo on AiProvider {
       'claude-haiku-4-5',
     ],
     AiProvider.openai => const ['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini'],
+    // Google's current stable line. Flash tiers are the right shape for
+    // translation — the work is short strings in bulk, not deep reasoning —
+    // and Flash-Lite is the cheap option for a large backlog.
     AiProvider.gemini => const [
-      'gemini-2.0-flash',
-      'gemini-2.0-flash-lite',
-      'gemini-1.5-pro',
+      'gemini-3.7-flash',
+      'gemini-3.6-flash',
+      'gemini-3.5-flash-lite',
     ],
   };
 
