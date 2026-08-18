@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_mark.dart';
 import '../data/github_release.dart';
 import '../state/landing_controller.dart';
@@ -130,7 +131,7 @@ class LandingNav extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 10),
-              LandingButton(
+              const LandingButton(
                 label: 'View on GitHub',
                 icon: HugeIcons.strokeRoundedGithub,
                 kind: LandingButtonKind.secondary,
@@ -203,7 +204,7 @@ class _IconAction extends StatefulWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  final List<List<dynamic>> icon;
   final String tooltip;
   final VoidCallback onTap;
 
@@ -233,7 +234,11 @@ class _IconActionState extends State<_IconAction> {
               color: _hovered ? tokens.active : Colors.transparent,
               borderRadius: BorderRadius.circular(11),
             ),
-            child: Icon(widget.icon, size: 19, color: tokens.foreground),
+            child: LingoDeskIcon(
+              widget.icon,
+              size: 19,
+              color: tokens.foreground,
+            ),
           ),
         ),
       ),
@@ -270,13 +275,17 @@ class _StarChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedGithub,
                 size: 15,
                 color: tokens.foreground,
               ),
               const SizedBox(width: 7),
-              Icon(HugeIcons.strokeRoundedStar, size: 13, color: tokens.muted),
+              LingoDeskIcon(
+                HugeIcons.strokeRoundedStar,
+                size: 13,
+                color: tokens.muted,
+              ),
               const SizedBox(width: 4),
               Text(
                 '$count',

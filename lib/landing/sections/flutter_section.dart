@@ -93,10 +93,7 @@ class FlutterSection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: narrow ? 0 : 40, height: narrow ? 32 : 0),
-                  Expanded(
-                    flex: narrow ? 0 : 2,
-                    child: _MarkProof(),
-                  ),
+                  Expanded(flex: narrow ? 0 : 2, child: _MarkProof()),
                 ],
               ),
             ),
@@ -104,7 +101,7 @@ class FlutterSection extends StatelessWidget {
           const SizedBox(height: 28),
           Reveal(child: _PlatformGrid(onSeeDownloads: onSeeDownloads)),
           const SizedBox(height: 28),
-          Reveal(child: const _StatRow()),
+          const Reveal(child: _StatRow()),
         ],
       ),
     );
@@ -220,10 +217,10 @@ class _MarkProof extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Center(
+          const Center(
             child: AnimatedSize(
               duration: LingoDeskMotion.standard,
-              child: const LingoDeskMark(size: 88),
+              child: LingoDeskMark(size: 88),
             ),
           ),
           const SizedBox(height: 24),

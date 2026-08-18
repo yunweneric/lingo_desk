@@ -1,0 +1,82 @@
+name: Deploy landing page
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "lib/landing/**"
+      - "lib/main_landing.dart"
+      - "lib/core/**"
+      - "web/**"
+      - "pubspec.yaml"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+# Pages only ever serves one version; a queued deploy supersedes a
+# running one rather than racing it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build web bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Resolve Flutter version
+        id: meta
+        run: |
+          set -euo pipefail
+          if [ -f ".fvmrc" ]; then
+            FLUTTER_VERSION=$(grep -o '"flutter"[[:space:]]*:[[:space:]]*"[^"]*"' .fvmrc | cut -d'"' -f4)
+          fi
+          echo "flutter_version=${FLUTTER_VERSION:-3.38.10}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.meta.outputs.flutter_version }}
+          channel: stable
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      # Project pages are served from /<repo>/, so the base href has to
+      # match or every relative asset request 404s.
+      - name: Build landing page
+        run: |
+          flutter build web \
+            --release \
+            --target lib/main_landing.dart \
+            --base-href "/${{ github.event.repository.name }}/" \
+            --pwa-strategy none
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    name: Publish to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

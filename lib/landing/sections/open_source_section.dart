@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../data/github_release.dart';
 import '../state/landing_controller.dart';
 import '../widgets/landing_button.dart';
@@ -32,7 +33,7 @@ class OpenSourceSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedSourceCodeCircle,
                 size: 30,
                 color: tokens.onBrandFill,
@@ -78,7 +79,7 @@ class OpenSourceSection extends StatelessWidget {
                     large: true,
                     url: GithubRepo.url,
                   ),
-                  LandingButton(
+                  const LandingButton(
                     label: 'Open an issue',
                     icon: HugeIcons.strokeRoundedAlertCircle,
                     kind: LandingButtonKind.secondary,

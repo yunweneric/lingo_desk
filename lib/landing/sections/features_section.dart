@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../../features/ai_translation/domain/entities/ai_provider.dart';
 import '../../features/ai_translation/presentation/widgets/ai_provider_logo.dart';
 import '../widgets/landing_layout.dart';
@@ -118,7 +119,7 @@ class _Feature {
     this.providers = false,
   });
 
-  final IconData icon;
+  final List<List<dynamic>> icon;
   final String title;
   final String body;
 
@@ -174,7 +175,11 @@ class _FeatureCardState extends State<_FeatureCard> {
                 borderRadius: BorderRadius.circular(11),
                 border: Border.all(color: tokens.brandFillBorder),
               ),
-              child: Icon(feature.icon, size: 20, color: tokens.onBrandFill),
+              child: LingoDeskIcon(
+                feature.icon,
+                size: 20,
+                color: tokens.onBrandFill,
+              ),
             ),
             const SizedBox(height: 20),
             Text(
@@ -190,8 +195,11 @@ class _FeatureCardState extends State<_FeatureCard> {
             const SizedBox(height: 10),
             Text(
               feature.body,
-              style: TextStyle(fontSize: 14.5, height: 1.6,
-                  color: tokens.muted),
+              style: TextStyle(
+                fontSize: 14.5,
+                height: 1.6,
+                color: tokens.muted,
+              ),
             ),
             if (feature.providers) ...[
               const SizedBox(height: 18),

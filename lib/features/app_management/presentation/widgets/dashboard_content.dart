@@ -118,7 +118,12 @@ class _DashboardBody extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final isWide = constraints.maxWidth >= 980;
+                    // The coverage chart and the language health card sit
+                    // side by side only where each still gets a readable
+                    // half; below that they stack.
+                    final isWide = WindowSizeClass.fromWidth(
+                      constraints.maxWidth,
+                    ).atLeast(WindowSizeClass.expanded);
 
                     final languageHealth = KeyedSubtree(
                       key: _languageHealthKey,

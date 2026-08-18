@@ -40,7 +40,7 @@ class _LocaleStripState extends State<LocaleStrip>
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final locales = SupportedLanguages.all;
+    const locales = SupportedLanguages.all;
     final runWidth = _itemWidth * locales.length;
     final moving = LingoDeskMotion.enabled(context);
 

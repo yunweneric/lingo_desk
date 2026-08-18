@@ -10,6 +10,28 @@
       "deviceId": "chrome"
     },
     {
+      "name": "Landing page (Chrome)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main_landing.dart",
+      "flutterMode": "debug",
+      "deviceId": "chrome"
+    },
+    {
+      "name": "Landing page (Chrome, release)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main_landing.dart",
+      "flutterMode": "release",
+      "deviceId": "chrome",
+      "args": [
+        "--base-href",
+        "/lingo_desk/",
+        "--pwa-strategy",
+        "none"
+      ]
+    },
+    {
       "name": "LingoDesk (macOS)",
       "type": "dart",
       "request": "launch",
@@ -96,4 +118,3 @@
     }
   ]
 }
-

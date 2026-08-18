@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../widgets/code_panel.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
@@ -56,11 +57,11 @@ class ProblemSection extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final stacked = context.windowSize.isBelow(WindowSizeClass.expanded);
 
-    final before = _Side(
+    const before = _Side(
       eyebrow: 'Without LingoDesk',
       title: 'Three files, three tabs, one missing string you find in review.',
       child: Column(
-        children: const [
+        children: [
           JsonPanel(filename: 'en.json', lines: _en),
           SizedBox(height: 12),
           JsonPanel(filename: 'fr.json', lines: _fr, flagged: true),
@@ -81,7 +82,7 @@ class ProblemSection extends StatelessWidget {
           const SizedBox(height: 18),
           Row(
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedDatabaseExport,
                 size: 16,
                 color: tokens.accent,
@@ -123,7 +124,7 @@ class ProblemSection extends StatelessWidget {
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: before),
+                      const Expanded(child: before),
                       const SizedBox(width: 32),
                       Expanded(child: after),
                     ],

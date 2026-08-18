@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_theme.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 
 /// Opens [url] in a new browser tab.
 ///
@@ -41,7 +42,7 @@ class LandingButton extends StatefulWidget {
   /// Convenience for the common case: a button that is really a link.
   final String? url;
 
-  final IconData? icon;
+  final List<List<dynamic>>? icon;
   final LandingButtonKind kind;
   final bool busy;
   final bool large;
@@ -132,8 +133,8 @@ class _LandingButtonState extends State<LandingButton> {
                   ),
                 )
               else if (widget.icon != null)
-                Icon(
-                  widget.icon,
+                LingoDeskIcon(
+                  widget.icon!,
                   size: widget.large ? 20 : 18,
                   color: isGhost ? tokens.muted : foreground,
                 ),

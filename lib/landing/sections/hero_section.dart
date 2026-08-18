@@ -119,12 +119,12 @@ class HeroSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 44),
-                  Reveal(
+                  const Reveal(
                     child: Wrap(
                       spacing: 10,
                       runSpacing: 10,
                       alignment: WrapAlignment.center,
-                      children: const [
+                      children: [
                         LandingPill(
                           label: 'macOS',
                           icon: HugeIcons.strokeRoundedApple,
@@ -153,8 +153,8 @@ class HeroSection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: narrow ? 48 : 72),
-                  Reveal(
-                    child: const LandingShot(
+                  const Reveal(
+                    child: LandingShot(
                       name: 'dashboard.png',
                       semanticLabel:
                           'The LingoDesk dashboard showing translation '
@@ -215,7 +215,7 @@ class _HeroActions extends StatelessWidget {
           url: url,
           onPressed: onPressed,
         ),
-        LandingButton(
+        const LandingButton(
           label: 'View on GitHub',
           icon: HugeIcons.strokeRoundedGithub,
           kind: LandingButtonKind.secondary,

@@ -114,10 +114,7 @@ class _LandingPageState extends State<LandingPage> {
                       controller: controller,
                       onSeeDownloads: () => _jumpTo(_download),
                     ),
-                    DownloadSection(
-                      anchor: _download,
-                      controller: controller,
-                    ),
+                    DownloadSection(anchor: _download, controller: controller),
                     OpenSourceSection(controller: controller),
                     const FooterSection(),
                   ],

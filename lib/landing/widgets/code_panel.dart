@@ -147,7 +147,7 @@ class GridPanel extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Expanded(flex: 3, child: _HeaderCell(label: 'Key')),
+                const Expanded(flex: 3, child: _HeaderCell(label: 'Key')),
                 for (final locale in locales)
                   Expanded(flex: 2, child: _HeaderCell(label: locale)),
               ],
@@ -247,7 +247,7 @@ class _ValueCell extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: LingoDeskColors.warningDeepBorder),
           ),
-          child: Text(
+          child: const Text(
             'missing',
             style: TextStyle(
               fontSize: 10.5,

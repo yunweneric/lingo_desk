@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../data/github_release.dart';
 import '../state/landing_controller.dart';
 import '../widgets/code_panel.dart';
@@ -67,7 +68,7 @@ class DownloadSection extends StatelessWidget {
             },
           ),
           const SizedBox(height: 20),
-          Reveal(child: const _SourceCard()),
+          const Reveal(child: _SourceCard()),
         ],
       ),
     );
@@ -157,7 +158,7 @@ class _ReleaseCard extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedInformationCircle,
                 size: 15,
                 color: tokens.muted,
@@ -201,7 +202,7 @@ class _AssetRow extends StatefulWidget {
 class _AssetRowState extends State<_AssetRow> {
   bool _hovered = false;
 
-  IconData get _icon => switch (widget.asset.target) {
+  List<List<dynamic>> get _icon => switch (widget.asset.target) {
     DownloadTarget.macos => HugeIcons.strokeRoundedApple,
     DownloadTarget.windowsInstaller ||
     DownloadTarget.windowsPortable => HugeIcons.strokeRoundedComputer,
@@ -232,7 +233,7 @@ class _AssetRowState extends State<_AssetRow> {
           ),
           child: Row(
             children: [
-              Icon(_icon, size: 20, color: tokens.foreground),
+              LingoDeskIcon(_icon, size: 20, color: tokens.foreground),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -263,7 +264,7 @@ class _AssetRowState extends State<_AssetRow> {
                 ),
               ),
               const SizedBox(width: 12),
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedDownload04,
                 size: 19,
                 color: _hovered ? tokens.accent : tokens.muted,
@@ -302,7 +303,7 @@ class _FallbackCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedRocket01,
                 size: 20,
                 color: tokens.accent,
@@ -331,12 +332,12 @@ class _FallbackCard extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             children: [
-              LandingButton(
+              const LandingButton(
                 label: 'Releases on GitHub',
                 icon: HugeIcons.strokeRoundedGithub,
                 url: GithubRepo.releases,
               ),
-              LandingButton(
+              const LandingButton(
                 label: 'Latest build runs',
                 icon: HugeIcons.strokeRoundedComputerActivity,
                 kind: LandingButtonKind.secondary,
@@ -376,7 +377,7 @@ class _SourceCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
+              LingoDeskIcon(
                 HugeIcons.strokeRoundedTerminal,
                 size: 19,
                 color: tokens.foreground,

@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_mark.dart';
 import '../data/github_release.dart';
 import '../widgets/landing_button.dart';
@@ -17,10 +18,10 @@ class FooterSection extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final narrow = context.windowSize.isBelow(WindowSizeClass.expanded);
 
-    final links = Wrap(
+    const links = Wrap(
       spacing: 26,
       runSpacing: 12,
-      children: const [
+      children: [
         LandingLink(label: 'GitHub', url: GithubRepo.url),
         LandingLink(label: 'Releases', url: GithubRepo.releases),
         LandingLink(label: 'Issues', url: GithubRepo.issues),
@@ -61,7 +62,7 @@ class FooterSection extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    LingoDeskIcon(
                       HugeIcons.strokeRoundedCodeSquare,
                       size: 15,
                       color: tokens.muted,

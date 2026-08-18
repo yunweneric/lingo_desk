@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
 
@@ -89,7 +90,7 @@ class StepsSection extends StatelessWidget {
 class _Step {
   const _Step({required this.icon, required this.title, required this.body});
 
-  final IconData icon;
+  final List<List<dynamic>> icon;
   final String title;
   final String body;
 }
@@ -123,7 +124,7 @@ class _StepCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 22),
-        Icon(step.icon, size: 24, color: tokens.foreground),
+        LingoDeskIcon(step.icon, size: 24, color: tokens.foreground),
         const SizedBox(height: 16),
         Text(
           step.title,

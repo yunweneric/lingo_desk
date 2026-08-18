@@ -130,24 +130,6 @@
     </div>
   </noscript>
 
-  <script>
-    window.addEventListener('load', function () {
-      _flutter.loader.load({
-        onEntrypointLoaded: async function (engineInitializer) {
-          const appRunner = await engineInitializer.initializeEngine();
-          await appRunner.runApp();
-          // One frame for Flutter to paint before the curtain lifts.
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              const boot = document.getElementById('boot');
-              boot.classList.add('done');
-              setTimeout(function () { boot.remove(); }, 400);
-            });
-          });
-        }
-      });
-    });
-  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

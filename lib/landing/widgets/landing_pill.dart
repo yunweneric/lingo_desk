@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/widgets/lingo_desk_icon.dart';
 
 /// A small rounded label: the MIT badge, the platform row, locale chips.
 class LandingPill extends StatelessWidget {
@@ -15,7 +16,7 @@ class LandingPill extends StatelessWidget {
   });
 
   final String label;
-  final IconData? icon;
+  final List<List<dynamic>>? icon;
 
   /// Anything richer than an icon — a flag emoji, a provider logo.
   final Widget? leading;
@@ -44,7 +45,7 @@ class LandingPill extends StatelessWidget {
         children: [
           if (leading != null) ...[leading!, const SizedBox(width: 8)],
           if (icon != null) ...[
-            Icon(icon, size: 15, color: foreground),
+            LingoDeskIcon(icon!, size: 15, color: foreground),
             const SizedBox(width: 7),
           ],
           Text(
@@ -84,7 +85,7 @@ class PlatformTile extends StatefulWidget {
   });
 
   final String label;
-  final IconData icon;
+  final List<List<dynamic>> icon;
   final bool available;
   final VoidCallback? onTap;
 
@@ -126,7 +127,7 @@ class _PlatformTileState extends State<PlatformTile> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(widget.icon, size: 24, color: tokens.accent),
+              LingoDeskIcon(widget.icon, size: 24, color: tokens.accent),
               const SizedBox(height: 10),
               Text(
                 widget.label,

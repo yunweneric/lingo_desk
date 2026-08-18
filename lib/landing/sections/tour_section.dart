@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
 import '../widgets/landing_layout.dart';
@@ -112,11 +111,7 @@ class _TourSectionState extends State<TourSection> {
             child: Text(
               screen.caption,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15,
-                height: 1.6,
-                color: tokens.muted,
-              ),
+              style: TextStyle(fontSize: 15, height: 1.6, color: tokens.muted),
             ),
           ),
         ],
