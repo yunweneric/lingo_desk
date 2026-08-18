@@ -2,7 +2,7 @@ part of '../pages/app_dashboard_page.dart';
 
 class _SiteHeader extends StatelessWidget {
   const _SiteHeader({
-    required this.projects,
+    required this.state,
     required this.themeMode,
     required this.onThemeModeChanged,
     required this.selectedLanguage,
@@ -10,7 +10,7 @@ class _SiteHeader extends StatelessWidget {
     required this.showMobileBrand,
   });
 
-  final List<_ProjectSummary> projects;
+  final AppManagementState state;
   final ThemeMode themeMode;
   final ValueChanged<ThemeMode> onThemeModeChanged;
   final String selectedLanguage;
@@ -19,7 +19,9 @@ class _SiteHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
+    final loaded =
+        state is AppManagementLoaded ? state as AppManagementLoaded : null;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -30,11 +32,15 @@ class _SiteHeader extends StatelessWidget {
         builder: (context, constraints) {
           final isCompact = constraints.maxWidth < 780;
           final horizontalPadding = showMobileBrand ? 16.0 : 24.0;
-          final missing = projects.fold<int>(0, (sum, app) => sum + app.missingCount);
 
           if (isCompact) {
             return Padding(
-              padding: EdgeInsets.fromLTRB(horizontalPadding, 14, horizontalPadding, 16),
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                14,
+                horizontalPadding,
+                16,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -43,7 +49,10 @@ class _SiteHeader extends StatelessWidget {
                       Expanded(
                         child:
                             showMobileBrand
-                                ? const LingoDeskMark(size: 32, showWordmark: true)
+                                ? const LingoDeskMark(
+                                  size: 32,
+                                  showWordmark: true,
+                                )
                                 : _Breadcrumb(tokens: tokens),
                       ),
                       _LanguageSwitcher(
@@ -60,14 +69,14 @@ class _SiteHeader extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 18),
-                  _HeaderOverview(projects: projects, missing: missing),
+                  _HeaderOverview(loaded: loaded),
                   const SizedBox(height: 12),
                   _SearchField(tokens: tokens, width: double.infinity),
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      onPressed: () {},
+                      onPressed: () => _openCreateApp(context),
                       icon: const LingoDeskIcon(
                         HugeIcons.strokeRoundedAdd01,
                         color: Colors.white,
@@ -82,7 +91,12 @@ class _SiteHeader extends StatelessWidget {
           }
 
           return Padding(
-            padding: EdgeInsets.fromLTRB(horizontalPadding, 16, horizontalPadding, 20),
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              16,
+              horizontalPadding,
+              20,
+            ),
             child: Column(
               children: [
                 Row(
@@ -90,7 +104,10 @@ class _SiteHeader extends StatelessWidget {
                     Expanded(child: _Breadcrumb(tokens: tokens)),
                     _SearchField(tokens: tokens, width: 280),
                     const SizedBox(width: 8),
-                    _ThemeSwitcher(themeMode: themeMode, onChanged: onThemeModeChanged),
+                    _ThemeSwitcher(
+                      themeMode: themeMode,
+                      onChanged: onThemeModeChanged,
+                    ),
                     const SizedBox(width: 8),
                     _LanguageSwitcher(
                       selectedLanguage: selectedLanguage,
@@ -98,7 +115,7 @@ class _SiteHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     FilledButton.icon(
-                      onPressed: () {},
+                      onPressed: () => _openCreateApp(context),
                       icon: const LingoDeskIcon(
                         HugeIcons.strokeRoundedAdd01,
                         color: Colors.white,
@@ -109,7 +126,7 @@ class _SiteHeader extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                _HeaderOverview(projects: projects, missing: missing),
+                _HeaderOverview(loaded: loaded),
               ],
             ),
           );
@@ -120,23 +137,24 @@ class _SiteHeader extends StatelessWidget {
 }
 
 class _HeaderOverview extends StatelessWidget {
-  const _HeaderOverview({required this.projects, required this.missing});
+  const _HeaderOverview({required this.loaded});
 
-  final List<_ProjectSummary> projects;
-  final int missing;
+  final AppManagementLoaded? loaded;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
-    final totalKeys = projects.fold<int>(0, (sum, app) => sum + app.keyCount);
-    final activeLanguages = projects.expand((app) => app.targetLanguages).toSet().length;
+    final tokens = LingoDeskTokens.of(context);
+    final appCount = loaded?.overviews.length ?? 0;
+    final totalKeys = loaded?.totalKeys ?? 0;
+    final activeLanguages = loaded?.activeLanguages.length ?? 0;
+    final missing = loaded?.totalMissing ?? 0;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: tokens.border),
       ),
       child: LayoutBuilder(
@@ -155,9 +173,10 @@ class _HeaderOverview extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Track coverage, review missing strings, and jump back into active localization work.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: tokens.muted, height: 1.45),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: tokens.muted,
+                  height: 1.45,
+                ),
               ),
             ],
           );
@@ -169,7 +188,7 @@ class _HeaderOverview extends StatelessWidget {
             children: [
               _HeaderMeta(
                 label: 'Apps',
-                value: projects.length.toString(),
+                value: appCount.toString(),
                 icon: HugeIcons.strokeRoundedFolder02,
                 tokens: tokens,
               ),
@@ -187,7 +206,10 @@ class _HeaderOverview extends StatelessWidget {
               ),
               _Badge(
                 label: '$missing missing strings',
-                color: missing == 0 ? LingoDeskColors.complete : LingoDeskColors.warning,
+                color:
+                    missing == 0
+                        ? LingoDeskColors.complete
+                        : LingoDeskColors.warning,
               ),
             ],
           );
@@ -227,7 +249,7 @@ class _HeaderMeta extends StatelessWidget {
   final String label;
   final String value;
   final List<List<dynamic>> icon;
-  final _DashboardTokens tokens;
+  final LingoDeskTokens tokens;
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +259,7 @@ class _HeaderMeta extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: tokens.active,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: tokens.border),
         ),
         child: Padding(
@@ -282,7 +304,7 @@ class _HeaderMeta extends StatelessWidget {
 class _Breadcrumb extends StatelessWidget {
   const _Breadcrumb({required this.tokens});
 
-  final _DashboardTokens tokens;
+  final LingoDeskTokens tokens;
 
   @override
   Widget build(BuildContext context) {
@@ -305,61 +327,86 @@ class _Breadcrumb extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField({required this.tokens, this.width = 220});
 
-  final _DashboardTokens tokens;
+  final LingoDeskTokens tokens;
   final double width;
 
   @override
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final tokens = widget.tokens;
+
     return SizedBox(
-      width: width,
+      width: widget.width,
       height: 42,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: tokens.card,
-          border: Border.all(color: tokens.border),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            LingoDeskIcon(
+      child: TextField(
+        controller: _controller,
+        onChanged:
+            (value) =>
+                context.read<AppManagementBloc>().add(SearchAppsEvent(value)),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: tokens.foreground),
+        decoration: InputDecoration(
+          hintText: 'Search apps',
+          hintStyle: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+          isDense: true,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.only(left: 12, right: 8),
+            child: LingoDeskIcon(
               HugeIcons.strokeRoundedGlobalSearch,
               color: tokens.muted,
               size: 18,
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Search projects',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(width: 8),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: tokens.active,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: tokens.border),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                child: Text(
-                  'K',
-                  style: LingoDeskTheme.codeStyle.copyWith(
-                    color: tokens.muted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                  ),
+          ),
+          prefixIconConstraints: const BoxConstraints(minWidth: 38),
+          suffixIcon: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _controller,
+            builder: (context, value, _) {
+              if (value.text.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return IconButton(
+                tooltip: 'Clear',
+                onPressed: () {
+                  _controller.clear();
+                  context.read<AppManagementBloc>().add(SearchAppsEvent(''));
+                },
+                icon: LingoDeskIcon(
+                  HugeIcons.strokeRoundedCancel01,
+                  color: tokens.muted,
+                  size: 16,
                 ),
-              ),
-            ),
-          ],
+              );
+            },
+          ),
+          filled: true,
+          fillColor: tokens.card,
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: tokens.border),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: tokens.border),
+          ),
         ),
       ),
     );

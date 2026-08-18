@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LingoDesk
+GenericName=Localization Workspace
+Comment=Manage app translations, imports and exports
+Exec=lingo_desk
+Icon=lingo_desk
+Terminal=false
+Categories=Development;Utility;
+StartupWMClass=lingo_desk

@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+/// LingoDesk palette — teal rebrand (Aug 2026).
+///
+/// One saturated accent (`brandTeal`), warm stone neutrals, literal
+/// status colors, and deep teal-ink stage surfaces. Values mirror the
+/// design system's `tokens/colors.css`.
 class LingoDeskColors {
   const LingoDeskColors._();
 
-  static const brandBlue = Color(0xFF0067CD);
-  static const brandBlueSoft = Color(0xFFEAF4FF);
-  static const ink = Color(0xFF030712);
-  static const darkInk = Color(0xFF070B14);
-  static const slate = Color(0xFF6B7280);
-  static const slateLight = Color(0xFFCBD5E1);
-  static const surface = Color(0xFFF9FAFB);
-  static const darkSurface = Color(0xFF0D111B);
+  static const brandTeal = Color(0xFF0F766E);
+  static const brandTealSoft = Color(0xFFE7F3F0);
+  static const brandTealSoftBorder = Color(0xFFCFE6E0);
+  static const ink = Color(0xFF1C1917);
+  static const darkInk = Color(0xFF0E1B18); // deep-ink stage pane
+  static const slate = Color(0xFF78716C);
+  static const slateLight = Color(0xFFD6D3D1);
+  static const surface = Color(0xFFFAFAF9);
+  static const darkSurface = Color(0xFF16241F); // deep-surface
+  static const sidebarDeep = Color(0xFF0C1714);
+  static const activeLight = Color(0xFFF0EFEC);
+  static const activeDeep = Color(0xFF1C2B26);
   static const missing = Color(0xFFFEF3C7);
-  static const complete = Color(0xFF16A34A);
+  static const complete = Color(0xFF15803D);
   static const error = Color(0xFFDC2626);
   static const warning = Color(0xFFB45309);
-  static const border = Color(0xFFE5E7EB);
+  static const border = Color(0xFFE7E5E4);
 }
 
 class LingoDeskTheme {
   const LingoDeskTheme._();
+
+  /// 12px does almost all the work; 8px nested, 16px dialogs/hero panes.
+  static const radius = 12.0;
+  static const radiusSm = 8.0;
+  static const radiusLg = 16.0;
 
   static ThemeData light() => _build(Brightness.light);
 
@@ -30,7 +45,7 @@ class LingoDeskTheme {
     final textColor = isDark ? Colors.white : LingoDeskColors.ink;
     final scheme = ColorScheme(
       brightness: brightness,
-      primary: LingoDeskColors.brandBlue,
+      primary: LingoDeskColors.brandTeal,
       onPrimary: Colors.white,
       secondary: isDark ? Colors.white : LingoDeskColors.ink,
       onSecondary: isDark ? LingoDeskColors.ink : Colors.white,
@@ -45,7 +60,8 @@ class LingoDeskTheme {
       brightness: brightness,
       scaffoldBackgroundColor:
           isDark ? LingoDeskColors.darkInk : LingoDeskColors.surface,
-      fontFamily: 'IBM Plex Sans',
+      fontFamily: GoogleFonts.urbanist().fontFamily,
+      textTheme: GoogleFonts.urbanistTextTheme(),
     );
 
     return base.copyWith(
@@ -61,7 +77,7 @@ class LingoDeskTheme {
         color: isDark ? LingoDeskColors.darkSurface : Colors.white,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(radius),
           side: BorderSide(
             color: isDark ? Colors.white12 : LingoDeskColors.border,
           ),
@@ -69,15 +85,27 @@ class LingoDeskTheme {
       ),
       chipTheme: base.chipTheme.copyWith(
         backgroundColor:
-            isDark ? const Color(0xFF151B27) : LingoDeskColors.surface,
-        selectedColor: LingoDeskColors.missing,
+            isDark ? LingoDeskColors.activeDeep : LingoDeskColors.surface,
+        selectedColor: LingoDeskColors.brandTealSoft,
         side: BorderSide(
           color: isDark ? Colors.white12 : LingoDeskColors.border,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
         labelStyle: TextStyle(
           color: isDark ? Colors.white : LingoDeskColors.ink,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        elevation: 0,
+        backgroundColor: isDark ? LingoDeskColors.darkSurface : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusLg),
+          side: BorderSide(
+            color: isDark ? Colors.white12 : LingoDeskColors.border,
+          ),
         ),
       ),
       dividerTheme: DividerThemeData(
@@ -87,11 +115,13 @@ class LingoDeskTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: LingoDeskColors.brandBlue,
+          backgroundColor: LingoDeskColors.brandTeal,
           foregroundColor: Colors.white,
           minimumSize: const Size(48, 48),
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
+          ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
@@ -106,18 +136,24 @@ class LingoDeskTheme {
           side: BorderSide(
             color: isDark ? Colors.white24 : LingoDeskColors.border,
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
+          ),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
           ),
         ),
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        selectionColor: LingoDeskColors.brandTealSoft,
+        cursorColor: LingoDeskColors.brandTeal,
+      ),
       textTheme: base.textTheme
           .apply(
             bodyColor: textColor,
             displayColor: textColor,
-            fontFamily: 'IBM Plex Sans',
+            fontFamily: GoogleFonts.urbanist().fontFamily,
           )
           .copyWith(
             headlineLarge: TextStyle(
@@ -166,11 +202,12 @@ class LingoDeskTheme {
     );
   }
 
+  /// Machine strings: Space Mono ships 400/700 only — bold it is.
   static const codeStyle = TextStyle(
     color: LingoDeskColors.ink,
-    fontFamily: 'IBM Plex Mono',
+    fontFamily: 'Space Mono',
     fontSize: 13,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700,
     letterSpacing: 0,
   );
 }

@@ -137,7 +137,7 @@ class _ToolbarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return Container(
       constraints: BoxConstraints(minWidth: compact ? 42 : 0),
@@ -145,7 +145,7 @@ class _ToolbarButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: compact ? 11 : 13),
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: tokens.border),
       ),
       child: Row(

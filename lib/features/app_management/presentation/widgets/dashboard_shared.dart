@@ -13,7 +13,7 @@ class _CardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return Row(
       children: [
@@ -56,12 +56,12 @@ class _Surface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return Container(
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: tokens.border),
       ),
       child: Padding(padding: padding, child: child),
@@ -92,42 +92,6 @@ class _Badge extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
       ),
-    );
-  }
-}
-
-class _DashboardTokens {
-  const _DashboardTokens({
-    required this.isDark,
-    required this.background,
-    required this.sidebar,
-    required this.card,
-    required this.border,
-    required this.foreground,
-    required this.muted,
-    required this.active,
-  });
-
-  final bool isDark;
-  final Color background;
-  final Color sidebar;
-  final Color card;
-  final Color border;
-  final Color foreground;
-  final Color muted;
-  final Color active;
-
-  static _DashboardTokens of(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return _DashboardTokens(
-      isDark: isDark,
-      background: isDark ? LingoDeskColors.darkInk : LingoDeskColors.surface,
-      sidebar: isDark ? const Color(0xFF080D16) : Colors.white,
-      card: isDark ? LingoDeskColors.darkSurface : Colors.white,
-      border: isDark ? Colors.white12 : LingoDeskColors.border,
-      foreground: isDark ? Colors.white : LingoDeskColors.ink,
-      muted: isDark ? LingoDeskColors.slateLight : LingoDeskColors.slate,
-      active: isDark ? const Color(0xFF151B27) : const Color(0xFFF1F5F9),
     );
   }
 }

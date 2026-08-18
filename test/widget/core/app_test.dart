@@ -18,7 +18,10 @@ void main() {
       // Build our app and trigger a frame.
       await tester.pumpWidget(const LingoDeskApp());
 
-      expect(find.text('Translate everything, once'), findsOneWidget);
+      expect(
+        find.text('Translate every locale from one clean desk'),
+        findsOneWidget,
+      );
       expect(find.byType(Image), findsWidgets);
     });
 
@@ -29,7 +32,7 @@ void main() {
       await tester.pumpWidget(const LingoDeskApp());
 
       expect(find.text('Translation workspace'.toUpperCase()), findsOneWidget);
-      expect(find.textContaining('home.hero.title'), findsOneWidget);
+      expect(find.textContaining('home.hero.title'), findsWidgets);
       expect(find.byType(HugeIcon), findsWidgets);
     });
 

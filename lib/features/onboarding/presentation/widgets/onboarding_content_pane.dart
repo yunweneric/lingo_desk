@@ -5,6 +5,8 @@ import 'onboarding_header.dart';
 import 'onboarding_slide.dart';
 import 'onboarding_step.dart';
 
+/// The reading half of the screen: header rail, the swipeable copy, and
+/// the navigation footer. Shared by both layouts so the two never drift.
 class OnboardingContentPane extends StatelessWidget {
   const OnboardingContentPane({
     super.key,
@@ -16,6 +18,7 @@ class OnboardingContentPane extends StatelessWidget {
     required this.onBack,
     required this.onNext,
     required this.onSkip,
+    required this.onSelect,
     this.isTablet = false,
   });
 
@@ -28,23 +31,31 @@ class OnboardingContentPane extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onNext;
   final VoidCallback onSkip;
+  final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
-    final horizontalPadding = isWide ? 72.0 : (isTablet ? 44.0 : 24.0);
-    final topPadding = isWide ? 44.0 : 18.0;
+    final horizontalPadding = isWide ? 64.0 : (isTablet ? 44.0 : 24.0);
+    final verticalPadding = isWide ? 40.0 : 20.0;
+    final isNarrow = !isWide && !isTablet;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
         horizontalPadding,
-        topPadding,
+        verticalPadding,
         horizontalPadding,
-        isWide ? 44 : 20,
+        verticalPadding,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          OnboardingHeader(onSkip: onSkip),
+          OnboardingHeader(
+            currentIndex: currentIndex,
+            length: pages.length,
+            onSkip: onSkip,
+            showMark: !isWide,
+          ),
+          SizedBox(height: isWide ? 24 : 20),
           Expanded(
             child: PageView.builder(
               controller: controller,
@@ -59,11 +70,14 @@ class OnboardingContentPane extends StatelessWidget {
               },
             ),
           ),
+          SizedBox(height: isWide ? 24 : 12),
           OnboardingFooter(
             currentIndex: currentIndex,
             length: pages.length,
             onBack: onBack,
             onNext: onNext,
+            onSelect: onSelect,
+            compact: isNarrow,
           ),
         ],
       ),

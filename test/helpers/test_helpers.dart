@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lingo_desk/core/di/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Test helper utilities for setting up and tearing down tests
 class TestHelpers {
@@ -10,6 +11,10 @@ class TestHelpers {
   static Future<void> setUp() async {
     // Reset GetIt before each test
     await reset();
+
+    // Use in-memory storage and register the real dependency graph
+    SharedPreferences.setMockInitialValues({});
+    await init();
 
     // Register test-specific dependencies here
     // Example:

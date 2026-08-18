@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <filter id="lift" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="9.89" stdDeviation="11.54" flood-color="#000000" flood-opacity="0.3"/>
+  </filter>
+  <rect x="100" y="100" width="824" height="824" rx="185.4" fill="#0f766e" filter="url(#lift)"/>
+  <rect x="265.62" y="323.59" width="347.82" height="347.82" rx="101.45" fill="#ffffff" fill-opacity="0.45"/>
+  <rect x="410.55" y="352.58" width="347.82" height="347.82" rx="101.45" fill="#ffffff"/>
+  <circle cx="526.49" cy="526.49" r="49.28" fill="#0f766e"/>
+  <circle cx="671.42" cy="526.49" r="49.28" fill="#0f766e"/>
+</svg>

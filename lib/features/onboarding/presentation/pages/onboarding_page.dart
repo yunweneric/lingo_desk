@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../widgets/onboarding_content_pane.dart';
+import '../widgets/onboarding_stage.dart';
 import '../widgets/onboarding_step.dart';
-import '../widgets/onboarding_visual_pane.dart';
 
+/// First-launch introduction: a persistent photographic stage on wide
+/// windows, a single scrolling column everywhere else.
+///
+/// Arrow keys, enter and escape all drive it, because this is a desktop
+/// app and reaching for the trackpad to read three screens is a tax.
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key, required this.onComplete});
 
@@ -14,6 +20,11 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
+  /// Two-pane needs room for a 3:2 stage *and* readable copy; below this
+  /// the stage becomes a banner inside the slide instead.
+  static const _wideBreakpoint = 960.0;
+  static const _tabletBreakpoint = 640.0;
+
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
@@ -26,59 +37,65 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isWide = constraints.maxWidth >= 920;
-          final isTablet = constraints.maxWidth >= 640;
+      body: FocusScope(
+        autofocus: true,
+        child: CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.arrowRight): _handleNext,
+            const SingleActivator(LogicalKeyboardKey.arrowLeft): _handleBack,
+            const SingleActivator(LogicalKeyboardKey.enter): _handleNext,
+            const SingleActivator(LogicalKeyboardKey.escape): _handleSkip,
+          },
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth >= _wideBreakpoint;
+              final isTablet = constraints.maxWidth >= _tabletBreakpoint;
 
-          if (isWide) {
-            return Row(
-              children: [
-                Expanded(
-                  flex: 11,
-                  child: OnboardingVisualPane(
-                    step: onboardingSteps[_currentIndex],
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: SafeArea(
-                    child: OnboardingContentPane(
-                      pages: onboardingSteps,
-                      controller: _controller,
-                      currentIndex: _currentIndex,
-                      isWide: true,
-                      onPageChanged: _handlePageChanged,
-                      onBack: _handleBack,
-                      onNext: _handleNext,
-                      onSkip: _handleSkip,
+              final contentPane = OnboardingContentPane(
+                pages: onboardingSteps,
+                controller: _controller,
+                currentIndex: _currentIndex,
+                isWide: isWide,
+                isTablet: isTablet,
+                onPageChanged: _handlePageChanged,
+                onBack: _handleBack,
+                onNext: _handleNext,
+                onSkip: _handleSkip,
+                onSelect: _handleSelect,
+              );
+
+              if (!isWide) {
+                return SafeArea(child: contentPane);
+              }
+
+              return Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: OnboardingStage(
+                      step: onboardingSteps[_currentIndex],
                     ),
                   ),
-                ),
-              ],
-            );
-          }
-
-          return SafeArea(
-            child: OnboardingContentPane(
-              pages: onboardingSteps,
-              controller: _controller,
-              currentIndex: _currentIndex,
-              isWide: false,
-              isTablet: isTablet,
-              onPageChanged: _handlePageChanged,
-              onBack: _handleBack,
-              onNext: _handleNext,
-              onSkip: _handleSkip,
-            ),
-          );
-        },
+                  Expanded(flex: 6, child: SafeArea(child: contentPane)),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
   void _handlePageChanged(int index) {
     setState(() => _currentIndex = index);
+  }
+
+  void _handleSelect(int index) {
+    _controller.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   void _handleBack() {

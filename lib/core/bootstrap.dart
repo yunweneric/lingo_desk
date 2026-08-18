@@ -71,21 +71,10 @@ class Bootstrap {
 
   /// Initializes application services
   ///
-  /// Add initialization for:
-  /// - Local storage (Hive, SharedPreferences, etc.)
-  /// - Dependency injection
-  /// - Analytics
-  /// - Other services
+  /// Local storage (SharedPreferences) is initialized inside the DI
+  /// container so every dependency shares the same instance.
   static Future<void> _initializeServices() async {
-    // Initialize dependency injection
+    // Initialize dependency injection (includes SharedPreferences)
     await di.init();
-
-    // TODO: Initialize local storage
-    // Example:
-    // await Hive.initFlutter();
-    // await SharedPreferences.getInstance();
-
-    // TODO: Initialize other services
-    // Example: Analytics, Crash reporting, etc.
   }
 }

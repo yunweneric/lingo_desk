@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/preferences/app_settings_controller.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
+import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/lingo_desk_mark.dart';
+import '../../../app_settings/presentation/widgets/create_app_dialog.dart';
+import '../../domain/entities/app_overview.dart';
+import '../bloc/app_management_bloc.dart';
+import '../bloc/app_management_event.dart';
+import '../bloc/app_management_state.dart';
 
 part '../widgets/dashboard_cards.dart';
 part '../widgets/dashboard_content.dart';
@@ -13,84 +25,82 @@ part '../widgets/dashboard_shared.dart';
 part '../widgets/dashboard_sidebar.dart';
 part '../widgets/projects_table.dart';
 
+/// App Management Dashboard: the entry point listing every
+/// localization project with live stats.
 class AppDashboardPage extends StatelessWidget {
-  const AppDashboardPage({
-    super.key,
-    required this.themeMode,
-    required this.onThemeModeChanged,
-    required this.selectedLanguage,
-    required this.onLanguageChanged,
-  });
+  const AppDashboardPage({super.key});
 
-  final ThemeMode themeMode;
-  final ValueChanged<ThemeMode> onThemeModeChanged;
-  final String selectedLanguage;
-  final ValueChanged<String> onLanguageChanged;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<AppManagementBloc>()..add(LoadAppsEvent()),
+      child: const _DashboardShell(),
+    );
+  }
+}
 
-  static const _projects = [
-    _ProjectSummary(
-      name: 'Customer Portal',
-      sourceLanguage: 'en',
-      targetLanguages: ['fr', 'es', 'uk'],
-      keyCount: 148,
-      missingCount: 12,
-      updatedLabel: '2 min ago',
-      progress: 0.92,
-      status: 'In review',
-    ),
-    _ProjectSummary(
-      name: 'Admin Console',
-      sourceLanguage: 'en',
-      targetLanguages: ['fr', 'de'],
-      keyCount: 86,
-      missingCount: 19,
-      updatedLabel: 'Yesterday',
-      progress: 0.78,
-      status: 'Missing',
-    ),
-    _ProjectSummary(
-      name: 'Mobile App',
-      sourceLanguage: 'en',
-      targetLanguages: ['fr', 'es', 'pt', 'uk'],
-      keyCount: 213,
-      missingCount: 0,
-      updatedLabel: '3 days ago',
-      progress: 1,
-      status: 'Complete',
-    ),
-    _ProjectSummary(
-      name: 'Marketing Site',
-      sourceLanguage: 'en',
-      targetLanguages: ['fr', 'es'],
-      keyCount: 64,
-      missingCount: 8,
-      updatedLabel: '5 days ago',
-      progress: 0.88,
-      status: 'Draft',
-    ),
-  ];
+class _DashboardShell extends StatefulWidget {
+  const _DashboardShell();
+
+  @override
+  State<_DashboardShell> createState() => _DashboardShellState();
+}
+
+class _DashboardShellState extends State<_DashboardShell> with RouteAware {
+  final AppSettingsController _settings = getIt<AppSettingsController>();
+  final ScrollController _scrollController = ScrollController();
+  AppManagementBloc? _bloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = context.read<AppManagementBloc>();
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// Reloads the stats whenever navigation returns to the dashboard,
+  /// so numbers reflect edits made in settings/upload/editor.
+  @override
+  void didPopNext() {
+    _bloc?.add(LoadAppsEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isWide = constraints.maxWidth >= 1024;
+      body: ListenableBuilder(
+        listenable: _settings,
+        builder: (context, _) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth >= 1024;
 
-          return Row(
-            children: [
-              if (isWide) const _AppSidebar(),
-              Expanded(
-                child: _DashboardContent(
-                  projects: _projects,
-                  themeMode: themeMode,
-                  onThemeModeChanged: onThemeModeChanged,
-                  selectedLanguage: selectedLanguage,
-                  onLanguageChanged: onLanguageChanged,
-                  showMobileBrand: !isWide,
-                ),
-              ),
-            ],
+              return Row(
+                children: [
+                  if (isWide) _AppSidebar(scrollController: _scrollController),
+                  Expanded(
+                    child: _DashboardContent(
+                      scrollController: _scrollController,
+                      themeMode: _settings.themeMode,
+                      onThemeModeChanged: _settings.setThemeMode,
+                      selectedLanguage: _settings.uiLanguage,
+                      onLanguageChanged: _settings.setUiLanguage,
+                      showMobileBrand: !isWide,
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         },
       ),
@@ -98,29 +108,200 @@ class AppDashboardPage extends StatelessWidget {
   }
 }
 
-List<_Metric> _dashboardMetrics(List<_ProjectSummary> projects) {
-  final totalKeys = projects.fold<int>(0, (sum, app) => sum + app.keyCount);
-  final missing = projects.fold<int>(0, (sum, app) => sum + app.missingCount);
-  final complete = totalKeys - missing;
-  final coverage = totalKeys == 0 ? 0 : complete / totalKeys;
+/// Section anchors for the sidebar's scroll jumps.
+final GlobalKey _appsSectionKey = GlobalKey(debugLabel: 'apps-section');
+final GlobalKey _languageHealthKey = GlobalKey(debugLabel: 'language-health');
+
+Future<void> _openCreateApp(BuildContext context) async {
+  final app = await CreateAppDialog.show(context);
+  if (app == null || !context.mounted) {
+    return;
+  }
+
+  // Offer to import files right away; the dashboard stats refresh via
+  // the shell's RouteAware.didPopNext when the dialogs close.
+  final uploadNow = await showDialog<bool>(
+    context: context,
+    builder:
+        (dialogContext) => AlertDialog(
+          title: Text('"${app.name}" created'),
+          content: const Text(
+            'Do you want to upload your existing JSON translation files now? '
+            'You can also do this later from the dashboard.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Later'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Upload files'),
+            ),
+          ],
+        ),
+  );
+
+  if (uploadNow == true && context.mounted) {
+    context.push(AppRoutes.fileUpload(app.id), extra: app);
+  }
+}
+
+/// Resolves which app a sidebar action should target: directly with a
+/// single app, via a chooser with several, or the create modal when none.
+Future<AppOverview?> _pickApp(BuildContext context) async {
+  final state = context.read<AppManagementBloc>().state;
+  final overviews =
+      state is AppManagementLoaded ? state.overviews : const <AppOverview>[];
+
+  if (overviews.isEmpty) {
+    await _openCreateApp(context);
+    return null;
+  }
+  if (overviews.length == 1) {
+    return overviews.first;
+  }
+
+  return showDialog<AppOverview>(
+    context: context,
+    builder:
+        (dialogContext) => SimpleDialog(
+          title: const Text('Choose an app'),
+          children: [
+            for (final overview in overviews)
+              SimpleDialogOption(
+                onPressed: () => Navigator.of(dialogContext).pop(overview),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        overview.app.name,
+                        style: Theme.of(dialogContext).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${overview.app.sourceLanguage}.json - '
+                        '${overview.keyCount} keys',
+                        style: LingoDeskTheme.codeStyle.copyWith(
+                          fontSize: 12,
+                          color: LingoDeskTokens.of(dialogContext).muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+  );
+}
+
+/// Smoothly scrolls the dashboard to a section anchor, building lazy
+/// slivers first when needed.
+Future<void> _scrollToSection(
+  ScrollController controller,
+  GlobalKey key,
+) async {
+  const duration = Duration(milliseconds: 240);
+  const curve = Curves.easeOutCubic;
+
+  final sectionContext = key.currentContext;
+  if (sectionContext != null) {
+    await Scrollable.ensureVisible(
+      sectionContext,
+      duration: duration,
+      curve: curve,
+    );
+    return;
+  }
+  if (!controller.hasClients) {
+    return;
+  }
+  // The sliver isn't built yet: scroll to the end, then anchor to it.
+  await controller.animateTo(
+    controller.position.maxScrollExtent,
+    duration: duration,
+    curve: curve,
+  );
+  await WidgetsBinding.instance.endOfFrame;
+  final retryContext = key.currentContext;
+  if (retryContext != null && retryContext.mounted) {
+    await Scrollable.ensureVisible(
+      retryContext,
+      duration: duration,
+      curve: curve,
+    );
+  }
+}
+
+void _openAppSettings(BuildContext context, AppOverview overview) {
+  context.push(AppRoutes.appSettings(overview.app.id), extra: overview.app);
+}
+
+void _openFileUpload(BuildContext context, AppOverview overview) {
+  context.push(AppRoutes.fileUpload(overview.app.id), extra: overview.app);
+}
+
+void _openEditor(BuildContext context, AppOverview overview) {
+  context.push(AppRoutes.editor(overview.app.id));
+}
+
+Future<void> _confirmDeleteApp(
+  BuildContext context,
+  AppOverview overview,
+) async {
+  final bloc = context.read<AppManagementBloc>();
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder:
+        (dialogContext) => AlertDialog(
+          title: Text('Delete "${overview.app.name}"?'),
+          content: const Text(
+            'This permanently removes the app and all of its translations. '
+            'This cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: LingoDeskColors.error,
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Delete'),
+            ),
+          ],
+        ),
+  );
+  if (confirmed ?? false) {
+    bloc.add(DeleteAppEvent(overview.app.id));
+  }
+}
+
+List<_Metric> _dashboardMetrics(AppManagementLoaded state) {
+  final missing = state.totalMissing;
 
   return [
     _Metric(
       label: 'Apps',
-      value: projects.length.toString(),
-      detail: '+1 this month',
+      value: state.overviews.length.toString(),
+      detail: 'Local workspace',
       icon: HugeIcons.strokeRoundedFolder02,
     ),
     _Metric(
       label: 'Total keys',
-      value: totalKeys.toString(),
-      detail: 'Across active apps',
+      value: state.totalKeys.toString(),
+      detail: 'Across all apps',
       icon: HugeIcons.strokeRoundedKey01,
     ),
     _Metric(
       label: 'Coverage',
-      value: '${(coverage * 100).round()}%',
-      detail: '+4.2% from last sync',
+      value: '${(state.coverage * 100).round()}%',
+      detail: '${state.activeLanguages.length} target locales',
       icon: HugeIcons.strokeRoundedChartBarIncreasing,
     ),
     _Metric(
@@ -131,6 +312,17 @@ List<_Metric> _dashboardMetrics(List<_ProjectSummary> projects) {
       isPositive: missing == 0,
     ),
   ];
+}
+
+/// Derived status of an app for the dashboard table.
+({String label, Color color}) _statusOf(AppOverview overview) {
+  if (overview.keyCount == 0) {
+    return (label: 'New', color: LingoDeskColors.brandTeal);
+  }
+  if (overview.isComplete) {
+    return (label: 'Complete', color: LingoDeskColors.complete);
+  }
+  return (label: 'Missing', color: LingoDeskColors.warning);
 }
 
 class _Metric {
@@ -154,31 +346,11 @@ class _SidebarItemData {
     required this.label,
     required this.icon,
     this.isActive = false,
+    this.onTap,
   });
 
   final String label;
   final List<List<dynamic>> icon;
   final bool isActive;
-}
-
-class _ProjectSummary {
-  const _ProjectSummary({
-    required this.name,
-    required this.sourceLanguage,
-    required this.targetLanguages,
-    required this.keyCount,
-    required this.missingCount,
-    required this.updatedLabel,
-    required this.progress,
-    required this.status,
-  });
-
-  final String name;
-  final String sourceLanguage;
-  final List<String> targetLanguages;
-  final int keyCount;
-  final int missingCount;
-  final String updatedLabel;
-  final double progress;
-  final String status;
+  final VoidCallback? onTap;
 }

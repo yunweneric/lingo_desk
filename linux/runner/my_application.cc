@@ -14,9 +14,24 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+// The install tree is relocatable, so GTK's icon theme won't find the hicolor
+// set installed beside the executable unless we point it there. Harmless when
+// the app is installed to a standard prefix, where the theme resolves anyway.
+static void register_bundled_icon_theme() {
+  g_autofree gchar* executable = g_file_read_link("/proc/self/exe", nullptr);
+  if (executable == nullptr) {
+    return;
+  }
+  g_autofree gchar* directory = g_path_get_dirname(executable);
+  g_autofree gchar* icons =
+      g_build_filename(directory, "share", "icons", nullptr);
+  gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), icons);
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
+  register_bundled_icon_theme();
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
@@ -47,6 +62,8 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "lingo_desk");
   }
 
+  // Resolved from the hicolor set installed by linux/CMakeLists.txt.
+  gtk_window_set_icon_name(window, "lingo_desk");
   gtk_window_set_default_size(window, 1280, 720);
   gtk_widget_show(GTK_WIDGET(window));
 

@@ -1,0 +1,31 @@
+# App icons for every platform, generated from the masters in
+# assets/brand/icons (see scripts/generate_brand_icons.py).
+#   flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  # Android — adaptive layers on API 26+, the shaped bitmap below that.
+  android: "ic_launcher"
+  image_path_android: "assets/brand/icons/android_legacy_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#0F766E"
+  adaptive_icon_foreground: "assets/brand/icons/android_adaptive_foreground.png"
+  adaptive_icon_monochrome: "assets/brand/icons/android_adaptive_monochrome.png"
+  # The masters are already drawn inside the 66dp-of-108dp safe circle, so
+  # skip the package's default 16% inset rather than shrinking them twice.
+  adaptive_icon_foreground_inset: 0
+
+  # iOS masks the corners itself and rejects an alpha channel.
+  ios: true
+  image_path_ios: "assets/brand/icons/ios_app_icon.png"
+  remove_alpha_ios: true
+
+  macos:
+    generate: true
+    image_path: "assets/brand/icons/macos_app_icon.png"
+
+  windows:
+    generate: true
+    image_path: "assets/brand/icons/windows_app_icon.png"
+    icon_size: 256
+
+  # Linux has no flutter_launcher_icons target; its hicolor set is rendered
+  # straight into linux/icons by scripts/generate_brand_icons.py.

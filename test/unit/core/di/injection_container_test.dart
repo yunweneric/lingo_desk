@@ -1,11 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lingo_desk/core/di/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('InjectionContainer', () {
     setUp(() async {
-      // Reset GetIt before each test
+      // Use in-memory storage and reset GetIt before each test
+      SharedPreferences.setMockInitialValues({});
       await reset();
     });
 
@@ -15,9 +19,7 @@ void main() {
     });
 
     test('init completes without errors', () async {
-      // Verify that init doesn't throw
-      expect(() => init(), returnsNormally);
-      await init();
+      await expectLater(init(), completes);
     });
 
     test('reset clears all registered dependencies', () async {

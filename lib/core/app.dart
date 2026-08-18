@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../features/app_management/presentation/pages/app_dashboard_page.dart';
-import '../features/onboarding/presentation/pages/onboarding_page.dart';
+import 'di/injection_container.dart';
+import 'preferences/app_settings_controller.dart';
+import 'router/app_router.dart';
 import 'theme/lingo_desk_theme.dart';
 
 /// Root application widget
 ///
-/// This widget is the entry point of the application UI.
-/// It configures the MaterialApp with theme, routes, and global settings.
+/// Configures the MaterialApp with theme, go_router routing (fade
+/// transitions), and global settings. Theme mode, UI language, and
+/// onboarding completion are persisted via [AppSettingsController].
 class LingoDeskApp extends StatefulWidget {
   const LingoDeskApp({super.key});
 
@@ -16,40 +19,37 @@ class LingoDeskApp extends StatefulWidget {
 }
 
 class _LingoDeskAppState extends State<LingoDeskApp> {
-  ThemeMode _themeMode = ThemeMode.system;
-  String _selectedLanguage = 'en';
-  bool _showOnboarding = true;
+  late final AppSettingsController _settings;
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _settings = getIt<AppSettingsController>();
+    _router = buildAppRouter(_settings);
+  }
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'LingoDesk',
-      debugShowCheckedModeBanner: false,
-      theme: LingoDeskTheme.light(),
-      darkTheme: LingoDeskTheme.dark(),
-      themeMode: _themeMode,
-      locale: Locale(_selectedLanguage),
-      home:
-          _showOnboarding
-              ? OnboardingPage(onComplete: _completeOnboarding)
-              : AppDashboardPage(
-                themeMode: _themeMode,
-                onThemeModeChanged: _setThemeMode,
-                selectedLanguage: _selectedLanguage,
-                onLanguageChanged: _setLanguage,
-              ),
+    return ListenableBuilder(
+      listenable: _settings,
+      builder: (context, _) {
+        return MaterialApp.router(
+          title: 'LingoDesk',
+          debugShowCheckedModeBanner: false,
+          theme: LingoDeskTheme.light(),
+          darkTheme: LingoDeskTheme.dark(),
+          themeMode: _settings.themeMode,
+          locale: Locale(_settings.uiLanguage),
+          routerConfig: _router,
+        );
+      },
     );
-  }
-
-  void _completeOnboarding() {
-    setState(() => _showOnboarding = false);
-  }
-
-  void _setThemeMode(ThemeMode mode) {
-    setState(() => _themeMode = mode);
-  }
-
-  void _setLanguage(String language) {
-    setState(() => _selectedLanguage = language);
   }
 }

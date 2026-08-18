@@ -7,7 +7,7 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return _Surface(
       child: Column(
@@ -66,14 +66,17 @@ class _MetricCard extends StatelessWidget {
   }
 }
 
-class _VelocityCard extends StatelessWidget {
-  const _VelocityCard();
+class _CoverageCard extends StatelessWidget {
+  const _CoverageCard({required this.state});
 
-  static const _bars = [0.34, 0.58, 0.46, 0.72, 0.66, 0.92, 0.78, 0.88];
+  final AppManagementLoaded state;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
+    // Most recently active apps first, capped to keep the chart readable.
+    final apps = state.overviews.take(8).toList();
+    final translated = state.totalCells - state.totalMissing;
 
     return _Surface(
       padding: const EdgeInsets.all(20),
@@ -81,33 +84,47 @@ class _VelocityCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _CardHeader(
-            title: 'Translation velocity',
-            subtitle: 'Completed strings over the last 8 sessions',
+            title: 'Coverage by app',
+            subtitle: 'Translated share of target strings per app',
             icon: HugeIcons.strokeRoundedChartArea,
           ),
           const SizedBox(height: 26),
           SizedBox(
             height: 220,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                for (var index = 0; index < _bars.length; index++) ...[
-                  Expanded(
-                    child: _ChartBar(
-                      value: _bars[index],
-                      label: 'S${index + 1}',
+            child:
+                apps.isEmpty
+                    ? Center(
+                      child: Text(
+                        'Create an app to see coverage here.',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+                      ),
+                    )
+                    : Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        for (var index = 0; index < apps.length; index++) ...[
+                          Expanded(
+                            child: _ChartBar(
+                              value: apps[index].progress,
+                              label: _appInitials(apps[index].app.name),
+                            ),
+                          ),
+                          if (index != apps.length - 1)
+                            const SizedBox(width: 10),
+                        ],
+                      ],
                     ),
-                  ),
-                  if (index != _bars.length - 1) const SizedBox(width: 10),
-                ],
-              ],
-            ),
           ),
           const SizedBox(height: 16),
           Divider(color: tokens.border),
           const SizedBox(height: 12),
           Text(
-            '92 strings completed this week. 39 are still missing across active target languages.',
+            state.totalCells == 0
+                ? 'No translation data yet. Upload JSON files to get started.'
+                : '$translated strings translated. ${state.totalMissing} are '
+                    'still missing across active target languages.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -115,6 +132,15 @@ class _VelocityCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _appInitials(String name) {
+    final words = name.trim().split(RegExp(r'\s+'));
+    if (words.length == 1) {
+      final word = words.first;
+      return word.substring(0, word.length >= 2 ? 2 : 1).toUpperCase();
+    }
+    return (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
   }
 }
 
@@ -126,7 +152,7 @@ class _ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -135,12 +161,13 @@ class _ChartBar extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: FractionallySizedBox(
-              heightFactor: value,
+              // Keep a sliver of bar visible for 0% apps.
+              heightFactor: value.clamp(0.02, 1.0),
               widthFactor: 1,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: LingoDeskColors.brandBlue,
-                  borderRadius: BorderRadius.circular(6),
+                  color: LingoDeskColors.brandTeal,
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
@@ -160,11 +187,16 @@ class _ChartBar extends StatelessWidget {
 }
 
 class _LanguageHealthCard extends StatelessWidget {
-  const _LanguageHealthCard();
+  const _LanguageHealthCard({required this.state});
+
+  final AppManagementLoaded state;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
+    final health = state.languageHealth.take(6).toList();
+    final nextReview =
+        state.overviews.where((overview) => overview.missingCount > 0).toList();
 
     return _Surface(
       padding: const EdgeInsets.all(20),
@@ -177,13 +209,22 @@ class _LanguageHealthCard extends StatelessWidget {
             icon: HugeIcons.strokeRoundedLanguageSquare,
           ),
           const SizedBox(height: 22),
-          const _LanguageProgress(language: 'FR', progress: 0.94, missing: 8),
-          const SizedBox(height: 18),
-          const _LanguageProgress(language: 'ES', progress: 0.89, missing: 12),
-          const SizedBox(height: 18),
-          const _LanguageProgress(language: 'UK', progress: 0.81, missing: 19),
-          const SizedBox(height: 18),
-          const _LanguageProgress(language: 'DE', progress: 0.78, missing: 19),
+          if (health.isEmpty)
+            Text(
+              'No target languages yet.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+            )
+          else
+            for (final stat in health) ...[
+              _LanguageProgress(
+                language: stat.language.toUpperCase(),
+                progress: stat.progress,
+                missing: stat.missing,
+              ),
+              if (stat != health.last) const SizedBox(height: 18),
+            ],
           const SizedBox(height: 22),
           Divider(color: tokens.border),
           const SizedBox(height: 16),
@@ -197,7 +238,9 @@ class _LanguageHealthCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Next review: Customer Portal',
+                  nextReview.isEmpty
+                      ? 'All apps are fully translated.'
+                      : 'Next review: ${nextReview.first.app.name}',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -224,7 +267,7 @@ class _LanguageProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = _DashboardTokens.of(context);
+    final tokens = LingoDeskTokens.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +282,7 @@ class _LanguageProgress extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              '$missing missing',
+              missing == 0 ? 'Complete' : '$missing missing',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: tokens.muted,
                 fontSize: 12,
@@ -252,7 +295,10 @@ class _LanguageProgress extends StatelessWidget {
           value: progress,
           minHeight: 8,
           borderRadius: BorderRadius.circular(99),
-          color: LingoDeskColors.brandBlue,
+          color:
+              missing == 0
+                  ? LingoDeskColors.complete
+                  : LingoDeskColors.brandTeal,
           backgroundColor: tokens.active,
         ),
       ],
