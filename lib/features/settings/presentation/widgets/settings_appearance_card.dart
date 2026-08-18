@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/preferences/app_settings_controller.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_palette.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
@@ -75,13 +76,13 @@ class SettingsAppearanceCard extends StatelessWidget {
               // A fixed count rather than an extent, so the six cards stay
               // in a tidy grid instead of reflowing to one long column on
               // a narrow settings pane.
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final columns = constraints.maxWidth >= 880
-                      ? 3
-                      : constraints.maxWidth >= 520
-                      ? 2
-                      : 1;
+              ResponsiveBuilder(
+                builder: (context, size, constraints) {
+                  final columns = size.resolve(
+                    compact: 1,
+                    medium: 2,
+                    expanded: 3,
+                  );
                   return GridView.count(
                     crossAxisCount: columns,
                     shrinkWrap: true,

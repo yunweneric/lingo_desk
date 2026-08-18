@@ -3,9 +3,9 @@
     "short_name": "LingoDesk",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FAFAF9",
+    "background_color": "#0E1B18",
     "theme_color": "#0F766E",
-    "description": "Manage app translations, imports and exports.",
+    "description": "Free, open-source, local-first localization manager. One workspace for every translation key.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,516 +1,393 @@
-# LingoDesk: Localization Management Tool
+# LingoDesk
 
-LingoDesk is a lightweight, project-based translation manager designed to eliminate the manual overhead of syncing multiple JSON localization files. It provides a centralized UI to manage keys and translations across various languages with real-time progress tracking.
+**A desktop workspace for JSON localization files.**
 
-Built with **Flutter** for web, desktop, and mobile platforms.
+LingoDesk replaces the loop of opening `en.json`, `fr.json`, `es.json` side by
+side and hand-syncing keys between them. Point it at a project folder, edit
+every locale in one grid, let an AI fill the gaps, and write the files back
+where they came from.
 
-## 🚀 The Problem
+Built with **Flutter** — macOS, Windows, Linux, web and mobile from one
+codebase. Everything is stored on your machine; there is no backend and no
+account.
 
-Developers often spend excessive time manually opening, editing, and syncing key-value pairs across `en.json`, `es.json`, `uk.json`, etc. This process is:
+![LingoDesk dashboard](./screenshots/dashboard.png)
 
-- **Error-prone**: Easy to miss keys or make typos
-- **Time-consuming**: Requires opening multiple files and manually syncing
-- **Inefficient**: Breaks the development flow and reduces productivity
+---
 
-## ✨ The Solution
+## Contents
 
-LingoDesk offers a cross-platform workflow to:
+- [Why](#why)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Getting started](#getting-started)
+- [How it works](#how-it-works)
+- [Architecture](#architecture)
+- [Design system](#design-system)
+- [Testing](#testing)
+- [Building & releases](#building--releases)
+- [Contributing](#contributing)
+- [License](#license)
 
-- **Organize translations by "App" (Project)**: Group related translations together
-- **Flatten complex nested JSON**: Convert nested structures into a manageable table format
-- **Track translation completion**: Real-time progress percentages for each language
-- **Export clean, nested JSON**: Generate production-ready files with proper structure
+---
 
-## 🛠 Tech Stack
+## Why
 
-- **Framework**: Flutter (Web, Desktop, Mobile)
-- **Version Management**: FVM (Flutter Version Management)
-- **State Management**: BLoC (Business Logic Component)
-- **Architecture**: Clean Architecture
-- **Storage**: Local storage (Hive/SharedPreferences)
+Keeping a set of locale files in step is mechanical work that tooling should
+have absorbed years ago:
 
-## 🎨 UI/UX Design
+- **Drift is invisible.** A key added to `en.json` is missing from six other
+  files and nothing tells you until a user sees a blank string.
+- **Nesting hides the gaps.** Deeply nested objects make it hard to see which
+  keys exist where, so "is this translated?" means diffing files by eye.
+- **Translation is a context switch.** Copying strings into a translator and
+  pasting them back breaks flow and loses the surrounding structure.
 
-The UI/UX design for LingoDesk is available on [UX Pilot](https://uxpilot.ai/s/470562a66d6978fa0526e25b06a74d90).
+LingoDesk turns the whole set into one table, shows you exactly what's missing,
+and writes valid nested JSON back out.
 
-This design guide includes:
+---
 
-- Screen layouts and wireframes
-- User flow diagrams
-- Component specifications
-- Design system guidelines
+## Screenshots
 
-Refer to the design for visual reference when implementing features.
+### Translation editor
 
-## 📸 Screenshots
+Every locale in one grid. Keys stay grouped by their JSON structure, missing
+cells are called out, and a search box and **Missing only** filter narrow a few
+thousand rows to the handful you care about.
 
-![Dashboard - Dark Mode](./screenshots/dashboard-dark.png)
+![Translation editor](./screenshots/editor.png)
 
-### Dashboard
+### Apps
 
-LingoDesk dashboard in dark mode
+Each project is an "app" with a source locale and a set of targets. The table
+shows coverage, file counts and status at a glance.
 
-## 📋 Prerequisites
+![Apps](./screenshots/apps.png)
 
-- [Dart SDK](https://dart.dev/get-dart)
-- [FVM](https://fvm.app/) (Flutter Version Management)
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) (managed via FVM)
+### AI providers
 
-## 🚦 Getting Started
+Bring your own key for Anthropic, OpenAI or Gemini. Keys are stored on your
+device and only ever sent to the provider they belong to. One key is active at
+a time and every AI action in the editor uses it.
 
-### 1. Install FVM
+![AI providers](./screenshots/ai-providers.png)
+
+### Appearance
+
+Six palettes, each restyling the whole chassis rather than swapping an accent,
+plus light / dark / follow-system.
+
+![Appearance](./screenshots/appearance.png)
+
+> Screenshots are captured from a real build and framed with
+> [`scripts/frame_screenshots.py`](scripts/frame_screenshots.py).
+
+---
+
+## Features
+
+### Projects
+
+- **Import a project folder** — scan a directory, detect its locale files and
+  create the app from what's actually there.
+- **Upload files** — or hand it individual JSON files for an existing app.
+- **Source and target locales** per app, with workspace-wide defaults applied to
+  every new one.
+- **App icons** and per-app settings.
+
+### Editing
+
+- **Flattened grid** — nested JSON becomes one row per key, with the original
+  nesting preserved as collapsible groups.
+- **Live coverage** — completion per target locale, updated as you type.
+- **Missing only** filter and full-text search across keys *and* values.
+- **Add and delete keys** across every locale at once, behind confirmation
+  guards.
+- **Pagination** for large key sets.
+
+### AI translation
+
+- **Anthropic, OpenAI and Gemini**, with a configurable model per key.
+- **Fill one cell, one locale, or everything missing** — runs a batch at a
+  time, writing each batch to storage as it lands, so a cancel or a crash
+  keeps the work already done.
+- **Live progress** over the grid, with per-cell spinners and a cancel.
+
+### Export
+
+Three destinations, because "export" means different things mid-task:
+
+| Destination | What it does |
+| --- | --- |
+| **Downloads** | Bundles the selected locales into a zip |
+| **Back to project** | Overwrites the files in the folder the app was imported from, following its original layout |
+| **Choose a folder** | Writes one flat `<locale>.json` per locale wherever you point it |
+
+### The app itself
+
+- **Six theme variants**, light and dark, following the system by default.
+- **Responsive** — the full labelled sidebar on a desktop window, an icon rail
+  on a tablet, a bottom bar on a phone.
+- **Toasts** for every outcome, with success / error / warning / info states.
+- **Local-first**: apps, translations and preferences live in local storage;
+  API keys go to the system keychain where one is available.
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- [Flutter](https://flutter.dev/docs/get-started/install) — the version in
+  [`.fvmrc`](.fvmrc) (currently **3.38.10**)
+- Platform toolchain for your target (Xcode for macOS/iOS, Visual Studio for
+  Windows, Android Studio for Android)
+
+The project pins its Flutter version in `.fvmrc`. [FVM](https://fvm.app/) will
+honour it if you use it, but plain `flutter` on a matching version works fine —
+every command below is written that way.
+
+### Run it
 
 ```bash
-# macOS/Linux
-brew tap leoafarias/fvm
-brew install fvm
-
-# Or using pub
-dart pub global activate fvm
-```
-
-### 2. Setup Flutter Version
-
-```bash
-# Navigate to project directory
+git clone https://github.com/your-username/lingo_desk.git
 cd lingo_desk
+flutter pub get
 
-# Install Flutter version (check .fvm/fvm_config.json for required version)
-fvm install
-
-# Use the Flutter version for this project
-fvm use <version>
+flutter run -d macos     # or: windows, linux, chrome, <device-id>
 ```
 
-### 3. Install Dependencies
+### First run
 
-```bash
-# Use fvm to run flutter commands
-fvm flutter pub get
+1. **Import project** in the sidebar, and pick a folder containing your locale
+   files — or **New app** and upload JSON files by hand.
+2. Confirm the source locale and pick your targets.
+3. Open the app in the editor.
+4. Optionally add an API key under **Settings → AI providers** to translate
+   missing strings.
+
+---
+
+## How it works
+
+### Flattening
+
+Nested JSON is flattened to dot notation for editing, and un-flattened on the
+way out, so the files you commit keep their original shape:
+
+```jsonc
+// en.json on disk
+{ "nav": { "home": "Home", "about": "About" } }
+
+// in the editor
+"nav.home"  → "Home"
+"nav.about" → "About"
 ```
 
-### 4. Run the Application
+The grid keeps the dots visible and groups rows by prefix, so structure is still
+legible when a project has a few thousand keys.
 
-```bash
-# Web
-fvm flutter run -d chrome
+### Storage
 
-# Desktop (macOS)
-fvm flutter run -d macos
+| What | Where |
+| --- | --- |
+| Apps, translations, preferences | Local storage on the device |
+| AI API keys | System keychain via `flutter_secure_storage`; the app tells you plainly if a build can't reach one and falls back |
+| Your locale files | Only ever read and written where you point the app |
 
-# Desktop (Linux)
-fvm flutter run -d linux
+Nothing is uploaded anywhere. The only network calls LingoDesk makes are to the
+AI provider you configured, when you ask it to translate.
 
-# Desktop (Windows)
-fvm flutter run -d windows
+---
 
-# Mobile (iOS)
-fvm flutter run -d ios
+## Architecture
 
-# Mobile (Android)
-fvm flutter run -d android
-```
-
-## 🏗 Architecture
-
-LingoDesk follows **Clean Architecture** principles with **BLoC** state management, organized in a **feature-based** folder structure.
-
-### Clean Architecture Layers
+**Clean Architecture** with **BLoC** state management, organised by feature.
 
 ```
 lib/
-├── core/                    # Core functionality
-│   ├── constants/
-│   ├── errors/
+├── core/
+│   ├── constants/        # Supported languages, storage keys
+│   ├── di/               # get_it registrations
+│   ├── errors/           # Failures and exceptions
+│   ├── preferences/      # Settings + AI credential controllers
+│   ├── responsive/       # Window size classes, touch targets
+│   ├── router/           # go_router configuration
+│   ├── theme/            # Palettes, tokens, motion
 │   ├── usecases/
 │   ├── utils/
-│   └── widgets/
-├── features/                # Feature modules
-│   ├── app_management/
-│   │   ├── data/
-│   │   │   ├── datasources/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   ├── models/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   ├── repositories/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   └── export.dart        # Main data barrel
-│   │   ├── domain/
-│   │   │   ├── entities/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   ├── repositories/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   ├── usecases/
-│   │   │   │   └── export.dart    # Barrel file
-│   │   │   └── export.dart        # Main domain barrel
-│   │   └── presentation/
-│   │       ├── bloc/
-│   │       │   └── export.dart    # Barrel file
-│   │       ├── pages/
-│   │       │   └── export.dart    # Barrel file
-│   │       ├── widgets/
-│   │       │   └── export.dart    # Barrel file
-│   │       └── export.dart        # Main presentation barrel
-│   ├── app_settings/
-│   ├── file_upload/
+│   └── widgets/          # App shell, design-system widgets, toasts
+├── features/
+│   ├── ai_translation/   # Providers, keys, batch translation
+│   ├── app_management/   # Apps list, dashboard, overviews
+│   ├── app_settings/     # Per-app configuration
+│   ├── file_upload/      # Project scan + file import
+│   ├── onboarding/
+│   ├── settings/         # Profile, appearance, languages
 │   └── translation_editor/
 └── main.dart
 ```
 
-> **Note**: Each feature uses barrel files (`export.dart`) for clean imports. See [Feature Implementation Guide](docs/feature.md#barrel-files) for details.
-
-### Layer Responsibilities
-
-- **Presentation Layer**: UI, BLoC, Pages, Widgets
-- **Domain Layer**: Business logic, Entities, Use cases, Repository interfaces
-- **Data Layer**: Data sources, Models, Repository implementations
-
-### BLoC State Management
-
-Each feature uses BLoC pattern for state management:
+Each feature follows the same three layers:
 
 ```
 feature/
-└── presentation/
-    └── bloc/
-        ├── feature_bloc.dart
-        ├── feature_event.dart
-        └── feature_state.dart
+├── data/          # Data sources, models, repository implementations
+├── domain/        # Entities, repository interfaces, use cases
+└── presentation/  # BLoC, pages, widgets
 ```
 
-## 📱 Application Flow
+- **Domain** knows nothing about Flutter or storage.
+- **Data** implements the domain's repository interfaces.
+- **Presentation** talks to domain use cases through a BLoC and never touches
+  data sources directly.
 
-LingoDesk follows a 4-screen flow designed for an intuitive translation management experience.
+Failures travel as `Either<Failure, T>` (dartz) rather than exceptions, so every
+call site has to decide what a failure looks like on screen.
 
-### 1. App Management Dashboard
+Each folder carries an `export.dart` barrel — see
+[Feature Implementation Guide](docs/feature.md#feature-structure).
 
-The entry point of the application.
+---
 
-- **CRUD for Apps**: Create, view, update, or delete localization projects
-- **Persistence**: Project metadata is saved to local storage so your project list persists across sessions
-- **Overview**: See high-level completion status for each app
+## Design system
 
-### 2. App Settings
+The visual language lives in [`lib/core/theme/`](lib/core/theme/) and is worth
+reading before adding UI:
 
-Configure the specific requirements for an App.
+- **`lingo_desk_palette.dart`** — the six theme variants. A variant is a whole
+  look, not an accent swap: each carries its own neutrals.
+- **`lingo_desk_tokens.dart`** — semantic tokens (`background`, `card`, `border`,
+  `foreground`, `muted`, `active`) resolved from the active variant and
+  brightness, plus `LingoDeskStatus` for success / error / warning / info.
+- **`lingo_desk_motion.dart`** — three durations and one curve family do almost
+  all the work. Everything decelerates; nothing accelerates away from the user.
+  Reduced-motion is respected throughout.
 
-- **Source Language**: Set the base language (e.g., `en`)
-- **Target Languages**: Define languages to translate into (e.g., `uk`, `es`, `ru`)
-- **Project Configuration**: Update project naming and language scope
+Reusable widgets are in [`lib/core/widgets/`](lib/core/widgets/) — the app
+shell, workspace cards and headers, fields, menus, dropdowns and the toast
+system. Prefer extending one of those over styling a Material widget inline.
 
-### 3. File Initialization (Upload)
+Further reading: [docs/ui.md](docs/ui.md),
+[docs/nomenclature.md](docs/nomenclature.md).
 
-A dedicated stage to sync your local code with the editor.
+---
 
-- **Context-Aware**: Displays the specific languages required for the selected App
-- **Validation**: Ensures files match the expected language codes before proceeding
-- **File Upload**: Import existing JSON files to populate the editor
-
-### 4. Translation Editor (The Workspace)
-
-The core engine of LingoDesk.
-
-- **Flattened Grid**: A unified table where each row is a translation key
-- **Progress Widget**: Real-time completion bars for every target language
-- **"Show Missing Only"**: A filter to instantly isolate untranslated strings
-- **CRUD on Keys**: Add new keys or delete obsolete ones across all languages simultaneously
-- **JSON Export**: Re-constructs the nested JSON structure and triggers downloads
-
-## ⚙️ Technical Specifications
-
-### Data Transformation
-
-**Flattening**: Converts nested JSON into dot-notation format
-
-```json
-// Input
-{
-  "nav": {
-    "home": "Home"
-  }
-}
-
-// Output
-{
-  "nav.home": "Home"
-}
-```
-
-**Un-flattening**: Reverses dot-notation back into deep objects upon export
-
-**In-Memory State**: Translation content is handled in-session for maximum speed and privacy
-
-### Core Features
-
-- **Missing Indicator**: Automatic UI highlighting for empty fields
-- **Confirmation Guards**: Destructive actions (deleting keys or apps) are protected by warning modals
-- **Frontend-Only**: No backend required. Your data stays locally
-
-## 🧪 Testing
-
-The project includes comprehensive testing setup for unit tests, widget tests, and integration tests.
-
-### Running Tests
+## Testing
 
 ```bash
-# Run all tests
-fvm flutter test
+flutter test                          # everything
+flutter test test/unit                # unit tests
+flutter test test/widget              # widget tests
+flutter test integration_test         # integration tests
 
-# Run unit tests only
-fvm flutter test test/unit
-
-# Run widget tests only
-fvm flutter test test/widget
-
-# Run integration tests
-fvm flutter test integration_test
-
-# Run specific test file
-fvm flutter test test/unit/core/bootstrap_test.dart
-
-# Using test scripts
-./scripts/test.sh all          # Run all tests
-./scripts/test.sh unit          # Run unit tests
-./scripts/test.sh widget        # Run widget tests
-./scripts/test.sh integration   # Run integration tests
-./scripts/test.sh coverage      # Run with coverage
-
-# Test CI workflow steps locally (before pushing)
-./scripts/test_ci.sh            # Simulates GitHub Actions test workflow
+./scripts/test.sh all                 # or: unit | widget | integration | coverage
+./scripts/test_ci.sh                  # run what CI runs, locally
 ```
 
-### Test Coverage
+Coverage:
 
 ```bash
-# Generate coverage report
-fvm flutter test --coverage
-
-# Generate and view HTML coverage report
-./scripts/test_coverage.sh
-
-# Or manually (requires lcov)
-fvm flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
-open coverage/html/index.html
+flutter test --coverage
+./scripts/test_coverage.sh            # generates and opens an HTML report
 ```
 
-### Test Structure
+See [test/README.md](test/README.md) for the full layout.
 
-```
-test/
-├── helpers/              # Test utilities and helpers
-│   ├── test_helpers.dart
-│   ├── mock_factories.dart
-│   └── bloc_test_helpers.dart
-├── unit/                 # Unit tests
-│   └── core/
-└── widget/               # Widget tests
-    └── core/
+---
 
-integration_test/         # Integration tests
-└── app_test.dart
-```
+## Building & releases
 
-### Test Types
-
-- **Unit Tests**: Test individual functions, classes, and use cases in isolation
-- **Widget Tests**: Test individual widgets and their interactions
-- **Integration Tests**: Test complete user flows and app behavior
-
-See [test/README.md](test/README.md) for detailed testing documentation.
-
-## 📦 Building
-
-### Local Build
+### Local
 
 ```bash
-# Web
-fvm flutter build web
-
-# Desktop (macOS)
-fvm flutter build macos
-
-# Desktop (Linux)
-fvm flutter build linux
-
-# Desktop (Windows)
-fvm flutter build windows
-
-# Mobile (iOS)
-fvm flutter build ios
-
-# Mobile (Android)
-fvm flutter build apk
-# or
-fvm flutter build appbundle
+flutter build macos      # .app
+flutter build windows    # .exe + DLLs
+flutter build linux
+flutter build web
+flutter build apk        # or: appbundle
 ```
 
-### CI/CD Builds & Artifacts
+### CI
 
-APKs are automatically built and uploaded as artifacts when code is pushed to `main` or when a version tag is created.
+| Workflow | Trigger | Produces |
+| --- | --- | --- |
+| [`test.yml`](.github/workflows/test.yml) | push / PR | format check, analyze, tests |
+| [`release.yml`](.github/workflows/release.yml) | push to `main`, `v*` tags | macOS `.dmg`, Windows installer `.exe` and portable `.zip` |
+| [`build_apk.yml`](.github/workflows/build_apk.yml) | push to `main`, `v*` tags | Android APK / AAB |
 
-**Downloading from GitHub Releases (Recommended):**
-
-When you create a version tag (e.g., `v1.0.0`), a GitHub Release is automatically created with APK files attached:
-
-1. Go to the **Releases** page in your GitHub repository
-2. Find the release version you want
-3. Download the APK files from the **Assets** section:
-
-- `app-release.apk` - Release APK (recommended for testing)
-- `app-debug.apk` - Debug APK
-- `app-release.aab` - App Bundle for Google Play Store (if available)
-
-**Downloading from Workflow Artifacts:**
-
-1. Go to the **Actions** tab in your GitHub repository
-2. Select the latest **"Build Android APK"** workflow run
-3. Scroll down to the **Artifacts** section
-4. Download the desired artifact:
-
-- `lingodesk-release-apk` - Release APK (recommended for testing)
-- `lingodesk-debug-apk` - Debug APK
-- `lingodesk-release-bundle` - App Bundle for Google Play Store
-
-**Creating a Release:**
-
-To create a new release, create and push a version tag:
+Desktop artifacts land on every push to `main` (Actions → the run → **Artifacts**,
+kept 90 days). Tagging cuts a GitHub Release with everything attached:
 
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-This will trigger the build workflow and automatically create a GitHub Release with the APK files attached.
+> Desktop builds are **unsigned**. On macOS, right-click → Open the first time;
+> on Windows, choose "More info" → "Run anyway" past SmartScreen. Add signing
+> certificates as repository secrets to remove both.
 
-**Artifact Retention:**
+See [.github/workflows/README.md](.github/workflows/README.md) for details.
 
-- **Releases**: Permanent (available indefinitely)
-- **Workflow Artifacts**: 90 days
+### Regenerating screenshots
 
-## 🤝 Contributing
-
-We welcome contributions to LingoDesk! Please follow these guidelines:
-
-### Getting Started
-
-1. **Fork the repository**
-2. **Clone your fork**
+Screenshots in this README are real captures wrapped in a window frame:
 
 ```bash
- git clone https://github.com/your-username/lingo_desk.git
- cd lingo_desk
+python3 scripts/frame_screenshots.py raw.png screenshots/editor.png \
+    --width 1500 --title "LingoDesk — Translation editor"
 ```
 
-3. **Create a branch**
+The script needs Pillow (`python3 -m pip install --user Pillow`) and emits a
+transparent PNG, so one file reads correctly on GitHub's light and dark themes.
+
+---
+
+## Contributing
+
+1. Fork and clone, then `flutter pub get`.
+2. Branch: `git checkout -b feature/your-feature-name`.
+3. Build it, then run the pre-commit checks below.
+4. Open a PR with a clear description, and screenshots for any UI change.
+
+### Guidelines
+
+- **Keep the layers separate.** Domain code must not import Flutter or a data
+  source.
+- **State goes through BLoC** for anything with more than local widget state.
+- **Organise by feature, not by file type.**
+- **Reach for the design system first** — a new colour or duration should be a
+  token, not a literal.
+- **Document the why.** Comments should explain decisions, not restate the code.
+
+### Pre-commit
+
+CI fails on unformatted code, so run this before pushing:
 
 ```bash
- git checkout -b feature/your-feature-name
+dart format .
+dart format --set-exit-if-changed .   # what CI runs
+flutter analyze
+flutter test
 ```
 
-4. **Setup the project**
+### Commits
 
-```bash
- fvm install
- fvm use <version>
- fvm flutter pub get
-```
+[Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`,
+`docs:`, `style:`, `refactor:`, `test:`, `chore:`.
 
-### Development Guidelines
+### Reporting issues
 
-- **Follow Clean Architecture**: Maintain separation between presentation, domain, and data layers
-- **Use BLoC Pattern**: Implement state management using BLoC for all features
-- **Feature-Based Structure**: Organize code by features, not by file types
-- **Write Tests**: Add unit tests for use cases and widget tests for UI components
-- **Follow Dart Style Guide**: Use `dart format` and follow the project's `analysis_options.yaml`
-- **Write Documentation**: Document complex logic and public APIs
+Include your platform and OS version, `flutter --version` output, steps to
+reproduce, what you expected, what happened, and a screenshot if it's visual.
 
-### Code Style
+---
 
-**⚠️ Important**: Always format your code before committing to avoid CI failures.
+## License
 
-```bash
-# Format code (always run this before committing)
-fvm dart format .
-
-# Verify formatting (used in CI - exits with error if changes needed)
-fvm dart format --set-exit-if-changed .
-
-# Analyze code
-fvm flutter analyze
-```
-
-**Pre-Commit Checklist:**
-
-1. ✅ Run `fvm dart format .` to format all files
-2. ✅ Run `fvm flutter analyze` to check for issues
-3. ✅ Run `fvm flutter test` to ensure tests pass
-4. ✅ Verify no formatting changes with `fvm dart format --set-exit-if-changed .`
-
-### Commit Messages
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes (formatting, etc.)
-- `refactor:` Code refactoring
-- `test:` Adding or updating tests
-- `chore:` Maintenance tasks
-
-### Pull Request Process
-
-1. **Update your branch**
-
-```bash
- git checkout main
- git pull upstream main
- git checkout your-branch
- git rebase main
-```
-
-2. **Ensure tests pass and code is formatted**
-
-```bash
- # Format code
- fvm dart format .
-
- # Verify formatting (should exit with 0)
- fvm dart format --set-exit-if-changed .
-
- # Run tests
- fvm flutter test
-
- # Analyze code
- fvm flutter analyze
-```
-
-3. **Create Pull Request**
-
-- Provide a clear description of changes
-- Reference any related issues
-- Include screenshots for UI changes
-- Ensure CI checks pass
-
-### Reporting Issues
-
-When reporting issues, please include:
-
-- **Platform**: Web, Desktop (OS), or Mobile (OS)
-- **Flutter Version**: Output of `fvm flutter --version`
-- **Steps to Reproduce**: Clear steps to reproduce the issue
-- **Expected Behavior**: What should happen
-- **Actual Behavior**: What actually happens
-- **Screenshots**: If applicable
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-LingoDesk was prototyped and specified using an iterative blueprinting process to ensure a rock-solid development path.
+MIT — see [LICENSE](LICENSE).
 
 ---
 

@@ -224,7 +224,9 @@ class _AppsShortcutCard extends StatelessWidget {
             label: const Text('View all apps'),
           );
 
-          if (constraints.maxWidth < 560) {
+          // The title and its button share a line once there is room for
+          // both; on a phone the button drops under it, full width.
+          if (WindowSizeClass.fromWidth(constraints.maxWidth).isCompact) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [header, const SizedBox(height: 16), action],

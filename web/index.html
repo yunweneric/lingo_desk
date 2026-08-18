@@ -1,38 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Manage app translations, imports and exports.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- iOS meta tags & icons -->
+  <title>LingoDesk — Localization manager for developers</title>
+  <meta name="description" content="LingoDesk turns a folder of en.json, fr.json and es.json into one workspace: every key a row, every language a column. Free, open source, local-first. Built with Flutter for macOS, Windows, Linux, Android, iOS and the web.">
+  <meta name="theme-color" content="#0F766E">
+
+  <!-- Open Graph / social previews. A Flutter page renders to canvas, so
+       these tags are what link unfurls and crawlers actually read. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LingoDesk">
+  <meta property="og:title" content="LingoDesk — Translate every locale from one clean desk">
+  <meta property="og:description" content="One workspace for every translation key. Free, open source, local-first. Built with Flutter.">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LingoDesk — Translate every locale from one clean desk">
+  <meta name="twitter:description" content="One workspace for every translation key. Free, open source, local-first. Built with Flutter.">
+  <meta name="twitter:image" content="og-image.png">
+
+  <!-- The theme resolves Urbanist through google_fonts at runtime. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="LingoDesk">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>LingoDesk</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #0E1B18; }
+
+    /* Shown from the first byte and removed the moment Flutter boots, so
+       a visitor never watches a blank white page load. */
+    #boot {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      background: radial-gradient(60% 50% at 50% 30%, #14433D 0%, #0E1B18 70%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      transition: opacity 320ms ease-out;
+      z-index: 10;
+    }
+    #boot.done { opacity: 0; pointer-events: none; }
+    #boot .mark { width: 64px; height: 64px; }
+    #boot .name {
+      color: #FFFFFF;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    #boot .bar {
+      width: 132px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+    }
+    #boot .bar span {
+      display: block;
+      width: 40%;
+      height: 100%;
+      border-radius: 999px;
+      background: #2FA396;
+      animation: slide 1.15s ease-in-out infinite;
+    }
+    @keyframes slide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(250%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #boot .bar span { animation: none; width: 100%; }
+    }
+
+    noscript .fallback {
+      max-width: 640px;
+      margin: 12vh auto;
+      padding: 0 24px;
+      color: #E7E5E4;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.65;
+    }
+    noscript a { color: #2FA396; }
+  </style>
 </head>
 <body>
+  <div id="boot">
+    <svg class="mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="16" fill="#ffffff"></rect>
+      <rect x="16" y="20" width="24" height="24" rx="7" fill="rgba(15,118,110,.4)"></rect>
+      <rect x="26" y="22" width="24" height="24" rx="7" fill="#0f766e"></rect>
+      <circle cx="34" cy="34" r="3.4" fill="#ffffff"></circle>
+      <circle cx="44" cy="34" r="3.4" fill="#ffffff"></circle>
+    </svg>
+    <div class="name">LingoDesk</div>
+    <div class="bar"><span></span></div>
+  </div>
+
+  <noscript>
+    <div class="fallback">
+      <h1>LingoDesk — translate every locale from one clean desk</h1>
+      <p>
+        LingoDesk is a free, open-source, local-first localization manager. It turns a
+        folder of <code>en.json</code>, <code>fr.json</code> and <code>es.json</code> into
+        one workspace: every translation key is a row, every language is a column, and
+        every missing string is impossible to miss.
+      </p>
+      <ul>
+        <li>Nested JSON flattened into one editable grid, then exported back in shape</li>
+        <li>Live coverage per locale and a filter for what is still missing</li>
+        <li>Batch AI translation through your own Anthropic, OpenAI or Gemini key</li>
+        <li>No backend, no account, no telemetry — projects stay on your machine</li>
+        <li>Built with Flutter for macOS, Windows, Linux, Android, iOS and the web</li>
+      </ul>
+      <p>
+        This page needs JavaScript because it is itself a Flutter application.
+        You can download builds and read the source at
+        <a href="https://github.com/yunweneric/lingo_desk">github.com/yunweneric/lingo_desk</a>.
+      </p>
+    </div>
+  </noscript>
+
+  <script>
+    window.addEventListener('load', function () {
+      _flutter.loader.load({
+        onEntrypointLoaded: async function (engineInitializer) {
+          const appRunner = await engineInitializer.initializeEngine();
+          await appRunner.runApp();
+          // One frame for Flutter to paint before the curtain lifts.
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              const boot = document.getElementById('boot');
+              boot.classList.add('done');
+              setTimeout(function () { boot.remove(); }, 400);
+            });
+          });
+        }
+      });
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageDraw, ImageFilter
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
 except ImportError:  # pragma: no cover - dependency hint
     sys.exit("Pillow is required: python3 -m pip install --user Pillow")
 
@@ -39,22 +39,52 @@ DOT_INSET = 20
 # Traffic lights, in macOS order.
 DOT_COLORS = ((0xFF, 0x5F, 0x57), (0xFE, 0xBC, 0x2E), (0x28, 0xC8, 0x40))
 
-# Title bar fills, picked to continue the app's own chrome rather than
-# fight it: LingoDesk's dark stage and its light stone surface.
+# Everything except the title bar fill, which is sampled from the capture
+# itself — LingoDesk ships six theme variants, each tinting its own
+# neutrals, so a hardcoded chrome colour would clash with five of them.
 THEMES = {
     "dark": {
-        "titlebar": (0x0C, 0x17, 0x14, 0xFF),
         "border": (0xFF, 0xFF, 0xFF, 0x24),
         "title": (0xFF, 0xFF, 0xFF, 0xB0),
         "shadow_alpha": 150,
     },
     "light": {
-        "titlebar": (0xF0, 0xEF, 0xEC, 0xFF),
-        "border": (0xE7, 0xE5, 0xE4, 0xFF),
-        "title": (0x78, 0x71, 0x6C, 0xFF),
+        "border": (0x00, 0x00, 0x00, 0x1A),
+        "title": (0x00, 0x00, 0x00, 0x8C),
         "shadow_alpha": 70,
     },
 }
+
+
+def sample_titlebar(shot: Image.Image) -> tuple[int, int, int, int]:
+    """The sidebar colour at the top-left of the capture.
+
+    Continuing the app's own chrome upward makes the frame read as part of
+    the window rather than a sticker on top of it, and it tracks whichever
+    theme variant the capture was taken in.
+    """
+    px = shot.convert("RGB").getpixel((6, 6))
+    return (px[0], px[1], px[2], 0xFF)
+
+
+# Pillow's built-in bitmap font is 11px and has no em-dash, so the title
+# is set in a real system face where one is available.
+FONT_CANDIDATES = (
+    "/System/Library/Fonts/SFNS.ttf",
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+)
+
+
+def title_font(size: int):
+    for path in FONT_CANDIDATES:
+        if Path(path).exists():
+            try:
+                return ImageFont.truetype(path, size)
+            except OSError:
+                continue
+    return ImageFont.load_default()
 
 
 def rounded_mask(size: tuple[int, int], radius: int) -> Image.Image:
@@ -71,7 +101,7 @@ def add_chrome(
 ) -> Image.Image:
     """Return `shot` with a title bar above it and a hairline around it."""
     bar_h = int(TITLEBAR_HEIGHT * scale)
-    card = Image.new("RGBA", (shot.width, shot.height + bar_h), theme["titlebar"])
+    card = Image.new("RGBA", (shot.width, shot.height + bar_h), sample_titlebar(shot))
     card.paste(shot, (0, bar_h))
 
     draw = ImageDraw.Draw(card)
@@ -82,17 +112,18 @@ def add_chrome(
         draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=color + (0xFF,))
 
     if title:
-        # Centred, and only if it fits without crowding the dots.
-        try:
-            bbox = draw.textbbox((0, 0), title)
-            tw = bbox[2] - bbox[0]
+        font = title_font(max(11, int(13 * scale)))
+        bbox = draw.textbbox((0, 0), title, font=font)
+        tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        # Centred on the bar, and only when it clears the traffic lights.
+        dots_end = int((DOT_INSET + 2 * DOT_GAP + DOT_RADIUS * 2) * scale)
+        if (card.width - tw) // 2 > dots_end:
             draw.text(
-                ((card.width - tw) // 2, cy - (bbox[3] - bbox[1]) // 2),
+                ((card.width - tw) // 2, cy - th // 2 - bbox[1]),
                 title,
+                font=font,
                 fill=theme["title"],
             )
-        except Exception:
-            pass  # No usable default font; the dots carry the frame alone.
 
     # Hairline, drawn last so it sits on top of both bar and content.
     radius = int(CORNER_RADIUS * scale)
