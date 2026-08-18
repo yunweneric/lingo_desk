@@ -12,6 +12,8 @@ class CreateAppParams {
     required this.sourceLanguage,
     required this.targetLanguages,
     this.iconImage,
+    this.projectPath,
+    this.languageFiles = const {},
   });
 
   final String name;
@@ -20,6 +22,12 @@ class CreateAppParams {
 
   /// Base64 PNG chosen for the app, or null to fall back to initials.
   final String? iconImage;
+
+  /// Folder the app was imported from, or null when created by hand.
+  final String? projectPath;
+
+  /// Language code -> path below [projectPath] to export that language to.
+  final Map<String, String> languageFiles;
 }
 
 /// Creates a new app after validating its configuration.
@@ -48,6 +56,8 @@ class CreateApp implements UseCase<App, CreateAppParams> {
       createdAt: now,
       updatedAt: now,
       iconImage: params.iconImage,
+      projectPath: params.projectPath,
+      languageFiles: Map.unmodifiable(params.languageFiles),
     );
     return repository.createApp(app);
   }

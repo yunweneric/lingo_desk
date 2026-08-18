@@ -23,4 +23,20 @@ class StorageKeys {
 
   /// Target locales pre-selected when creating a new app.
   static const defaultTargetLanguages = 'lingo_desk_default_target_languages';
+
+  /// AI translation keys. The metadata list (id, provider, label, model) is
+  /// a plain preference; each secret lives in the platform keychain under
+  /// [aiApiKey], addressed by the entry's id.
+  static const aiKeys = 'lingo_desk_ai_keys';
+  static const aiActiveKeyId = 'lingo_desk_ai_active_key_id';
+
+  /// Secure-storage key holding one entry's API key.
+  static String aiApiKey(String id) => 'lingo_desk_ai_api_key_$id';
+
+  /// Pre-list layout: one key per provider, no metadata. Read once so a key
+  /// saved by an earlier build is carried into the list instead of lost.
+  static const legacyAiProvider = 'lingo_desk_ai_provider';
+
+  static String legacyAiModel(String provider) =>
+      'lingo_desk_ai_model_$provider';
 }

@@ -1,3 +1,4 @@
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../domain/entities/app_overview.dart';
 
 abstract class AppManagementState {}
@@ -7,13 +8,17 @@ class AppManagementInitial extends AppManagementState {}
 class AppManagementLoading extends AppManagementState {}
 
 class AppManagementLoaded extends AppManagementState {
-  AppManagementLoaded({required this.overviews, this.query = ''});
+  AppManagementLoaded({required this.overviews, this.query = '', this.notice});
 
   /// All apps, sorted by most recent activity.
   final List<AppOverview> overviews;
 
   /// Current search query (matched against app names).
   final String query;
+
+  /// One-shot feedback for the shell to toast — a delete that landed, or
+  /// one that didn't. Null on an ordinary load.
+  final ToastNotice? notice;
 
   /// Apps matching [query].
   List<AppOverview> get filteredOverviews {
@@ -82,10 +87,16 @@ class AppManagementLoaded extends AppManagementState {
     return stats;
   }
 
-  AppManagementLoaded copyWith({List<AppOverview>? overviews, String? query}) {
+  AppManagementLoaded copyWith({
+    List<AppOverview>? overviews,
+    String? query,
+    ToastNotice? notice,
+  }) {
     return AppManagementLoaded(
       overviews: overviews ?? this.overviews,
       query: query ?? this.query,
+      // Never carried forward: a notice belongs to the emit that made it.
+      notice: notice,
     );
   }
 }

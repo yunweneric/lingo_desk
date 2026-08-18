@@ -120,75 +120,82 @@ class LingoDeskMenuTile extends StatelessWidget {
             ),
           ),
         ),
-        child: Row(
-          children: [
-            if (leadingText != null) ...[
-              Text(leadingText!, style: TextStyle(fontSize: size.fontSize + 2)),
-              SizedBox(width: size.gap),
-            ] else if (icon != null) ...[
-              LingoDeskIcon(
-                icon!,
-                size: size.iconSize,
-                color:
-                    destructive
-                        ? LingoDeskColors.error
-                        : selected
-                        ? LingoDeskColors.brandTeal
-                        : tokens.muted,
-              ),
-              SizedBox(width: size.gap),
-            ],
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: labelStyle,
-                  ),
-                  if (description != null) ...[
-                    const SizedBox(height: 2),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+
+          child: Row(
+            children: [
+              if (leadingText != null) ...[
+                Text(
+                  leadingText!,
+                  style: TextStyle(fontSize: size.fontSize + 2),
+                ),
+                SizedBox(width: size.gap),
+              ] else if (icon != null) ...[
+                LingoDeskIcon(
+                  icon!,
+                  size: size.iconSize,
+                  color:
+                      destructive
+                          ? LingoDeskColors.error
+                          : selected
+                          ? LingoDeskColors.brandTeal
+                          : tokens.muted,
+                ),
+                SizedBox(width: size.gap),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      description!,
+                      label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: tokens.muted,
-                        fontSize: 11,
-                      ),
+                      style: labelStyle,
                     ),
+                    if (description != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        description!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: tokens.muted,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
-              ),
-            ),
-            if (trailingText != null) ...[
-              SizedBox(width: size.gap),
-              Text(
-                trailingText!,
-                style: LingoDeskTheme.codeStyle.copyWith(
-                  color: tokens.muted,
-                  fontSize: size.fontSize - 2,
                 ),
               ),
+              if (trailingText != null) ...[
+                SizedBox(width: size.gap),
+                Text(
+                  trailingText!,
+                  style: LingoDeskTheme.codeStyle.copyWith(
+                    color: tokens.muted,
+                    fontSize: size.fontSize - 2,
+                  ),
+                ),
+              ],
+              if (showSelection) ...[
+                SizedBox(width: size.gap),
+                SizedBox(
+                  width: size.iconSize,
+                  child:
+                      selected
+                          ? LingoDeskIcon(
+                            HugeIcons.strokeRoundedTick02,
+                            size: size.iconSize,
+                            color: LingoDeskColors.brandTeal,
+                          )
+                          : null,
+                ),
+              ],
             ],
-            if (showSelection) ...[
-              SizedBox(width: size.gap),
-              SizedBox(
-                width: size.iconSize,
-                child:
-                    selected
-                        ? LingoDeskIcon(
-                          HugeIcons.strokeRoundedTick02,
-                          size: size.iconSize,
-                          color: LingoDeskColors.brandTeal,
-                        )
-                        : null,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/usecases/usecase.dart';
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../domain/usecases/delete_app.dart';
 import '../../domain/usecases/get_app_overviews.dart';
 import 'app_management_event.dart';
@@ -46,9 +47,30 @@ class AppManagementBloc extends Bloc<AppManagementEvent, AppManagementState> {
     DeleteAppEvent event,
     Emitter<AppManagementState> emit,
   ) async {
+    final before = state;
+    // Read the name while the app is still in the list — after the delete
+    // there is nothing left to name it by.
+    String? name;
+    if (before is AppManagementLoaded) {
+      for (final overview in before.overviews) {
+        if (overview.app.id == event.appId) {
+          name = overview.app.name;
+          break;
+        }
+      }
+    }
+
     final result = await deleteApp(DeleteAppParams(appId: event.appId));
     await result.fold(
-      (failure) async => emit(AppManagementError(failure.message)),
+      (failure) async {
+        // A failed delete leaves the list intact, so it stays on screen
+        // with a toast over it rather than collapsing to an error page.
+        if (before is AppManagementLoaded) {
+          emit(before.copyWith(notice: ToastNotice.error(failure.message)));
+        } else {
+          emit(AppManagementError(failure.message));
+        }
+      },
       (_) async {
         // Reload stats after the delete.
         final refreshed = await getAppOverviews(const NoParams());
@@ -59,7 +81,15 @@ class AppManagementBloc extends Bloc<AppManagementEvent, AppManagementState> {
               state is AppManagementLoaded
                   ? (state as AppManagementLoaded).query
                   : '';
-          emit(AppManagementLoaded(overviews: overviews, query: query));
+          emit(
+            AppManagementLoaded(
+              overviews: overviews,
+              query: query,
+              notice: ToastNotice.success(
+                name == null ? 'App deleted.' : 'Deleted "$name".',
+              ),
+            ),
+          );
         });
       },
     );

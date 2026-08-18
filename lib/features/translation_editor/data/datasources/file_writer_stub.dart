@@ -1,5 +1,11 @@
 /// No-op file writer used on platforms without `dart:io` (web).
 ///
-/// On web, `FilePicker.saveFile` already downloads the provided bytes,
-/// so nothing is written here.
+/// Nothing on web can be written to a path, so the export data source
+/// reports the platform as unsupported rather than silently doing
+/// nothing.
 Future<void> writeBytes(String path, List<int> bytes) async {}
+
+/// Web has no Downloads path to write to.
+Future<String?> downloadsDirectoryPath() async => null;
+
+Future<bool> pathExists(String path) async => false;

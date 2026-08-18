@@ -24,6 +24,12 @@ class ProjectNameChangedEvent extends FileUploadEvent {
   final String name;
 }
 
+/// Opens the image picker for the app icon (project mode).
+class ProjectIconPickRequestedEvent extends FileUploadEvent {}
+
+/// Drops the picked icon, falling back to the name's initials.
+class ProjectIconClearedEvent extends FileUploadEvent {}
+
 /// Drops everything added so far and starts the import over.
 class ResetImportEvent extends FileUploadEvent {}
 

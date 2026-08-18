@@ -179,6 +179,10 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
                   createdAt: editingApp.createdAt,
                   updatedAt: editingApp.updatedAt,
                   iconImage: current.iconImage,
+                  // The settings form does not touch the imported
+                  // project, so it is carried over untouched.
+                  projectPath: editingApp.projectPath,
+                  languageFiles: editingApp.languageFiles,
                 ),
               ),
             );

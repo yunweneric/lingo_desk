@@ -12,4 +12,11 @@ class LingoDeskAssets {
       'assets/onboarding/onboarding_workspace.jpg';
   static const onboardingProjects = 'assets/onboarding/onboarding_projects.jpg';
   static const onboardingExport = 'assets/onboarding/onboarding_export.jpg';
+
+  // Provider marks shown on the AI providers screen. Trademarks of their
+  // owners, included only to identify each service — see
+  // assets/brand/providers/CREDITS.md.
+  static const anthropicMark = 'assets/brand/providers/anthropic.svg';
+  static const openAiMark = 'assets/brand/providers/openai.svg';
+  static const geminiMark = 'assets/brand/providers/gemini.svg';
 }

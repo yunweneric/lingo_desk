@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/languages.dart';
@@ -56,6 +58,9 @@ class AddKeyDialog extends StatefulWidget {
 }
 
 class _AddKeyDialogState extends State<AddKeyDialog> {
+  /// Gutter between the language fields, both axes.
+  static const _gap = 16.0;
+
   final _keyController = TextEditingController();
   late final Map<String, TextEditingController> _valueControllers = {
     for (final language in widget.languages) language: TextEditingController(),
@@ -98,13 +103,18 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
     final tokens = LingoDeskTokens.of(context);
     final theme = Theme.of(context);
 
+    // Wide enough for full sentences, since every language is edited
+    // here rather than only the source — but never wider than the window
+    // once the dialog's inset (32 a side) and content padding (24 a side)
+    // are paid for.
+    final media = MediaQuery.sizeOf(context);
+    final dialogWidth = math.max(280.0, math.min(1120.0, media.width - 112));
+
     return AlertDialog(
       title: const Text('Add key'),
-      // Wide enough for full sentences, since every language is edited
-      // here rather than only the source.
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
       content: SizedBox(
-        width: 620,
+        width: dialogWidth,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,26 +152,47 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
             const SizedBox(height: 12),
             Flexible(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (final language in widget.languages)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: LingoDeskTextField(
-                          controller: _valueControllers[language],
-                          label: _labelFor(language),
-                          hintText:
-                              language == widget.sourceLanguage
-                                  ? 'Source text'
-                                  : 'Translation - optional',
-                          size: LingoDeskFieldSize.large,
-                          maxLines: 3,
-                          minLines: 1,
-                          textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Two columns once a field still fits a sentence,
+                    // three on a full-width desktop window.
+                    final width = constraints.maxWidth;
+                    final columns =
+                        width >= 1000
+                            ? 3
+                            : width >= 640
+                            ? 2
+                            : 1;
+                    final itemWidth = (width - _gap * (columns - 1)) / columns;
+
+                    return Wrap(
+                      spacing: _gap,
+                      runSpacing: _gap,
+                      children: [
+                        for (final language in widget.languages)
+                          SizedBox(
+                            // The source string carries the most text, so
+                            // it keeps a row to itself in a grid.
+                            width:
+                                language == widget.sourceLanguage
+                                    ? width
+                                    : itemWidth,
+                            child: LingoDeskTextField(
+                              controller: _valueControllers[language],
+                              label: _labelFor(language),
+                              hintText:
+                                  language == widget.sourceLanguage
+                                      ? 'Source text'
+                                      : 'Translation - optional',
+                              size: LingoDeskFieldSize.large,
+                              maxLines: 3,
+                              minLines: 1,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

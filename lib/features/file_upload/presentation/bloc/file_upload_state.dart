@@ -1,6 +1,7 @@
 import '../../../app_management/domain/entities/app.dart';
 import '../../domain/entities/scanned_project.dart';
 import '../../domain/entities/uploaded_translation_file.dart';
+import '../../domain/project_source.dart';
 
 abstract class FileUploadState {}
 
@@ -12,10 +13,13 @@ class FileUploadReady extends FileUploadState {
     this.stagedFiles = const [],
     this.project,
     this.projectName,
+    this.iconImage,
     this.selectedSource,
     this.excludedLanguages = const {},
+    this.scannedSource,
     this.isScanning = false,
     this.isImporting = false,
+    this.isPickingIcon = false,
     this.errorMessage,
   });
 
@@ -34,14 +38,25 @@ class FileUploadReady extends FileUploadState {
   /// folder and editable.
   final String? projectName;
 
+  /// Base64 PNG picked for the app the import will create, or null to
+  /// fall back to the name's initials (project mode).
+  final String? iconImage;
+
   /// Language chosen as the app's source (project mode).
   final String? selectedSource;
 
   /// Scanned languages the user unchecked.
   final Set<String> excludedLanguages;
 
+  /// Folder the last scan came from and where each language sat in it.
+  ///
+  /// Recorded in both modes so the app the import lands on can export
+  /// straight back to the codebase. Null until a folder is scanned.
+  final ProjectSource? scannedSource;
+
   final bool isScanning;
   final bool isImporting;
+  final bool isPickingIcon;
 
   /// Transient failure message (picker or import errors).
   final String? errorMessage;
@@ -49,7 +64,7 @@ class FileUploadReady extends FileUploadState {
   /// True when no app was supplied, so importing creates one.
   bool get isProjectMode => app == null;
 
-  bool get isBusy => isScanning || isImporting;
+  bool get isBusy => isScanning || isImporting || isPickingIcon;
 
   List<UploadedTranslationFile> get validFiles =>
       stagedFiles.where((file) => file.isValid).toList();
@@ -95,12 +110,16 @@ class FileUploadReady extends FileUploadState {
     List<UploadedTranslationFile>? stagedFiles,
     ScannedProject? project,
     String? projectName,
+    String? iconImage,
     String? selectedSource,
     Set<String>? excludedLanguages,
+    ProjectSource? scannedSource,
     bool? isScanning,
     bool? isImporting,
+    bool? isPickingIcon,
     String? errorMessage,
     bool clearError = false,
+    bool clearIcon = false,
     bool reset = false,
   }) {
     return FileUploadReady(
@@ -108,11 +127,14 @@ class FileUploadReady extends FileUploadState {
       stagedFiles: stagedFiles ?? this.stagedFiles,
       project: reset ? null : (project ?? this.project),
       projectName: reset ? null : (projectName ?? this.projectName),
+      iconImage: reset || clearIcon ? null : (iconImage ?? this.iconImage),
       selectedSource: reset ? null : (selectedSource ?? this.selectedSource),
       excludedLanguages:
           reset ? const {} : (excludedLanguages ?? this.excludedLanguages),
+      scannedSource: reset ? null : (scannedSource ?? this.scannedSource),
       isScanning: isScanning ?? this.isScanning,
       isImporting: isImporting ?? this.isImporting,
+      isPickingIcon: isPickingIcon ?? this.isPickingIcon,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }

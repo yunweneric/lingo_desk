@@ -2,8 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<!-- LingoDesk reads and writes translation files in the user's own
+		     project folders, and a remembered project has to stay writable
+		     across restarts. The sandbox only grants access to a folder for
+		     the session it was picked in, so it is off here as it is for
+		     other developer tools. -->
 		<key>com.apple.security.app-sandbox</key>
-		<true/>
+		<false/>
 		<key>com.apple.security.cs.allow-jit</key>
 		<true/>
 		<key>com.apple.security.network.server</key>
@@ -12,9 +17,5 @@
 		<true/>
 		<key>com.apple.security.network.client</key>
 		<true/>
-		<key>keychain-access-groups</key>
-		<array>
-			<string>$(AppIdentifierPrefix)com.example.lingoDesk</string>
-		</array>
 	</dict>
 </plist>

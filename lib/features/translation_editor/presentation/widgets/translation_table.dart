@@ -14,6 +14,7 @@ import '../../../../core/widgets/lingo_desk_dropdown.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/lingo_desk_menu.dart';
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../domain/entities/translation_entry.dart';
 import '../bloc/translation_editor_bloc.dart';
 import '../bloc/translation_editor_event.dart';
@@ -218,6 +219,7 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
       sourceLanguage: widget.state.app.sourceLanguage,
       tokens: tokens,
       isFirstInGroup: row.isFirstInGroup,
+      aiJob: widget.state.aiJob,
     );
   }
 
@@ -550,6 +552,7 @@ class _TranslationRow extends StatefulWidget {
     required this.sourceLanguage,
     required this.tokens,
     required this.isFirstInGroup,
+    this.aiJob,
   });
 
   final TranslationEntry entry;
@@ -568,6 +571,9 @@ class _TranslationRow extends StatefulWidget {
   final String sourceLanguage;
   final LingoDeskTokens tokens;
   final bool isFirstInGroup;
+
+  /// The running AI pass, so cells this row owns can show a spinner.
+  final AiJob? aiJob;
 
   @override
   State<_TranslationRow> createState() => _TranslationRowState();
@@ -678,6 +684,13 @@ class _TranslationRowState extends State<_TranslationRow> {
                           language: language,
                           value: widget.entry.valueFor(language),
                           highlightMissing: language != widget.sourceLanguage,
+                          canTranslate: _canTranslate(language),
+                          isTranslating:
+                              widget.aiJob?.isPending(
+                                widget.entry.key,
+                                language,
+                              ) ??
+                              false,
                         ),
                       ),
                     ),
@@ -692,14 +705,20 @@ class _TranslationRowState extends State<_TranslationRow> {
                     child: LingoDeskMenuButton<String>(
                       tooltip: 'Key actions',
                       menuWidth: 190,
-                      items: const [
+                      items: [
                         LingoDeskMenuItem(
+                          value: 'ai',
+                          label: 'AI translate row',
+                          icon: HugeIcons.strokeRoundedSparkles,
+                          enabled: _missingLanguages.isNotEmpty,
+                        ),
+                        const LingoDeskMenuItem(
                           value: 'copy',
                           label: 'Copy key',
                           icon: HugeIcons.strokeRoundedCopy01,
                         ),
-                        LingoDeskMenuItem.divider(),
-                        LingoDeskMenuItem(
+                        const LingoDeskMenuItem.divider(),
+                        const LingoDeskMenuItem(
                           value: 'delete',
                           label: 'Delete key',
                           icon: HugeIcons.strokeRoundedDelete02,
@@ -708,6 +727,8 @@ class _TranslationRowState extends State<_TranslationRow> {
                       ],
                       onSelected: (action) {
                         switch (action) {
+                          case 'ai':
+                            _translateRow(context);
                           case 'copy':
                             _copyKey(context);
                           case 'delete':
@@ -731,6 +752,8 @@ class _TranslationRowState extends State<_TranslationRow> {
                         indent: indent,
                         cellWidth: widget.languageWidth,
                         tokens: tokens,
+                        aiJob: widget.aiJob,
+                        canTranslate: _canTranslate,
                       )
                       : const SizedBox(width: double.infinity),
             ),
@@ -740,11 +763,29 @@ class _TranslationRowState extends State<_TranslationRow> {
     );
   }
 
+  /// A cell can be AI-filled when it is a target column, still empty, and
+  /// the source column actually has text to translate from.
+  bool _canTranslate(String language) {
+    return language != widget.sourceLanguage &&
+        widget.entry.isMissingFor(language) &&
+        widget.entry.valueFor(widget.sourceLanguage).trim().isNotEmpty;
+  }
+
+  /// Every target language this row is still missing.
+  List<String> get _missingLanguages => [
+    for (final language in [...widget.languages, ...widget.hiddenLanguages])
+      if (_canTranslate(language)) language,
+  ];
+
+  void _translateRow(BuildContext context) {
+    context.read<TranslationEditorBloc>().add(
+      AiTranslateEvent(_missingLanguages, keys: {widget.entry.key}),
+    );
+  }
+
   void _copyKey(BuildContext context) {
     Clipboard.setData(ClipboardData(text: widget.entry.key));
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('Copied "${widget.entry.key}"')));
+    context.showInfoToast('Copied "${widget.entry.key}" to the clipboard.');
   }
 
   Future<void> _confirmDelete(BuildContext context) async {
@@ -873,6 +914,8 @@ class _HiddenLanguages extends StatelessWidget {
     required this.indent,
     required this.cellWidth,
     required this.tokens,
+    required this.canTranslate,
+    this.aiJob,
   });
 
   final TranslationEntry entry;
@@ -880,6 +923,12 @@ class _HiddenLanguages extends StatelessWidget {
   final double indent;
   final double cellWidth;
   final LingoDeskTokens tokens;
+
+  /// Same eligibility test the visible columns use, passed in so folding a
+  /// column never changes what the cell can do.
+  final bool Function(String language) canTranslate;
+
+  final AiJob? aiJob;
 
   @override
   Widget build(BuildContext context) {
@@ -918,6 +967,9 @@ class _HiddenLanguages extends StatelessWidget {
                     language: language,
                     value: entry.valueFor(language),
                     highlightMissing: true,
+                    canTranslate: canTranslate(language),
+                    isTranslating:
+                        aiJob?.isPending(entry.key, language) ?? false,
                   ),
                 ],
               ),
@@ -1115,6 +1167,8 @@ class TranslationCellFieldForRow extends StatelessWidget {
     required this.language,
     required this.value,
     required this.highlightMissing,
+    this.canTranslate = false,
+    this.isTranslating = false,
   });
 
   final String entryKey;
@@ -1122,12 +1176,25 @@ class TranslationCellFieldForRow extends StatelessWidget {
   final String value;
   final bool highlightMissing;
 
+  /// Whether an AI pass could fill this cell: a target column, still empty,
+  /// with source text to translate from.
+  final bool canTranslate;
+
+  final bool isTranslating;
+
   @override
   Widget build(BuildContext context) {
     return TranslationCellField(
       key: ValueKey('$entryKey::$language'),
       value: value,
       highlightMissing: highlightMissing,
+      isTranslating: isTranslating,
+      onAiTranslate:
+          canTranslate
+              ? () => context.read<TranslationEditorBloc>().add(
+                AiTranslateCellEvent(key: entryKey, language: language),
+              )
+              : null,
       onChanged:
           (newValue) => context.read<TranslationEditorBloc>().add(
             UpdateCellEvent(key: entryKey, language: language, value: newValue),

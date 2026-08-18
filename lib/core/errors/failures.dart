@@ -22,3 +22,8 @@ class ValidationFailure extends Failure {
 class FileFailure extends Failure {
   const FileFailure({required super.message});
 }
+
+/// Failure raised when an AI provider request fails.
+class AiFailure extends Failure {
+  const AiFailure({required super.message});
+}

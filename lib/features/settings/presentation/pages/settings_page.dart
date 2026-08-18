@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
+import '../../../../core/preferences/ai_settings_controller.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
+import '../widgets/settings_ai_card.dart';
 import '../widgets/settings_appearance_card.dart';
 import '../widgets/settings_defaults_card.dart';
 import '../widgets/settings_language_card.dart';
@@ -24,8 +26,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage>
     with SingleTickerProviderStateMixin {
   final AppSettingsController _settings = getIt<AppSettingsController>();
+  final AiSettingsController _aiSettings = getIt<AiSettingsController>();
 
-  late final TabController _tabs = TabController(length: 3, vsync: this)
+  late final TabController _tabs = TabController(length: 4, vsync: this)
     ..addListener(_onTabChanged);
 
   @override
@@ -52,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage>
       color: tokens.background,
       child: SafeArea(
         child: ListenableBuilder(
-          listenable: _settings,
+          listenable: Listenable.merge([_settings, _aiSettings]),
           builder: (context, _) {
             return Column(
               children: [
@@ -101,6 +104,10 @@ class _SettingsPageState extends State<SettingsPage>
       case 1:
         return _SettingsTabContent(
           child: SettingsAppearanceCard(settings: _settings),
+        );
+      case 2:
+        return _SettingsTabContent(
+          child: SettingsAiCard(settings: _aiSettings),
         );
       default:
         return _SettingsTabContent(
@@ -187,6 +194,7 @@ class _SettingsTabBar extends StatelessWidget {
               label: 'Appearance',
               icon: HugeIcons.strokeRoundedPaintBoard,
             ),
+            _SettingsTab(label: 'AI', icon: HugeIcons.strokeRoundedSparkles),
             _SettingsTab(
               label: 'Languages',
               icon: HugeIcons.strokeRoundedLanguageSquare,

@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../features/app_management/presentation/app_actions.dart';
 import '../../features/app_management/presentation/bloc/app_management_bloc.dart';
 import '../../features/app_management/presentation/bloc/app_management_event.dart';
+import '../../features/app_management/presentation/bloc/app_management_state.dart';
 import '../di/injection_container.dart';
 import '../preferences/app_settings_controller.dart';
 import '../router/app_router.dart';
@@ -16,6 +17,7 @@ import 'lingo_desk_animations.dart';
 import 'app_shell_scope.dart';
 import 'lingo_desk_icon.dart';
 import 'lingo_desk_mark.dart';
+import 'lingo_desk_toast.dart';
 
 /// Persistent frame around every signed-in page: the sidebar on the left,
 /// the routed page on the right.
@@ -46,40 +48,54 @@ class _AppShellState extends State<AppShell> {
 
     return BlocProvider(
       create: (_) => getIt<AppManagementBloc>()..add(LoadAppsEvent()),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth;
-          final hasDrawer = width < kShellRailBreakpoint;
-          final collapsed = width < kShellExpandedBreakpoint;
+      // The shell owns the only AppManagementBloc, so one listener here
+      // toasts its outcomes for every page below — the dashboard, the
+      // apps table and the sidebar all get feedback for free.
+      child: BlocListener<AppManagementBloc, AppManagementState>(
+        listenWhen:
+            (previous, current) =>
+                current is AppManagementLoaded && current.notice != null,
+        listener:
+            (context, state) =>
+                context.showToast((state as AppManagementLoaded).notice!),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final hasDrawer = width < kShellRailBreakpoint;
+            final collapsed = width < kShellExpandedBreakpoint;
 
-          return AppShellScope(
-            hasDrawer: hasDrawer,
-            openDrawer: _openDrawer,
-            child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: tokens.background,
-              drawer:
-                  hasDrawer
-                      ? Drawer(
-                        width: 284,
-                        backgroundColor: tokens.sidebar,
-                        shape: const RoundedRectangleBorder(),
-                        child: AppSidebar(
-                          location: widget.location,
-                          onItemTap: () => Navigator.of(context).pop(),
-                        ),
-                      )
-                      : null,
-              body: Row(
-                children: [
-                  if (!hasDrawer)
-                    AppSidebar(location: widget.location, collapsed: collapsed),
-                  Expanded(child: widget.child),
-                ],
+            return AppShellScope(
+              hasDrawer: hasDrawer,
+              openDrawer: _openDrawer,
+              child: Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: tokens.background,
+                drawer:
+                    hasDrawer
+                        ? Drawer(
+                          width: 284,
+                          backgroundColor: tokens.sidebar,
+                          shape: const RoundedRectangleBorder(),
+                          child: AppSidebar(
+                            location: widget.location,
+                            onItemTap: () => Navigator.of(context).pop(),
+                          ),
+                        )
+                        : null,
+                body: Row(
+                  children: [
+                    if (!hasDrawer)
+                      AppSidebar(
+                        location: widget.location,
+                        collapsed: collapsed,
+                      ),
+                    Expanded(child: widget.child),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -168,6 +184,12 @@ class AppSidebar extends StatelessWidget {
                             location == AppRoutes.importProject ||
                             location.endsWith('/upload'),
                         onTap: () => openImportProject(context),
+                      ),
+                      _SidebarItemData(
+                        label: 'AI providers',
+                        icon: HugeIcons.strokeRoundedSparkles,
+                        isActive: location == AppRoutes.aiProviders,
+                        onTap: () => context.go(AppRoutes.aiProviders),
                       ),
                       _SidebarItemData(
                         label: 'Settings',

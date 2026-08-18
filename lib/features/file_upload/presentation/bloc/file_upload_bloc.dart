@@ -7,9 +7,12 @@ import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../app_management/domain/entities/app.dart';
 import '../../../app_management/domain/usecases/create_app.dart';
+import '../../../app_management/domain/usecases/pick_app_icon.dart';
+import '../../../app_management/domain/usecases/update_app.dart';
 import '../../../translation_editor/domain/usecases/save_translations.dart';
 import '../../domain/entities/scanned_project.dart';
 import '../../domain/entities/uploaded_translation_file.dart';
+import '../../domain/project_source.dart';
 import '../../domain/usecases/parse_translation_file.dart';
 import '../../domain/usecases/pick_translation_files.dart';
 import '../../domain/usecases/scan_project_folder.dart';
@@ -24,12 +27,16 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
     required this.scanProjectFolder,
     required this.saveTranslations,
     required this.createApp,
+    required this.updateApp,
+    required this.pickAppIcon,
     required this.settings,
   }) : super(FileUploadInitial()) {
     on<LoadUploadContextEvent>(_onLoadUploadContext);
     on<PickFilesEvent>(_onPickFiles);
     on<ScanProjectEvent>(_onScanProject);
     on<ProjectNameChangedEvent>(_onProjectNameChanged);
+    on<ProjectIconPickRequestedEvent>(_onPickProjectIcon);
+    on<ProjectIconClearedEvent>(_onClearProjectIcon);
     on<ResetImportEvent>(_onResetImport);
     on<SourceLanguageSelectedEvent>(_onSourceLanguageSelected);
     on<ToggleScannedLanguageEvent>(_onToggleScannedLanguage);
@@ -42,6 +49,8 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
   final ScanProjectFolder scanProjectFolder;
   final SaveTranslations saveTranslations;
   final CreateApp createApp;
+  final UpdateApp updateApp;
+  final PickAppIcon pickAppIcon;
   final AppSettingsController settings;
 
   void _onLoadUploadContext(
@@ -184,8 +193,12 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
           return;
         }
 
+        // Both modes remember where the files came from, so the app the
+        // import lands on can export straight back into the codebase.
+        final source = _mergedSource(scanning.scannedSource, project);
+
         if (scanning.isProjectMode) {
-          emit(_withProject(scanning, project));
+          emit(_withProject(scanning, project).copyWith(scannedSource: source));
         } else {
           // App mode: the scan just feeds the staging list, and the
           // app's own languages still decide what is accepted.
@@ -193,11 +206,37 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
             scanning.copyWith(
               isScanning: false,
               stagedFiles: _stageScannedGroups(scanning, project),
+              scannedSource: source,
               clearError: true,
             ),
           );
         }
       },
+    );
+  }
+
+  /// Folds a fresh scan into the project reference kept so far.
+  ///
+  /// The first folder scanned stays the reference: a second folder
+  /// somewhere else cannot be written back to through the first one's
+  /// root, so its layout is dropped rather than mixed in.
+  ProjectSource? _mergedSource(
+    ProjectSource? existing,
+    ScannedProject project,
+  ) {
+    final fresh = projectSourceFrom(project, project.groups);
+    if (fresh == null) {
+      return existing;
+    }
+    if (existing == null) {
+      return fresh;
+    }
+    if (existing.rootPath != fresh.rootPath) {
+      return existing;
+    }
+    return ProjectSource(
+      rootPath: existing.rootPath,
+      languageFiles: {...existing.languageFiles, ...fresh.languageFiles},
     );
   }
 
@@ -247,6 +286,48 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
       return;
     }
     emit(current.copyWith(projectName: event.name, clearError: true));
+  }
+
+  Future<void> _onPickProjectIcon(
+    ProjectIconPickRequestedEvent event,
+    Emitter<FileUploadState> emit,
+  ) async {
+    final current = state;
+    if (current is! FileUploadReady || current.isBusy) {
+      return;
+    }
+
+    emit(current.copyWith(isPickingIcon: true, clearError: true));
+    final result = await pickAppIcon(const NoParams());
+
+    // The picker is modal but a scan can still settle behind it, so the
+    // icon lands on whatever state is current rather than the captured one.
+    final settled = state;
+    if (settled is! FileUploadReady) {
+      return;
+    }
+    result.fold(
+      (failure) => emit(
+        settled.copyWith(isPickingIcon: false, errorMessage: failure.message),
+      ),
+      // A canceled picker leaves the current icon alone.
+      (icon) => emit(
+        icon == null
+            ? settled.copyWith(isPickingIcon: false)
+            : settled.copyWith(isPickingIcon: false, iconImage: icon),
+      ),
+    );
+  }
+
+  void _onClearProjectIcon(
+    ProjectIconClearedEvent event,
+    Emitter<FileUploadState> emit,
+  ) {
+    final current = state;
+    if (current is! FileUploadReady || current.isBusy) {
+      return;
+    }
+    emit(current.copyWith(clearIcon: true, clearError: true));
   }
 
   void _onResetImport(ResetImportEvent event, Emitter<FileUploadState> emit) {
@@ -313,14 +394,53 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
       SaveTranslationsParams(appId: app.id, filesByLanguage: filesByLanguage),
     );
 
-    result.fold(
-      (failure) => emit(
+    final failure = result.fold((failure) => failure, (_) => null);
+    if (failure != null) {
+      emit(
         // In project mode the app already exists at this point; it stays
         // in the workspace so the import can be retried against it.
         current.copyWith(isImporting: false, errorMessage: failure.message),
+      );
+      return;
+    }
+
+    // Project mode already created the app with its origin attached; an
+    // existing app picks it up here, so scanning a folder into an app
+    // made by hand also earns it a save-back-to-project.
+    emit(
+      FileUploadImportSuccess(
+        current.isProjectMode ? app : await _withSource(app, current),
       ),
-      (_) => emit(FileUploadImportSuccess(app)),
     );
+  }
+
+  /// Attaches the scanned origin to an existing app.
+  ///
+  /// The app keeps whichever project it was already tied to — the point
+  /// is to remember the *initial* one — and only gains paths for the
+  /// languages it did not have yet. Returns the app unchanged when there
+  /// is nothing to record or the update fails; a saved import is not
+  /// worth failing over a bookkeeping write.
+  Future<App> _withSource(App app, FileUploadReady state) async {
+    final source = state.scannedSource;
+    if (source == null) {
+      return app;
+    }
+
+    final updated = App(
+      id: app.id,
+      name: app.name,
+      sourceLanguage: app.sourceLanguage,
+      targetLanguages: app.targetLanguages,
+      createdAt: app.createdAt,
+      updatedAt: app.updatedAt,
+      iconImage: app.iconImage,
+      projectPath: app.hasProject ? app.projectPath : source.rootPath,
+      languageFiles: {...source.languageFiles, ...app.languageFiles},
+    );
+
+    final result = await updateApp(UpdateAppParams(app: updated));
+    return result.getOrElse(() => app);
   }
 
   /// Creates the app the scanned project is imported into.
@@ -346,11 +466,17 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
           ).take(1).toList();
     }
 
+    final projectSource = state.scannedSource;
     return createApp(
       CreateAppParams(
         name: (state.projectName ?? state.project!.projectName).trim(),
         sourceLanguage: source,
         targetLanguages: targets,
+        iconImage: state.iconImage,
+        projectPath: projectSource?.rootPath,
+        // Every scanned language keeps its path, not just the imported
+        // ones, so adding a target later already knows where it lives.
+        languageFiles: projectSource?.languageFiles ?? const {},
       ),
     );
   }

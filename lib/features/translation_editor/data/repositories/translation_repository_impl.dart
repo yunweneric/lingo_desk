@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/utils/json_flattener.dart';
+import '../../domain/entities/export_outcome.dart';
 import '../../domain/entities/translation_entry.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../datasources/file_export_data_source.dart';
@@ -123,10 +124,64 @@ class TranslationRepositoryImpl implements TranslationRepository {
   }
 
   @override
-  Future<Either<Failure, int>> exportTranslations(
+  Future<Either<Failure, ExportOutcome>> exportZipToDownloads(
     String appId,
     List<String> languages,
     String archiveName,
+  ) async {
+    return _export(appId, languages, (entries) async {
+      // Every language goes into one archive, so a download is a single
+      // file no matter how many languages were selected.
+      final jsonFiles = _jsonFilesFor(entries, languages, const {});
+      final path = await fileExportDataSource.saveZipToDownloads(
+        archiveName,
+        jsonFiles,
+      );
+      return ExportOutcome(location: path, paths: [path]);
+    });
+  }
+
+  @override
+  Future<Either<Failure, ExportOutcome>> exportToFolder(
+    String appId,
+    List<String> languages,
+    String rootPath,
+    Map<String, String> languageFiles,
+  ) async {
+    return _export(appId, languages, (entries) async {
+      final jsonFiles = _jsonFilesFor(entries, languages, languageFiles);
+      final written = await fileExportDataSource.writeJsonFiles(
+        rootPath,
+        jsonFiles,
+      );
+      return ExportOutcome(location: rootPath, paths: written);
+    });
+  }
+
+  @override
+  Future<Either<Failure, String?>> pickExportFolder({
+    String? initialDirectory,
+  }) async {
+    try {
+      return Right(
+        await fileExportDataSource.pickDestinationFolder(
+          initialDirectory: initialDirectory,
+        ),
+      );
+    } on FileException catch (e) {
+      return Left(FileFailure(message: e.message));
+    } on Exception catch (e) {
+      return Left(FileFailure(message: e.toString()));
+    }
+  }
+
+  /// Loads the app's entries, guards the empty case, and runs [write],
+  /// mapping the shared set of storage and file failures.
+  Future<Either<Failure, ExportOutcome>> _export(
+    String appId,
+    List<String> languages,
+    Future<ExportOutcome> Function(Map<String, Map<String, String>> entries)
+    write,
   ) async {
     try {
       final entries = await localDataSource.getEntries(appId);
@@ -135,23 +190,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
           ValidationFailure(message: 'There are no keys to export yet.'),
         );
       }
-
-      // Every language goes into one archive, so there is a single save
-      // dialog no matter how many are selected.
-      final jsonFiles = <String, Map<String, dynamic>>{};
-      for (final language in languages) {
-        final flat = <String, String>{
-          for (final entry in entries.entries)
-            entry.key: entry.value[language] ?? '',
-        };
-        jsonFiles['$language.json'] = JsonFlattener.unflatten(flat);
-      }
-
-      final saved = await fileExportDataSource.saveZipFile(
-        archiveName,
-        jsonFiles,
-      );
-      return Right(saved ? jsonFiles.length : 0);
+      return Right(await write(entries));
     } on FileException catch (e) {
       return Left(FileFailure(message: e.message));
     } on CacheException catch (e) {
@@ -159,6 +198,29 @@ class TranslationRepositoryImpl implements TranslationRepository {
     } on Exception catch (e) {
       return Left(FileFailure(message: e.toString()));
     }
+  }
+
+  /// One nested JSON document per language, keyed by the path it is
+  /// written to.
+  ///
+  /// A language missing from [languageFiles] lands at `<lang>.json`, so
+  /// a plain folder export and a language added after the import both
+  /// get the obvious name.
+  Map<String, Map<String, dynamic>> _jsonFilesFor(
+    Map<String, Map<String, String>> entries,
+    List<String> languages,
+    Map<String, String> languageFiles,
+  ) {
+    final jsonFiles = <String, Map<String, dynamic>>{};
+    for (final language in languages) {
+      final flat = <String, String>{
+        for (final entry in entries.entries)
+          entry.key: entry.value[language] ?? '',
+      };
+      final path = languageFiles[language] ?? '$language.json';
+      jsonFiles[path] = JsonFlattener.unflatten(flat);
+    }
+    return jsonFiles;
   }
 
   List<TranslationEntry> _toSortedList(

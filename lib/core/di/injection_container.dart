@@ -1,6 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/ai_translation/data/export.dart';
+import '../../features/ai_translation/domain/export.dart';
 import '../../features/app_management/data/export.dart';
 import '../../features/app_management/domain/export.dart';
 import '../../features/app_management/presentation/bloc/export.dart';
@@ -11,6 +14,8 @@ import '../../features/file_upload/presentation/bloc/export.dart';
 import '../../features/translation_editor/data/export.dart';
 import '../../features/translation_editor/domain/export.dart';
 import '../../features/translation_editor/presentation/bloc/export.dart';
+import '../preferences/ai_credential_store.dart';
+import '../preferences/ai_settings_controller.dart';
 import '../preferences/app_preferences.dart';
 import '../preferences/app_settings_controller.dart';
 
@@ -41,6 +46,21 @@ Future<void> init() async {
   getIt.registerLazySingleton<AppSettingsController>(
     () => AppSettingsController(getIt()),
   );
+  getIt.registerLazySingleton<http.Client>(http.Client.new);
+  getIt.registerLazySingleton<AiCredentialStore>(
+    () => AiCredentialStore(
+      secureStorage: AiCredentialStore.defaultSecureStorage,
+      preferences: getIt(),
+    ),
+  );
+  // The API keys live in the platform keychain, which is async, so they are
+  // read once here and cached; every later read is synchronous.
+  final aiSettings = AiSettingsController(
+    preferences: getIt(),
+    credentialStore: getIt(),
+  );
+  await aiSettings.load();
+  getIt.registerLazySingleton<AiSettingsController>(() => aiSettings);
 
   // ==========================================
   // Data Sources
@@ -60,6 +80,9 @@ Future<void> init() async {
   getIt.registerLazySingleton<FilePickerDataSource>(
     () => const FilePickerDataSourceImpl(),
   );
+  getIt.registerLazySingleton<AnthropicClient>(() => AnthropicClient(getIt()));
+  getIt.registerLazySingleton<OpenAiClient>(() => OpenAiClient(getIt()));
+  getIt.registerLazySingleton<GeminiClient>(() => GeminiClient(getIt()));
 
   // ==========================================
   // Repositories
@@ -79,6 +102,15 @@ Future<void> init() async {
   getIt.registerLazySingleton<FileUploadRepository>(
     () => FileUploadRepositoryImpl(filePickerDataSource: getIt()),
   );
+  getIt.registerLazySingleton<AiTranslationRepository>(
+    () => AiTranslationRepositoryImpl(
+      clients: {
+        AiProvider.anthropic: getIt<AnthropicClient>(),
+        AiProvider.openai: getIt<OpenAiClient>(),
+        AiProvider.gemini: getIt<GeminiClient>(),
+      },
+    ),
+  );
 
   // ==========================================
   // Use Cases
@@ -97,7 +129,13 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => UpdateTranslation(getIt()));
   getIt.registerLazySingleton(() => AddTranslationKey(getIt()));
   getIt.registerLazySingleton(() => DeleteTranslationKey(getIt()));
-  getIt.registerLazySingleton(() => ExportTranslations(getIt()));
+  getIt.registerLazySingleton(() => ExportTranslationsToDownloads(getIt()));
+  getIt.registerLazySingleton(() => ExportTranslationsToFolder(getIt()));
+  getIt.registerLazySingleton(() => PickExportFolder(getIt()));
+
+  // AI translation
+  getIt.registerLazySingleton(() => TranslateBatch(getIt()));
+  getIt.registerLazySingleton(() => VerifyAiCredentials(getIt()));
 
   // File upload
   getIt.registerLazySingleton(() => PickTranslationFiles(getIt()));
@@ -124,7 +162,12 @@ Future<void> init() async {
       updateTranslation: getIt(),
       addTranslationKey: getIt(),
       deleteTranslationKey: getIt(),
-      exportTranslations: getIt(),
+      exportToDownloads: getIt(),
+      exportToFolder: getIt(),
+      pickExportFolder: getIt(),
+      saveTranslations: getIt(),
+      translateBatch: getIt(),
+      aiSettings: getIt(),
     ),
   );
   getIt.registerFactory(
@@ -134,6 +177,8 @@ Future<void> init() async {
       scanProjectFolder: getIt(),
       saveTranslations: getIt(),
       createApp: getIt(),
+      updateApp: getIt(),
+      pickAppIcon: getIt(),
       settings: getIt(),
     ),
   );

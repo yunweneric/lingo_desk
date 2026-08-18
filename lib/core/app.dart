@@ -5,6 +5,7 @@ import 'di/injection_container.dart';
 import 'preferences/app_settings_controller.dart';
 import 'router/app_router.dart';
 import 'theme/lingo_desk_theme.dart';
+import 'widgets/lingo_desk_toast.dart';
 
 /// Root application widget
 ///
@@ -48,6 +49,11 @@ class _LingoDeskAppState extends State<LingoDeskApp> {
           themeMode: _settings.themeMode,
           locale: Locale(_settings.uiLanguage),
           routerConfig: _router,
+          // Above the router, so a toast survives the navigation that
+          // often triggers it and paints over dialogs.
+          builder:
+              (context, child) =>
+                  LingoDeskToastHost(child: child ?? const SizedBox.shrink()),
         );
       },
     );

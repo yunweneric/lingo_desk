@@ -17,6 +17,7 @@ class ScannedLanguageTile extends StatelessWidget {
     required this.isIncluded,
     required this.isSource,
     required this.onToggle,
+    this.exportPath,
   });
 
   final ScannedLanguageGroup group;
@@ -27,6 +28,16 @@ class ScannedLanguageTile extends StatelessWidget {
   final bool isIncluded;
   final bool isSource;
   final VoidCallback? onToggle;
+
+  /// Path an export writes this language back to, relative to the
+  /// project root. Only worth showing when it is not simply the file the
+  /// language was read from.
+  final String? exportPath;
+
+  /// True when the export path is not one of the files scanned, i.e. the
+  /// language came from several files and collapses into one.
+  bool get _mergesOnExport =>
+      exportPath != null && !group.relativePaths.contains(exportPath);
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +162,20 @@ class ScannedLanguageTile extends StatelessWidget {
                 '${group.conflictCount} duplicate key(s) merged across '
                 '${group.relativePaths.length} files.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: tokens.muted,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+            // Several files merge into one on the way back out, so the
+            // destination is called out before the import, not after.
+            if (_mergesOnExport) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Exports back to $exportPath',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: LingoDeskTheme.codeStyle.copyWith(
                   color: tokens.muted,
                   fontSize: 11,
                 ),

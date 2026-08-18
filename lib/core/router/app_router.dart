@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/ai_translation/presentation/pages/ai_providers_page.dart';
 import '../../features/app_management/domain/entities/app.dart';
 import '../../features/app_management/presentation/pages/app_dashboard_page.dart';
 import '../../features/app_management/presentation/pages/apps_page.dart';
@@ -33,6 +34,9 @@ class AppRoutes {
   static const importProject = '/import';
 
   static const settings = '/settings';
+
+  /// API keys for the AI translation providers.
+  static const aiProviders = '/ai-providers';
 
   /// Dashboard deep link that scrolls to a section anchor once loaded.
   static String dashboardSection(String section) => '/?section=$section';
@@ -102,6 +106,11 @@ GoRouter buildAppRouter(AppSettingsController settings) {
             path: AppRoutes.settings,
             pageBuilder:
                 (context, state) => _fadePage(state, const SettingsPage()),
+          ),
+          GoRoute(
+            path: AppRoutes.aiProviders,
+            pageBuilder:
+                (context, state) => _fadePage(state, const AiProvidersPage()),
           ),
           GoRoute(
             path: '/apps/:id/settings',

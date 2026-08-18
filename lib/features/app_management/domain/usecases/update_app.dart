@@ -38,6 +38,8 @@ class UpdateApp implements UseCase<App, UpdateAppParams> {
       createdAt: app.createdAt,
       updatedAt: DateTime.now(),
       iconImage: app.iconImage,
+      projectPath: app.projectPath,
+      languageFiles: Map.unmodifiable(app.languageFiles),
     );
     return repository.updateApp(updated);
   }

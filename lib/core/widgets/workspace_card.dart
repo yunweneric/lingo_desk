@@ -140,6 +140,7 @@ class WorkspaceMetaTile extends StatelessWidget {
     required this.value,
     required this.icon,
     this.width = 104,
+    this.height = 54,
   });
 
   final String label;
@@ -147,13 +148,17 @@ class WorkspaceMetaTile extends StatelessWidget {
   final List<List<dynamic>> icon;
   final double width;
 
+  /// Overridden where the tile shares a row with fields and buttons and
+  /// has to match their height.
+  final double height;
+
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
     return SizedBox(
       width: width,
-      height: 54,
+      height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: tokens.active,
@@ -161,7 +166,7 @@ class WorkspaceMetaTile extends StatelessWidget {
           border: Border.all(color: tokens.border),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           child: Row(
             children: [
               LingoDeskIcon(icon, size: 17, color: tokens.muted),

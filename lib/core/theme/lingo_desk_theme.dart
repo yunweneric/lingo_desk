@@ -30,6 +30,32 @@ class LingoDeskColors {
   static const error = Color(0xFFDC2626);
   static const warning = Color(0xFFB45309);
   static const border = Color(0xFFE7E5E4);
+
+  // Status tints. Each status carries a soft fill and hairline for the
+  // light chassis, a deep fill and hairline for the dark stage, and a
+  // lifted accent bright enough to stay legible against that deep fill —
+  // the literal `complete`/`error`/`warning` hues go muddy on dark ink.
+  static const successSoft = Color(0xFFE8F3EB);
+  static const successSoftBorder = Color(0xFFC6E2D0);
+  static const successDeep = Color(0xFF10301E);
+  static const successDeepBorder = Color(0xFF2E7D4F);
+  static const successLift = Color(0xFF4ADE80);
+
+  static const errorSoft = Color(0xFFFDECEC);
+  static const errorSoftBorder = Color(0xFFF6CFCF);
+  static const errorDeep = Color(0xFF351A1A);
+  static const errorDeepBorder = Color(0xFF9B3A3A);
+  static const errorLift = Color(0xFFF87171);
+
+  static const warningSoft = Color(0xFFFDF2E3);
+  static const warningSoftBorder = Color(0xFFF0D9B4);
+  static const warningDeep = Color(0xFF33240F);
+  static const warningDeepBorder = Color(0xFF8E5F1E);
+  static const warningLift = Color(0xFFFBBF24);
+
+  /// Info borrows the brand teal wholesale; only the dark-stage accent
+  /// needs its own value.
+  static const infoLift = Color(0xFF5EEAD4);
 }
 
 class LingoDeskTheme {
@@ -219,20 +245,6 @@ class LingoDeskTheme {
             );
           }),
         ),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-        elevation: 6,
-        backgroundColor:
-            isDark ? LingoDeskColors.activeDeep : LingoDeskColors.ink,
-        contentTextStyle: GoogleFonts.urbanist(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        insetPadding: const EdgeInsets.all(20),
       ),
       tooltipTheme: TooltipThemeData(
         waitDuration: const Duration(milliseconds: 400),

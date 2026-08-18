@@ -8,11 +8,13 @@ import '../../../../core/di/injection_container.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/language_dropdown.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../../app_management/domain/entities/app.dart';
@@ -74,6 +76,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
             }
           }
           if (state is FileUploadImportSuccess) {
+            context.showSuccessToast('Imported into "${state.app.name}".');
             if (widget.popOnImport) {
               context.pop(true);
             } else {
@@ -426,21 +429,34 @@ class _ScannedProjectState extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LingoDeskTextField(
-                controller: nameController,
-                label: 'App name',
-                hintText: 'e.g. Customer Portal',
-                size: LingoDeskFieldSize.large,
-                enabled: !state.isBusy,
-                isRequired: true,
-                onChanged:
-                    (value) => context.read<FileUploadBloc>().add(
-                      ProjectNameChangedEvent(value),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ProjectIconField(
+                    state: state,
+                    nameController: nameController,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: LingoDeskTextField(
+                      controller: nameController,
+                      label: 'App name',
+                      hintText: 'e.g. Customer Portal',
+                      size: LingoDeskFieldSize.large,
+                      enabled: !state.isBusy,
+                      isRequired: true,
+                      onChanged:
+                          (value) => context.read<FileUploadBloc>().add(
+                            ProjectNameChangedEvent(value),
+                          ),
                     ),
+                  ),
+                ],
               ),
               if (project.rootPath.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Text(
+                  // Kept on the app, so exports can go straight back here.
                   project.rootPath,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -515,6 +531,10 @@ class _ScannedProjectState extends StatelessWidget {
                     project.groups[index].languageCode,
                   ),
               isSource: project.groups[index].languageCode == source,
+              exportPath:
+                  state.scannedSource?.languageFiles[project
+                      .groups[index]
+                      .languageCode],
               onToggle:
                   project.groups[index].languageCode == source || state.isBusy
                       ? null
@@ -600,6 +620,110 @@ class _ScannedProjectState extends StatelessWidget {
       (sum, group) => sum + group.filledKeyCount,
     );
     return '${(filled / cells * 100).round()}%';
+  }
+}
+
+/// The logo the import will hang on the app it creates.
+///
+/// The badge is a live preview of what the apps list will show: the
+/// picked image, or the initials of whatever is currently typed in the
+/// name field beside it.
+class _ProjectIconField extends StatelessWidget {
+  const _ProjectIconField({required this.state, required this.nameController});
+
+  final FileUploadReady state;
+
+  /// Watched so the initials track the name as it is typed.
+  final TextEditingController nameController;
+
+  /// Matches the height of the large name field it sits next to.
+  static const _size = 50.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final bloc = context.read<FileUploadBloc>();
+    final hasIcon = state.iconImage != null;
+    final busy = state.isBusy;
+
+    return LingoDeskFieldScaffold(
+      label: 'Logo',
+      child: Row(
+        children: [
+          Tooltip(
+            message: hasIcon ? 'Replace logo' : 'Upload a logo',
+            child: InkWell(
+              onTap:
+                  busy
+                      ? null
+                      : () => bloc.add(ProjectIconPickRequestedEvent()),
+              borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
+              child: SizedBox.square(
+                dimension: _size,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: nameController,
+                      builder: (context, value, _) {
+                        final name = value.text.trim();
+                        return AppAvatar(
+                          name: name.isEmpty ? 'New app' : name,
+                          initials: appInitialsFor(value.text),
+                          iconImage: state.iconImage,
+                          size: _size,
+                        );
+                      },
+                    ),
+                    // Sits half off the badge so it reads as an action on
+                    // the logo rather than part of the artwork.
+                    Positioned(
+                      right: -4,
+                      bottom: -4,
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: tokens.card,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: tokens.border),
+                        ),
+                        child:
+                            state.isPickingIcon
+                                ? const SizedBox.square(
+                                  dimension: 11,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.8,
+                                  ),
+                                )
+                                : LingoDeskIcon(
+                                  HugeIcons.strokeRoundedImageAdd01,
+                                  size: 12,
+                                  color: tokens.muted,
+                                ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (hasIcon) ...[
+            const SizedBox(width: 6),
+            IconButton(
+              onPressed: busy ? null : () => bloc.add(ProjectIconClearedEvent()),
+              tooltip: 'Remove logo',
+              visualDensity: VisualDensity.compact,
+              icon: const LingoDeskIcon(
+                HugeIcons.strokeRoundedDelete02,
+                size: 17,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }
 

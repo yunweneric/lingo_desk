@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failures.dart';
+import '../entities/export_outcome.dart';
 import '../entities/translation_entry.dart';
 
 /// Data operations for an app's translation workspace.
@@ -34,13 +35,27 @@ abstract class TranslationRepository {
 
   Future<Either<Failure, void>> deleteKey(String appId, String key);
 
-  /// Bundles one nested JSON file per language into a single archive
-  /// named [archiveName] and saves it via one save dialog.
-  ///
-  /// Returns the number of files bundled (0 when canceled).
-  Future<Either<Failure, int>> exportTranslations(
+  /// Bundles one nested JSON file per language into an archive named
+  /// [archiveName] in the user's Downloads folder.
+  Future<Either<Failure, ExportOutcome>> exportZipToDownloads(
     String appId,
     List<String> languages,
     String archiveName,
   );
+
+  /// Writes one nested JSON file per language under [rootPath].
+  ///
+  /// [languageFiles] gives the path below [rootPath] for a language, so
+  /// a save back to an imported project lands on the files it came from.
+  /// Languages missing from it are written as `<lang>.json` in the root.
+  Future<Either<Failure, ExportOutcome>> exportToFolder(
+    String appId,
+    List<String> languages,
+    String rootPath,
+    Map<String, String> languageFiles,
+  );
+
+  /// Asks for a destination folder, opening at [initialDirectory] when
+  /// one is given. Returns null when the user cancels.
+  Future<Either<Failure, String?>> pickExportFolder({String? initialDirectory});
 }

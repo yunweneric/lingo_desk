@@ -9,6 +9,8 @@ class App {
     required this.createdAt,
     required this.updatedAt,
     this.iconImage,
+    this.projectPath,
+    this.languageFiles = const {},
   });
 
   final String id;
@@ -24,6 +26,28 @@ class App {
   /// picked file being moved or deleted. Null is the normal case, and
   /// the UI falls back to [initials].
   final String? iconImage;
+
+  /// Absolute path of the project folder this app was imported from, or
+  /// null when it was created by hand.
+  ///
+  /// Kept so an export can write the translations straight back into the
+  /// codebase they came from instead of asking where to put them.
+  final String? projectPath;
+
+  /// Language code -> path below [projectPath] of the file that language
+  /// was read from, e.g. `{'en': 'src/translations/en.json'}`.
+  ///
+  /// A language merged from several files is recorded as one
+  /// `<lang>.json` in the directory those files shared. Languages added
+  /// after the import have no entry and fall back to `<lang>.json`.
+  final Map<String, String> languageFiles;
+
+  /// Whether an export can write back to disk without asking for a folder.
+  bool get hasProject => (projectPath ?? '').isNotEmpty;
+
+  /// Where [language] is written on a save back to the project.
+  String projectFileFor(String language) =>
+      languageFiles[language] ?? '$language.json';
 
   /// Source language followed by the target languages.
   List<String> get allLanguages => [sourceLanguage, ...targetLanguages];

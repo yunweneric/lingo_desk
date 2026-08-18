@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
+import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -26,6 +28,8 @@ class TranslationCellField extends StatefulWidget {
     required this.value,
     required this.highlightMissing,
     required this.onChanged,
+    this.onAiTranslate,
+    this.isTranslating = false,
   });
 
   final String value;
@@ -34,6 +38,13 @@ class TranslationCellField extends StatefulWidget {
   final bool highlightMissing;
 
   final ValueChanged<String> onChanged;
+
+  /// Fills this one cell from the AI provider. Null on the source column and
+  /// whenever there is no source text to translate from.
+  final VoidCallback? onAiTranslate;
+
+  /// True while this cell is part of a running AI batch.
+  final bool isTranslating;
 
   @override
   State<TranslationCellField> createState() => _TranslationCellFieldState();
@@ -170,37 +181,128 @@ class _TranslationCellFieldState extends State<TranslationCellField>
         // Center hands the TextField loose constraints, it takes its
         // intrinsic single-line height, and the leftover splits evenly.
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 9),
-          child: Center(
-            child: TextField(
-              controller: _controller,
-              focusNode: _focusNode,
-              onChanged: _handleChanged,
-              onSubmitted: (_) => _flush(),
-              maxLines: 1,
-              cursorColor: LingoDeskColors.brandTeal,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: tokens.foreground,
-                fontSize: 13,
-                height: 1.2,
-              ),
-              decoration: InputDecoration(
-                isCollapsed: true,
-                hintText: showMissing ? 'Missing' : null,
-                hintStyle: TextStyle(
-                  color: LingoDeskColors.warning.withAlpha(170),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  height: 1.2,
+          padding: const EdgeInsets.only(left: 9, right: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    onChanged: _handleChanged,
+                    onSubmitted: (_) => _flush(),
+                    maxLines: 1,
+                    // The AI is mid-write; typing here would race the value
+                    // that is about to land.
+                    readOnly: widget.isTranslating,
+                    cursorColor: LingoDeskColors.brandTeal,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: tokens.foreground,
+                      fontSize: 13,
+                      height: 1.2,
+                    ),
+                    decoration: InputDecoration(
+                      isCollapsed: true,
+                      hintText:
+                          widget.isTranslating
+                              ? 'Translating…'
+                              : (showMissing ? 'Missing' : null),
+                      hintStyle: TextStyle(
+                        color:
+                            widget.isTranslating
+                                ? LingoDeskColors.brandTeal.withAlpha(190)
+                                : LingoDeskColors.warning.withAlpha(170),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
                 ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
               ),
-            ),
+              _CellAiAction(
+                onPressed: widget.onAiTranslate,
+                isTranslating: widget.isTranslating,
+                // An empty target cell keeps the affordance faintly visible
+                // so it is findable without a mouse; a filled cell only
+                // shows it under the pointer, where it can't distract.
+                visible: _hovered || showMissing || widget.isTranslating,
+                emphasized: showMissing,
+                tokens: tokens,
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The per-cell "translate this one" affordance.
+///
+/// Sits inside the cell rather than in the row menu because the single
+/// missing field is the case you hit most often — it should be one click
+/// from where you are already looking.
+class _CellAiAction extends StatelessWidget {
+  const _CellAiAction({
+    required this.onPressed,
+    required this.isTranslating,
+    required this.visible,
+    required this.emphasized,
+    required this.tokens,
+  });
+
+  final VoidCallback? onPressed;
+  final bool isTranslating;
+  final bool visible;
+  final bool emphasized;
+  final LingoDeskTokens tokens;
+
+  @override
+  Widget build(BuildContext context) {
+    if (onPressed == null && !isTranslating) {
+      return const SizedBox(width: 4);
+    }
+
+    return AnimatedOpacity(
+      duration: LingoDeskMotion.fast,
+      curve: LingoDeskMotion.curve,
+      opacity: visible ? (emphasized && !isTranslating ? 0.75 : 1) : 0,
+      child: SizedBox.square(
+        dimension: 24,
+        child:
+            isTranslating
+                ? const Padding(
+                  padding: EdgeInsets.all(5),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: LingoDeskColors.brandTeal,
+                  ),
+                )
+                : IgnorePointer(
+                  ignoring: !visible,
+                  child: IconButton(
+                    tooltip: 'Translate with AI',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints.tightFor(
+                      width: 24,
+                      height: 24,
+                    ),
+                    onPressed: onPressed,
+                    icon: LingoDeskIcon(
+                      HugeIcons.strokeRoundedSparkles,
+                      size: 15,
+                      color:
+                          emphasized
+                              ? LingoDeskColors.warning
+                              : LingoDeskColors.brandTeal,
+                    ),
+                  ),
+                ),
       ),
     );
   }

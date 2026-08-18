@@ -9,6 +9,8 @@ class AppModel extends App {
     required super.createdAt,
     required super.updatedAt,
     super.iconImage,
+    super.projectPath,
+    super.languageFiles,
   });
 
   factory AppModel.fromEntity(App app) {
@@ -20,6 +22,8 @@ class AppModel extends App {
       createdAt: app.createdAt,
       updatedAt: app.updatedAt,
       iconImage: app.iconImage,
+      projectPath: app.projectPath,
+      languageFiles: app.languageFiles,
     );
   }
 
@@ -32,6 +36,10 @@ class AppModel extends App {
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       iconImage: json['iconImage'] as String?,
+      projectPath: json['projectPath'] as String?,
+      languageFiles: Map<String, String>.from(
+        json['languageFiles'] as Map? ?? const {},
+      ),
     );
   }
 
@@ -45,6 +53,9 @@ class AppModel extends App {
       'updatedAt': updatedAt.toIso8601String(),
       // Apps saved before icons existed simply have no entry.
       if (iconImage != null) 'iconImage': iconImage,
+      // Likewise for apps created by hand rather than imported.
+      if (projectPath != null) 'projectPath': projectPath,
+      if (languageFiles.isNotEmpty) 'languageFiles': languageFiles,
     };
   }
 
@@ -57,6 +68,8 @@ class AppModel extends App {
     DateTime? updatedAt,
     String? iconImage,
     bool clearIcon = false,
+    String? projectPath,
+    Map<String, String>? languageFiles,
   }) {
     return AppModel(
       id: id ?? this.id,
@@ -66,6 +79,8 @@ class AppModel extends App {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       iconImage: clearIcon ? null : (iconImage ?? this.iconImage),
+      projectPath: projectPath ?? this.projectPath,
+      languageFiles: languageFiles ?? this.languageFiles,
     );
   }
 }

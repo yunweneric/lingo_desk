@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 
-/// Dialog to choose which languages go into the exported archive.
+/// Dialog to choose which languages an export covers.
+///
+/// Shared by all three destinations. The copy and the file name shown
+/// against each language are passed in, so the ZIP download, the save
+/// back to the project and the folder export each name exactly what they
+/// are about to write — which matters most for the project save, where
+/// the listed files are overwritten in place.
 ///
 /// Returns the selected language codes, or null when canceled.
 class ExportLanguagesDialog extends StatefulWidget {
@@ -11,20 +17,33 @@ class ExportLanguagesDialog extends StatefulWidget {
     super.key,
     required this.languages,
     required this.sourceLanguage,
-    required this.archiveName,
+    required this.title,
+    required this.summary,
+    required this.confirmLabel,
+    this.fileNameFor,
   });
 
   final List<String> languages;
   final String sourceLanguage;
 
-  /// Name of the single archive the selected files are bundled into.
-  final String archiveName;
+  final String title;
+
+  /// Line above the list saying where the files land.
+  final String summary;
+
+  final String confirmLabel;
+
+  /// What each language is written as. Defaults to `<lang>.json`.
+  final String Function(String language)? fileNameFor;
 
   static Future<List<String>?> show(
     BuildContext context, {
     required List<String> languages,
     required String sourceLanguage,
-    required String archiveName,
+    required String title,
+    required String summary,
+    required String confirmLabel,
+    String Function(String language)? fileNameFor,
   }) {
     return showDialog<List<String>>(
       context: context,
@@ -32,7 +51,10 @@ class ExportLanguagesDialog extends StatefulWidget {
           (_) => ExportLanguagesDialog(
             languages: languages,
             sourceLanguage: sourceLanguage,
-            archiveName: archiveName,
+            title: title,
+            summary: summary,
+            confirmLabel: confirmLabel,
+            fileNameFor: fileNameFor,
           ),
     );
   }
@@ -44,14 +66,17 @@ class ExportLanguagesDialog extends StatefulWidget {
 class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
   late final Set<String> _selected = widget.languages.toSet();
 
+  String _fileNameFor(String language) =>
+      widget.fileNameFor?.call(language) ?? '$language.json';
+
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
     return AlertDialog(
-      title: const Text('Export as ZIP'),
+      title: Text(widget.title),
       content: SizedBox(
-        width: 380,
+        width: 420,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,8 +84,7 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                'The selected files are bundled into a single archive, '
-                '${widget.archiveName}.',
+                widget.summary,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -72,8 +96,17 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
                 dense: true,
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
-                  '${SupportedLanguages.flagOf(language)}  $language.json - ${SupportedLanguages.nameOf(language)}'
+                  '${SupportedLanguages.flagOf(language)}  '
+                  '${SupportedLanguages.nameOf(language)}'
                   '${language == widget.sourceLanguage ? ' (source)' : ''}',
+                ),
+                subtitle: Text(
+                  _fileNameFor(language),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: tokens.muted),
                 ),
                 onChanged: (checked) {
                   setState(() {
@@ -100,7 +133,7 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
                   : () => Navigator.of(
                     context,
                   ).pop(widget.languages.where(_selected.contains).toList()),
-          child: const Text('Download ZIP'),
+          child: Text(widget.confirmLabel),
         ),
       ],
     );

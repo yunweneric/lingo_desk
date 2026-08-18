@@ -8,6 +8,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/lingo_desk_toast.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
 import '../../../app_management/domain/entities/app.dart';
 import '../bloc/app_settings_bloc.dart';
@@ -66,9 +67,7 @@ class _AppSettingsViewState extends State<_AppSettingsView> {
       listener: (context, state) {
         if (state is AppSettingsSaveSuccess) {
           final router = GoRouter.of(context);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Saved "${state.app.name}".')));
+          context.showSuccessToast('Saved "${state.app.name}".');
           router.pop(true);
         }
       },
