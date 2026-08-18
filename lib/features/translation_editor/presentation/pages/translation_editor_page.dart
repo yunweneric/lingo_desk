@@ -288,8 +288,8 @@ class _EditorViewState extends State<_EditorView> {
     final languages = await AiTranslateDialog.show(
       context,
       state: state,
-      providerLabel: aiSettings.provider.label,
-      model: aiSettings.model,
+      providerLabel: aiSettings.activeKey?.provider.label ?? 'No provider',
+      model: aiSettings.activeKey?.model ?? '',
     );
     if (languages != null && languages.isNotEmpty) {
       bloc.add(AiTranslateEvent(languages));

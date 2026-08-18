@@ -12,5 +12,6 @@ export 'lingo_desk_text_field.dart';
 export 'lingo_desk_toast.dart';
 export 'workspace_card.dart';
 export 'workspace_page_header.dart';
+export 'workspace_pagination_bar.dart';
 export 'workspace_scaffold.dart';
 export 'workspace_toolbar.dart';

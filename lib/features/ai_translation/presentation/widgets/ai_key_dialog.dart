@@ -128,8 +128,7 @@ class _AiKeyDialogState extends State<AiKeyDialog> {
                   modelController: _modelController,
                   showKey: _showKey,
                   error: _error,
-                  onToggleShowKey:
-                      () => setState(() => _showKey = !_showKey),
+                  onToggleShowKey: () => setState(() => _showKey = !_showKey),
                   onModelPicked: (model) {
                     _modelController.text = model;
                     setState(() {});

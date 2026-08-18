@@ -129,7 +129,8 @@ class AiSettingsController extends ChangeNotifier {
           provider: provider,
           label: provider.label,
           apiKey: secret,
-          model: (model == null || model.isEmpty) ? provider.defaultModel : model,
+          model:
+              (model == null || model.isEmpty) ? provider.defaultModel : model,
           createdAt: DateTime.now(),
         ),
       );
@@ -276,8 +277,7 @@ class AiSettingsController extends ChangeNotifier {
   Future<void> _write(String id, String apiKey) =>
       _guardStorage(() => _store.write(id, apiKey));
 
-  Future<void> _delete(String id) =>
-      _guardStorage(() => _store.delete(id));
+  Future<void> _delete(String id) => _guardStorage(() => _store.delete(id));
 
   Future<void> _guardStorage(Future<void> Function() action) async {
     try {

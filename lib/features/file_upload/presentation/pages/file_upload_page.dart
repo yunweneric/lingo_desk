@@ -654,9 +654,7 @@ class _ProjectIconField extends StatelessWidget {
             message: hasIcon ? 'Replace logo' : 'Upload a logo',
             child: InkWell(
               onTap:
-                  busy
-                      ? null
-                      : () => bloc.add(ProjectIconPickRequestedEvent()),
+                  busy ? null : () => bloc.add(ProjectIconPickRequestedEvent()),
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
               child: SizedBox.square(
                 dimension: _size,
@@ -712,7 +710,8 @@ class _ProjectIconField extends StatelessWidget {
           if (hasIcon) ...[
             const SizedBox(width: 6),
             IconButton(
-              onPressed: busy ? null : () => bloc.add(ProjectIconClearedEvent()),
+              onPressed:
+                  busy ? null : () => bloc.add(ProjectIconClearedEvent()),
               tooltip: 'Remove logo',
               visualDensity: VisualDensity.compact,
               icon: const LingoDeskIcon(

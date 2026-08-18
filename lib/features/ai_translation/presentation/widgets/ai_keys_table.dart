@@ -228,12 +228,8 @@ class _KeyRowState extends State<_KeyRow> {
                           entry.provider.label,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                            color: tokens.muted,
-                            fontSize: 11,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: tokens.muted, fontSize: 11),
                         ),
                       ],
                     ),
@@ -293,9 +289,7 @@ class _KeyRowState extends State<_KeyRow> {
                 DateFormatter.relative(entry.createdAt),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: tokens.muted,
                   fontSize: 12,
                 ),

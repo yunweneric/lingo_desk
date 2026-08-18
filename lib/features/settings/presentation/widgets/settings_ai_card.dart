@@ -9,6 +9,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../ai_translation/domain/entities/ai_provider.dart';
 import '../../../ai_translation/presentation/widgets/ai_provider_logo.dart';
 
 /// Where AI translation stands, and the way through to change it.
