@@ -90,8 +90,9 @@ class LingoDeskTheme {
       useMaterial3: true,
       colorScheme: scheme,
       brightness: brightness,
-      scaffoldBackgroundColor:
-          isDark ? LingoDeskColors.darkInk : LingoDeskColors.surface,
+      scaffoldBackgroundColor: isDark
+          ? LingoDeskColors.darkInk
+          : LingoDeskColors.surface,
       fontFamily: urbanist.fontFamily,
       fontFamilyFallback: urbanist.fontFamilyFallback,
       textTheme: GoogleFonts.urbanistTextTheme(),
@@ -154,24 +155,23 @@ class LingoDeskTheme {
         side: WidgetStateBorderSide.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return BorderSide(
-              color:
-                  isDark
-                      ? LingoDeskColors.brandTealDeepBorder
-                      : LingoDeskColors.brandTealSoftBorder,
+              color: isDark
+                  ? LingoDeskColors.brandTealDeepBorder
+                  : LingoDeskColors.brandTealSoftBorder,
             );
           }
           return BorderSide(
-            color:
-                states.contains(WidgetState.disabled)
-                    ? (isDark ? Colors.white10 : LingoDeskColors.border)
-                    : (isDark ? Colors.white24 : LingoDeskColors.border),
+            color: states.contains(WidgetState.disabled)
+                ? (isDark ? Colors.white10 : LingoDeskColors.border)
+                : (isDark ? Colors.white24 : LingoDeskColors.border),
           );
         }),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
-        checkmarkColor:
-            isDark ? LingoDeskColors.brandTealSoft : LingoDeskColors.brandTeal,
+        checkmarkColor: isDark
+            ? LingoDeskColors.brandTealSoft
+            : LingoDeskColors.brandTeal,
         labelStyle: GoogleFonts.urbanist(
           color: WidgetStateColor.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
@@ -205,64 +205,66 @@ class LingoDeskTheme {
       // Primary actions pick up a soft teal glow under the pointer and
       // settle flat again when pressed.
       filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: LingoDeskColors.brandTeal,
-          foregroundColor: Colors.white,
-          minimumSize: const Size(48, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
-          ),
-          textStyle: GoogleFonts.urbanist(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
-          animationDuration: LingoDeskMotion.fast,
-        ).copyWith(
-          elevation: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.disabled) ||
-                states.contains(WidgetState.pressed)) {
-              return 0.0;
-            }
-            return states.contains(WidgetState.hovered) ? 4.0 : 0.0;
-          }),
-          shadowColor: WidgetStatePropertyAll(
-            LingoDeskColors.brandTeal.withValues(alpha: 0.5),
-          ),
-        ),
+        style:
+            FilledButton.styleFrom(
+              backgroundColor: LingoDeskColors.brandTeal,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(48, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius),
+              ),
+              textStyle: GoogleFonts.urbanist(
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0,
+              ),
+              animationDuration: LingoDeskMotion.fast,
+            ).copyWith(
+              elevation: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.disabled) ||
+                    states.contains(WidgetState.pressed)) {
+                  return 0.0;
+                }
+                return states.contains(WidgetState.hovered) ? 4.0 : 0.0;
+              }),
+              shadowColor: WidgetStatePropertyAll(
+                LingoDeskColors.brandTeal.withValues(alpha: 0.5),
+              ),
+            ),
       ),
       // Secondary actions answer the pointer by taking on the brand
       // border instead of changing weight or size.
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: isDark ? Colors.white : LingoDeskColors.ink,
-          minimumSize: const Size(48, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
-          ),
-          textStyle: GoogleFonts.urbanist(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
-          animationDuration: LingoDeskMotion.fast,
-        ).copyWith(
-          side: WidgetStateBorderSide.resolveWith((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return BorderSide(
-                color: isDark ? Colors.white10 : LingoDeskColors.border,
-              );
-            }
-            if (states.contains(WidgetState.hovered) ||
-                states.contains(WidgetState.focused) ||
-                states.contains(WidgetState.pressed)) {
-              return const BorderSide(color: LingoDeskColors.brandTeal);
-            }
-            return BorderSide(
-              color: isDark ? Colors.white24 : LingoDeskColors.border,
-            );
-          }),
-        ),
+        style:
+            OutlinedButton.styleFrom(
+              foregroundColor: isDark ? Colors.white : LingoDeskColors.ink,
+              minimumSize: const Size(48, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius),
+              ),
+              textStyle: GoogleFonts.urbanist(
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0,
+              ),
+              animationDuration: LingoDeskMotion.fast,
+            ).copyWith(
+              side: WidgetStateBorderSide.resolveWith((states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return BorderSide(
+                    color: isDark ? Colors.white10 : LingoDeskColors.border,
+                  );
+                }
+                if (states.contains(WidgetState.hovered) ||
+                    states.contains(WidgetState.focused) ||
+                    states.contains(WidgetState.pressed)) {
+                  return const BorderSide(color: LingoDeskColors.brandTeal);
+                }
+                return BorderSide(
+                  color: isDark ? Colors.white24 : LingoDeskColors.border,
+                );
+              }),
+            ),
       ),
       tooltipTheme: TooltipThemeData(
         waitDuration: const Duration(milliseconds: 400),

@@ -129,8 +129,9 @@ class AiSettingsController extends ChangeNotifier {
           provider: provider,
           label: provider.label,
           apiKey: secret,
-          model:
-              (model == null || model.isEmpty) ? provider.defaultModel : model,
+          model: (model == null || model.isEmpty)
+              ? provider.defaultModel
+              : model,
           createdAt: DateTime.now(),
         ),
       );
@@ -201,19 +202,17 @@ class AiSettingsController extends ChangeNotifier {
     final trimmedModel = model?.trim();
 
     final updated = existing.copyWith(
-      label:
-          trimmedLabel == null
-              ? null
-              : (trimmedLabel.isEmpty
-                  ? _defaultLabel(existing.provider)
-                  : trimmedLabel),
+      label: trimmedLabel == null
+          ? null
+          : (trimmedLabel.isEmpty
+                ? _defaultLabel(existing.provider)
+                : trimmedLabel),
       apiKey: apiKey?.trim(),
-      model:
-          trimmedModel == null
-              ? null
-              : (trimmedModel.isEmpty
-                  ? existing.provider.defaultModel
-                  : trimmedModel),
+      model: trimmedModel == null
+          ? null
+          : (trimmedModel.isEmpty
+                ? existing.provider.defaultModel
+                : trimmedModel),
     );
 
     _keys[index] = updated;

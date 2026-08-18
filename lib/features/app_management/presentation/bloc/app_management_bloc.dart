@@ -77,10 +77,9 @@ class AppManagementBloc extends Bloc<AppManagementEvent, AppManagementState> {
         refreshed.fold((failure) => emit(AppManagementError(failure.message)), (
           overviews,
         ) {
-          final query =
-              state is AppManagementLoaded
-                  ? (state as AppManagementLoaded).query
-                  : '';
+          final query = state is AppManagementLoaded
+              ? (state as AppManagementLoaded).query
+              : '';
           emit(
             AppManagementLoaded(
               overviews: overviews,

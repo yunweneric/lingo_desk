@@ -26,10 +26,8 @@ class AppSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) =>
-              getIt<AppSettingsBloc>()
-                ..add(InitializeAppSettingsEvent(app: app)),
+      create: (_) =>
+          getIt<AppSettingsBloc>()..add(InitializeAppSettingsEvent(app: app)),
       child: _AppSettingsView(app: app),
     );
   }
@@ -91,51 +89,46 @@ class _AppSettingsViewState extends State<_AppSettingsView> {
                   ],
                   actions: [
                     OutlinedButton(
-                      onPressed:
-                          ready == null || ready.isSaving
-                              ? null
-                              : () => Navigator.of(context).maybePop(),
+                      onPressed: ready == null || ready.isSaving
+                          ? null
+                          : () => Navigator.of(context).maybePop(),
                       child: const Text('Cancel'),
                     ),
                     FilledButton.icon(
-                      onPressed:
-                          ready == null || ready.isSaving
-                              ? null
-                              : () => _save(context),
-                      icon:
-                          ready != null && ready.isSaving
-                              ? const SizedBox.square(
-                                dimension: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                              : const LingoDeskIcon(
-                                HugeIcons.strokeRoundedTick02,
+                      onPressed: ready == null || ready.isSaving
+                          ? null
+                          : () => _save(context),
+                      icon: ready != null && ready.isSaving
+                          ? const SizedBox.square(
+                              dimension: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
                                 color: Colors.white,
-                                size: 18,
                               ),
+                            )
+                          : const LingoDeskIcon(
+                              HugeIcons.strokeRoundedTick02,
+                              color: Colors.white,
+                              size: 18,
+                            ),
                       label: const Text('Save changes'),
                     ),
                   ],
-                  child:
-                      ready == null
-                          ? null
-                          : AppSettingsMetaStrip(
-                            state: ready,
-                            updatedAt: widget.app.updatedAt,
-                          ),
+                  child: ready == null
+                      ? null
+                      : AppSettingsMetaStrip(
+                          state: ready,
+                          updatedAt: widget.app.updatedAt,
+                        ),
                 ),
                 Expanded(
-                  child:
-                      ready == null
-                          ? const Center(child: CircularProgressIndicator())
-                          : _AppSettingsBody(
-                            state: ready,
-                            nameController: _nameController,
-                            onSubmitted: () => _save(context),
-                          ),
+                  child: ready == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : _AppSettingsBody(
+                          state: ready,
+                          nameController: _nameController,
+                          onSubmitted: () => _save(context),
+                        ),
                 ),
               ],
             ),
@@ -190,20 +183,19 @@ class _AppSettingsBody extends StatelessWidget {
 
         return SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 28),
-          child:
-              isWide
-                  ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 4, child: general),
-                      const SizedBox(width: 16),
-                      Expanded(flex: 7, child: languages),
-                    ],
-                  )
-                  : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [general, const SizedBox(height: 16), languages],
-                  ),
+          child: isWide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 4, child: general),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 7, child: languages),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [general, const SizedBox(height: 16), languages],
+                ),
         );
       },
     );

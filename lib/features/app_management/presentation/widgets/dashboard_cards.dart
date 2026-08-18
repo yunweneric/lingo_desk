@@ -50,10 +50,9 @@ class _MetricCard extends StatelessWidget {
                         ? HugeIcons.strokeRoundedArrowUpRight02
                         : HugeIcons.strokeRoundedArrowDownRight02,
                     size: 16,
-                    color:
-                        metric.isPositive
-                            ? LingoDeskColors.complete
-                            : LingoDeskColors.warning,
+                    color: metric.isPositive
+                        ? LingoDeskColors.complete
+                        : LingoDeskColors.warning,
                   ),
                   const SizedBox(width: 6),
                   Expanded(
@@ -101,33 +100,31 @@ class _CoverageCard extends StatelessWidget {
           const SizedBox(height: 26),
           SizedBox(
             height: 220,
-            child:
-                apps.isEmpty
-                    ? Center(
-                      child: Text(
-                        'Create an app to see coverage here.',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
-                      ),
-                    )
-                    : Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        for (var index = 0; index < apps.length; index++) ...[
-                          Expanded(
-                            child: _ChartBar(
-                              value: apps[index].progress,
-                              label: apps[index].app.initials,
-                              name: apps[index].app.name,
-                              index: index,
-                            ),
-                          ),
-                          if (index != apps.length - 1)
-                            const SizedBox(width: 10),
-                        ],
-                      ],
+            child: apps.isEmpty
+                ? Center(
+                    child: Text(
+                      'Create an app to see coverage here.',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
                     ),
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      for (var index = 0; index < apps.length; index++) ...[
+                        Expanded(
+                          child: _ChartBar(
+                            value: apps[index].progress,
+                            label: apps[index].app.initials,
+                            name: apps[index].app.name,
+                            index: index,
+                          ),
+                        ),
+                        if (index != apps.length - 1) const SizedBox(width: 10),
+                      ],
+                    ],
+                  ),
           ),
           const SizedBox(height: 16),
           Divider(color: tokens.border),
@@ -136,7 +133,7 @@ class _CoverageCard extends StatelessWidget {
             state.totalCells == 0
                 ? 'No translation data yet. Upload JSON files to get started.'
                 : '$translated strings translated. ${state.totalMissing} are '
-                    'still missing across active target languages.',
+                      'still missing across active target languages.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -205,12 +202,11 @@ class _ChartBarState extends State<_ChartBar> {
                         duration: LingoDeskMotion.fast,
                         curve: LingoDeskMotion.curve,
                         decoration: BoxDecoration(
-                          color:
-                              _hovered
-                                  ? LingoDeskColors.brandTeal
-                                  : LingoDeskColors.brandTeal.withValues(
-                                    alpha: 0.82,
-                                  ),
+                          color: _hovered
+                              ? LingoDeskColors.brandTeal
+                              : LingoDeskColors.brandTeal.withValues(
+                                  alpha: 0.82,
+                                ),
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
@@ -222,14 +218,13 @@ class _ChartBarState extends State<_ChartBar> {
             const SizedBox(height: 8),
             AnimatedTint(
               color: _hovered ? tokens.foreground : tokens.muted,
-              builder:
-                  (context, tint) => Text(
-                    widget.label,
-                    style: LingoDeskTheme.codeStyle.copyWith(
-                      color: tint,
-                      fontSize: 11,
-                    ),
-                  ),
+              builder: (context, tint) => Text(
+                widget.label,
+                style: LingoDeskTheme.codeStyle.copyWith(
+                  color: tint,
+                  fontSize: 11,
+                ),
+              ),
             ),
           ],
         ),
@@ -247,8 +242,9 @@ class _LanguageHealthCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     final health = state.languageHealth.take(6).toList();
-    final nextReview =
-        state.overviews.where((overview) => overview.missingCount > 0).toList();
+    final nextReview = state.overviews
+        .where((overview) => overview.missingCount > 0)
+        .toList();
 
     return WorkspaceSurface(
       padding: const EdgeInsets.all(20),

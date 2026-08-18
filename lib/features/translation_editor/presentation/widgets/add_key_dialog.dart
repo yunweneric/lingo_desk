@@ -1,10 +1,10 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/utils/json_flattener.dart';
+import '../../../../core/responsive/breakpoints.dart';
+import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
 
@@ -44,12 +44,11 @@ class AddKeyDialog extends StatefulWidget {
   }) {
     return showDialog<AddKeyRequest>(
       context: context,
-      builder:
-          (_) => AddKeyDialog(
-            existingKeys: existingKeys,
-            languages: languages,
-            sourceLanguage: sourceLanguage,
-          ),
+      builder: (_) => AddKeyDialog(
+        existingKeys: existingKeys,
+        languages: languages,
+        sourceLanguage: sourceLanguage,
+      ),
     );
   }
 
@@ -104,100 +103,85 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
     final theme = Theme.of(context);
 
     // Wide enough for full sentences, since every language is edited
-    // here rather than only the source — but never wider than the window
-    // once the dialog's inset (32 a side) and content padding (24 a side)
-    // are paid for.
-    final media = MediaQuery.sizeOf(context);
-    final dialogWidth = math.max(280.0, math.min(1120.0, media.width - 112));
-
-    return AlertDialog(
+    // here rather than only the source — but never wider than the window.
+    return LingoDeskDialog(
       title: const Text('Add key'),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
-      content: SizedBox(
-        width: dialogWidth,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LingoDeskTextField(
-              controller: _keyController,
-              label: 'Key',
-              hintText: 'nav.home',
-              helperText: 'Dot notation groups keys into nested JSON.',
-              errorText: _error,
-              size: LingoDeskFieldSize.large,
-              monospace: true,
-              autofocus: true,
-              isRequired: true,
-              onChanged: (_) {
-                if (_error != null) {
-                  setState(() => _error = null);
-                }
-              },
-              onSubmitted: (_) => _submit(),
+      preferredWidth: 1120,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LingoDeskTextField(
+            controller: _keyController,
+            label: 'Key',
+            hintText: 'nav.home',
+            helperText: 'Dot notation groups keys into nested JSON.',
+            errorText: _error,
+            size: LingoDeskFieldSize.large,
+            monospace: true,
+            autofocus: true,
+            isRequired: true,
+            onChanged: (_) {
+              if (_error != null) {
+                setState(() => _error = null);
+              }
+            },
+            onSubmitted: (_) => _submit(),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Translations',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: tokens.foreground,
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Translations',
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: tokens.foreground,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Fill in what you have now - anything left blank stays missing '
-              'and can be translated later in the grid.',
-              style: theme.textTheme.bodySmall?.copyWith(color: tokens.muted),
-            ),
-            const SizedBox(height: 12),
-            Flexible(
-              child: SingleChildScrollView(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    // Two columns once a field still fits a sentence,
-                    // three on a full-width desktop window.
-                    final width = constraints.maxWidth;
-                    final columns =
-                        width >= 1000
-                            ? 3
-                            : width >= 640
-                            ? 2
-                            : 1;
-                    final itemWidth = (width - _gap * (columns - 1)) / columns;
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Fill in what you have now - anything left blank stays missing '
+            'and can be translated later in the grid.',
+            style: theme.textTheme.bodySmall?.copyWith(color: tokens.muted),
+          ),
+          const SizedBox(height: 12),
+          Flexible(
+            child: SingleChildScrollView(
+              child: ResponsiveBuilder(
+                builder: (context, size, constraints) {
+                  // Two columns once a field still fits a sentence,
+                  // three on a full-width desktop window, one on a phone.
+                  final width = constraints.maxWidth;
+                  final columns = size.resolve(compact: 1, medium: 2, large: 3);
+                  final itemWidth = (width - _gap * (columns - 1)) / columns;
 
-                    return Wrap(
-                      spacing: _gap,
-                      runSpacing: _gap,
-                      children: [
-                        for (final language in widget.languages)
-                          SizedBox(
-                            // The source string carries the most text, so
-                            // it keeps a row to itself in a grid.
-                            width:
-                                language == widget.sourceLanguage
-                                    ? width
-                                    : itemWidth,
-                            child: LingoDeskTextField(
-                              controller: _valueControllers[language],
-                              label: _labelFor(language),
-                              hintText:
-                                  language == widget.sourceLanguage
-                                      ? 'Source text'
-                                      : 'Translation - optional',
-                              size: LingoDeskFieldSize.large,
-                              maxLines: 3,
-                              minLines: 1,
-                              textInputAction: TextInputAction.next,
-                            ),
+                  return Wrap(
+                    spacing: _gap,
+                    runSpacing: _gap,
+                    children: [
+                      for (final language in widget.languages)
+                        SizedBox(
+                          // The source string carries the most text, so
+                          // it keeps a row to itself in a grid.
+                          width: language == widget.sourceLanguage
+                              ? width
+                              : itemWidth,
+                          child: LingoDeskTextField(
+                            controller: _valueControllers[language],
+                            label: _labelFor(language),
+                            hintText: language == widget.sourceLanguage
+                                ? 'Source text'
+                                : 'Translation - optional',
+                            size: LingoDeskFieldSize.large,
+                            maxLines: 3,
+                            minLines: 1,
+                            textInputAction: TextInputAction.next,
                           ),
-                      ],
-                    );
-                  },
-                ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       actions: [
         TextButton(

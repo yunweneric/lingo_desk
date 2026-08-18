@@ -169,14 +169,14 @@ class _HoverLiftState extends State<HoverLift> {
     }
 
     return MouseRegion(
-      cursor:
-          widget.onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
+      cursor: widget.onTap != null
+          ? SystemMouseCursors.click
+          : MouseCursor.defer,
       onEnter: (_) => setState(() => _hovered = true),
-      onExit:
-          (_) => setState(() {
-            _hovered = false;
-            _pressed = false;
-          }),
+      onExit: (_) => setState(() {
+        _hovered = false;
+        _pressed = false;
+      }),
       child: content,
     );
   }

@@ -131,10 +131,9 @@ class _LingoDeskTextFieldState extends State<LingoDeskTextField> {
     final tokens = LingoDeskTokens.of(context);
     final size = widget.size;
     final isMultiline = widget.maxLines != 1;
-    final baseStyle =
-        widget.monospace
-            ? LingoDeskTheme.codeStyle.copyWith(fontSize: size.fontSize)
-            : Theme.of(context).textTheme.bodyMedium;
+    final baseStyle = widget.monospace
+        ? LingoDeskTheme.codeStyle.copyWith(fontSize: size.fontSize)
+        : Theme.of(context).textTheme.bodyMedium;
     final textStyle = baseStyle?.copyWith(
       fontSize: size.fontSize,
       color: widget.enabled ? tokens.foreground : tokens.muted,
@@ -172,8 +171,9 @@ class _LingoDeskTextFieldState extends State<LingoDeskTextField> {
     );
 
     final content = Row(
-      crossAxisAlignment:
-          isMultiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      crossAxisAlignment: isMultiline
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
       children: [
         if (widget.prefixIcon != null) ...[
           LingoDeskIcon(

@@ -17,8 +17,9 @@ class StagedFileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final statusColor =
-        file.isValid ? LingoDeskColors.complete : LingoDeskColors.error;
+    final statusColor = file.isValid
+        ? LingoDeskColors.complete
+        : LingoDeskColors.error;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

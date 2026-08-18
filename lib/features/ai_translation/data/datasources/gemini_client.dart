@@ -84,14 +84,13 @@ class GeminiClient implements AiClient {
     }
 
     final parts = (candidate['content'] as Map?)?['parts'];
-    final text =
-        parts is List
-            ? parts
-                .whereType<Map>()
-                .map((part) => part['text'])
-                .whereType<String>()
-                .join()
-            : '';
+    final text = parts is List
+        ? parts
+              .whereType<Map>()
+              .map((part) => part['text'])
+              .whereType<String>()
+              .join()
+        : '';
     if (text.trim().isEmpty) {
       throw const AiException('Gemini returned an empty response.');
     }

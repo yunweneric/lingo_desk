@@ -75,24 +75,23 @@ class LingoDeskMenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final selectedColor =
-        tokens.isDark
-            ? LingoDeskColors.brandTealDeep
-            : LingoDeskColors.brandTealSoft;
-    final contentColor =
-        !enabled
-            ? tokens.muted
-            : destructive
-            ? LingoDeskColors.error
-            : tokens.foreground;
-    final labelStyle = (monospace
-            ? LingoDeskTheme.codeStyle
-            : Theme.of(context).textTheme.bodyMedium)
-        ?.copyWith(
-          fontSize: size.fontSize,
-          color: contentColor,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-        );
+    final selectedColor = tokens.isDark
+        ? LingoDeskColors.brandTealDeep
+        : LingoDeskColors.brandTealSoft;
+    final contentColor = !enabled
+        ? tokens.muted
+        : destructive
+        ? LingoDeskColors.error
+        : tokens.foreground;
+    final labelStyle =
+        (monospace
+                ? LingoDeskTheme.codeStyle
+                : Theme.of(context).textTheme.bodyMedium)
+            ?.copyWith(
+              fontSize: size.fontSize,
+              color: contentColor,
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
@@ -107,8 +106,8 @@ class LingoDeskMenuTile extends StatelessWidget {
             destructive
                 ? LingoDeskColors.error.withValues(alpha: 0.1)
                 : (tokens.isDark
-                    ? Colors.white.withValues(alpha: 0.06)
-                    : LingoDeskColors.activeLight),
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : LingoDeskColors.activeLight),
           ),
           padding: WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 10, vertical: size.gap),
@@ -135,12 +134,11 @@ class LingoDeskMenuTile extends StatelessWidget {
                 LingoDeskIcon(
                   icon!,
                   size: size.iconSize,
-                  color:
-                      destructive
-                          ? LingoDeskColors.error
-                          : selected
-                          ? LingoDeskColors.brandTeal
-                          : tokens.muted,
+                  color: destructive
+                      ? LingoDeskColors.error
+                      : selected
+                      ? LingoDeskColors.brandTeal
+                      : tokens.muted,
                 ),
                 SizedBox(width: size.gap),
               ],
@@ -184,14 +182,13 @@ class LingoDeskMenuTile extends StatelessWidget {
                 SizedBox(width: size.gap),
                 SizedBox(
                   width: size.iconSize,
-                  child:
-                      selected
-                          ? LingoDeskIcon(
-                            HugeIcons.strokeRoundedTick02,
-                            size: size.iconSize,
-                            color: LingoDeskColors.brandTeal,
-                          )
-                          : null,
+                  child: selected
+                      ? LingoDeskIcon(
+                          HugeIcons.strokeRoundedTick02,
+                          size: size.iconSize,
+                          color: LingoDeskColors.brandTeal,
+                        )
+                      : null,
                 ),
               ],
             ],
@@ -305,16 +302,14 @@ class _LingoDeskMenuButtonState<T> extends State<LingoDeskMenuButton<T>> {
       controller: _menuController,
       onOpen: () => setState(() => _open = true),
       onClose: () => setState(() => _open = false),
-      alignmentOffset:
-          widget.alignMenuEnd
-              ? Offset(-widget.menuWidth, 6)
-              : const Offset(0, 6),
-      style:
-          widget.alignMenuEnd
-              ? lingoDeskMenuStyle(
-                tokens,
-              ).copyWith(alignment: Alignment.bottomRight)
-              : lingoDeskMenuStyle(tokens),
+      alignmentOffset: widget.alignMenuEnd
+          ? Offset(-widget.menuWidth, 6)
+          : const Offset(0, 6),
+      style: widget.alignMenuEnd
+          ? lingoDeskMenuStyle(
+              tokens,
+            ).copyWith(alignment: Alignment.bottomRight)
+          : lingoDeskMenuStyle(tokens),
       menuChildren: [
         ConstrainedBox(
           constraints: BoxConstraints(
@@ -367,8 +362,9 @@ class _LingoDeskMenuButtonState<T> extends State<LingoDeskMenuButton<T>> {
         return Tooltip(
           message: widget.tooltip,
           child: MouseRegion(
-            cursor:
-                isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+            cursor: isEnabled
+                ? SystemMouseCursors.click
+                : SystemMouseCursors.basic,
             child: GestureDetector(
               onTap: isEnabled ? _toggle : null,
               behavior: HitTestBehavior.opaque,
@@ -420,30 +416,24 @@ class _MenuIconState extends State<_MenuIcon> {
         height: widget.size,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color:
-              widget.open
-                  ? (tokens.isDark
-                      ? LingoDeskColors.brandTealDeep
-                      : LingoDeskColors.brandTealSoft)
-                  : tinted
-                  ? tokens.active
-                  : Colors.transparent,
+          color: widget.open
+              ? (tokens.isDark
+                    ? LingoDeskColors.brandTealDeep
+                    : LingoDeskColors.brandTealSoft)
+              : tinted
+              ? tokens.active
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
         ),
         child: AnimatedTint(
-          color:
-              !widget.enabled
-                  ? tokens.muted.withValues(alpha: 0.4)
-                  : widget.open
-                  ? LingoDeskColors.brandTeal
-                  : tokens.foreground.withValues(alpha: _hovered ? 1 : 0.75),
+          color: !widget.enabled
+              ? tokens.muted.withValues(alpha: 0.4)
+              : widget.open
+              ? LingoDeskColors.brandTeal
+              : tokens.foreground.withValues(alpha: _hovered ? 1 : 0.75),
           duration: LingoDeskMotion.fast,
-          builder:
-              (context, tint) => LingoDeskIcon(
-                widget.icon,
-                size: widget.iconSize,
-                color: tint,
-              ),
+          builder: (context, tint) =>
+              LingoDeskIcon(widget.icon, size: widget.iconSize, color: tint),
         ),
       ),
     );

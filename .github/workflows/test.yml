@@ -33,18 +33,18 @@ jobs:
         run: |
           # Try to read Flutter version from FVM config files
           if [ -f ".fvmrc" ]; then
-            FLUTTER_VERSION=$(grep -o '"flutter":"[^"]*"' .fvmrc | cut -d'"' -f4)
+            FLUTTER_VERSION=$(grep -o '"flutter"[[:space:]]*:[[:space:]]*"[^"]*"' .fvmrc | cut -d'"' -f4)
             echo "Using Flutter version from .fvmrc: $FLUTTER_VERSION"
             fvm install $FLUTTER_VERSION
             fvm use $FLUTTER_VERSION --force
           elif [ -f ".fvm/fvm_config.json" ]; then
-            FLUTTER_VERSION=$(grep -o '"flutterSdkVersion":"[^"]*"' .fvm/fvm_config.json | cut -d'"' -f4)
+            FLUTTER_VERSION=$(grep -o '"flutterSdkVersion"[[:space:]]*:[[:space:]]*"[^"]*"' .fvm/fvm_config.json | cut -d'"' -f4)
             echo "Using Flutter version from FVM config: $FLUTTER_VERSION"
             fvm install $FLUTTER_VERSION
             fvm use $FLUTTER_VERSION --force
           else
             # Fallback: use a specific version
-            FLUTTER_VERSION="3.29.3"
+            FLUTTER_VERSION="3.38.10"
             echo "FVM config not found, using Flutter version: $FLUTTER_VERSION"
             fvm install $FLUTTER_VERSION
             fvm use $FLUTTER_VERSION --force

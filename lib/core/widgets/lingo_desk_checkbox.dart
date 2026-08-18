@@ -56,18 +56,16 @@ class _LingoDeskCheckboxState extends State<LingoDeskCheckbox> {
     final checked = widget.value;
     final size = widget.size;
 
-    final fill =
-        checked
-            ? (enabled
-                ? LingoDeskColors.brandTeal
-                : LingoDeskColors.brandTeal.withValues(alpha: 0.4))
-            : Colors.transparent;
-    final border =
-        checked
-            ? fill
-            : enabled && _hovered
-            ? LingoDeskColors.brandTeal
-            : tokens.border;
+    final fill = checked
+        ? (enabled
+              ? LingoDeskColors.brandTeal
+              : LingoDeskColors.brandTeal.withValues(alpha: 0.4))
+        : Colors.transparent;
+    final border = checked
+        ? fill
+        : enabled && _hovered
+        ? LingoDeskColors.brandTeal
+        : tokens.border;
 
     final box = AnimatedContainer(
       duration: LingoDeskMotion.fast,
@@ -81,15 +79,14 @@ class _LingoDeskCheckboxState extends State<LingoDeskCheckbox> {
         border: Border.all(color: border, width: 1.4),
         // A halo instead of a border that thickens: the box keeps its
         // size, so a row of them never shifts when one is hovered.
-        boxShadow:
-            enabled && _hovered
-                ? [
-                  BoxShadow(
-                    color: LingoDeskColors.brandTeal.withValues(alpha: 0.16),
-                    spreadRadius: size * 0.16,
-                  ),
-                ]
-                : null,
+        boxShadow: enabled && _hovered
+            ? [
+                BoxShadow(
+                  color: LingoDeskColors.brandTeal.withValues(alpha: 0.16),
+                  spreadRadius: size * 0.16,
+                ),
+              ]
+            : null,
       ),
       child: AnimatedScale(
         scale: checked ? 1 : 0.4,
@@ -182,18 +179,16 @@ class _LingoDeskCheckboxTileState extends State<LingoDeskCheckboxTile> {
           curve: LingoDeskMotion.curve,
           padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
           decoration: BoxDecoration(
-            color:
-                checked
-                    ? LingoDeskColors.brandTeal.withValues(alpha: 0.08)
-                    : _hovered
-                    ? tokens.active.withValues(alpha: 0.6)
-                    : Colors.transparent,
+            color: checked
+                ? LingoDeskColors.brandTeal.withValues(alpha: 0.08)
+                : _hovered
+                ? tokens.active.withValues(alpha: 0.6)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color:
-                  checked
-                      ? LingoDeskColors.brandTeal.withValues(alpha: 0.35)
-                      : Colors.transparent,
+              color: checked
+                  ? LingoDeskColors.brandTeal.withValues(alpha: 0.35)
+                  : Colors.transparent,
             ),
           ),
           child: Row(

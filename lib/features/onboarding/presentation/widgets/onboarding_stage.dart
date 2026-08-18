@@ -266,10 +266,9 @@ class OnboardingBanner extends StatelessWidget {
                     step.photoCaption,
                     overflow: TextOverflow.ellipsis,
                     style: LingoDeskTheme.codeStyle.copyWith(
-                      color:
-                          tokens.isDark
-                              ? Colors.white54
-                              : LingoDeskColors.slate,
+                      color: tokens.isDark
+                          ? Colors.white54
+                          : LingoDeskColors.slate,
                       fontSize: 11,
                     ),
                   ),
@@ -279,10 +278,9 @@ class OnboardingBanner extends StatelessWidget {
                   Text(
                     step.photoCredit,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color:
-                          tokens.isDark
-                              ? Colors.white38
-                              : LingoDeskColors.slate,
+                      color: tokens.isDark
+                          ? Colors.white38
+                          : LingoDeskColors.slate,
                       fontSize: 11,
                       height: 1.2,
                     ),

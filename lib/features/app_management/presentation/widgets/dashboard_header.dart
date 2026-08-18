@@ -68,10 +68,9 @@ class _HeaderOverview extends StatelessWidget {
               ),
               WorkspaceBadge(
                 label: '$missing missing strings',
-                color:
-                    missing == 0
-                        ? LingoDeskColors.complete
-                        : LingoDeskColors.warning,
+                color: missing == 0
+                    ? LingoDeskColors.complete
+                    : LingoDeskColors.warning,
               ),
             ],
           );

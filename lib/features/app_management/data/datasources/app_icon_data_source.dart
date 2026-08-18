@@ -76,8 +76,9 @@ Future<String> encodeIconBytes(Uint8List bytes) async {
     codec.dispose();
   }
 
-  final longestEdge =
-      source.width > source.height ? source.width : source.height;
+  final longestEdge = source.width > source.height
+      ? source.width
+      : source.height;
 
   ui.Image image = source;
   if (longestEdge > iconMaxSize) {

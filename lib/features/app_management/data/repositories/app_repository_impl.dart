@@ -99,10 +99,9 @@ class AppRepositoryImpl implements AppRepository {
   }
 
   AppOverview _buildOverview(App app, Map<String, dynamic>? blob) {
-    final entries =
-        blob == null
-            ? const <String, dynamic>{}
-            : Map<String, dynamic>.from(blob['entries'] as Map? ?? {});
+    final entries = blob == null
+        ? const <String, dynamic>{}
+        : Map<String, dynamic>.from(blob['entries'] as Map? ?? {});
 
     final missingByLanguage = <String, int>{
       for (final language in app.targetLanguages) language: 0,

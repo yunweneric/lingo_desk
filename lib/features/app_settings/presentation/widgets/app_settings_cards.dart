@@ -63,10 +63,9 @@ class AppSettingsGeneralCard extends StatelessWidget {
             description: 'The base language your keys are written in.',
             value: state.sourceLanguage,
             enabled: !state.isSaving,
-            onChanged:
-                (value) => context.read<AppSettingsBloc>().add(
-                  SourceLanguageChangedEvent(value),
-                ),
+            onChanged: (value) => context.read<AppSettingsBloc>().add(
+              SourceLanguageChangedEvent(value),
+            ),
           ),
           if (state.errorMessage != null) ...[
             const SizedBox(height: 18),
@@ -89,10 +88,9 @@ class AppSettingsLanguagesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     final bloc = context.read<AppSettingsBloc>();
-    final selectable =
-        SupportedLanguages.all
-            .where((option) => option.code != state.sourceLanguage)
-            .length;
+    final selectable = SupportedLanguages.all
+        .where((option) => option.code != state.sourceLanguage)
+        .length;
     final selected = state.targetLanguages.length;
 
     return WorkspaceSurface(
@@ -111,28 +109,25 @@ class AppSettingsLanguagesCard extends StatelessWidget {
               const SizedBox(width: 12),
               WorkspaceBadge(
                 label: '$selected of $selectable selected',
-                color:
-                    selected == 0
-                        ? LingoDeskColors.warning
-                        : LingoDeskColors.brandTeal,
+                color: selected == 0
+                    ? LingoDeskColors.warning
+                    : LingoDeskColors.brandTeal,
               ),
               const SizedBox(width: 4),
               TextButton(
-                onPressed:
-                    state.isSaving || selected == selectable
-                        ? null
-                        : () => bloc.add(
-                          AllTargetLanguagesToggledEvent(selectAll: true),
-                        ),
+                onPressed: state.isSaving || selected == selectable
+                    ? null
+                    : () => bloc.add(
+                        AllTargetLanguagesToggledEvent(selectAll: true),
+                      ),
                 child: const Text('Select all'),
               ),
               TextButton(
-                onPressed:
-                    state.isSaving || selected == 0
-                        ? null
-                        : () => bloc.add(
-                          AllTargetLanguagesToggledEvent(selectAll: false),
-                        ),
+                onPressed: state.isSaving || selected == 0
+                    ? null
+                    : () => bloc.add(
+                        AllTargetLanguagesToggledEvent(selectAll: false),
+                      ),
                 child: const Text('Clear'),
               ),
             ],
@@ -141,8 +136,8 @@ class AppSettingsLanguagesCard extends StatelessWidget {
           LanguageTargetGrid(
             sourceLanguage: state.sourceLanguage,
             selectedLanguages: state.targetLanguages,
-            onToggled:
-                (language) => bloc.add(TargetLanguageToggledEvent(language)),
+            onToggled: (language) =>
+                bloc.add(TargetLanguageToggledEvent(language)),
           ),
           const SizedBox(height: 14),
           Text(
@@ -224,49 +219,46 @@ class AppSettingsMetaStrip extends StatelessWidget {
             border: Border.all(color: tokens.border),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          child:
-              isRow
-                  // The dividers run the height of the tallest fact and
-                  // the bar is as tall as that comes to, so the row has
-                  // to be measured before it can be stretched.
-                  ? IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (var i = 0; i < facts.length; i++) ...[
-                          if (i != 0)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 18,
-                              ),
-                              child: VerticalDivider(
-                                width: 1,
-                                thickness: 1,
-                                color: tokens.border,
-                              ),
-                            ),
-                          Expanded(child: facts[i]),
-                        ],
-                      ],
-                    ),
-                  )
-                  : Column(
+          child: isRow
+              // The dividers run the height of the tallest fact and
+              // the bar is as tall as that comes to, so the row has
+              // to be measured before it can be stretched.
+              ? IntrinsicHeight(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      for (var index = 0; index < facts.length; index++) ...[
-                        if (index != 0)
+                      for (var i = 0; i < facts.length; i++) ...[
+                        if (i != 0)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Divider(
-                              height: 1,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: VerticalDivider(
+                              width: 1,
                               thickness: 1,
                               color: tokens.border,
                             ),
                           ),
-                        facts[index],
+                        Expanded(child: facts[i]),
                       ],
                     ],
                   ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var index = 0; index < facts.length; index++) ...[
+                      if (index != 0)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: tokens.border,
+                          ),
+                        ),
+                      facts[index],
+                    ],
+                  ],
+                ),
         );
       },
     );

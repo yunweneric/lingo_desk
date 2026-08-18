@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hugeicons/hugeicons.dart';
 
+import '../responsive/breakpoints.dart';
 import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import '../router/app_router.dart';
-import 'app_shell_scope.dart';
-import 'lingo_desk_icon.dart';
 
-/// Bordered header band for the pages rendered inside [AppShell]:
+/// Bordered header band for the pages rendered inside `AppShell`:
 /// breadcrumb on the left, toolbar actions on the right, and an optional
-/// hero [child] underneath. Adds a drawer button when the shell is narrow.
+/// hero [child] underneath.
+///
+/// Below the compact boundary the band stacks: breadcrumb on its own line,
+/// then the actions, then the hero. A page whose full action set is too
+/// much for a phone passes a shorter [compactActions] list instead of
+/// letting four buttons wrap into three rows of chrome.
 class WorkspacePageHeader extends StatelessWidget {
   const WorkspacePageHeader({
     super.key,
     required this.breadcrumb,
     this.actions = const [],
+    this.compactActions,
     this.child,
   });
 
@@ -26,13 +30,17 @@ class WorkspacePageHeader extends StatelessWidget {
 
   final List<Widget> actions;
 
+  /// What the band carries on a phone, when the full [actions] set would
+  /// take more height than the page beneath it can spare. Defaults to
+  /// [actions].
+  final List<Widget>? compactActions;
+
   /// Optional block rendered below the breadcrumb row.
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final shell = AppShellScope.maybeOf(context);
     final hero = child;
 
     return DecoratedBox(
@@ -40,26 +48,14 @@ class WorkspacePageHeader extends StatelessWidget {
         color: tokens.background,
         border: Border(bottom: BorderSide(color: tokens.border)),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isCompact = constraints.maxWidth < 780;
-          final horizontalPadding = isCompact ? 16.0 : 24.0;
-
-          final leading = <Widget>[
-            if (shell != null && shell.hasDrawer) ...[
-              IconButton(
-                tooltip: 'Menu',
-                onPressed: shell.openDrawer,
-                icon: LingoDeskIcon(
-                  HugeIcons.strokeRoundedMenu01,
-                  color: tokens.foreground,
-                ),
-              ),
-              const SizedBox(width: 4),
-            ],
-          ];
+      child: ResponsiveBuilder(
+        builder: (context, size, _) {
+          final isCompact = size.isBelow(WindowSizeClass.expanded);
+          final horizontalPadding = size.pagePadding;
 
           if (isCompact) {
+            final visibleActions = compactActions ?? actions;
+
             return Padding(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
@@ -68,17 +64,12 @@ class WorkspacePageHeader extends StatelessWidget {
                 16,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      ...leading,
-                      Expanded(child: _Breadcrumb(segments: breadcrumb)),
-                    ],
-                  ),
-                  if (actions.isNotEmpty) ...[
+                  _Breadcrumb(segments: breadcrumb),
+                  if (visibleActions.isNotEmpty) ...[
                     const SizedBox(height: 14),
-                    Wrap(spacing: 8, runSpacing: 8, children: actions),
+                    Wrap(spacing: 8, runSpacing: 8, children: visibleActions),
                   ],
                   if (hero != null) ...[const SizedBox(height: 16), hero],
                 ],
@@ -100,7 +91,6 @@ class WorkspacePageHeader extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    ...leading,
                     Expanded(child: _Breadcrumb(segments: breadcrumb)),
                     for (final action in actions) ...[
                       const SizedBox(width: 8),
@@ -176,13 +166,12 @@ class _CrumbLabel extends StatelessWidget {
       crumb.label,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style:
-          isCurrent
-              ? Theme.of(context).textTheme.labelLarge
-              : Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: route == null ? tokens.muted : tokens.foreground,
-                fontWeight: FontWeight.w600,
-              ),
+      style: isCurrent
+          ? Theme.of(context).textTheme.labelLarge
+          : Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: route == null ? tokens.muted : tokens.foreground,
+              fontWeight: FontWeight.w600,
+            ),
     );
 
     if (route == null) {

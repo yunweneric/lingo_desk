@@ -70,10 +70,9 @@ class AiKey {
     return AiKey(
       id: json['id'] as String,
       provider: AiProviderInfo.fromId(json['provider'] as String?),
-      label:
-          (json['label'] as String?)?.trim().isNotEmpty ?? false
-              ? json['label'] as String
-              : AiProviderInfo.fromId(json['provider'] as String?).label,
+      label: (json['label'] as String?)?.trim().isNotEmpty ?? false
+          ? json['label'] as String
+          : AiProviderInfo.fromId(json['provider'] as String?).label,
       apiKey: apiKey,
       model: (json['model'] as String?) ?? '',
       createdAt:

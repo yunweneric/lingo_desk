@@ -35,10 +35,9 @@ class AppsSummaryCard extends StatelessWidget {
               ),
               WorkspaceBadge(
                 label: missing == 0 ? 'All clear' : '$missing missing',
-                color:
-                    missing == 0
-                        ? LingoDeskColors.complete
-                        : LingoDeskColors.warning,
+                color: missing == 0
+                    ? LingoDeskColors.complete
+                    : LingoDeskColors.warning,
               ),
             ],
           ),

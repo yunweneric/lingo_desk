@@ -34,8 +34,8 @@ class SettingsAppearanceCard extends StatelessWidget {
               ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
             ],
             selected: {settings.themeMode},
-            onSelectionChanged:
-                (selection) => settings.setThemeMode(selection.first),
+            onSelectionChanged: (selection) =>
+                settings.setThemeMode(selection.first),
           ),
           const SizedBox(height: 22),
           Row(

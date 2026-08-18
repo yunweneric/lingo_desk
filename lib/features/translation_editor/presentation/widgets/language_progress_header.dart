@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/constants/languages.dart';
+import '../../../../core/responsive/breakpoints.dart';
+import '../../../../core/responsive/touch.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -25,26 +27,51 @@ class LanguageProgressHeader extends StatelessWidget {
 
     final languages = state.app.targetLanguages;
 
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: [
-        for (var index = 0; index < languages.length; index++)
-          FadeSlideIn.staggered(
-            index: index,
-            child: _LanguageProgressTile(
-              language: languages[index],
-              progress: state.completionFor(languages[index]),
-              missing: state.missingCountFor(languages[index]),
-              translatable: state.translatableMissingFor(languages[index]),
-              isBusy: state.aiJob != null,
-              tokens: tokens,
-            ),
-          ),
-      ],
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        // A fixed 190px tile leaves a ragged gutter down the right of a
+        // phone and a half-empty last row on a laptop. Fit as many whole
+        // tiles as the pane takes and let them share it out evenly.
+        const spacing = 12.0;
+        const minTileWidth = 170.0;
+        final columns = ((constraints.maxWidth + spacing) /
+                (minTileWidth + spacing))
+            .floor()
+            .clamp(1, 8);
+        final tileWidth =
+            (constraints.maxWidth - spacing * (columns - 1)) / columns;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (var index = 0; index < languages.length; index++)
+              FadeSlideIn.staggered(
+                index: index,
+                child: SizedBox(
+                  width: tileWidth,
+                  child: _LanguageProgressTile(
+                    language: languages[index],
+                    progress: state.completionFor(languages[index]),
+                    missing: state.missingCountFor(languages[index]),
+                    translatable: state.translatableMissingFor(
+                      languages[index],
+                    ),
+                    isBusy: state.aiJob != null,
+                    tokens: tokens,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
+
+/// Side of the per-language AI button. A thumb needs the full target; a
+/// pointer would rather the tile stayed compact.
+final double _aiButtonSide = isTouchPlatform ? kTouchTarget : 22;
 
 class _LanguageProgressTile extends StatelessWidget {
   const _LanguageProgressTile({
@@ -72,7 +99,6 @@ class _LanguageProgressTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 190,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: tokens.active,
@@ -100,20 +126,20 @@ class _LanguageProgressTile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 2),
                   child: SizedBox.square(
-                    dimension: 22,
+                    // 22px is a pointer's target, not a thumb's.
+                    dimension: _aiButtonSide,
                     child: IconButton(
                       tooltip:
                           'AI translate $translatable missing '
                           '${translatable == 1 ? 'string' : 'strings'}',
                       padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints.tightFor(
-                        width: 22,
-                        height: 22,
+                      constraints: BoxConstraints.tightFor(
+                        width: _aiButtonSide,
+                        height: _aiButtonSide,
                       ),
-                      onPressed:
-                          () => context.read<TranslationEditorBloc>().add(
-                            AiTranslateEvent([language]),
-                          ),
+                      onPressed: () => context
+                          .read<TranslationEditorBloc>()
+                          .add(AiTranslateEvent([language])),
                       icon: const LingoDeskIcon(
                         HugeIcons.strokeRoundedSparkles,
                         size: 14,

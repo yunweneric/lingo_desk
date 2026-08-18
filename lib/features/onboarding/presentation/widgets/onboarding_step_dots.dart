@@ -42,12 +42,11 @@ class OnboardingStepDots extends StatelessWidget {
                 width: isActive ? 26 : 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color:
-                      isActive
-                          ? LingoDeskColors.brandTeal
-                          : (tokens.isDark
-                              ? Colors.white24
-                              : LingoDeskColors.border),
+                  color: isActive
+                      ? LingoDeskColors.brandTeal
+                      : (tokens.isDark
+                            ? Colors.white24
+                            : LingoDeskColors.border),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),

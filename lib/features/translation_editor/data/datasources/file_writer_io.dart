@@ -28,8 +28,9 @@ Future<String?> downloadsDirectoryPath() async {
   } catch (_) {}
 
   final environment = Platform.environment;
-  final home =
-      Platform.isWindows ? environment['USERPROFILE'] : environment['HOME'];
+  final home = Platform.isWindows
+      ? environment['USERPROFILE']
+      : environment['HOME'];
   if (home == null || home.isEmpty) {
     return null;
   }

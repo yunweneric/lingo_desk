@@ -451,8 +451,9 @@ class _ToastCardState extends State<_ToastCard> with TickerProviderStateMixin {
                             // Without a title the message is the headline
                             // and carries the weight itself.
                             color: hasTitle ? tokens.muted : style.foreground,
-                            fontWeight:
-                                hasTitle ? FontWeight.w400 : FontWeight.w600,
+                            fontWeight: hasTitle
+                                ? FontWeight.w400
+                                : FontWeight.w600,
                           ),
                         ),
                         if (notice.actionLabel != null) ...[
@@ -617,12 +618,11 @@ class _ToastCloseButtonState extends State<_ToastCloseButton> {
             width: 26,
             height: 26,
             decoration: BoxDecoration(
-              color:
-                  _hovered
-                      ? (tokens.isDark
-                          ? Colors.white.withValues(alpha: 0.1)
-                          : Colors.black.withValues(alpha: 0.06))
-                      : Colors.transparent,
+              color: _hovered
+                  ? (tokens.isDark
+                        ? Colors.white.withValues(alpha: 0.1)
+                        : Colors.black.withValues(alpha: 0.06))
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
             ),
             child: Center(

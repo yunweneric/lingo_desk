@@ -62,9 +62,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) =>
-              getIt<FileUploadBloc>()..add(LoadUploadContextEvent(widget.app)),
+      create: (_) =>
+          getIt<FileUploadBloc>()..add(LoadUploadContextEvent(widget.app)),
       child: BlocConsumer<FileUploadBloc, FileUploadState>(
         listener: (context, state) {
           if (state is FileUploadReady) {
@@ -107,33 +106,30 @@ class _FileUploadPageState extends State<FileUploadPage> {
                     ],
                     actions: [
                       OutlinedButton(
-                        onPressed:
-                            ready == null || ready.isBusy
-                                ? null
-                                : () => _leave(context),
+                        onPressed: ready == null || ready.isBusy
+                            ? null
+                            : () => _leave(context),
                         child: Text(_leaveLabel),
                       ),
                       FilledButton.icon(
-                        onPressed:
-                            ready != null && ready.canImport
-                                ? () => context.read<FileUploadBloc>().add(
-                                  ConfirmImportEvent(),
-                                )
-                                : null,
-                        icon:
-                            ready != null && ready.isImporting
-                                ? const SizedBox.square(
-                                  dimension: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : const LingoDeskIcon(
-                                  HugeIcons.strokeRoundedArrowRight01,
+                        onPressed: ready != null && ready.canImport
+                            ? () => context.read<FileUploadBloc>().add(
+                                ConfirmImportEvent(),
+                              )
+                            : null,
+                        icon: ready != null && ready.isImporting
+                            ? const SizedBox.square(
+                                dimension: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
                                   color: Colors.white,
-                                  size: 18,
                                 ),
+                              )
+                            : const LingoDeskIcon(
+                                HugeIcons.strokeRoundedArrowRight01,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                         label: Text(
                           _isProjectMode
                               ? 'Import project'
@@ -143,13 +139,12 @@ class _FileUploadPageState extends State<FileUploadPage> {
                     ],
                   ),
                   Expanded(
-                    child:
-                        ready == null
-                            ? const Center(child: CircularProgressIndicator())
-                            : _UploadBody(
-                              state: ready,
-                              nameController: _nameController,
-                            ),
+                    child: ready == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : _UploadBody(
+                            state: ready,
+                            nameController: _nameController,
+                          ),
                   ),
                 ],
               ),
@@ -186,20 +181,17 @@ class _UploadBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEmpty =
-        state.isProjectMode ? !state.hasProject : state.stagedFiles.isEmpty;
+    final isEmpty = state.isProjectMode
+        ? !state.hasProject
+        : state.stagedFiles.isEmpty;
 
     final content = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: isEmpty ? 620 : 760),
-      child:
-          isEmpty
-              ? _EmptyState(state: state)
-              : state.isProjectMode
-              ? _ScannedProjectState(
-                state: state,
-                nameController: nameController,
-              )
-              : _StagedState(state: state),
+      child: isEmpty
+          ? _EmptyState(state: state)
+          : state.isProjectMode
+          ? _ScannedProjectState(state: state, nameController: nameController)
+          : _StagedState(state: state),
     );
 
     return LayoutBuilder(
@@ -217,10 +209,9 @@ class _UploadBody extends StatelessWidget {
             constraints: BoxConstraints(
               minHeight: isEmpty ? constraints.maxHeight - 48 : 0,
             ),
-            child:
-                isEmpty
-                    ? Center(child: content)
-                    : Align(alignment: Alignment.topCenter, child: content),
+            child: isEmpty
+                ? Center(child: content)
+                : Align(alignment: Alignment.topCenter, child: content),
           ),
         );
       },
@@ -273,10 +264,10 @@ class _EmptyState extends StatelessWidget {
               Text(
                 isProject
                     ? 'Pick the project (or any folder) and LingoDesk finds '
-                        'the translation files inside it — or select the '
-                        '.json files yourself.'
+                          'the translation files inside it — or select the '
+                          '.json files yourself.'
                     : 'Scan a folder, or select the .json files yourself. '
-                        'Each file is matched to a language by its name.',
+                          'Each file is matched to a language by its name.',
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -289,37 +280,34 @@ class _EmptyState extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: [
                   FilledButton.icon(
-                    onPressed:
-                        state.isBusy
-                            ? null
-                            : () => context.read<FileUploadBloc>().add(
-                              ScanProjectEvent(),
-                            ),
-                    icon:
-                        state.isScanning
-                            ? const SizedBox.square(
-                              dimension: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                            : const LingoDeskIcon(
-                              HugeIcons.strokeRoundedFolderAdd,
+                    onPressed: state.isBusy
+                        ? null
+                        : () => context.read<FileUploadBloc>().add(
+                            ScanProjectEvent(),
+                          ),
+                    icon: state.isScanning
+                        ? const SizedBox.square(
+                            dimension: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
                               color: Colors.white,
-                              size: 18,
                             ),
+                          )
+                        : const LingoDeskIcon(
+                            HugeIcons.strokeRoundedFolderAdd,
+                            color: Colors.white,
+                            size: 18,
+                          ),
                     label: Text(
                       state.isScanning ? 'Scanning…' : 'Choose folder',
                     ),
                   ),
                   OutlinedButton.icon(
-                    onPressed:
-                        state.isBusy
-                            ? null
-                            : () => context.read<FileUploadBloc>().add(
-                              PickFilesEvent(),
-                            ),
+                    onPressed: state.isBusy
+                        ? null
+                        : () => context.read<FileUploadBloc>().add(
+                            PickFilesEvent(),
+                          ),
                     icon: const LingoDeskIcon(
                       HugeIcons.strokeRoundedFileUpload,
                       size: 18,
@@ -445,10 +433,9 @@ class _ScannedProjectState extends StatelessWidget {
                       size: LingoDeskFieldSize.large,
                       enabled: !state.isBusy,
                       isRequired: true,
-                      onChanged:
-                          (value) => context.read<FileUploadBloc>().add(
-                            ProjectNameChangedEvent(value),
-                          ),
+                      onChanged: (value) => context.read<FileUploadBloc>().add(
+                        ProjectNameChangedEvent(value),
+                      ),
                     ),
                   ),
                 ],
@@ -497,10 +484,9 @@ class _ScannedProjectState extends StatelessWidget {
                 ],
                 value: source,
                 enabled: !state.isBusy,
-                onChanged:
-                    (value) => context.read<FileUploadBloc>().add(
-                      SourceLanguageSelectedEvent(value),
-                    ),
+                onChanged: (value) => context.read<FileUploadBloc>().add(
+                  SourceLanguageSelectedEvent(value),
+                ),
               ),
             ],
           ),
@@ -526,23 +512,21 @@ class _ScannedProjectState extends StatelessWidget {
             child: ScannedLanguageTile(
               group: project.groups[index],
               totalKeys: totalKeys,
-              isIncluded:
-                  !state.excludedLanguages.contains(
-                    project.groups[index].languageCode,
-                  ),
+              isIncluded: !state.excludedLanguages.contains(
+                project.groups[index].languageCode,
+              ),
               isSource: project.groups[index].languageCode == source,
-              exportPath:
-                  state.scannedSource?.languageFiles[project
-                      .groups[index]
-                      .languageCode],
+              exportPath: state
+                  .scannedSource
+                  ?.languageFiles[project.groups[index].languageCode],
               onToggle:
                   project.groups[index].languageCode == source || state.isBusy
-                      ? null
-                      : () => context.read<FileUploadBloc>().add(
-                        ToggleScannedLanguageEvent(
-                          project.groups[index].languageCode,
-                        ),
+                  ? null
+                  : () => context.read<FileUploadBloc>().add(
+                      ToggleScannedLanguageEvent(
+                        project.groups[index].languageCode,
                       ),
+                    ),
             ),
           ),
           const SizedBox(height: 8),
@@ -563,7 +547,7 @@ class _ScannedProjectState extends StatelessWidget {
                 included.isEmpty
                     ? 'Keep at least one language to import.'
                     : '${included.length} language(s) and $totalKeys keys '
-                        'ready to import.',
+                          'ready to import.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: tokens.muted,
                   fontSize: 12,
@@ -571,12 +555,10 @@ class _ScannedProjectState extends StatelessWidget {
               ),
             ),
             TextButton.icon(
-              onPressed:
-                  state.isBusy
-                      ? null
-                      : () => context.read<FileUploadBloc>().add(
-                        ScanProjectEvent(),
-                      ),
+              onPressed: state.isBusy
+                  ? null
+                  : () =>
+                        context.read<FileUploadBloc>().add(ScanProjectEvent()),
               icon: const LingoDeskIcon(
                 HugeIcons.strokeRoundedFolderAdd,
                 size: 17,
@@ -584,11 +566,9 @@ class _ScannedProjectState extends StatelessWidget {
               label: const Text('Add folder'),
             ),
             TextButton.icon(
-              onPressed:
-                  state.isBusy
-                      ? null
-                      : () =>
-                          context.read<FileUploadBloc>().add(PickFilesEvent()),
+              onPressed: state.isBusy
+                  ? null
+                  : () => context.read<FileUploadBloc>().add(PickFilesEvent()),
               icon: const LingoDeskIcon(
                 HugeIcons.strokeRoundedFileUpload,
                 size: 17,
@@ -596,12 +576,10 @@ class _ScannedProjectState extends StatelessWidget {
               label: const Text('Add files'),
             ),
             TextButton(
-              onPressed:
-                  state.isBusy
-                      ? null
-                      : () => context.read<FileUploadBloc>().add(
-                        ResetImportEvent(),
-                      ),
+              onPressed: state.isBusy
+                  ? null
+                  : () =>
+                        context.read<FileUploadBloc>().add(ResetImportEvent()),
               child: Text('Start over', style: TextStyle(color: tokens.muted)),
             ),
           ],
@@ -653,8 +631,9 @@ class _ProjectIconField extends StatelessWidget {
           Tooltip(
             message: hasIcon ? 'Replace logo' : 'Upload a logo',
             child: InkWell(
-              onTap:
-                  busy ? null : () => bloc.add(ProjectIconPickRequestedEvent()),
+              onTap: busy
+                  ? null
+                  : () => bloc.add(ProjectIconPickRequestedEvent()),
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
               child: SizedBox.square(
                 dimension: _size,
@@ -687,19 +666,18 @@ class _ProjectIconField extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(color: tokens.border),
                         ),
-                        child:
-                            state.isPickingIcon
-                                ? const SizedBox.square(
-                                  dimension: 11,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.8,
-                                  ),
-                                )
-                                : LingoDeskIcon(
-                                  HugeIcons.strokeRoundedImageAdd01,
-                                  size: 12,
-                                  color: tokens.muted,
+                        child: state.isPickingIcon
+                            ? const SizedBox.square(
+                                dimension: 11,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 1.8,
                                 ),
+                              )
+                            : LingoDeskIcon(
+                                HugeIcons.strokeRoundedImageAdd01,
+                                size: 12,
+                                color: tokens.muted,
+                              ),
                       ),
                     ),
                   ],
@@ -710,8 +688,9 @@ class _ProjectIconField extends StatelessWidget {
           if (hasIcon) ...[
             const SizedBox(width: 6),
             IconButton(
-              onPressed:
-                  busy ? null : () => bloc.add(ProjectIconClearedEvent()),
+              onPressed: busy
+                  ? null
+                  : () => bloc.add(ProjectIconClearedEvent()),
               tooltip: 'Remove logo',
               visualDensity: VisualDensity.compact,
               icon: const LingoDeskIcon(
@@ -834,11 +813,9 @@ class _StagedState extends StatelessWidget {
               ),
             ),
             OutlinedButton.icon(
-              onPressed:
-                  state.isBusy
-                      ? null
-                      : () =>
-                          context.read<FileUploadBloc>().add(PickFilesEvent()),
+              onPressed: state.isBusy
+                  ? null
+                  : () => context.read<FileUploadBloc>().add(PickFilesEvent()),
               icon: const LingoDeskIcon(
                 HugeIcons.strokeRoundedFolderAdd,
                 size: 17,
@@ -853,10 +830,9 @@ class _StagedState extends StatelessWidget {
             index: index,
             child: StagedFileTile(
               file: state.stagedFiles[index],
-              onRemove:
-                  () => context.read<FileUploadBloc>().add(
-                    RemoveFileEvent(state.stagedFiles[index].fileName),
-                  ),
+              onRemove: () => context.read<FileUploadBloc>().add(
+                RemoveFileEvent(state.stagedFiles[index].fileName),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -894,8 +870,9 @@ class _LanguageChecklist extends StatelessWidget {
     final total = app.allLanguages.length;
 
     return Column(
-      crossAxisAlignment:
-          centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: centered
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisSize: centered ? MainAxisSize.min : MainAxisSize.max,
@@ -908,10 +885,9 @@ class _LanguageChecklist extends StatelessWidget {
             Text(
               '${covered.length}/$total',
               style: LingoDeskTheme.codeStyle.copyWith(
-                color:
-                    covered.length == total
-                        ? LingoDeskColors.complete
-                        : tokens.muted,
+                color: covered.length == total
+                    ? LingoDeskColors.complete
+                    : tokens.muted,
                 fontSize: 12,
               ),
             ),

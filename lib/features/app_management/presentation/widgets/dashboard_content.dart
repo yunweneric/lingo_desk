@@ -93,12 +93,11 @@ class _DashboardBody extends StatelessWidget {
               sliver: SliverLayoutBuilder(
                 builder: (context, constraints) {
                   final width = constraints.crossAxisExtent;
-                  final columns =
-                      width >= 1180
-                          ? 4
-                          : width >= 760
-                          ? 2
-                          : 1;
+                  final columns = width >= 1180
+                      ? 4
+                      : width >= 760
+                      ? 2
+                      : 1;
 
                   return SliverGrid.builder(
                     itemCount: metrics.length,
@@ -172,20 +171,19 @@ class _DashboardBody extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: FadeSlideIn.staggered(
                   index: 6,
-                  child:
-                      state.overviews.isEmpty
-                          ? WorkspaceEmptyState(
-                            icon: HugeIcons.strokeRoundedFolder02,
-                            title: 'Create your first app',
-                            message:
-                                'An app groups the translation files of one '
-                                'project. Set a source language, pick your '
-                                'targets, and start translating.',
-                            actionLabel: 'New app',
-                            actionIcon: HugeIcons.strokeRoundedAdd01,
-                            onAction: () => openCreateApp(context),
-                          )
-                          : _AppsShortcutCard(state: state),
+                  child: state.overviews.isEmpty
+                      ? WorkspaceEmptyState(
+                          icon: HugeIcons.strokeRoundedFolder02,
+                          title: 'Create your first app',
+                          message:
+                              'An app groups the translation files of one '
+                              'project. Set a source language, pick your '
+                              'targets, and start translating.',
+                          actionLabel: 'New app',
+                          actionIcon: HugeIcons.strokeRoundedAdd01,
+                          onAction: () => openCreateApp(context),
+                        )
+                      : _AppsShortcutCard(state: state),
                 ),
               ),
             ),

@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/ai_settings_controller.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
@@ -37,8 +38,8 @@ class TranslationEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) => getIt<TranslationEditorBloc>()..add(LoadEditorEvent(appId)),
+      create: (_) =>
+          getIt<TranslationEditorBloc>()..add(LoadEditorEvent(appId)),
       child: _EditorView(appId: appId),
     );
   }
@@ -65,12 +66,11 @@ class _EditorViewState extends State<_EditorView> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TranslationEditorBloc, TranslationEditorState>(
-      listenWhen:
-          (previous, current) =>
-              current is TranslationEditorLoaded &&
-              current.notice != null &&
-              (previous is! TranslationEditorLoaded ||
-                  previous.notice != current.notice),
+      listenWhen: (previous, current) =>
+          current is TranslationEditorLoaded &&
+          current.notice != null &&
+          (previous is! TranslationEditorLoaded ||
+              previous.notice != current.notice),
       listener: (context, state) {
         context.showToast((state as TranslationEditorLoaded).notice!);
       },
@@ -105,10 +105,9 @@ class _EditorViewState extends State<_EditorView> {
       breadcrumb: const [Crumb.workspace, Crumb('Editor')],
       body: WorkspaceErrorState(
         message: state.message,
-        onRetry:
-            () => context.read<TranslationEditorBloc>().add(
-              LoadEditorEvent(widget.appId),
-            ),
+        onRetry: () => context.read<TranslationEditorBloc>().add(
+          LoadEditorEvent(widget.appId),
+        ),
       ),
     );
   }
@@ -126,62 +125,105 @@ class _EditorViewState extends State<_EditorView> {
       // sits beside the app it fills. Adding a key is not one of them —
       // it changes what is in the grid, so it sits with the grid's own
       // controls.
-      actions: [
-        EditorHeaderAction(
-          icon: HugeIcons.strokeRoundedSettings01,
-          label: 'Settings',
-          onPressed: () => _openAppSettings(context, state),
-        ),
-        EditorHeaderAction(
-          icon: HugeIcons.strokeRoundedSparkles,
-          label: 'AI translate',
-          // The label says what it does; the tooltip is left to say why
-          // it cannot right now.
-          tooltip: switch (state) {
-            _ when state.aiJob != null => 'AI translation running',
-            _ when state.translatableMissing == 0 =>
-              'Nothing left to translate',
-            _ => '',
-          },
-          onPressed:
-              state.aiJob != null || state.translatableMissing == 0
-                  ? null
-                  : () => _aiTranslate(context, state),
-        ),
-        _ExportMenuButton(state: state, onSelected: _export),
-      ],
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        // The grid is the point of this page, so the blocks above it
-        // arrive first and it settles in last.
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            LanguageProgressHeader(state: state),
-            const SizedBox(height: 14),
-            FadeSlideIn.staggered(
-              index: 2,
-              child: _buildToolbar(context, state),
+      actions: _headerActions(context, state, compact: false),
+      // Three named buttons will not share a phone's width; the same three
+      // glyphs will, and each keeps its name in a tooltip.
+      compactActions: _headerActions(context, state, compact: true),
+      body: ResponsiveBuilder(
+        builder: (context, size, _) {
+          return Padding(
+            padding: EdgeInsets.all(size.isCompact ? 12 : 20),
+            // The grid is the point of this page, so the blocks above it
+            // arrive first and it settles in last.
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LanguageProgressHeader(state: state),
+                const SizedBox(height: 14),
+                FadeSlideIn.staggered(
+                  index: 2,
+                  child: _buildToolbar(context, state, size),
+                ),
+                const SizedBox(height: 14),
+                if (state.aiJob != null) ...[
+                  _AiJobBanner(job: state.aiJob!),
+                  const SizedBox(height: 14),
+                ],
+                Expanded(
+                  child: FadeSlideIn.staggered(
+                    index: 3,
+                    child: TranslationTableWidget(state: state),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 14),
-            if (state.aiJob != null) ...[
-              _AiJobBanner(job: state.aiJob!),
-              const SizedBox(height: 14),
-            ],
-            Expanded(
-              child: FadeSlideIn.staggered(
-                index: 3,
-                child: TranslationTableWidget(state: state),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildToolbar(BuildContext context, TranslationEditorLoaded state) {
+  Widget _buildToolbar(
+    BuildContext context,
+    TranslationEditorLoaded state,
+    WindowSizeClass size,
+  ) {
     final bloc = context.read<TranslationEditorBloc>();
+    final isCompact = size.isCompact;
+
+    final search = SizedBox(
+      height: _barHeight,
+      child: LingoDeskTextField(
+        controller: _searchController,
+        hintText: 'Search keys and values',
+        prefixIcon: HugeIcons.strokeRoundedSearch01,
+        clearable: true,
+        onChanged: (value) => bloc.add(SearchKeysEvent(value)),
+      ),
+    );
+
+    final missingOnly = SizedBox(
+      height: _barHeight,
+      child: FilterChip(
+        label: Text(
+          state.showMissingOnly
+              ? 'Missing only (${state.filteredEntries.length})'
+              : 'Missing only',
+        ),
+        selected: state.showMissingOnly,
+        onSelected: (_) => bloc.add(ToggleMissingOnlyEvent()),
+      ),
+    );
+
+    final addKey = FilledButton.icon(
+      onPressed: () => _addKey(context, state),
+      icon: const LingoDeskIcon(
+        HugeIcons.strokeRoundedAdd01,
+        color: Colors.white,
+        size: 17,
+      ),
+      label: const Text('Add key'),
+    );
+
+    if (isCompact) {
+      // A 260px field, three readouts and a button will not share a phone's
+      // width, and a Wrap cannot shrink the field to make them. Search gets
+      // the full width it needs to be typed into; the rest lines up under it.
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          search,
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: missingOnly),
+              const SizedBox(width: 10),
+              addKey,
+            ],
+          ),
+        ],
+      );
+    }
 
     // One bar over the grid: what is in it, what of it is shown, and the
     // way to add to it — pinned right, the only action among readouts.
@@ -194,44 +236,46 @@ class _EditorViewState extends State<_EditorView> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ..._summaryTiles(state),
-              SizedBox(
-                width: 260,
-                height: _barHeight,
-                child: LingoDeskTextField(
-                  controller: _searchController,
-                  hintText: 'Search keys and values',
-                  prefixIcon: HugeIcons.strokeRoundedSearch01,
-                  clearable: true,
-                  onChanged: (value) => bloc.add(SearchKeysEvent(value)),
-                ),
-              ),
-              SizedBox(
-                height: _barHeight,
-                child: FilterChip(
-                  label: Text(
-                    state.showMissingOnly
-                        ? 'Missing only (${state.filteredEntries.length})'
-                        : 'Missing only',
-                  ),
-                  selected: state.showMissingOnly,
-                  onSelected: (_) => bloc.add(ToggleMissingOnlyEvent()),
-                ),
-              ),
+              SizedBox(width: 260, child: search),
+              missingOnly,
             ],
           ),
         ),
         const SizedBox(width: 10),
-        FilledButton.icon(
-          onPressed: () => _addKey(context, state),
-          icon: const LingoDeskIcon(
-            HugeIcons.strokeRoundedAdd01,
-            color: Colors.white,
-            size: 17,
-          ),
-          label: const Text('Add key'),
-        ),
+        addKey,
       ],
     );
+  }
+
+  List<Widget> _headerActions(
+    BuildContext context,
+    TranslationEditorLoaded state, {
+    required bool compact,
+  }) {
+    return [
+      EditorHeaderAction(
+        icon: HugeIcons.strokeRoundedSettings01,
+        label: 'Settings',
+        compact: compact,
+        onPressed: () => _openAppSettings(context, state),
+      ),
+      EditorHeaderAction(
+        icon: HugeIcons.strokeRoundedSparkles,
+        label: 'AI translate',
+        compact: compact,
+        // The label says what it does; the tooltip is left to say why
+        // it cannot right now.
+        tooltip: switch (state) {
+          _ when state.aiJob != null => 'AI translation running',
+          _ when state.translatableMissing == 0 => 'Nothing left to translate',
+          _ => '',
+        },
+        onPressed: state.aiJob != null || state.translatableMissing == 0
+            ? null
+            : () => _aiTranslate(context, state),
+      ),
+      _ExportMenuButton(state: state, compact: compact, onSelected: _export),
+    ];
   }
 
   Future<void> _addKey(
@@ -321,8 +365,9 @@ class _EditorViewState extends State<_EditorView> {
       },
       // Only a save back to the project follows the imported layout;
       // the other two write flat <lang>.json files.
-      fileNameFor:
-          destination == _ExportDestination.project ? app.projectFileFor : null,
+      fileNameFor: destination == _ExportDestination.project
+          ? app.projectFileFor
+          : null,
     );
 
     if (languages == null || languages.isEmpty) {
@@ -346,9 +391,14 @@ enum _ExportDestination { downloads, project, folder }
 /// upload actions, and the choice of destination is a detail of one
 /// action rather than three separate ones.
 class _ExportMenuButton extends StatelessWidget {
-  const _ExportMenuButton({required this.state, required this.onSelected});
+  const _ExportMenuButton({
+    required this.state,
+    required this.onSelected,
+    this.compact = false,
+  });
 
   final TranslationEditorLoaded state;
+  final bool compact;
   final void Function(
     BuildContext context,
     TranslationEditorLoaded state,
@@ -379,10 +429,9 @@ class _ExportMenuButton extends StatelessWidget {
           icon: HugeIcons.strokeRoundedFolderSync,
           // Naming the folder is the whole reassurance here: this is the
           // one destination that overwrites files the user already has.
-          description:
-              app.hasProject
-                  ? app.projectPath
-                  : 'Import a project folder first',
+          description: app.hasProject
+              ? app.projectPath
+              : 'Import a project folder first',
           enabled: app.hasProject,
         ),
         const LingoDeskMenuItem(
@@ -400,17 +449,17 @@ class _ExportMenuButton extends StatelessWidget {
           // The menu trigger above already carries the tooltip.
           tooltip: '',
           primary: true,
+          compact: compact,
           onPressed: enabled ? () {} : null,
-          child:
-              state.isExporting
-                  ? const SizedBox.square(
-                    dimension: 17,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                  : null,
+          child: state.isExporting
+              ? const SizedBox.square(
+                  dimension: 17,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
         ),
       ),
     );
@@ -430,6 +479,7 @@ class EditorHeaderAction extends StatelessWidget {
     required this.onPressed,
     this.tooltip = '',
     this.primary = false,
+    this.compact = false,
     this.child,
   });
 
@@ -445,6 +495,11 @@ class EditorHeaderAction extends StatelessWidget {
 
   /// Draws the action filled, for the page's main way out of the editor.
   final bool primary;
+
+  /// Drops the label and keeps the glyph, so three actions still share
+  /// one line on a phone. The name moves into the tooltip rather than
+  /// being lost.
+  final bool compact;
 
   /// Replaces the icon while something is running, for a spinner.
   final Widget? child;
@@ -465,28 +520,40 @@ class EditorHeaderAction extends StatelessWidget {
 
     // Only the metrics are overridden; the rest of each button's look
     // still comes from the theme.
-    const style = ButtonStyle(
-      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
-      minimumSize: WidgetStatePropertyAll(Size(0, height)),
-      fixedSize: WidgetStatePropertyAll(Size.fromHeight(height)),
+    final style = ButtonStyle(
+      padding: WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: compact ? 12 : 16),
+      ),
+      minimumSize: WidgetStatePropertyAll(Size(compact ? height : 0, height)),
+      fixedSize: const WidgetStatePropertyAll(Size.fromHeight(height)),
     );
 
-    final button =
-        primary
-            ? FilledButton.icon(
+    final Widget button;
+    if (compact) {
+      button = primary
+          ? FilledButton(onPressed: onPressed, style: style, child: glyph)
+          : OutlinedButton(onPressed: onPressed, style: style, child: glyph);
+    } else {
+      button = primary
+          ? FilledButton.icon(
               onPressed: onPressed,
               style: style,
               icon: glyph,
               label: text,
             )
-            : OutlinedButton.icon(
+          : OutlinedButton.icon(
               onPressed: onPressed,
               style: style,
               icon: glyph,
               label: text,
             );
+    }
 
-    return tooltip.isEmpty ? button : Tooltip(message: tooltip, child: button);
+    // Compact drops the label, so the name has to live in the tooltip;
+    // wide already says it on the button itself.
+    final message = tooltip.isNotEmpty ? tooltip : (compact ? label : '');
+
+    return message.isEmpty ? button : Tooltip(message: message, child: button);
   }
 }
 
@@ -498,10 +565,12 @@ class _EditorChrome extends StatelessWidget {
     required this.breadcrumb,
     required this.body,
     this.actions = const [],
+    this.compactActions,
   });
 
   final List<Crumb> breadcrumb;
   final List<Widget> actions;
+  final List<Widget>? compactActions;
   final Widget body;
 
   @override
@@ -513,7 +582,11 @@ class _EditorChrome extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            WorkspacePageHeader(breadcrumb: breadcrumb, actions: actions),
+            WorkspacePageHeader(
+              breadcrumb: breadcrumb,
+              actions: actions,
+              compactActions: compactActions,
+            ),
             Expanded(child: body),
           ],
         ),
@@ -596,7 +669,7 @@ class _AiJobBanner extends StatelessWidget {
                   job.isCanceling
                       ? 'Finishing the current batch…'
                       : 'Translating ${job.label} · '
-                          '${job.settled} of ${job.total}',
+                            '${job.settled} of ${job.total}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: tokens.foreground,
                     fontSize: 13,
@@ -615,12 +688,11 @@ class _AiJobBanner extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           TextButton(
-            onPressed:
-                job.isCanceling
-                    ? null
-                    : () => context.read<TranslationEditorBloc>().add(
-                      CancelAiTranslationEvent(),
-                    ),
+            onPressed: job.isCanceling
+                ? null
+                : () => context.read<TranslationEditorBloc>().add(
+                    CancelAiTranslationEvent(),
+                  ),
             child: const Text('Cancel'),
           ),
         ],

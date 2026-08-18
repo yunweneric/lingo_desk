@@ -129,8 +129,9 @@ class FileUploadReady extends FileUploadState {
       projectName: reset ? null : (projectName ?? this.projectName),
       iconImage: reset || clearIcon ? null : (iconImage ?? this.iconImage),
       selectedSource: reset ? null : (selectedSource ?? this.selectedSource),
-      excludedLanguages:
-          reset ? const {} : (excludedLanguages ?? this.excludedLanguages),
+      excludedLanguages: reset
+          ? const {}
+          : (excludedLanguages ?? this.excludedLanguages),
       scannedSource: reset ? null : (scannedSource ?? this.scannedSource),
       isScanning: isScanning ?? this.isScanning,
       isImporting: isImporting ?? this.isImporting,

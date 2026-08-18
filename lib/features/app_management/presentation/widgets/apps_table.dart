@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/constants/languages.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -72,8 +73,13 @@ class AppsTable extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final overviews = state.filteredOverviews;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        // Seven columns across a phone gives the app's own name about
+        // 76px and the status badge 38 — present, but unreadable. Below
+        // the compact boundary each app becomes a card instead.
+        final asCards = size.isCompact;
+
         // The table fills the pane rather than scrolling sideways, so how
         // many language badges fit inline is a function of the width the
         // Languages column ends up with: flex 3 of 16 of the row, less
@@ -119,29 +125,31 @@ class AppsTable extends StatelessWidget {
                     Expanded(
                       child: WorkspaceCardHeader(
                         title: 'Apps',
-                        subtitle:
-                            state.query.trim().isEmpty
-                                ? 'Current localization workspaces'
-                                : '${overviews.length} of '
-                                    '${state.overviews.length} apps match '
-                                    '"${state.query.trim()}"',
+                        subtitle: state.query.trim().isEmpty
+                            ? 'Current localization workspaces'
+                            : '${overviews.length} of '
+                                  '${state.overviews.length} apps match '
+                                  '"${state.query.trim()}"',
                         icon: HugeIcons.strokeRoundedFolder02,
                       ),
                     ),
-                    TextButton.icon(
-                      onPressed: () => openCreateApp(context),
-                      icon: const LingoDeskIcon(
-                        HugeIcons.strokeRoundedAdd01,
-                        size: 17,
+                    if (!asCards)
+                      TextButton.icon(
+                        onPressed: () => openCreateApp(context),
+                        icon: const LingoDeskIcon(
+                          HugeIcons.strokeRoundedAdd01,
+                          size: 17,
+                        ),
+                        label: const Text('New app'),
                       ),
-                      label: const Text('New app'),
-                    ),
                   ],
                 ),
               ),
               Divider(height: 1, color: tokens.border),
-              _TableHeader(tokens: tokens),
-              Divider(height: 1, color: tokens.border),
+              if (!asCards) ...[
+                _TableHeader(tokens: tokens),
+                Divider(height: 1, color: tokens.border),
+              ],
               if (overviews.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(28),
@@ -156,10 +164,13 @@ class AppsTable extends StatelessWidget {
                 for (var index = 0; index < overviews.length; index++) ...[
                   FadeSlideIn.staggered(
                     index: index,
-                    child: _AppRow(
-                      overview: overviews[index],
-                      inlineLimit: inlineLimit,
-                    ),
+                    child:
+                        asCards
+                            ? _AppCard(overview: overviews[index])
+                            : _AppRow(
+                              overview: overviews[index],
+                              inlineLimit: inlineLimit,
+                            ),
                   ),
                   if (index != overviews.length - 1)
                     Divider(height: 1, color: tokens.border),
@@ -277,10 +288,9 @@ class _AppRowState extends State<_AppRow> {
             border: Border(
               left: BorderSide(
                 width: 3,
-                color:
-                    hovered || _expanded
-                        ? LingoDeskColors.brandTeal
-                        : Colors.transparent,
+                color: hovered || _expanded
+                    ? LingoDeskColors.brandTeal
+                    : Colors.transparent,
               ),
             ),
           ),
@@ -306,10 +316,9 @@ class _AppRowState extends State<_AppRow> {
                     // shape of the tree and re-inflates everything below
                     // it — including the overflow menu's anchor, whose
                     // open menu dies with it.
-                    color:
-                        hovered
-                            ? tokens.active.withValues(alpha: 0.6)
-                            : Colors.transparent,
+                    color: hovered
+                        ? tokens.active.withValues(alpha: 0.6)
+                        : Colors.transparent,
                     padding: const EdgeInsets.fromLTRB(17, 14, 20, 14),
                     child: content,
                   );
@@ -318,15 +327,14 @@ class _AppRowState extends State<_AppRow> {
                   children: [
                     SizedBox(
                       width: _expanderColumn,
-                      child:
-                          canExpand
-                              ? _ExpanderButton(
-                                expanded: _expanded,
-                                hovered: _hovered,
-                                tokens: tokens,
-                                onTap: _toggle,
-                              )
-                              : null,
+                      child: canExpand
+                          ? _ExpanderButton(
+                              expanded: _expanded,
+                              hovered: _hovered,
+                              tokens: tokens,
+                              onTap: _toggle,
+                            )
+                          : null,
                     ),
                     Expanded(
                       flex: 4,
@@ -463,10 +471,9 @@ class _AppRowState extends State<_AppRow> {
             duration: LingoDeskMotion.standard,
             curve: LingoDeskMotion.curve,
             alignment: Alignment.topCenter,
-            child:
-                _expanded && canExpand
-                    ? _LanguagePanel(overview: overview, tokens: tokens)
-                    : const SizedBox(width: double.infinity),
+            child: _expanded && canExpand
+                ? _LanguagePanel(overview: overview, tokens: tokens)
+                : const SizedBox(width: double.infinity),
           ),
         ],
       ),
@@ -476,6 +483,103 @@ class _AppRowState extends State<_AppRow> {
 
 /// The chevron at the start of an expandable row. One arrow that turns,
 /// rather than two that swap — the rotation is what says "this opens".
+
+/// One app on a phone: everything the row's seven columns carry, stacked.
+///
+/// No expander here — a card has the width to show every language badge,
+/// so there is nothing folded away for a chevron to open.
+class _AppCard extends StatelessWidget {
+  const _AppCard({required this.overview});
+
+  final AppOverview overview;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final app = overview.app;
+    final status = appStatusOf(overview);
+
+    return InkWell(
+      onTap: () => openEditor(context, overview),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 14, 12, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AppAvatar(
+                  name: app.name,
+                  initials: app.initials,
+                  iconImage: app.iconImage,
+                  size: 34,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        app.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${app.sourceLanguage}.json - '
+                        '${overview.keyCount} keys',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: LingoDeskTheme.codeStyle.copyWith(
+                          color: tokens.muted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _AppRowMenu(overview: overview),
+              ],
+            ),
+            const SizedBox(height: 12),
+            WorkspaceProgressBar(
+              value: overview.progress,
+              isComplete: overview.isComplete,
+              showPercentage: true,
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: _badgeGap,
+              runSpacing: _badgeGap,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                WorkspaceBadge(label: status.label, color: status.color),
+                for (final language in app.targetLanguages)
+                  WorkspaceBadge(
+                    label: language.toUpperCase(),
+                    color: tokens.muted,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '${overview.completeFileCount}/${overview.fileCount} files '
+              'complete - ${DateFormatter.relative(overview.lastActivity)}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ExpanderButton extends StatelessWidget {
   const _ExpanderButton({
     required this.expanded,
@@ -515,10 +619,9 @@ class _ExpanderButton extends StatelessWidget {
                   return LingoDeskIcon(
                     HugeIcons.strokeRoundedArrowRight01,
                     size: 16,
-                    color:
-                        expanded || isHovered
-                            ? tokens.foreground
-                            : tokens.muted,
+                    color: expanded || isHovered
+                        ? tokens.foreground
+                        : tokens.muted,
                   );
                 },
               ),

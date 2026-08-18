@@ -9,7 +9,9 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/lingo_desk_toast.dart';
+import '../../../../core/widgets/app_shell_scope.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
+import '../../../settings/presentation/pages/settings_pane.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/ai_key.dart';
 import '../../domain/entities/ai_provider.dart';
@@ -78,32 +80,31 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     final wasActive = entry.id == _settings.activeKeyId;
     final confirmed = await showDialog<bool>(
       context: context,
-      builder:
-          (dialogContext) => AlertDialog(
-            title: const Text('Delete API key?'),
-            content: Text(
-              wasActive
-                  ? 'This removes "${entry.label}", the key translations '
-                      'currently run on. Another saved key takes over, or AI '
-                      'translation stops until you add one.'
-                  : 'This removes "${entry.label}" from this device. '
-                      'The key itself stays valid at '
-                      '${entry.provider.consoleLabel}.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(false),
-                child: const Text('Cancel'),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: LingoDeskColors.error,
-                ),
-                onPressed: () => Navigator.of(dialogContext).pop(true),
-                child: const Text('Delete'),
-              ),
-            ],
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Delete API key?'),
+        content: Text(
+          wasActive
+              ? 'This removes "${entry.label}", the key translations '
+                    'currently run on. Another saved key takes over, or AI '
+                    'translation stops until you add one.'
+              : 'This removes "${entry.label}" from this device. '
+                    'The key itself stays valid at '
+                    '${entry.provider.consoleLabel}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancel'),
           ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: LingoDeskColors.error,
+            ),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
     );
     if (!(confirmed ?? false)) {
       return;
@@ -179,7 +180,11 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
             return Column(
               children: [
                 WorkspacePageHeader(
-                  breadcrumb: const [Crumb.workspace, Crumb('AI providers')],
+                  breadcrumb: const [
+                    Crumb.workspace,
+                    Crumb('Settings'),
+                    Crumb('AI providers'),
+                  ],
                   actions: [
                     FilledButton.icon(
                       onPressed: _addKey,
@@ -192,11 +197,17 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
                     ),
                   ],
                 ),
+                // This screen belongs to the settings group, so on a phone
+                // it carries the same pane switcher its siblings do.
+                if (AppShellScope.maybeOf(context)?.sizeClass.isCompact ??
+                    false)
+                  const SettingsPaneSwitcher(),
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final horizontal =
-                          constraints.maxWidth < 780 ? 16.0 : 24.0;
+                      final horizontal = constraints.maxWidth < 780
+                          ? 16.0
+                          : 24.0;
 
                       return SingleChildScrollView(
                         padding: EdgeInsets.fromLTRB(
@@ -278,9 +289,9 @@ class _Summary extends StatelessWidget {
                 Text(
                   configured && active != null
                       ? '${active.provider.label} · ${active.model} · used by '
-                          'every AI action in the editor.'
+                            'every AI action in the editor.'
                       : 'Add an API key, then the editor can fill missing '
-                          'translations for you.',
+                            'translations for you.',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -327,11 +338,11 @@ class _StorageNote extends StatelessWidget {
           child: Text(
             isSecure
                 ? 'Keys are stored in this device’s keychain and are only '
-                    'ever sent to the provider they belong to.'
+                      'ever sent to the provider they belong to.'
                 : 'This build cannot reach the system keychain, so keys are '
-                    'stored with your other local settings in plain text. '
-                    'They stay on this device and are only ever sent to the '
-                    'provider they belong to.',
+                      'stored with your other local settings in plain text. '
+                      'They stay on this device and are only ever sent to the '
+                      'provider they belong to.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),

@@ -51,9 +51,8 @@ class _LingoDeskAppState extends State<LingoDeskApp> {
           routerConfig: _router,
           // Above the router, so a toast survives the navigation that
           // often triggers it and paints over dialogs.
-          builder:
-              (context, child) =>
-                  LingoDeskToastHost(child: child ?? const SizedBox.shrink()),
+          builder: (context, child) =>
+              LingoDeskToastHost(child: child ?? const SizedBox.shrink()),
         );
       },
     );

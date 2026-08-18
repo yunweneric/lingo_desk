@@ -20,9 +20,8 @@ class AppsSearchField extends StatelessWidget {
         hintText: 'Search apps',
         prefixIcon: HugeIcons.strokeRoundedGlobalSearch,
         clearable: true,
-        onChanged:
-            (value) =>
-                context.read<AppManagementBloc>().add(SearchAppsEvent(value)),
+        onChanged: (value) =>
+            context.read<AppManagementBloc>().add(SearchAppsEvent(value)),
       ),
     );
   }

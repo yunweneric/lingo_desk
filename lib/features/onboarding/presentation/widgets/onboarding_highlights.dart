@@ -42,16 +42,14 @@ class _HighlightRow extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color:
-                tokens.isDark
-                    ? LingoDeskColors.activeDeep
-                    : LingoDeskColors.brandTealSoft,
+            color: tokens.isDark
+                ? LingoDeskColors.activeDeep
+                : LingoDeskColors.brandTealSoft,
             borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
             border: Border.all(
-              color:
-                  tokens.isDark
-                      ? Colors.white12
-                      : LingoDeskColors.brandTealSoftBorder,
+              color: tokens.isDark
+                  ? Colors.white12
+                  : LingoDeskColors.brandTealSoftBorder,
             ),
           ),
           child: SizedBox.square(

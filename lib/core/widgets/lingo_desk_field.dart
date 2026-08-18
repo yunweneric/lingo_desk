@@ -65,26 +65,24 @@ BoxDecoration lingoDeskFieldDecoration({
   final highlighted = enabled && (focused || hasError);
 
   return BoxDecoration(
-    color:
-        enabled
-            ? tokens.card
-            : (tokens.isDark
-                ? Colors.white.withValues(alpha: 0.04)
-                : LingoDeskColors.surface),
+    color: enabled
+        ? tokens.card
+        : (tokens.isDark
+              ? Colors.white.withValues(alpha: 0.04)
+              : LingoDeskColors.surface),
     borderRadius: BorderRadius.circular(size.radius),
     border: Border.all(
       color: highlighted ? accent : tokens.border,
       width: highlighted ? 1.5 : 1,
     ),
-    boxShadow:
-        enabled && focused
-            ? [
-              BoxShadow(
-                color: accent.withValues(alpha: tokens.isDark ? 0.24 : 0.14),
-                spreadRadius: 3,
-              ),
-            ]
-            : null,
+    boxShadow: enabled && focused
+        ? [
+            BoxShadow(
+              color: accent.withValues(alpha: tokens.isDark ? 0.24 : 0.14),
+              spreadRadius: 3,
+            ),
+          ]
+        : null,
   );
 }
 

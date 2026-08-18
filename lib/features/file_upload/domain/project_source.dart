@@ -43,10 +43,9 @@ ProjectSource? projectSourceFrom(
       continue;
     }
     final directory = _commonDirectory(paths);
-    languageFiles[group.languageCode] =
-        directory.isEmpty
-            ? '${group.languageCode}.json'
-            : '$directory/${group.languageCode}.json';
+    languageFiles[group.languageCode] = directory.isEmpty
+        ? '${group.languageCode}.json'
+        : '$directory/${group.languageCode}.json';
   }
 
   return ProjectSource(
@@ -79,8 +78,7 @@ String _commonDirectory(List<String> paths) {
 }
 
 /// Splits a relative path on either separator style, dropping empties.
-List<String> _segmentsOf(String path) =>
-    path
-        .split(RegExp(r'[/\\]'))
-        .where((segment) => segment.isNotEmpty)
-        .toList();
+List<String> _segmentsOf(String path) => path
+    .split(RegExp(r'[/\\]'))
+    .where((segment) => segment.isNotEmpty)
+    .toList();

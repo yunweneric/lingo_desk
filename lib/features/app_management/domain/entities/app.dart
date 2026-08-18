@@ -63,12 +63,11 @@ class App {
 /// Takes a raw name rather than an [App] so the settings form can preview
 /// the badge while the name is still being typed.
 String appInitialsFor(String name) {
-  final words =
-      name
-          .trim()
-          .split(RegExp(r'\s+'))
-          .where((word) => word.isNotEmpty)
-          .toList();
+  final words = name
+      .trim()
+      .split(RegExp(r'\s+'))
+      .where((word) => word.isNotEmpty)
+      .toList();
   if (words.isEmpty) {
     return '?';
   }

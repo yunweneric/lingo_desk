@@ -157,20 +157,20 @@ class _TranslationCellFieldState extends State<TranslationCellField>
               // Kept at a constant width so gaining focus never nudges the
               // text sideways.
               border: Border.all(
-                color:
-                    hasFocus ? LingoDeskColors.brandTeal : Colors.transparent,
+                color: hasFocus
+                    ? LingoDeskColors.brandTeal
+                    : Colors.transparent,
               ),
-              boxShadow:
-                  glow == 0
-                      ? null
-                      : [
-                        BoxShadow(
-                          color: LingoDeskColors.complete.withValues(
-                            alpha: 0.32 * glow,
-                          ),
-                          spreadRadius: 2 * glow,
+              boxShadow: glow == 0
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: LingoDeskColors.complete.withValues(
+                          alpha: 0.32 * glow,
                         ),
-                      ],
+                        spreadRadius: 2 * glow,
+                      ),
+                    ],
             ),
             child: child,
           );
@@ -203,15 +203,13 @@ class _TranslationCellFieldState extends State<TranslationCellField>
                     ),
                     decoration: InputDecoration(
                       isCollapsed: true,
-                      hintText:
-                          widget.isTranslating
-                              ? 'Translating…'
-                              : (showMissing ? 'Missing' : null),
+                      hintText: widget.isTranslating
+                          ? 'Translating…'
+                          : (showMissing ? 'Missing' : null),
                       hintStyle: TextStyle(
-                        color:
-                            widget.isTranslating
-                                ? LingoDeskColors.brandTeal.withAlpha(190)
-                                : LingoDeskColors.warning.withAlpha(170),
+                        color: widget.isTranslating
+                            ? LingoDeskColors.brandTeal.withAlpha(190)
+                            : LingoDeskColors.warning.withAlpha(170),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         height: 1.2,
@@ -274,35 +272,33 @@ class _CellAiAction extends StatelessWidget {
       opacity: visible ? (emphasized && !isTranslating ? 0.75 : 1) : 0,
       child: SizedBox.square(
         dimension: 24,
-        child:
-            isTranslating
-                ? const Padding(
-                  padding: EdgeInsets.all(5),
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: LingoDeskColors.brandTeal,
+        child: isTranslating
+            ? const Padding(
+                padding: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: LingoDeskColors.brandTeal,
+                ),
+              )
+            : IgnorePointer(
+                ignoring: !visible,
+                child: IconButton(
+                  tooltip: 'Translate with AI',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints.tightFor(
+                    width: 24,
+                    height: 24,
                   ),
-                )
-                : IgnorePointer(
-                  ignoring: !visible,
-                  child: IconButton(
-                    tooltip: 'Translate with AI',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints.tightFor(
-                      width: 24,
-                      height: 24,
-                    ),
-                    onPressed: onPressed,
-                    icon: LingoDeskIcon(
-                      HugeIcons.strokeRoundedSparkles,
-                      size: 15,
-                      color:
-                          emphasized
-                              ? LingoDeskColors.warning
-                              : LingoDeskColors.brandTeal,
-                    ),
+                  onPressed: onPressed,
+                  icon: LingoDeskIcon(
+                    HugeIcons.strokeRoundedSparkles,
+                    size: 15,
+                    color: emphasized
+                        ? LingoDeskColors.warning
+                        : LingoDeskColors.brandTeal,
                   ),
                 ),
+              ),
       ),
     );
   }

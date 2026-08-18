@@ -66,28 +66,25 @@ class AppIconField extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     OutlinedButton.icon(
-                      onPressed:
-                          busy
-                              ? null
-                              : () => bloc.add(AppIconPickRequestedEvent()),
-                      icon:
-                          state.isPickingIcon
-                              ? const SizedBox.square(
-                                dimension: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                              : const LingoDeskIcon(
-                                HugeIcons.strokeRoundedImageAdd01,
-                                size: 18,
-                              ),
+                      onPressed: busy
+                          ? null
+                          : () => bloc.add(AppIconPickRequestedEvent()),
+                      icon: state.isPickingIcon
+                          ? const SizedBox.square(
+                              dimension: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const LingoDeskIcon(
+                              HugeIcons.strokeRoundedImageAdd01,
+                              size: 18,
+                            ),
                       label: Text(hasIcon ? 'Replace icon' : 'Upload icon'),
                     ),
                     if (hasIcon)
                       TextButton.icon(
-                        onPressed:
-                            busy ? null : () => bloc.add(AppIconClearedEvent()),
+                        onPressed: busy
+                            ? null
+                            : () => bloc.add(AppIconClearedEvent()),
                         icon: const LingoDeskIcon(
                           HugeIcons.strokeRoundedDelete02,
                           size: 17,

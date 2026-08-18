@@ -63,28 +63,23 @@ class _WorkspaceToolbarButtonState extends State<WorkspaceToolbarButton> {
             // glitch.
             AnimatedTint(
               color: accent,
-              builder:
-                  (context, tint) => AnimatedSwitcher(
-                    duration: LingoDeskMotion.standard,
-                    switchInCurve: LingoDeskMotion.curve,
-                    transitionBuilder:
-                        (child, animation) => FadeTransition(
-                          opacity: animation,
-                          child: ScaleTransition(
-                            scale: Tween<double>(
-                              begin: 0.7,
-                              end: 1,
-                            ).animate(animation),
-                            child: child,
-                          ),
-                        ),
-                    child: LingoDeskIcon(
-                      widget.icon,
-                      key: ValueKey<String>(widget.label),
-                      color: tint,
-                      size: 18,
-                    ),
+              builder: (context, tint) => AnimatedSwitcher(
+                duration: LingoDeskMotion.standard,
+                switchInCurve: LingoDeskMotion.curve,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.7, end: 1).animate(animation),
+                    child: child,
                   ),
+                ),
+                child: LingoDeskIcon(
+                  widget.icon,
+                  key: ValueKey<String>(widget.label),
+                  color: tint,
+                  size: 18,
+                ),
+              ),
             ),
             if (!compact) ...[
               const SizedBox(width: 8),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
+import '../../../../core/widgets/lingo_desk_dialog.dart';
 
 /// Dialog to choose which languages an export covers.
 ///
@@ -48,15 +49,14 @@ class ExportLanguagesDialog extends StatefulWidget {
   }) {
     return showDialog<List<String>>(
       context: context,
-      builder:
-          (_) => ExportLanguagesDialog(
-            languages: languages,
-            sourceLanguage: sourceLanguage,
-            title: title,
-            summary: summary,
-            confirmLabel: confirmLabel,
-            fileNameFor: fileNameFor,
-          ),
+      builder: (_) => ExportLanguagesDialog(
+        languages: languages,
+        sourceLanguage: sourceLanguage,
+        title: title,
+        summary: summary,
+        confirmLabel: confirmLabel,
+        fileNameFor: fileNameFor,
+      ),
     );
   }
 
@@ -74,43 +74,44 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
-    return AlertDialog(
+    return LingoDeskDialog(
       title: Text(widget.title),
-      content: SizedBox(
-        width: 420,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                widget.summary,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
-              ),
+      preferredWidth: 420,
+      // A plain column of language tiles with no scroll of its own; a
+      // workspace with many locales has to be able to reach the last one.
+      scrollable: true,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              widget.summary,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
             ),
-            for (final language in widget.languages)
-              LingoDeskCheckboxTile(
-                value: _selected.contains(language),
-                leading: SupportedLanguages.flagOf(language),
-                title:
-                    '${SupportedLanguages.nameOf(language)}'
-                    '${language == widget.sourceLanguage ? ' (source)' : ''}',
-                description: _fileNameFor(language),
-                onChanged: (checked) {
-                  setState(() {
-                    if (checked) {
-                      _selected.add(language);
-                    } else {
-                      _selected.remove(language);
-                    }
-                  });
-                },
-              ),
-          ],
-        ),
+          ),
+          for (final language in widget.languages)
+            LingoDeskCheckboxTile(
+              value: _selected.contains(language),
+              leading: SupportedLanguages.flagOf(language),
+              title:
+                  '${SupportedLanguages.nameOf(language)}'
+                  '${language == widget.sourceLanguage ? ' (source)' : ''}',
+              description: _fileNameFor(language),
+              onChanged: (checked) {
+                setState(() {
+                  if (checked) {
+                    _selected.add(language);
+                  } else {
+                    _selected.remove(language);
+                  }
+                });
+              },
+            ),
+        ],
       ),
       actions: [
         TextButton(
@@ -118,12 +119,11 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
           child: const Text('Cancel'),
         ),
         FilledButton(
-          onPressed:
-              _selected.isEmpty
-                  ? null
-                  : () => Navigator.of(
-                    context,
-                  ).pop(widget.languages.where(_selected.contains).toList()),
+          onPressed: _selected.isEmpty
+              ? null
+              : () => Navigator.of(
+                  context,
+                ).pop(widget.languages.where(_selected.contains).toList()),
           child: Text(widget.confirmLabel),
         ),
       ],

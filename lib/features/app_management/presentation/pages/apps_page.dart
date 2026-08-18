@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_animations.dart';
@@ -137,9 +138,9 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final horizontal = constraints.maxWidth < 780 ? 16.0 : 24.0;
+    return ResponsiveBuilder(
+      builder: (context, size, constraints) {
+        final horizontal = size.pagePadding;
 
         return SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 28),

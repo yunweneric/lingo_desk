@@ -79,13 +79,12 @@ class AnthropicClient implements AiClient {
     if (content is! List) {
       throw const AiException('Anthropic returned an unexpected response.');
     }
-    final text =
-        content
-            .whereType<Map>()
-            .where((block) => block['type'] == 'text')
-            .map((block) => block['text'])
-            .whereType<String>()
-            .join();
+    final text = content
+        .whereType<Map>()
+        .where((block) => block['type'] == 'text')
+        .map((block) => block['text'])
+        .whereType<String>()
+        .join();
     if (text.trim().isEmpty) {
       throw const AiException('Anthropic returned an empty response.');
     }

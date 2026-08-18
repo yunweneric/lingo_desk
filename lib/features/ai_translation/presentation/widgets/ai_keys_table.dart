@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/preferences/ai_settings_controller.dart';
+import '../../../../core/responsive/breakpoints.dart';
+import '../../../../core/responsive/touch.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -23,6 +25,11 @@ enum AiKeyAction { use, test, edit, delete }
 /// and once there is more than one per provider the useful questions become
 /// "which of these is live" and "which one is this" — both of which a row of
 /// aligned columns answers faster than a stack of forms.
+///
+/// That argument only holds while the columns have room to be columns.
+/// Below [WindowSizeClass.expanded] the same four facts stack into a card
+/// per key, because five columns crushed into a phone's width answer
+/// nothing at all.
 class AiKeysTable extends StatefulWidget {
   const AiKeysTable({
     super.key,
@@ -58,59 +65,73 @@ class _AiKeysTableState extends State<AiKeysTable> {
     final end = math.min(start + _pageSize, keys.length);
     final rows = keys.sublist(math.min(start, keys.length), end);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: tokens.card,
-        borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
-        border: Border.all(color: tokens.border),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _HeaderRow(tokens: tokens),
-          if (rows.isEmpty)
-            _EmptyRow(tokens: tokens)
-          else
-            for (var i = 0; i < rows.length; i++)
-              _KeyRow(
-                entry: rows[i],
-                isActive: rows[i].id == widget.settings.activeKeyId,
-                isTesting: rows[i].id == widget.testingKeyId,
-                isFirst: i == 0,
-                tokens: tokens,
-                onAction: (action) => widget.onAction(action, rows[i]),
-              ),
-          WorkspacePaginationBar(
-            page: page,
-            pageCount: pageCount,
-            pageSize: _pageSize,
-            summary:
-                keys.isEmpty
+    return ResponsiveBuilder(
+      builder: (context, size, _) {
+        final asCards = size.isBelow(WindowSizeClass.expanded);
+
+        return Container(
+          decoration: BoxDecoration(
+            color: tokens.card,
+            borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
+            border: Border.all(color: tokens.border),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!asCards) _HeaderRow(tokens: tokens),
+              if (rows.isEmpty)
+                _EmptyRow(tokens: tokens)
+              else
+                for (var i = 0; i < rows.length; i++)
+                  _KeyEntry(
+                    entry: rows[i],
+                    isActive: rows[i].id == widget.settings.activeKeyId,
+                    isTesting: rows[i].id == widget.testingKeyId,
+                    isFirst: i == 0,
+                    asCard: asCards,
+                    tokens: tokens,
+                    onAction: (action) => widget.onAction(action, rows[i]),
+                  ),
+              WorkspacePaginationBar(
+                page: page,
+                pageCount: pageCount,
+                pageSize: _pageSize,
+                summary: keys.isEmpty
                     ? 'No keys yet'
                     : '${start + 1}-$end of ${keys.length} '
-                        'key${keys.length == 1 ? '' : 's'}',
-            onPageChanged: (value) => setState(() => _page = value),
-            onPageSizeChanged:
-                (value) => setState(() {
+                          'key${keys.length == 1 ? '' : 's'}',
+                onPageChanged: (value) => setState(() => _page = value),
+                onPageSizeChanged: (value) => setState(() {
                   _pageSize = value;
                   _page = 0;
                 }),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-/// Column widths, shared by the header and every row so they stay aligned.
+/// Column weights, shared by the header and every row so they stay
+/// aligned.
+///
+/// Weights rather than fixed widths: the four columns used to add up to
+/// 616px of hard [SizedBox], which simply overflowed anything narrower
+/// than a laptop. Sharing out the row proportionally lets the table hold
+/// its shape all the way down to where it hands over to cards.
 class _Columns {
   const _Columns._();
 
-  static const provider = 190.0;
-  static const model = 210.0;
-  static const added = 120.0;
-  static const actions = 96.0;
+  static const provider = 5;
+  static const apiKey = 5;
+  static const model = 5;
+  static const added = 3;
+
+  /// The trailing menu needs a real width; it is a button, not text.
+  static const actionsWidth = 96.0;
 }
 
 class _HeaderRow extends StatelessWidget {
@@ -127,6 +148,16 @@ class _HeaderRow extends StatelessWidget {
       letterSpacing: 0.4,
     );
 
+    Widget cell(String label, int flex) => Expanded(
+      flex: flex,
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      ),
+    );
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -135,29 +166,26 @@ class _HeaderRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(
-            width: _Columns.provider,
-            child: Text('PROVIDER', style: style),
-          ),
-          Expanded(child: Text('API KEY', style: style)),
-          SizedBox(width: _Columns.model, child: Text('MODEL', style: style)),
-          SizedBox(width: _Columns.added, child: Text('ADDED', style: style)),
-          SizedBox(
-            width: _Columns.actions,
-            child: Text('', style: style, textAlign: TextAlign.end),
-          ),
+          cell('PROVIDER', _Columns.provider),
+          cell('API KEY', _Columns.apiKey),
+          cell('MODEL', _Columns.model),
+          cell('ADDED', _Columns.added),
+          const SizedBox(width: _Columns.actionsWidth),
         ],
       ),
     );
   }
 }
 
-class _KeyRow extends StatefulWidget {
-  const _KeyRow({
+/// One saved key — as a table row where the columns fit, as a card where
+/// they do not.
+class _KeyEntry extends StatefulWidget {
+  const _KeyEntry({
     required this.entry,
     required this.isActive,
     required this.isTesting,
     required this.isFirst,
+    required this.asCard,
     required this.tokens,
     required this.onAction,
   });
@@ -166,20 +194,20 @@ class _KeyRow extends StatefulWidget {
   final bool isActive;
   final bool isTesting;
   final bool isFirst;
+  final bool asCard;
   final LingoDeskTokens tokens;
   final ValueChanged<AiKeyAction> onAction;
 
   @override
-  State<_KeyRow> createState() => _KeyRowState();
+  State<_KeyEntry> createState() => _KeyEntryState();
 }
 
-class _KeyRowState extends State<_KeyRow> {
+class _KeyEntryState extends State<_KeyEntry> {
   bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
     final tokens = widget.tokens;
-    final entry = widget.entry;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
@@ -188,159 +216,274 @@ class _KeyRowState extends State<_KeyRow> {
         duration: LingoDeskMotion.fast,
         curve: LingoDeskMotion.curve,
         decoration: BoxDecoration(
-          color:
-              _hovered
-                  ? (tokens.isDark
-                      ? Colors.white.withValues(alpha: 0.03)
-                      : tokens.active.withValues(alpha: 0.5))
-                  : null,
-          border:
-              widget.isFirst
-                  ? null
-                  : Border(top: BorderSide(color: tokens.border)),
+          color: _hovered
+              ? (tokens.isDark
+                    ? Colors.white.withValues(alpha: 0.03)
+                    : tokens.active.withValues(alpha: 0.5))
+              : null,
+          border: widget.isFirst
+              ? null
+              : Border(top: BorderSide(color: tokens.border)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            SizedBox(
-              width: _Columns.provider,
-              child: Row(
-                children: [
-                  AiProviderLogo(provider: entry.provider, size: 20),
+        child: widget.asCard ? _buildCard(context) : _buildRow(context),
+      ),
+    );
+  }
+
+  // ---- wide -------------------------------------------------------------
+
+  Widget _buildRow(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: _Columns.provider,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: _Identity(entry: widget.entry, tokens: widget.tokens),
+          ),
+        ),
+        Expanded(
+          flex: _Columns.apiKey,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Row(
+              children: [
+                Flexible(child: _maskedKey(context)),
+                if (widget.isActive) ...[
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          entry.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                            color: tokens.foreground,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          entry.provider.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: tokens.muted, fontSize: 11),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const _ActiveBadge(),
                 ],
-              ),
+                if (widget.isTesting) ...[
+                  const SizedBox(width: 10),
+                  const _TestingSpinner(),
+                ],
+              ],
             ),
+          ),
+        ),
+        Expanded(
+          flex: _Columns.model,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: _model(context),
+          ),
+        ),
+        Expanded(flex: _Columns.added, child: _added(context)),
+        SizedBox(
+          width: _Columns.actionsWidth,
+          child: Align(alignment: Alignment.centerRight, child: _menu()),
+        ),
+      ],
+    );
+  }
+
+  // ---- compact ----------------------------------------------------------
+
+  /// The same four facts as the row, stacked: who the key is for, the key
+  /// itself, then the two details that only matter once you have found it.
+  Widget _buildCard(BuildContext context) {
+    final tokens = widget.tokens;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        entry.maskedKey,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: LingoDeskTheme.codeStyle.copyWith(
-                          color: tokens.foreground,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    if (widget.isActive) ...[
-                      const SizedBox(width: 10),
-                      const _ActiveBadge(),
-                    ],
-                    if (widget.isTesting) ...[
-                      const SizedBox(width: 10),
-                      const SizedBox.square(
-                        dimension: 13,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: LingoDeskColors.brandTeal,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+              child: _Identity(entry: widget.entry, tokens: tokens),
             ),
-            SizedBox(
-              width: _Columns.model,
-              child: Text(
-                entry.model,
+            const SizedBox(width: 8),
+            _menu(),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Flexible(child: _maskedKey(context)),
+            if (widget.isActive) ...[
+              const SizedBox(width: 8),
+              const _ActiveBadge(),
+            ],
+            if (widget.isTesting) ...[
+              const SizedBox(width: 8),
+              const _TestingSpinner(),
+            ],
+          ],
+        ),
+        const SizedBox(height: 10),
+        _CardFact(label: 'MODEL', tokens: tokens, child: _model(context)),
+        const SizedBox(height: 4),
+        _CardFact(label: 'ADDED', tokens: tokens, child: _added(context)),
+      ],
+    );
+  }
+
+  // ---- shared pieces ----------------------------------------------------
+
+  Widget _maskedKey(BuildContext context) => Text(
+    widget.entry.maskedKey,
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: LingoDeskTheme.codeStyle.copyWith(
+      color: widget.tokens.foreground,
+      fontSize: 12,
+    ),
+  );
+
+  Widget _model(BuildContext context) => Text(
+    widget.entry.model,
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: LingoDeskTheme.codeStyle.copyWith(
+      color: widget.tokens.muted,
+      fontSize: 12,
+    ),
+  );
+
+  Widget _added(BuildContext context) => Text(
+    DateFormatter.relative(widget.entry.createdAt),
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: Theme.of(
+      context,
+    ).textTheme.bodyMedium?.copyWith(color: widget.tokens.muted, fontSize: 12),
+  );
+
+  Widget _menu() {
+    return AnimatedOpacity(
+      duration: LingoDeskMotion.fast,
+      curve: LingoDeskMotion.curve,
+      // Fully opaque without a pointer: there is no hover on a touch
+      // screen to bring it up with.
+      opacity: hasHover ? (_hovered ? 1 : 0.4) : 1,
+      child: LingoDeskMenuButton<AiKeyAction>(
+        tooltip: 'Key actions',
+        menuWidth: 210,
+        items: [
+          LingoDeskMenuItem(
+            value: AiKeyAction.use,
+            label: 'Use for translations',
+            icon: HugeIcons.strokeRoundedCheckmarkCircle02,
+            enabled: !widget.isActive && widget.entry.isUsable,
+          ),
+          LingoDeskMenuItem(
+            value: AiKeyAction.test,
+            label: 'Test connection',
+            icon: HugeIcons.strokeRoundedPlugSocket,
+            enabled: !widget.isTesting,
+          ),
+          const LingoDeskMenuItem(
+            value: AiKeyAction.edit,
+            label: 'Edit',
+            icon: HugeIcons.strokeRoundedEdit02,
+          ),
+          const LingoDeskMenuItem.divider(),
+          const LingoDeskMenuItem(
+            value: AiKeyAction.delete,
+            label: 'Delete',
+            icon: HugeIcons.strokeRoundedDelete02,
+            destructive: true,
+          ),
+        ],
+        onSelected: widget.onAction,
+      ),
+    );
+  }
+}
+
+/// The key's own name over the provider it belongs to, behind the
+/// provider's logo.
+class _Identity extends StatelessWidget {
+  const _Identity({required this.entry, required this.tokens});
+
+  final AiKey entry;
+  final LingoDeskTokens tokens;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        AiProviderLogo(provider: entry.provider, size: 20),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                entry.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: LingoDeskTheme.codeStyle.copyWith(
-                  color: tokens.muted,
-                  fontSize: 12,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: tokens.foreground,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
                 ),
               ),
-            ),
-            SizedBox(
-              width: _Columns.added,
-              child: Text(
-                DateFormatter.relative(entry.createdAt),
+              Text(
+                entry.provider.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: tokens.muted,
-                  fontSize: 12,
+                  fontSize: 11,
                 ),
               ),
-            ),
-            SizedBox(
-              width: _Columns.actions,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: AnimatedOpacity(
-                  duration: LingoDeskMotion.fast,
-                  curve: LingoDeskMotion.curve,
-                  // Never fully hidden, or the row's actions would be
-                  // undiscoverable without a mouse.
-                  opacity: _hovered ? 1 : 0.4,
-                  child: LingoDeskMenuButton<AiKeyAction>(
-                    tooltip: 'Key actions',
-                    menuWidth: 210,
-                    items: [
-                      LingoDeskMenuItem(
-                        value: AiKeyAction.use,
-                        label: 'Use for translations',
-                        icon: HugeIcons.strokeRoundedCheckmarkCircle02,
-                        enabled: !widget.isActive && entry.isUsable,
-                      ),
-                      LingoDeskMenuItem(
-                        value: AiKeyAction.test,
-                        label: 'Test connection',
-                        icon: HugeIcons.strokeRoundedPlugSocket,
-                        enabled: !widget.isTesting,
-                      ),
-                      const LingoDeskMenuItem(
-                        value: AiKeyAction.edit,
-                        label: 'Edit',
-                        icon: HugeIcons.strokeRoundedEdit02,
-                      ),
-                      const LingoDeskMenuItem.divider(),
-                      const LingoDeskMenuItem(
-                        value: AiKeyAction.delete,
-                        label: 'Delete',
-                        icon: HugeIcons.strokeRoundedDelete02,
-                        destructive: true,
-                      ),
-                    ],
-                    onSelected: widget.onAction,
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ],
+    );
+  }
+}
+
+/// A labelled detail inside a card, standing in for the column header the
+/// card no longer has.
+class _CardFact extends StatelessWidget {
+  const _CardFact({
+    required this.label,
+    required this.tokens,
+    required this.child,
+  });
+
+  final String label;
+  final LingoDeskTokens tokens;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 58,
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: tokens.muted,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ),
+        Expanded(child: child),
+      ],
+    );
+  }
+}
+
+class _TestingSpinner extends StatelessWidget {
+  const _TestingSpinner();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox.square(
+      dimension: 13,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: LingoDeskColors.brandTeal,
       ),
     );
   }
@@ -384,6 +527,7 @@ class _EmptyRow extends StatelessWidget {
       child: Center(
         child: Text(
           'No API keys yet. Add one to translate from the editor.',
+          textAlign: TextAlign.center,
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: tokens.muted),

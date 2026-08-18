@@ -9,6 +9,8 @@ import '../../features/app_management/presentation/bloc/app_management_event.dar
 import '../../features/app_management/presentation/bloc/app_management_state.dart';
 import '../di/injection_container.dart';
 import '../preferences/app_settings_controller.dart';
+import '../responsive/breakpoints.dart';
+import '../responsive/touch.dart';
 import '../router/app_router.dart';
 import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_theme.dart';
@@ -19,8 +21,184 @@ import 'lingo_desk_icon.dart';
 import 'lingo_desk_mark.dart';
 import 'lingo_desk_toast.dart';
 
-/// Persistent frame around every signed-in page: the sidebar on the left,
-/// the routed page on the right.
+/// Width of the sidebar with its labels showing.
+const double kSidebarWidth = 284;
+
+/// Width of the sidebar as an icon-only rail.
+const double kSidebarRailWidth = 72;
+
+/// The two halves of the primary navigation.
+///
+/// [workspace] is what you do to translations; [settings] is what you
+/// configure once and leave alone. The split is what lets the sidebar
+/// title its groups, and what lets a phone collapse the second one into a
+/// single entry.
+enum NavGroup {
+  workspace('Workspace'),
+  settings('Settings');
+
+  const NavGroup(this.title);
+
+  final String title;
+}
+
+/// One place in the primary navigation.
+///
+/// Held as data rather than built inline, so the sidebar, the rail and the
+/// phone's bottom bar all render the same destinations from one list
+/// instead of three that have to be kept in step.
+class AppDestination {
+  const AppDestination({
+    required this.label,
+    required this.icon,
+    required this.group,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  final String label;
+  final List<List<dynamic>> icon;
+  final NavGroup group;
+
+  /// Whether the current route belongs to this destination.
+  final bool Function(String location) isActive;
+
+  final void Function(BuildContext context) onTap;
+}
+
+/// Everywhere the shell navigates to.
+///
+/// Settings is a group of panes rather than one page with a tab bar: each
+/// pane is a row here, so no destination in the app is more than one click
+/// away and the rail is the only navigation the settings screens need.
+const List<AppDestination> kAppDestinations = [
+  AppDestination(
+    label: 'Dashboard',
+    icon: HugeIcons.strokeRoundedDashboardSquare01,
+    group: NavGroup.workspace,
+    isActive: _isDashboard,
+    onTap: _goDashboard,
+  ),
+  AppDestination(
+    label: 'Apps',
+    icon: HugeIcons.strokeRoundedFolder02,
+    group: NavGroup.workspace,
+    isActive: _isApps,
+    onTap: _goApps,
+  ),
+  AppDestination(
+    label: 'Import',
+    icon: HugeIcons.strokeRoundedFileUpload,
+    group: NavGroup.workspace,
+    isActive: _isImport,
+    onTap: openImportProject,
+  ),
+  AppDestination(
+    label: 'Profile',
+    icon: HugeIcons.strokeRoundedUserCircle,
+    group: NavGroup.settings,
+    isActive: _isProfile,
+    onTap: _goProfile,
+  ),
+  AppDestination(
+    label: 'Appearance',
+    icon: HugeIcons.strokeRoundedPaintBoard,
+    group: NavGroup.settings,
+    isActive: _isAppearance,
+    onTap: _goAppearance,
+  ),
+  AppDestination(
+    label: 'Languages',
+    icon: HugeIcons.strokeRoundedLanguageSquare,
+    group: NavGroup.settings,
+    isActive: _isLanguages,
+    onTap: _goLanguages,
+  ),
+  // Keys are a setting you manage, not a workspace task — and putting
+  // them here means the old "AI" settings tab has exactly one successor.
+  AppDestination(
+    label: 'AI providers',
+    icon: HugeIcons.strokeRoundedSparkles,
+    group: NavGroup.settings,
+    isActive: _isAiProviders,
+    onTap: _goAiProviders,
+  ),
+];
+
+/// What the phone's bottom bar carries.
+///
+/// Seven destinations will not fit along a phone's bottom edge, so the
+/// settings group collapses to a single entry that opens its first pane;
+/// [SettingsPaneSwitcher] offers the rest once you are there.
+const List<AppDestination> kBottomNavDestinations = [
+  AppDestination(
+    label: 'Dashboard',
+    icon: HugeIcons.strokeRoundedDashboardSquare01,
+    group: NavGroup.workspace,
+    isActive: _isDashboard,
+    onTap: _goDashboard,
+  ),
+  AppDestination(
+    label: 'Apps',
+    icon: HugeIcons.strokeRoundedFolder02,
+    group: NavGroup.workspace,
+    isActive: _isApps,
+    onTap: _goApps,
+  ),
+  AppDestination(
+    label: 'Import',
+    icon: HugeIcons.strokeRoundedFileUpload,
+    group: NavGroup.workspace,
+    isActive: _isImport,
+    onTap: openImportProject,
+  ),
+  AppDestination(
+    label: 'Settings',
+    icon: HugeIcons.strokeRoundedSettings01,
+    group: NavGroup.settings,
+    isActive: _isAnySettings,
+    onTap: _goProfile,
+  ),
+];
+
+bool _isDashboard(String location) => location == AppRoutes.dashboard;
+
+// The editor and per-app pages hang off Apps; uploading into an app
+// belongs to Import.
+bool _isApps(String location) =>
+    location.startsWith(AppRoutes.apps) && !location.endsWith('/upload');
+
+bool _isImport(String location) =>
+    location == AppRoutes.importProject || location.endsWith('/upload');
+
+bool _isAiProviders(String location) => location == AppRoutes.aiProviders;
+
+bool _isProfile(String location) => location == AppRoutes.settingsProfile;
+
+bool _isAppearance(String location) => location == AppRoutes.settingsAppearance;
+
+bool _isLanguages(String location) => location == AppRoutes.settingsLanguages;
+
+/// Any pane in the settings group — what the phone's single entry lights
+/// up for.
+bool _isAnySettings(String location) =>
+    location.startsWith(AppRoutes.settings) || _isAiProviders(location);
+
+void _goDashboard(BuildContext context) => context.go(AppRoutes.dashboard);
+void _goApps(BuildContext context) => context.go(AppRoutes.apps);
+void _goAiProviders(BuildContext context) => context.go(AppRoutes.aiProviders);
+void _goProfile(BuildContext context) => context.go(AppRoutes.settingsProfile);
+void _goAppearance(BuildContext context) =>
+    context.go(AppRoutes.settingsAppearance);
+void _goLanguages(BuildContext context) =>
+    context.go(AppRoutes.settingsLanguages);
+
+/// Persistent frame around every signed-in page: the navigation, and the
+/// routed page beside or above it.
+///
+/// The nav takes the shape the window can carry — a bottom bar on a phone,
+/// an icon rail on a tablet, the full labelled sidebar on a desktop
+/// window.
 ///
 /// Owns the single [AppManagementBloc] instance for the whole shell, so
 /// the dashboard, the apps page and the sidebar's app chooser all read the
@@ -28,7 +206,7 @@ import 'lingo_desk_toast.dart';
 class AppShell extends StatefulWidget {
   const AppShell({super.key, required this.location, required this.child});
 
-  /// Current route path, used to highlight the active sidebar item.
+  /// Current route path, used to highlight the active destination.
   final String location;
 
   final Widget child;
@@ -52,39 +230,39 @@ class _AppShellState extends State<AppShell> {
       // toasts its outcomes for every page below — the dashboard, the
       // apps table and the sidebar all get feedback for free.
       child: BlocListener<AppManagementBloc, AppManagementState>(
-        listenWhen:
-            (previous, current) =>
-                current is AppManagementLoaded && current.notice != null,
-        listener:
-            (context, state) =>
-                context.showToast((state as AppManagementLoaded).notice!),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth;
-            final hasDrawer = width < kShellRailBreakpoint;
-            final collapsed = width < kShellExpandedBreakpoint;
+        listenWhen: (previous, current) =>
+            current is AppManagementLoaded && current.notice != null,
+        listener: (context, state) =>
+            context.showToast((state as AppManagementLoaded).notice!),
+        child: ResponsiveBuilder(
+          builder: (context, size, constraints) {
+            // A phone puts the nav under the thumb; anything wider keeps
+            // it down the side, labelled once the window can spare the
+            // 284px without squeezing the page beside it.
+            final useBottomBar = size.isCompact;
+            final collapsed = size.isBelow(WindowSizeClass.large);
+            final sidebarWidth = useBottomBar
+                ? 0.0
+                : (collapsed ? kSidebarRailWidth : kSidebarWidth);
 
             return AppShellScope(
-              hasDrawer: hasDrawer,
+              // The rail is always on screen, and the bottom bar replaces
+              // the drawer outright, so nothing reaches for one any more.
+              hasDrawer: false,
               openDrawer: _openDrawer,
+              sizeClass: size,
+              contentSizeClass: WindowSizeClass.fromWidth(
+                constraints.maxWidth - sidebarWidth,
+              ),
               child: Scaffold(
                 key: _scaffoldKey,
                 backgroundColor: tokens.background,
-                drawer:
-                    hasDrawer
-                        ? Drawer(
-                          width: 284,
-                          backgroundColor: tokens.sidebar,
-                          shape: const RoundedRectangleBorder(),
-                          child: AppSidebar(
-                            location: widget.location,
-                            onItemTap: () => Navigator.of(context).pop(),
-                          ),
-                        )
-                        : null,
+                bottomNavigationBar: useBottomBar
+                    ? AppBottomNav(location: widget.location)
+                    : null,
                 body: Row(
                   children: [
-                    if (!hasDrawer)
+                    if (!useBottomBar)
                       AppSidebar(
                         location: widget.location,
                         collapsed: collapsed,
@@ -96,6 +274,62 @@ class _AppShellState extends State<AppShell> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+/// Primary navigation on a phone: the workspace destinations plus one
+/// entry for the whole settings group, along the bottom edge where a
+/// thumb can reach them.
+class AppBottomNav extends StatelessWidget {
+  const AppBottomNav({super.key, required this.location});
+
+  final String location;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final selected = kBottomNavDestinations.indexWhere(
+      (destination) => destination.isActive(location),
+    );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: tokens.sidebar,
+        border: Border(top: BorderSide(color: tokens.border)),
+      ),
+      child: NavigationBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        indicatorColor: tokens.active,
+        height: kTouchTarget + 16,
+        // Four labels at once is a lot of type along a phone's bottom
+        // edge; naming only the one you are on keeps the bar quiet
+        // without leaving any destination unnamed when you reach it.
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        // A route the nav has no destination for — the editor, an app's
+        // settings — must not light one up at random.
+        selectedIndex: selected < 0 ? 0 : selected,
+        onDestinationSelected: (index) =>
+            kBottomNavDestinations[index].onTap(context),
+        destinations: [
+          for (final destination in kBottomNavDestinations)
+            NavigationDestination(
+              icon: LingoDeskIcon(
+                destination.icon,
+                size: 22,
+                color: tokens.muted,
+              ),
+              selectedIcon: LingoDeskIcon(
+                destination.icon,
+                size: 22,
+                color: LingoDeskColors.brandTeal,
+              ),
+              label: destination.label,
+            ),
+        ],
       ),
     );
   }
@@ -114,14 +348,14 @@ class AppSidebar extends StatelessWidget {
   final String location;
   final bool collapsed;
 
-  /// Called after any item is activated; the drawer uses it to close.
+  /// Called after any item is activated; a drawer would use it to close.
   final VoidCallback? onItemTap;
 
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
-    final width = collapsed ? 72.0 : 284.0;
+    final width = collapsed ? kSidebarRailWidth : kSidebarWidth;
 
     return AnimatedContainer(
       duration: LingoDeskMotion.standard,
@@ -148,63 +382,32 @@ class AppSidebar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        collapsed
-                            ? const EdgeInsets.only(bottom: 18)
-                            : const EdgeInsets.fromLTRB(8, 8, 8, 20),
+                    padding: collapsed
+                        ? const EdgeInsets.only(bottom: 18)
+                        : const EdgeInsets.fromLTRB(8, 8, 8, 20),
                     child: LingoDeskMark(
                       size: collapsed ? 28 : 34,
                       reversed: tokens.isDark,
                       showWordmark: !collapsed,
                     ),
                   ),
-                  _SidebarSection(
-                    collapsed: collapsed,
-                    items: [
-                      _SidebarItemData(
-                        label: 'Dashboard',
-                        icon: HugeIcons.strokeRoundedDashboardSquare01,
-                        isActive: location == AppRoutes.dashboard,
-                        onTap: () => context.go(AppRoutes.dashboard),
+                  // Seven rows plus two headings outgrow a short window,
+                  // so the nav scrolls and the footer stays put rather
+                  // than the whole column overflowing.
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: _SidebarSection(
+                        collapsed: collapsed,
+                        location: location,
+                        onItemTap: onItemTap,
                       ),
-                      _SidebarItemData(
-                        label: 'Apps',
-                        icon: HugeIcons.strokeRoundedFolder02,
-                        // The editor and per-app pages hang off Apps;
-                        // uploading into an app belongs to Import.
-                        isActive:
-                            location.startsWith(AppRoutes.apps) &&
-                            !location.endsWith('/upload'),
-                        onTap: () => context.go(AppRoutes.apps),
-                      ),
-                      _SidebarItemData(
-                        label: 'Import',
-                        icon: HugeIcons.strokeRoundedFileUpload,
-                        isActive:
-                            location == AppRoutes.importProject ||
-                            location.endsWith('/upload'),
-                        onTap: () => openImportProject(context),
-                      ),
-                      _SidebarItemData(
-                        label: 'AI providers',
-                        icon: HugeIcons.strokeRoundedSparkles,
-                        isActive: location == AppRoutes.aiProviders,
-                        onTap: () => context.go(AppRoutes.aiProviders),
-                      ),
-                      _SidebarItemData(
-                        label: 'Settings',
-                        icon: HugeIcons.strokeRoundedSettings01,
-                        isActive: location == AppRoutes.settings,
-                        onTap: () => context.go(AppRoutes.settings),
-                      ),
-                    ],
-                    onItemTap: onItemTap,
+                    ),
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 12),
                   _SidebarFooter(
                     collapsed: collapsed,
                     onTap: () {
-                      context.go(AppRoutes.settings);
+                      context.go(AppRoutes.settingsProfile);
                       onItemTap?.call();
                     },
                   ),
@@ -218,38 +421,58 @@ class AppSidebar extends StatelessWidget {
   }
 }
 
-class _SidebarItemData {
-  const _SidebarItemData({
-    required this.label,
-    required this.icon,
-    this.isActive = false,
-    this.onTap,
-  });
-
-  final String label;
-  final List<List<dynamic>> icon;
-  final bool isActive;
-  final VoidCallback? onTap;
-}
-
+/// The rail's rows, split into titled groups.
+///
+/// At full width each group is announced by its name; in the icon rail
+/// there is no room for words, so the same break is drawn as a hairline —
+/// the grouping survives the collapse, only its label doesn't.
 class _SidebarSection extends StatelessWidget {
   const _SidebarSection({
-    required this.items,
     required this.collapsed,
+    required this.location,
     this.onItemTap,
   });
 
-  final List<_SidebarItemData> items;
   final bool collapsed;
+  final String location;
   final VoidCallback? onItemTap;
 
   @override
   Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final headingStyle = Theme.of(context).textTheme.labelLarge?.copyWith(
+      color: tokens.muted,
+      fontSize: 11,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.8,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final item in items)
-          _SidebarItem(item: item, collapsed: collapsed, onItemTap: onItemTap),
+        for (final (index, group) in NavGroup.values.indexed) ...[
+          if (!collapsed)
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, index == 0 ? 0 : 18, 10, 8),
+              child: Text(group.title.toUpperCase(), style: headingStyle),
+            )
+          // The first group needs no rule above it — the mark already
+          // separates it from the top of the rail.
+          else if (index != 0)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
+              child: Divider(color: tokens.border, height: 1, thickness: 1),
+            ),
+          for (final destination in kAppDestinations.where(
+            (destination) => destination.group == group,
+          ))
+            _SidebarItem(
+              destination: destination,
+              isActive: destination.isActive(location),
+              collapsed: collapsed,
+              onItemTap: onItemTap,
+            ),
+        ],
       ],
     );
   }
@@ -260,12 +483,14 @@ class _SidebarSection extends StatelessWidget {
 /// active item grows a teal bar against the rail's inner edge.
 class _SidebarItem extends StatefulWidget {
   const _SidebarItem({
-    required this.item,
+    required this.destination,
+    required this.isActive,
     required this.collapsed,
     this.onItemTap,
   });
 
-  final _SidebarItemData item;
+  final AppDestination destination;
+  final bool isActive;
   final bool collapsed;
   final VoidCallback? onItemTap;
 
@@ -279,21 +504,23 @@ class _SidebarItemState extends State<_SidebarItem> {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final item = widget.item;
+    final destination = widget.destination;
     final collapsed = widget.collapsed;
-    final foreground =
-        item.isActive || _hovered ? tokens.foreground : tokens.muted;
-    final background =
-        item.isActive
-            ? tokens.active
-            : _hovered
-            ? tokens.active.withValues(alpha: 0.6)
-            : Colors.transparent;
+    final foreground = widget.isActive || _hovered
+        ? tokens.foreground
+        : tokens.muted;
+    final background = widget.isActive
+        ? tokens.active
+        : _hovered
+        ? tokens.active.withValues(alpha: 0.6)
+        : Colors.transparent;
 
     final row = AnimatedContainer(
       duration: LingoDeskMotion.fast,
       curve: LingoDeskMotion.curve,
-      height: 40,
+      // A rail on a touch screen is reached with a thumb, so the rows
+      // grow to a finger's size there and stay tight under a pointer.
+      height: isTouchPlatform ? kTouchTarget : 40,
       padding: EdgeInsets.symmetric(horizontal: collapsed ? 0 : 10),
       decoration: BoxDecoration(
         color: background,
@@ -302,7 +529,7 @@ class _SidebarItemState extends State<_SidebarItem> {
       child: AnimatedTint(
         color: foreground,
         builder: (context, tint) {
-          final icon = LingoDeskIcon(item.icon, size: 18, color: tint);
+          final icon = LingoDeskIcon(destination.icon, size: 18, color: tint);
 
           if (collapsed) {
             return Center(child: icon);
@@ -322,7 +549,7 @@ class _SidebarItemState extends State<_SidebarItem> {
                       ).textTheme.labelLarge?.copyWith(color: tint) ??
                       TextStyle(color: tint),
                   child: Text(
-                    item.label,
+                    destination.label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -343,7 +570,7 @@ class _SidebarItemState extends State<_SidebarItem> {
           duration: LingoDeskMotion.standard,
           curve: LingoDeskMotion.curve,
           width: 3,
-          height: item.isActive ? 18 : 0,
+          height: widget.isActive ? 18 : 0,
           decoration: BoxDecoration(
             color: LingoDeskColors.brandTeal,
             borderRadius: BorderRadius.circular(99),
@@ -360,21 +587,17 @@ class _SidebarItemState extends State<_SidebarItem> {
         onEnter: (_) => setState(() => _hovered = true),
         onExit: (_) => setState(() => _hovered = false),
         child: InkWell(
-          onTap:
-              item.onTap == null
-                  ? null
-                  : () {
-                    item.onTap!.call();
-                    widget.onItemTap?.call();
-                  },
+          onTap: () {
+            destination.onTap(context);
+            widget.onItemTap?.call();
+          },
           borderRadius: BorderRadius.circular(12),
           // The rail's own tint already reads as hover; Material's would
           // stack a second wash on top of it.
           hoverColor: Colors.transparent,
-          child:
-              collapsed
-                  ? Tooltip(message: item.label, child: content)
-                  : content,
+          child: collapsed
+              ? Tooltip(message: destination.label, child: content)
+              : content,
         ),
       ),
     );
@@ -418,15 +641,17 @@ class _SidebarFooter extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(12),
-              child: avatar,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minHitTarget),
+                child: Center(child: avatar),
+              ),
             ),
           );
         }
 
-        final subtitle =
-            settings.profileEmail.isEmpty
-                ? 'Local storage'
-                : settings.profileEmail;
+        final subtitle = settings.profileEmail.isEmpty
+            ? 'Local storage'
+            : settings.profileEmail;
 
         // Deliberately not lifted on hover: this card is a button, and a
         // target that rises out from under the pointer is a target you

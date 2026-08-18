@@ -4,6 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
+import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../app_management/domain/entities/app.dart';
 import '../bloc/app_settings_bloc.dart';
@@ -27,14 +28,13 @@ class CreateAppDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) =>
-              getIt<AppSettingsBloc>()..add(
-                InitializeAppSettingsEvent(
-                  defaultTargetLanguages:
-                      getIt<AppSettingsController>().defaultTargetLanguages,
-                ),
-              ),
+      create: (_) => getIt<AppSettingsBloc>()
+        ..add(
+          InitializeAppSettingsEvent(
+            defaultTargetLanguages:
+                getIt<AppSettingsController>().defaultTargetLanguages,
+          ),
+        ),
       child: const _CreateAppDialogView(),
     );
   }
@@ -73,51 +73,47 @@ class _CreateAppDialogViewState extends State<_CreateAppDialogView> {
       builder: (context, state) {
         final ready = state is AppSettingsReady ? state : null;
 
-        return AlertDialog(
+        return LingoDeskDialog(
           title: const Text('New app'),
-          content: SizedBox(
-            width: 560,
-            child:
-                ready == null
-                    ? const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                    : SingleChildScrollView(
-                      child: AppSettingsFormFields(
-                        state: ready,
-                        nameController: _nameController,
-                        autofocusName: true,
-                        onSubmitted: () => _save(context),
-                      ),
-                    ),
-          ),
+          preferredWidth: 560,
+          content: ready == null
+              ? const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : SingleChildScrollView(
+                  child: AppSettingsFormFields(
+                    state: ready,
+                    nameController: _nameController,
+                    autofocusName: true,
+                    onSubmitted: () => _save(context),
+                  ),
+                ),
           actions: [
             OutlinedButton(
-              onPressed:
-                  (ready?.isSaving ?? false)
-                      ? null
-                      : () => Navigator.of(context).pop(),
+              onPressed: (ready?.isSaving ?? false)
+                  ? null
+                  : () => Navigator.of(context).pop(),
               child: const Text('Cancel'),
             ),
             FilledButton.icon(
-              onPressed:
-                  ready == null || ready.isSaving ? null : () => _save(context),
-              icon:
-                  (ready?.isSaving ?? false)
-                      ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                      : const LingoDeskIcon(
-                        HugeIcons.strokeRoundedTick02,
+              onPressed: ready == null || ready.isSaving
+                  ? null
+                  : () => _save(context),
+              icon: (ready?.isSaving ?? false)
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
                         color: Colors.white,
-                        size: 18,
                       ),
+                    )
+                  : const LingoDeskIcon(
+                      HugeIcons.strokeRoundedTick02,
+                      color: Colors.white,
+                      size: 18,
+                    ),
               label: const Text('Create app'),
             ),
           ],

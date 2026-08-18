@@ -66,10 +66,9 @@ class _MarkPainter extends CustomPainter {
     // Brand SVG geometry on a 64x64 viewBox.
     final unit = size.width / 64;
     final square = reversed ? Colors.white : LingoDeskColors.brandTeal;
-    final backTile =
-        reversed
-            ? LingoDeskColors.brandTeal.withValues(alpha: 0.4)
-            : Colors.white.withValues(alpha: 0.45);
+    final backTile = reversed
+        ? LingoDeskColors.brandTeal.withValues(alpha: 0.4)
+        : Colors.white.withValues(alpha: 0.45);
     final frontTile = reversed ? LingoDeskColors.brandTeal : Colors.white;
     final dots = reversed ? Colors.white : LingoDeskColors.brandTeal;
 

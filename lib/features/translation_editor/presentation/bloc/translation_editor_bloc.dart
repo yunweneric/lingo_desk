@@ -97,12 +97,12 @@ class TranslationEditorBloc
               TranslationEditorLoaded(
                 app: app,
                 entries: entries,
-                showMissingOnly:
-                    previous is TranslationEditorLoaded
-                        ? previous.showMissingOnly
-                        : false,
-                query:
-                    previous is TranslationEditorLoaded ? previous.query : '',
+                showMissingOnly: previous is TranslationEditorLoaded
+                    ? previous.showMissingOnly
+                    : false,
+                query: previous is TranslationEditorLoaded
+                    ? previous.query
+                    : '',
               ),
             );
           },
@@ -414,10 +414,9 @@ class TranslationEditorBloc
     AiTranslateEvent event,
     Emitter<TranslationEditorState> emit,
   ) {
-    final label =
-        event.languages.length == 1
-            ? SupportedLanguages.nameOf(event.languages.first)
-            : '${event.languages.length} languages';
+    final label = event.languages.length == 1
+        ? SupportedLanguages.nameOf(event.languages.first)
+        : '${event.languages.length} languages';
     return _runAiTranslation(
       emit,
       languages: event.languages,

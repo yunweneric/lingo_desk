@@ -122,8 +122,9 @@ class TranslationEditorLoaded extends TranslationEditorState {
     if (entries.isEmpty) {
       return 0;
     }
-    final translated =
-        entries.where((entry) => !entry.isMissingFor(language)).length;
+    final translated = entries
+        .where((entry) => !entry.isMissingFor(language))
+        .length;
     return translated / entries.length;
   }
 

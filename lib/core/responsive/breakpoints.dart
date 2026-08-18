@@ -117,10 +117,9 @@ class ResponsiveBuilder extends StatelessWidget {
       builder: (context, constraints) {
         // An unbounded width (inside a horizontal scroll view, say) has no
         // size class of its own; fall back to the window's.
-        final width =
-            constraints.hasBoundedWidth
-                ? constraints.maxWidth
-                : MediaQuery.sizeOf(context).width;
+        final width = constraints.hasBoundedWidth
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
         return builder(context, WindowSizeClass.fromWidth(width), constraints);
       },
     );

@@ -41,7 +41,7 @@ jobs:
           if [ -f ".fvmrc" ]; then
             FLUTTER_VERSION=$(grep -o '"flutter"[[:space:]]*:[[:space:]]*"[^"]*"' .fvmrc | cut -d'"' -f4)
           fi
-          FLUTTER_VERSION="${FLUTTER_VERSION:-3.29.3}"
+          FLUTTER_VERSION="${FLUTTER_VERSION:-3.38.10}"
 
           # Artifact version: tag name for releases, pubspec version + sha otherwise.
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then

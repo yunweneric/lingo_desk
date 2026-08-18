@@ -22,24 +22,23 @@ Future<void> openCreateApp(BuildContext context) async {
   // RouteAware.didPopNext when the dialogs close.
   final uploadNow = await showDialog<bool>(
     context: context,
-    builder:
-        (dialogContext) => AlertDialog(
-          title: Text('"${app.name}" created'),
-          content: const Text(
-            'Do you want to upload your existing JSON translation files now? '
-            'You can also do this later from the dashboard.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Later'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Upload files'),
-            ),
-          ],
+    builder: (dialogContext) => AlertDialog(
+      title: Text('"${app.name}" created'),
+      content: const Text(
+        'Do you want to upload your existing JSON translation files now? '
+        'You can also do this later from the dashboard.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: const Text('Later'),
         ),
+        FilledButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: const Text('Upload files'),
+        ),
+      ],
+    ),
   );
 
   if (uploadNow == true && context.mounted) {
@@ -72,27 +71,24 @@ Future<void> confirmDeleteApp(
   final bloc = context.read<AppManagementBloc>();
   final confirmed = await showDialog<bool>(
     context: context,
-    builder:
-        (dialogContext) => AlertDialog(
-          title: Text('Delete "${overview.app.name}"?'),
-          content: const Text(
-            'This permanently removes the app and all of its translations. '
-            'This cannot be undone.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: LingoDeskColors.error,
-              ),
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Delete'),
-            ),
-          ],
+    builder: (dialogContext) => AlertDialog(
+      title: Text('Delete "${overview.app.name}"?'),
+      content: const Text(
+        'This permanently removes the app and all of its translations. '
+        'This cannot be undone.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: const Text('Cancel'),
         ),
+        FilledButton(
+          style: FilledButton.styleFrom(backgroundColor: LingoDeskColors.error),
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: const Text('Delete'),
+        ),
+      ],
+    ),
   );
   if (confirmed ?? false) {
     bloc.add(DeleteAppEvent(overview.app.id));

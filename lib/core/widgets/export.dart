@@ -4,6 +4,7 @@ export 'app_shell_scope.dart';
 export 'language_dropdown.dart';
 export 'lingo_desk_animations.dart';
 export 'lingo_desk_checkbox.dart';
+export 'lingo_desk_dialog.dart';
 export 'lingo_desk_dropdown.dart';
 export 'lingo_desk_field.dart';
 export 'lingo_desk_icon.dart';

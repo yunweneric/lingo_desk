@@ -170,19 +170,18 @@ class _LingoDeskDropdownState<T> extends State<LingoDeskDropdown<T>> {
                 ),
               ),
             ],
-            builder:
-                (context, controller, child) => _DropdownTrigger(
-                  selected: _selected,
-                  hintText: widget.hintText,
-                  icon: widget.icon,
-                  size: widget.size,
-                  enabled: _isEnabled,
-                  open: _open,
-                  monospace: widget.monospace,
-                  hasError: widget.errorText != null,
-                  expand: widget.expand,
-                  onTap: _isEnabled ? _toggle : null,
-                ),
+            builder: (context, controller, child) => _DropdownTrigger(
+              selected: _selected,
+              hintText: widget.hintText,
+              icon: widget.icon,
+              size: widget.size,
+              enabled: _isEnabled,
+              open: _open,
+              monospace: widget.monospace,
+              hasError: widget.errorText != null,
+              expand: widget.expand,
+              onTap: _isEnabled ? _toggle : null,
+            ),
           );
         },
       ),
@@ -220,19 +219,19 @@ class _DropdownTrigger<T> extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final item = selected;
     final leadingIcon = item?.icon ?? icon;
-    final labelStyle = (monospace
-            ? LingoDeskTheme.codeStyle
-            : Theme.of(context).textTheme.bodyMedium)
-        ?.copyWith(
-          fontSize: size.fontSize,
-          color:
-              !enabled
+    final labelStyle =
+        (monospace
+                ? LingoDeskTheme.codeStyle
+                : Theme.of(context).textTheme.bodyMedium)
+            ?.copyWith(
+              fontSize: size.fontSize,
+              color: !enabled
                   ? tokens.muted
                   : item == null
                   ? tokens.muted
                   : tokens.foreground,
-          fontWeight: item == null ? FontWeight.w400 : FontWeight.w600,
-        );
+              fontWeight: item == null ? FontWeight.w400 : FontWeight.w600,
+            );
 
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,

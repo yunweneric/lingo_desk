@@ -34,10 +34,9 @@ class LanguageTargetSelector extends StatelessWidget {
           FilterChip(
             label: Text('${option.flag}  ${option.name} (${option.code})'),
             selected: selectedLanguages.contains(option.code),
-            onSelected:
-                option.code == sourceLanguage
-                    ? null
-                    : (_) => onToggled(option.code),
+            onSelected: option.code == sourceLanguage
+                ? null
+                : (_) => onToggled(option.code),
           ),
       ],
     );
@@ -127,27 +126,25 @@ class _LanguageTileState extends State<_LanguageTile> {
     final theme = Theme.of(context);
     final selected = widget.selected && !widget.isSource;
 
-    final borderColor =
-        widget.isSource
-            ? tokens.border
-            : selected
-            ? (tokens.isDark
-                ? LingoDeskColors.brandTealDeepBorder
-                : LingoDeskColors.brandTeal)
-            : _hovered
-            ? LingoDeskColors.brandTeal.withValues(alpha: 0.55)
-            : tokens.border;
+    final borderColor = widget.isSource
+        ? tokens.border
+        : selected
+        ? (tokens.isDark
+              ? LingoDeskColors.brandTealDeepBorder
+              : LingoDeskColors.brandTeal)
+        : _hovered
+        ? LingoDeskColors.brandTeal.withValues(alpha: 0.55)
+        : tokens.border;
 
-    final fill =
-        widget.isSource
-            ? tokens.active
-            : selected
-            ? (tokens.isDark
-                ? LingoDeskColors.brandTealDeep
-                : LingoDeskColors.brandTealSoft)
-            : _hovered
-            ? tokens.active
-            : tokens.card;
+    final fill = widget.isSource
+        ? tokens.active
+        : selected
+        ? (tokens.isDark
+              ? LingoDeskColors.brandTealDeep
+              : LingoDeskColors.brandTealSoft)
+        : _hovered
+        ? tokens.active
+        : tokens.card;
 
     final tile = AnimatedContainer(
       duration: LingoDeskMotion.fast,

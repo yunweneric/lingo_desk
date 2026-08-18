@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../../../../core/widgets/lingo_desk_dropdown.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
@@ -109,32 +110,32 @@ class _AiKeyDialogState extends State<AiKeyDialog> {
   Widget build(BuildContext context) {
     final provider = _provider;
 
-    return AlertDialog(
+    return LingoDeskDialog(
       title: Text(
         _isEditing
             ? 'Edit API key'
             : (provider == null ? 'Add API key' : 'Add ${provider.label} key'),
       ),
-      content: SizedBox(
-        width: 460,
-        child:
-            provider == null
-                ? _ProviderPicker(onSelected: _chooseProvider)
-                : _KeyForm(
-                  provider: provider,
-                  isEditing: _isEditing,
-                  labelController: _labelController,
-                  keyController: _keyController,
-                  modelController: _modelController,
-                  showKey: _showKey,
-                  error: _error,
-                  onToggleShowKey: () => setState(() => _showKey = !_showKey),
-                  onModelPicked: (model) {
-                    _modelController.text = model;
-                    setState(() {});
-                  },
-                ),
-      ),
+      preferredWidth: 460,
+      // The picker is a plain list of providers; the form brings its own
+      // scroll view and must not be wrapped in a second one.
+      scrollable: provider == null,
+      content: provider == null
+          ? _ProviderPicker(onSelected: _chooseProvider)
+          : _KeyForm(
+              provider: provider,
+              isEditing: _isEditing,
+              labelController: _labelController,
+              keyController: _keyController,
+              modelController: _modelController,
+              showKey: _showKey,
+              error: _error,
+              onToggleShowKey: () => setState(() => _showKey = !_showKey),
+              onModelPicked: (model) {
+                _modelController.text = model;
+                setState(() {});
+              },
+            ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -357,8 +358,9 @@ class _KeyForm extends StatelessWidget {
                 LingoDeskDropdownItem(
                   value: model,
                   label: model,
-                  trailingText:
-                      model == provider.defaultModel ? 'default' : null,
+                  trailingText: model == provider.defaultModel
+                      ? 'default'
+                      : null,
                 ),
             ],
             onChanged: onModelPicked,

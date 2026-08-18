@@ -62,10 +62,9 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
       current.copyWith(
         sourceLanguage: event.languageCode,
         // The source language cannot also be a target.
-        targetLanguages:
-            current.targetLanguages
-                .where((language) => language != event.languageCode)
-                .toList(),
+        targetLanguages: current.targetLanguages
+            .where((language) => language != event.languageCode)
+            .toList(),
         clearError: true,
       ),
     );
@@ -98,13 +97,12 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
     }
     emit(
       current.copyWith(
-        targetLanguages:
-            event.selectAll
-                ? [
-                  for (final option in SupportedLanguages.all)
-                    if (option.code != current.sourceLanguage) option.code,
-                ]
-                : const <String>[],
+        targetLanguages: event.selectAll
+            ? [
+                for (final option in SupportedLanguages.all)
+                  if (option.code != current.sourceLanguage) option.code,
+              ]
+            : const <String>[],
         clearError: true,
       ),
     );
@@ -159,33 +157,32 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
     emit(current.copyWith(isSaving: true, clearError: true));
 
     final editingApp = current.editingApp;
-    final result =
-        editingApp == null
-            ? await createApp(
-              CreateAppParams(
+    final result = editingApp == null
+        ? await createApp(
+            CreateAppParams(
+              name: event.name,
+              sourceLanguage: current.sourceLanguage,
+              targetLanguages: current.targetLanguages,
+              iconImage: current.iconImage,
+            ),
+          )
+        : await updateApp(
+            UpdateAppParams(
+              app: App(
+                id: editingApp.id,
                 name: event.name,
                 sourceLanguage: current.sourceLanguage,
                 targetLanguages: current.targetLanguages,
+                createdAt: editingApp.createdAt,
+                updatedAt: editingApp.updatedAt,
                 iconImage: current.iconImage,
+                // The settings form does not touch the imported
+                // project, so it is carried over untouched.
+                projectPath: editingApp.projectPath,
+                languageFiles: editingApp.languageFiles,
               ),
-            )
-            : await updateApp(
-              UpdateAppParams(
-                app: App(
-                  id: editingApp.id,
-                  name: event.name,
-                  sourceLanguage: current.sourceLanguage,
-                  targetLanguages: current.targetLanguages,
-                  createdAt: editingApp.createdAt,
-                  updatedAt: editingApp.updatedAt,
-                  iconImage: current.iconImage,
-                  // The settings form does not touch the imported
-                  // project, so it is carried over untouched.
-                  projectPath: editingApp.projectPath,
-                  languageFiles: editingApp.languageFiles,
-                ),
-              ),
-            );
+            ),
+          );
 
     result.fold(
       (failure) => emit(

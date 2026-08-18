@@ -4,6 +4,7 @@ import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
+import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../bloc/translation_editor_state.dart';
 
 /// Picks which target languages an AI pass should fill.
@@ -31,12 +32,11 @@ class AiTranslateDialog extends StatefulWidget {
   }) {
     return showDialog<List<String>>(
       context: context,
-      builder:
-          (_) => AiTranslateDialog(
-            state: state,
-            providerLabel: providerLabel,
-            model: model,
-          ),
+      builder: (_) => AiTranslateDialog(
+        state: state,
+        providerLabel: providerLabel,
+        model: model,
+      ),
     );
   }
 
@@ -61,89 +61,85 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
     final tokens = LingoDeskTokens.of(context);
     final allSelected = _selected.length == _missing.length;
 
-    return AlertDialog(
+    return LingoDeskDialog(
       title: const Text('AI translate'),
-      content: SizedBox(
-        width: 420,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      preferredWidth: 420,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              'Only empty cells are filled — translations you already have '
+              'are never overwritten.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+            ),
+          ),
+          if (_missing.isEmpty)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.symmetric(vertical: 18),
               child: Text(
-                'Only empty cells are filled — translations you already have '
-                'are never overwritten.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
+                'Every target language is complete.',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            )
+          else ...[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => setState(() {
+                  if (allSelected) {
+                    _selected.clear();
+                  } else {
+                    _selected.addAll(_missing.keys);
+                  }
+                }),
+                child: Text(allSelected ? 'Clear all' : 'Select all'),
               ),
             ),
-            if (_missing.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 18),
-                child: Text(
-                  'Every target language is complete.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              )
-            else ...[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed:
-                      () => setState(() {
-                        if (allSelected) {
-                          _selected.clear();
-                        } else {
-                          _selected.addAll(_missing.keys);
-                        }
-                      }),
-                  child: Text(allSelected ? 'Clear all' : 'Select all'),
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (final entry in _missing.entries)
-                        LingoDeskCheckboxTile(
-                          value: _selected.contains(entry.key),
-                          leading: SupportedLanguages.flagOf(entry.key),
-                          title: SupportedLanguages.nameOf(entry.key),
-                          trailing: Text(
-                            '${entry.value} missing',
-                            style: LingoDeskTheme.codeStyle.copyWith(
-                              color: tokens.muted,
-                              fontSize: 12,
-                            ),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (final entry in _missing.entries)
+                      LingoDeskCheckboxTile(
+                        value: _selected.contains(entry.key),
+                        leading: SupportedLanguages.flagOf(entry.key),
+                        title: SupportedLanguages.nameOf(entry.key),
+                        trailing: Text(
+                          '${entry.value} missing',
+                          style: LingoDeskTheme.codeStyle.copyWith(
+                            color: tokens.muted,
+                            fontSize: 12,
                           ),
-                          onChanged: (checked) {
-                            setState(() {
-                              if (checked) {
-                                _selected.add(entry.key);
-                              } else {
-                                _selected.remove(entry.key);
-                              }
-                            });
-                          },
                         ),
-                    ],
-                  ),
+                        onChanged: (checked) {
+                          setState(() {
+                            if (checked) {
+                              _selected.add(entry.key);
+                            } else {
+                              _selected.remove(entry.key);
+                            }
+                          });
+                        },
+                      ),
+                  ],
                 ),
-              ),
-            ],
-            const SizedBox(height: 12),
-            Text(
-              'Using ${widget.providerLabel} · ${widget.model}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: tokens.muted,
-                fontSize: 12,
               ),
             ),
           ],
-        ),
+          const SizedBox(height: 12),
+          Text(
+            'Using ${widget.providerLabel} · ${widget.model}',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -151,19 +147,18 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
           child: const Text('Cancel'),
         ),
         FilledButton(
-          onPressed:
-              _selected.isEmpty
-                  ? null
-                  : () => Navigator.of(context).pop(
-                    widget.state.app.targetLanguages
-                        .where(_selected.contains)
-                        .toList(),
-                  ),
+          onPressed: _selected.isEmpty
+              ? null
+              : () => Navigator.of(context).pop(
+                  widget.state.app.targetLanguages
+                      .where(_selected.contains)
+                      .toList(),
+                ),
           child: Text(
             _selectedCount == 0
                 ? 'Translate'
                 : 'Translate $_selectedCount string'
-                    '${_selectedCount == 1 ? '' : 's'}',
+                      '${_selectedCount == 1 ? '' : 's'}',
           ),
         ),
       ],

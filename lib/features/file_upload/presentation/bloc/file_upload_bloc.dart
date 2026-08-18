@@ -122,10 +122,9 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
       groups: grouper.groups,
       skipped: [
         ...?previous?.skipped.where(
-          (file) =>
-              !grouper.skipped.any(
-                (fresh) => fresh.relativePath == file.relativePath,
-              ),
+          (file) => !grouper.skipped.any(
+            (fresh) => fresh.relativePath == file.relativePath,
+          ),
         ),
         ...grouper.skipped,
       ],
@@ -142,10 +141,9 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
       isScanning: false,
       project: project,
       projectName: current.projectName ?? project.projectName,
-      selectedSource:
-          project.languages.contains(current.selectedSource)
-              ? current.selectedSource
-              : project.suggestedSource,
+      selectedSource: project.languages.contains(current.selectedSource)
+          ? current.selectedSource
+          : project.suggestedSource,
       clearError: true,
     );
   }
@@ -345,10 +343,9 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
     }
     emit(
       current.copyWith(
-        stagedFiles:
-            current.stagedFiles
-                .where((file) => file.fileName != event.fileName)
-                .toList(),
+        stagedFiles: current.stagedFiles
+            .where((file) => file.fileName != event.fileName)
+            .toList(),
         clearError: true,
       ),
     );
@@ -459,11 +456,10 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
       targets = _without(source, settings.defaultTargetLanguages);
     }
     if (targets.isEmpty) {
-      targets =
-          _without(
-            source,
-            SupportedLanguages.all.map((option) => option.code),
-          ).take(1).toList();
+      targets = _without(
+        source,
+        SupportedLanguages.all.map((option) => option.code),
+      ).take(1).toList();
     }
 
     final projectSource = state.scannedSource;

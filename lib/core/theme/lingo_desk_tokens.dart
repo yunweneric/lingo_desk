@@ -1,43 +1,48 @@
 import 'package:flutter/material.dart';
 
+import 'lingo_desk_palette.dart';
 import 'lingo_desk_theme.dart';
 
-/// Semantic color tokens derived from the current theme brightness.
+/// Semantic colour tokens for the active theme variant and brightness.
 ///
-/// Light is the brand's primary chassis; dark maps to the design
-/// system's deep teal-ink stage values.
+/// Resolved from the [LingoDeskPalette] carried on [ThemeData], so
+/// switching variants in Settings → Appearance repaints every widget
+/// that reads tokens — which is all of them.
 class LingoDeskTokens {
-  const LingoDeskTokens({
-    required this.isDark,
-    required this.background,
-    required this.sidebar,
-    required this.card,
-    required this.border,
-    required this.foreground,
-    required this.muted,
-    required this.active,
-  });
+  const LingoDeskTokens({required this.palette, required this.isDark})
+    : _scheme = isDark ? palette.dark : palette.light;
 
+  final LingoDeskPalette palette;
   final bool isDark;
-  final Color background;
-  final Color sidebar;
-  final Color card;
-  final Color border;
-  final Color foreground;
-  final Color muted;
-  final Color active;
+  final LingoDeskScheme _scheme;
+
+  LingoDeskThemeVariant get variant => palette.variant;
+
+  /// The always-dark scheme, for panes that stay dark in both modes
+  /// (the onboarding stage).
+  LingoDeskScheme get darkStage => palette.dark;
+
+  Color get brand => _scheme.brand;
+  Color get onBrand => _scheme.onBrand;
+  Color get accent => _scheme.accent;
+  Color get brandFill => _scheme.brandFill;
+  Color get brandFillBorder => _scheme.brandFillBorder;
+  Color get onBrandFill => _scheme.onBrandFill;
+  Color get background => _scheme.background;
+  Color get sidebar => _scheme.sidebar;
+  Color get card => _scheme.card;
+  Color get border => _scheme.border;
+  Color get foreground => _scheme.foreground;
+  Color get muted => _scheme.muted;
+  Color get active => _scheme.active;
 
   static LingoDeskTokens of(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     return LingoDeskTokens(
-      isDark: isDark,
-      background: isDark ? LingoDeskColors.darkInk : LingoDeskColors.surface,
-      sidebar: isDark ? LingoDeskColors.sidebarDeep : Colors.white,
-      card: isDark ? LingoDeskColors.darkSurface : Colors.white,
-      border: isDark ? Colors.white12 : LingoDeskColors.border,
-      foreground: isDark ? Colors.white : LingoDeskColors.ink,
-      muted: isDark ? Colors.white70 : LingoDeskColors.slate,
-      active: isDark ? LingoDeskColors.activeDeep : LingoDeskColors.activeLight,
+      // A theme built outside LingoDeskTheme (a bare MaterialApp in a
+      // widget preview) carries no extension — fall back to the house look.
+      palette: theme.extension<LingoDeskPalette>() ?? LingoDeskPalettes.teal,
+      isDark: theme.brightness == Brightness.dark,
     );
   }
 }
@@ -52,6 +57,8 @@ enum LingoDeskStatus { success, error, warning, info, neutral }
 ///
 /// Light gets a soft tinted fill; dark gets a deep fill with a lifted
 /// accent, because the literal status hues lose contrast on deep ink.
+/// Success/error/warning are variant-independent — a failure is red in
+/// every palette — while info follows the active brand.
 class LingoDeskStatusStyle {
   const LingoDeskStatusStyle({
     required this.accent,
@@ -85,53 +92,42 @@ class LingoDeskStatusStyle {
     switch (status) {
       case LingoDeskStatus.success:
         return LingoDeskStatusStyle(
-          accent:
-              isDark ? LingoDeskColors.successLift : LingoDeskColors.complete,
-          fill:
-              isDark
-                  ? LingoDeskColors.successDeep
-                  : LingoDeskColors.successSoft,
-          border:
-              isDark
-                  ? LingoDeskColors.successDeepBorder
-                  : LingoDeskColors.successSoftBorder,
+          accent: isDark
+              ? LingoDeskColors.successLift
+              : LingoDeskColors.complete,
+          fill: isDark
+              ? LingoDeskColors.successDeep
+              : LingoDeskColors.successSoft,
+          border: isDark
+              ? LingoDeskColors.successDeepBorder
+              : LingoDeskColors.successSoftBorder,
           foreground: tokens.foreground,
         );
       case LingoDeskStatus.error:
         return LingoDeskStatusStyle(
           accent: isDark ? LingoDeskColors.errorLift : LingoDeskColors.error,
           fill: isDark ? LingoDeskColors.errorDeep : LingoDeskColors.errorSoft,
-          border:
-              isDark
-                  ? LingoDeskColors.errorDeepBorder
-                  : LingoDeskColors.errorSoftBorder,
+          border: isDark
+              ? LingoDeskColors.errorDeepBorder
+              : LingoDeskColors.errorSoftBorder,
           foreground: tokens.foreground,
         );
       case LingoDeskStatus.warning:
         return LingoDeskStatusStyle(
-          accent:
-              isDark ? LingoDeskColors.warningLift : LingoDeskColors.warning,
-          fill:
-              isDark
-                  ? LingoDeskColors.warningDeep
-                  : LingoDeskColors.warningSoft,
-          border:
-              isDark
-                  ? LingoDeskColors.warningDeepBorder
-                  : LingoDeskColors.warningSoftBorder,
+          accent: isDark ? LingoDeskColors.warningLift : LingoDeskColors.warning,
+          fill: isDark
+              ? LingoDeskColors.warningDeep
+              : LingoDeskColors.warningSoft,
+          border: isDark
+              ? LingoDeskColors.warningDeepBorder
+              : LingoDeskColors.warningSoftBorder,
           foreground: tokens.foreground,
         );
       case LingoDeskStatus.info:
         return LingoDeskStatusStyle(
-          accent: isDark ? LingoDeskColors.infoLift : LingoDeskColors.brandTeal,
-          fill:
-              isDark
-                  ? LingoDeskColors.brandTealDeep
-                  : LingoDeskColors.brandTealSoft,
-          border:
-              isDark
-                  ? LingoDeskColors.brandTealDeepBorder
-                  : LingoDeskColors.brandTealSoftBorder,
+          accent: tokens.accent,
+          fill: tokens.brandFill,
+          border: tokens.brandFillBorder,
           foreground: tokens.foreground,
         );
       case LingoDeskStatus.neutral:

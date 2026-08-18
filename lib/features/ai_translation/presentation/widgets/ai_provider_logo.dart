@@ -34,10 +34,9 @@ class AiProviderLogo extends StatelessWidget {
         assetFor(provider),
         width: size,
         height: size,
-        colorFilter:
-            provider == AiProvider.openai
-                ? ColorFilter.mode(tokens.foreground, BlendMode.srcIn)
-                : null,
+        colorFilter: provider == AiProvider.openai
+            ? ColorFilter.mode(tokens.foreground, BlendMode.srcIn)
+            : null,
         // The mark is decoration beside a name that already says which
         // provider this is, so it stays out of the semantics tree.
         excludeFromSemantics: true,

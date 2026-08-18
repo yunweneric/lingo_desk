@@ -58,13 +58,12 @@ class AppAvatar extends StatelessWidget {
             filterQuality: FilterQuality.medium,
             // A stored icon that will not decode is still an app: fall
             // back rather than dropping an error box into the list.
-            errorBuilder:
-                (context, error, stack) => _Initials(
-                  name: name,
-                  initials: initials,
-                  size: size,
-                  radius: radius,
-                ),
+            errorBuilder: (context, error, stack) => _Initials(
+              name: name,
+              initials: initials,
+              size: size,
+              radius: radius,
+            ),
           ),
         ),
       );

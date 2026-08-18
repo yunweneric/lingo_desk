@@ -37,12 +37,11 @@ class AppSettingsController extends ChangeNotifier {
   /// Up to two uppercase initials derived from [profileName], used by the
   /// sidebar footer and the settings avatar. Falls back to the brand mark.
   String get profileInitials {
-    final words =
-        _profileName
-            .trim()
-            .split(RegExp(r'\s+'))
-            .where((word) => word.isNotEmpty)
-            .toList();
+    final words = _profileName
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .toList();
     if (words.isEmpty) {
       return 'LD';
     }

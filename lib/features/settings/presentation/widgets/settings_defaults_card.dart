@@ -38,7 +38,7 @@ class SettingsDefaultsCard extends StatelessWidget {
             selected.isEmpty
                 ? 'No defaults yet — new apps start with an empty target list.'
                 : '${selected.length} locale'
-                    '${selected.length == 1 ? '' : 's'} will be pre-selected.',
+                      '${selected.length == 1 ? '' : 's'} will be pre-selected.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),

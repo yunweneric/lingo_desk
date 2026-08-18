@@ -43,16 +43,14 @@ class ScannedLanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final progress =
-        totalKeys == 0
-            ? 0.0
-            : (group.filledKeyCount / totalKeys).clamp(0.0, 1.0);
-    final accent =
-        !isIncluded
-            ? tokens.muted
-            : progress == 1
-            ? LingoDeskColors.complete
-            : LingoDeskColors.brandTeal;
+    final progress = totalKeys == 0
+        ? 0.0
+        : (group.filledKeyCount / totalKeys).clamp(0.0, 1.0);
+    final accent = !isIncluded
+        ? tokens.muted
+        : progress == 1
+        ? LingoDeskColors.complete
+        : LingoDeskColors.brandTeal;
 
     // Excluding a locale is reversible and easy to do by accident, so the
     // tile dims and its accent border drains away rather than blinking

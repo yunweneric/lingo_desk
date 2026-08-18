@@ -8,7 +8,9 @@ import '../../features/app_management/presentation/pages/apps_page.dart';
 import '../../features/app_settings/presentation/pages/app_settings_page.dart';
 import '../../features/file_upload/presentation/pages/file_upload_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
-import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/settings/presentation/pages/settings_appearance_page.dart';
+import '../../features/settings/presentation/pages/settings_languages_page.dart';
+import '../../features/settings/presentation/pages/settings_profile_page.dart';
 import '../../features/translation_editor/presentation/pages/translation_editor_page.dart';
 import '../preferences/app_settings_controller.dart';
 import '../theme/lingo_desk_motion.dart';
@@ -33,7 +35,13 @@ class AppRoutes {
   /// Project import: scan a folder, then create the app from it.
   static const importProject = '/import';
 
+  /// Settings is a group, not a page: each pane is its own sidebar item
+  /// and its own route. The bare path redirects to the first pane so old
+  /// links and the sidebar footer still land somewhere.
   static const settings = '/settings';
+  static const settingsProfile = '/settings/profile';
+  static const settingsAppearance = '/settings/appearance';
+  static const settingsLanguages = '/settings/languages';
 
   /// API keys for the AI translation providers.
   static const aiProviders = '/ai-providers';
@@ -71,27 +79,22 @@ GoRouter buildAppRouter(AppSettingsController settings) {
     routes: [
       GoRoute(
         path: AppRoutes.onboarding,
-        pageBuilder:
-            (context, state) => _fadePage(
-              state,
-              OnboardingPage(onComplete: settings.completeOnboarding),
-            ),
+        pageBuilder: (context, state) => _fadePage(
+          state,
+          OnboardingPage(onComplete: settings.completeOnboarding),
+        ),
       ),
       ShellRoute(
         observers: [appRouteObserver],
-        builder:
-            (context, state, child) =>
-                AppShell(location: state.uri.path, child: child),
+        builder: (context, state, child) =>
+            AppShell(location: state.uri.path, child: child),
         routes: [
           GoRoute(
             path: AppRoutes.dashboard,
-            pageBuilder:
-                (context, state) => _fadePage(
-                  state,
-                  AppDashboardPage(
-                    section: state.uri.queryParameters['section'],
-                  ),
-                ),
+            pageBuilder: (context, state) => _fadePage(
+              state,
+              AppDashboardPage(section: state.uri.queryParameters['section']),
+            ),
           ),
           GoRoute(
             path: AppRoutes.apps,
@@ -99,51 +102,60 @@ GoRouter buildAppRouter(AppSettingsController settings) {
           ),
           GoRoute(
             path: AppRoutes.importProject,
-            pageBuilder:
-                (context, state) => _fadePage(state, const FileUploadPage()),
+            pageBuilder: (context, state) =>
+                _fadePage(state, const FileUploadPage()),
           ),
           GoRoute(
             path: AppRoutes.settings,
-            pageBuilder:
-                (context, state) => _fadePage(state, const SettingsPage()),
+            redirect: (context, state) => AppRoutes.settingsProfile,
+          ),
+          GoRoute(
+            path: AppRoutes.settingsProfile,
+            pageBuilder: (context, state) =>
+                _fadePage(state, const SettingsProfilePage()),
+          ),
+          GoRoute(
+            path: AppRoutes.settingsAppearance,
+            pageBuilder: (context, state) =>
+                _fadePage(state, const SettingsAppearancePage()),
+          ),
+          GoRoute(
+            path: AppRoutes.settingsLanguages,
+            pageBuilder: (context, state) =>
+                _fadePage(state, const SettingsLanguagesPage()),
           ),
           GoRoute(
             path: AppRoutes.aiProviders,
-            pageBuilder:
-                (context, state) => _fadePage(state, const AiProvidersPage()),
+            pageBuilder: (context, state) =>
+                _fadePage(state, const AiProvidersPage()),
           ),
           GoRoute(
             path: '/apps/:id/settings',
             // Editing needs the App object; a bare deep link falls back to
             // the dashboard.
-            redirect:
-                (context, state) =>
-                    state.extra is App ? null : AppRoutes.dashboard,
-            pageBuilder:
-                (context, state) =>
-                    _fadePage(state, AppSettingsPage(app: state.extra as App)),
+            redirect: (context, state) =>
+                state.extra is App ? null : AppRoutes.dashboard,
+            pageBuilder: (context, state) =>
+                _fadePage(state, AppSettingsPage(app: state.extra as App)),
           ),
           GoRoute(
             path: '/apps/:id/upload',
-            redirect:
-                (context, state) =>
-                    state.extra is App ? null : AppRoutes.dashboard,
-            pageBuilder:
-                (context, state) => _fadePage(
-                  state,
-                  FileUploadPage(
-                    app: state.extra as App,
-                    popOnImport: state.uri.queryParameters['pop'] == '1',
-                  ),
-                ),
+            redirect: (context, state) =>
+                state.extra is App ? null : AppRoutes.dashboard,
+            pageBuilder: (context, state) => _fadePage(
+              state,
+              FileUploadPage(
+                app: state.extra as App,
+                popOnImport: state.uri.queryParameters['pop'] == '1',
+              ),
+            ),
           ),
           GoRoute(
             path: '/apps/:id/editor',
-            pageBuilder:
-                (context, state) => _fadePage(
-                  state,
-                  TranslationEditorPage(appId: state.pathParameters['id']!),
-                ),
+            pageBuilder: (context, state) => _fadePage(
+              state,
+              TranslationEditorPage(appId: state.pathParameters['id']!),
+            ),
           ),
         ],
       ),

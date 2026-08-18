@@ -38,10 +38,9 @@ class ScanProjectFolder
     return scanResult.fold<Future<Either<Failure, ScannedProject?>>>(
       (failure) async => Left(failure),
       // A null payload means the folder picker was canceled.
-      (data) async =>
-          data == null
-              ? const Right(null)
-              : Right(await _group(data, params.existing)),
+      (data) async => data == null
+          ? const Right(null)
+          : Right(await _group(data, params.existing)),
     );
   }
 

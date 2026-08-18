@@ -50,10 +50,9 @@ class AppSettingsFormFields extends StatelessWidget {
           label: 'Source language',
           description: 'The base language your keys are written in.',
           value: state.sourceLanguage,
-          onChanged:
-              (value) => context.read<AppSettingsBloc>().add(
-                SourceLanguageChangedEvent(value),
-              ),
+          onChanged: (value) => context.read<AppSettingsBloc>().add(
+            SourceLanguageChangedEvent(value),
+          ),
         ),
         const SizedBox(height: 24),
         LingoDeskFieldScaffold(
@@ -62,10 +61,9 @@ class AppSettingsFormFields extends StatelessWidget {
           child: LanguageTargetSelector(
             sourceLanguage: state.sourceLanguage,
             selectedLanguages: state.targetLanguages,
-            onToggled:
-                (language) => context.read<AppSettingsBloc>().add(
-                  TargetLanguageToggledEvent(language),
-                ),
+            onToggled: (language) => context.read<AppSettingsBloc>().add(
+              TargetLanguageToggledEvent(language),
+            ),
           ),
         ),
         if (state.errorMessage != null) ...[
