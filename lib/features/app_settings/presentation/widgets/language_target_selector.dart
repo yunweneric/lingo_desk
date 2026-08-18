@@ -26,7 +26,7 @@ class LanguageTargetSelector extends StatelessWidget {
       children: [
         for (final option in SupportedLanguages.all)
           FilterChip(
-            label: Text('${option.name} (${option.code})'),
+            label: Text('${option.flag}  ${option.name} (${option.code})'),
             selected: selectedLanguages.contains(option.code),
             onSelected:
                 option.code == sourceLanguage

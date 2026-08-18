@@ -123,6 +123,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
   Future<Either<Failure, int>> exportTranslations(
     String appId,
     List<String> languages,
+    String archiveName,
   ) async {
     try {
       final entries = await localDataSource.getEntries(appId);
@@ -132,22 +133,22 @@ class TranslationRepositoryImpl implements TranslationRepository {
         );
       }
 
-      var savedCount = 0;
+      // Every language goes into one archive, so there is a single save
+      // dialog no matter how many are selected.
+      final jsonFiles = <String, Map<String, dynamic>>{};
       for (final language in languages) {
         final flat = <String, String>{
           for (final entry in entries.entries)
             entry.key: entry.value[language] ?? '',
         };
-        final nested = JsonFlattener.unflatten(flat);
-        final saved = await fileExportDataSource.saveJsonFile(
-          '$language.json',
-          nested,
-        );
-        if (saved) {
-          savedCount++;
-        }
+        jsonFiles['$language.json'] = JsonFlattener.unflatten(flat);
       }
-      return Right(savedCount);
+
+      final saved = await fileExportDataSource.saveZipFile(
+        archiveName,
+        jsonFiles,
+      );
+      return Right(saved ? jsonFiles.length : 0);
     } on FileException catch (e) {
       return Left(FileFailure(message: e.message));
     } on CacheException catch (e) {

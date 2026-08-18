@@ -4,7 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/storage_keys.dart';
 
 /// Thin wrapper around [SharedPreferences] for app-level preferences:
-/// theme mode, UI language, and the onboarding-completed flag.
+/// theme mode, UI language, the onboarding-completed flag, the local
+/// profile, and the default target locales for new apps.
 class AppPreferences {
   const AppPreferences(this._preferences);
 
@@ -35,5 +36,30 @@ class AppPreferences {
 
   Future<void> setOnboardingComplete(bool complete) {
     return _preferences.setBool(StorageKeys.onboardingComplete, complete);
+  }
+
+  String get profileName =>
+      _preferences.getString(StorageKeys.profileName) ?? 'Local workspace';
+
+  Future<void> setProfileName(String name) {
+    return _preferences.setString(StorageKeys.profileName, name);
+  }
+
+  String get profileEmail =>
+      _preferences.getString(StorageKeys.profileEmail) ?? '';
+
+  Future<void> setProfileEmail(String email) {
+    return _preferences.setString(StorageKeys.profileEmail, email);
+  }
+
+  List<String> get defaultTargetLanguages =>
+      _preferences.getStringList(StorageKeys.defaultTargetLanguages) ??
+      const [];
+
+  Future<void> setDefaultTargetLanguages(List<String> languages) {
+    return _preferences.setStringList(
+      StorageKeys.defaultTargetLanguages,
+      languages,
+    );
   }
 }

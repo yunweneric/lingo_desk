@@ -16,4 +16,11 @@ class StorageKeys {
   static const themeMode = 'lingo_desk_theme_mode';
   static const uiLanguage = 'lingo_desk_ui_language';
   static const onboardingComplete = 'lingo_desk_onboarding_complete';
+
+  /// Local profile shown in the sidebar footer and the settings page.
+  static const profileName = 'lingo_desk_profile_name';
+  static const profileEmail = 'lingo_desk_profile_email';
+
+  /// Target locales pre-selected when creating a new app.
+  static const defaultTargetLanguages = 'lingo_desk_default_target_languages';
 }

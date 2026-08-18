@@ -95,6 +95,7 @@ Future<void> init() async {
   // File upload
   getIt.registerLazySingleton(() => PickTranslationFiles(getIt()));
   getIt.registerLazySingleton(ParseTranslationFile.new);
+  getIt.registerLazySingleton(() => ScanProjectFolder(getIt(), getIt()));
 
   // ==========================================
   // BLoCs
@@ -119,7 +120,10 @@ Future<void> init() async {
     () => FileUploadBloc(
       pickTranslationFiles: getIt(),
       parseTranslationFile: getIt(),
+      scanProjectFolder: getIt(),
       saveTranslations: getIt(),
+      createApp: getIt(),
+      settings: getIt(),
     ),
   );
 }

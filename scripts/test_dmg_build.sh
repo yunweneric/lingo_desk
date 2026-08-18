@@ -100,7 +100,7 @@ echo -e "${YELLOW}Testing: Create DMG${NC}"
 if [ -f "macos/Runner/Configs/AppInfo.xcconfig" ]; then
     APP_NAME=$(grep "PRODUCT_NAME" macos/Runner/Configs/AppInfo.xcconfig | cut -d'=' -f2 | xargs)
 else
-    APP_NAME="lingo_desk"
+    APP_NAME="LingoDesk"
 fi
 
 APP_PATH="build/macos/Build/Products/Release/${APP_NAME}.app"
@@ -128,7 +128,7 @@ else
     ln -s /Applications "${DMG_TEMP_DIR}/Applications"
     
     # Create the DMG
-    VOLUME_NAME=$(echo "${APP_NAME}" | sed 's/_/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2));}1')
+    VOLUME_NAME="${APP_NAME}"
     echo "Creating DMG with volume name: ${VOLUME_NAME}"
     
     if hdiutil create -volname "${VOLUME_NAME}" \

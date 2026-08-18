@@ -8,7 +8,9 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
-import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../../core/widgets/workspace_card.dart';
+import '../../../../core/widgets/workspace_page_header.dart';
+import '../../domain/usecases/export_translations.dart';
 import '../bloc/translation_editor_bloc.dart';
 import '../bloc/translation_editor_event.dart';
 import '../bloc/translation_editor_state.dart';
@@ -79,8 +81,8 @@ class _EditorViewState extends State<_EditorView> {
         if (state is TranslationEditorError) {
           return _buildError(context, state);
         }
-        return const WorkspaceScaffold(
-          title: 'Translation editor',
+        return const _EditorChrome(
+          breadcrumb: ['Workspace', 'Editor'],
           body: Center(child: CircularProgressIndicator()),
         );
       },
@@ -88,29 +90,14 @@ class _EditorViewState extends State<_EditorView> {
   }
 
   Widget _buildError(BuildContext context, TranslationEditorError state) {
-    return WorkspaceScaffold(
-      title: 'Translation editor',
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const LingoDeskIcon(
-              HugeIcons.strokeRoundedAlertCircle,
-              color: LingoDeskColors.error,
-              size: 32,
+    return _EditorChrome(
+      breadcrumb: const ['Workspace', 'Editor'],
+      body: WorkspaceErrorState(
+        message: state.message,
+        onRetry:
+            () => context.read<TranslationEditorBloc>().add(
+              LoadEditorEvent(widget.appId),
             ),
-            const SizedBox(height: 12),
-            Text('Error: ${state.message}'),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed:
-                  () => context.read<TranslationEditorBloc>().add(
-                    LoadEditorEvent(widget.appId),
-                  ),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -118,16 +105,42 @@ class _EditorViewState extends State<_EditorView> {
   Widget _buildLoaded(BuildContext context, TranslationEditorLoaded state) {
     final tokens = LingoDeskTokens.of(context);
 
-    return WorkspaceScaffold(
-      title: state.app.name,
-      subtitle:
-          'Translation editor - ${state.entries.length} keys - '
-          '${state.totalMissing} missing',
+    return _EditorChrome(
+      breadcrumb: ['Workspace', state.app.name, 'Editor'],
+      // Page-level actions live in the header; the body toolbar keeps only
+      // the controls that change what the grid *shows*.
+      actions: [
+        OutlinedButton.icon(
+          onPressed: () => _addKey(context, state),
+          icon: const LingoDeskIcon(HugeIcons.strokeRoundedAdd01, size: 17),
+          label: const Text('Add key'),
+        ),
+        OutlinedButton.icon(
+          onPressed: () => _uploadFiles(context, state),
+          icon: const LingoDeskIcon(
+            HugeIcons.strokeRoundedFileUpload,
+            size: 17,
+          ),
+          label: const Text('Upload'),
+        ),
+        FilledButton.icon(
+          onPressed:
+              state.entries.isEmpty ? null : () => _exportFiles(context, state),
+          icon: const LingoDeskIcon(
+            HugeIcons.strokeRoundedDownload04,
+            color: Colors.white,
+            size: 17,
+          ),
+          label: const Text('Export ZIP'),
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            _EditorSummary(state: state),
+            const SizedBox(height: 14),
             LanguageProgressHeader(state: state),
             const SizedBox(height: 14),
             _buildToolbar(context, state, tokens),
@@ -195,29 +208,6 @@ class _EditorViewState extends State<_EditorView> {
           selected: state.showMissingOnly,
           onSelected: (_) => bloc.add(ToggleMissingOnlyEvent()),
         ),
-        OutlinedButton.icon(
-          onPressed: () => _addKey(context, state),
-          icon: const LingoDeskIcon(HugeIcons.strokeRoundedAdd01, size: 17),
-          label: const Text('Add key'),
-        ),
-        OutlinedButton.icon(
-          onPressed: () => _uploadFiles(context, state),
-          icon: const LingoDeskIcon(
-            HugeIcons.strokeRoundedFileUpload,
-            size: 17,
-          ),
-          label: const Text('Upload'),
-        ),
-        FilledButton.icon(
-          onPressed:
-              state.entries.isEmpty ? null : () => _exportFiles(context, state),
-          icon: const LingoDeskIcon(
-            HugeIcons.strokeRoundedDownload04,
-            color: Colors.white,
-            size: 17,
-          ),
-          label: const Text('Export JSON'),
-        ),
       ],
     );
   }
@@ -258,9 +248,74 @@ class _EditorViewState extends State<_EditorView> {
       context,
       languages: state.app.allLanguages,
       sourceLanguage: state.app.sourceLanguage,
+      archiveName: archiveNameFor(state.app.name),
     );
     if (languages != null && languages.isNotEmpty) {
       bloc.add(ExportTranslationsEvent(languages));
     }
+  }
+}
+
+/// Shared frame for every editor state: the shell's breadcrumb header
+/// above the page body, so loading, error and loaded all sit in the same
+/// chrome instead of each inventing its own.
+class _EditorChrome extends StatelessWidget {
+  const _EditorChrome({
+    required this.breadcrumb,
+    required this.body,
+    this.actions = const [],
+  });
+
+  final List<String> breadcrumb;
+  final List<Widget> actions;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return ColoredBox(
+      color: tokens.background,
+      child: SafeArea(
+        child: Column(
+          children: [
+            WorkspacePageHeader(breadcrumb: breadcrumb, actions: actions),
+            Expanded(child: body),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The totals the old header subtitle used to carry.
+class _EditorSummary extends StatelessWidget {
+  const _EditorSummary({required this.state});
+
+  final TranslationEditorLoaded state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+        WorkspaceMetaTile(
+          label: 'Keys',
+          value: '${state.entries.length}',
+          icon: HugeIcons.strokeRoundedKey01,
+        ),
+        WorkspaceMetaTile(
+          label: 'Missing',
+          value: '${state.totalMissing}',
+          icon: HugeIcons.strokeRoundedAlertCircle,
+        ),
+        WorkspaceMetaTile(
+          label: 'Languages',
+          value: '${state.app.allLanguages.length}',
+          icon: HugeIcons.strokeRoundedLanguageSquare,
+        ),
+      ],
+    );
   }
 }

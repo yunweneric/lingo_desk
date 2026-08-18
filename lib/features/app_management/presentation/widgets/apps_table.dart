@@ -1,7 +1,20 @@
-part of '../pages/app_dashboard_page.dart';
+import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
-class _ProjectsTable extends StatelessWidget {
-  const _ProjectsTable({required this.state});
+import '../../../../core/theme/lingo_desk_theme.dart';
+import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/utils/date_formatter.dart';
+import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/workspace_card.dart';
+import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../../core/widgets/workspace_toolbar.dart';
+import '../../domain/entities/app_overview.dart';
+import '../app_actions.dart';
+import '../bloc/app_management_state.dart';
+
+/// Every app with its file counters, coverage and status.
+class AppsTable extends StatelessWidget {
+  const AppsTable({super.key, required this.state});
 
   final AppManagementLoaded state;
 
@@ -13,9 +26,9 @@ class _ProjectsTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final tableWidth =
-            constraints.maxWidth < 860 ? 860.0 : constraints.maxWidth;
+            constraints.maxWidth < 980 ? 980.0 : constraints.maxWidth;
 
-        return _Surface(
+        return WorkspaceSurface(
           padding: EdgeInsets.zero,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -28,7 +41,7 @@ class _ProjectsTable extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _CardHeader(
+                          child: WorkspaceCardHeader(
                             title: 'Apps',
                             subtitle:
                                 state.query.trim().isEmpty
@@ -40,7 +53,7 @@ class _ProjectsTable extends StatelessWidget {
                           ),
                         ),
                         TextButton.icon(
-                          onPressed: () => _openCreateApp(context),
+                          onPressed: () => openCreateApp(context),
                           icon: const LingoDeskIcon(
                             HugeIcons.strokeRoundedAdd01,
                             size: 17,
@@ -65,7 +78,7 @@ class _ProjectsTable extends StatelessWidget {
                     )
                   else
                     for (final overview in overviews) ...[
-                      _ProjectRow(overview: overview),
+                      _AppRow(overview: overview),
                       if (overview != overviews.last)
                         Divider(height: 1, color: tokens.border),
                     ],
@@ -92,6 +105,7 @@ class _TableHeader extends StatelessWidget {
         children: [
           _HeaderCell('App', flex: 4, tokens: tokens),
           _HeaderCell('Languages', flex: 3, tokens: tokens),
+          _HeaderCell('Files', flex: 2, tokens: tokens),
           _HeaderCell('Progress', flex: 3, tokens: tokens),
           _HeaderCell('Status', flex: 2, tokens: tokens),
           _HeaderCell('Updated', flex: 2, tokens: tokens),
@@ -125,8 +139,8 @@ class _HeaderCell extends StatelessWidget {
   }
 }
 
-class _ProjectRow extends StatelessWidget {
-  const _ProjectRow({required this.overview});
+class _AppRow extends StatelessWidget {
+  const _AppRow({required this.overview});
 
   final AppOverview overview;
 
@@ -134,10 +148,10 @@ class _ProjectRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
     final app = overview.app;
-    final status = _statusOf(overview);
+    final status = appStatusOf(overview);
 
     return InkWell(
-      onTap: () => _openEditor(context, overview),
+      onTap: () => openEditor(context, overview),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         child: Row(
@@ -166,31 +180,29 @@ class _ProjectRow extends StatelessWidget {
                 runSpacing: 6,
                 children: [
                   for (final language in app.targetLanguages)
-                    _Badge(label: language.toUpperCase(), color: tokens.muted),
+                    WorkspaceBadge(
+                      label: language.toUpperCase(),
+                      color: tokens.muted,
+                    ),
                 ],
               ),
             ),
             Expanded(
-              flex: 3,
-              child: Row(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: overview.progress,
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(99),
-                      color:
-                          overview.isComplete
-                              ? LingoDeskColors.complete
-                              : LingoDeskColors.brandTeal,
-                      backgroundColor: tokens.active,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
                   Text(
-                    '${(overview.progress * 100).round()}%',
+                    '${overview.completeFileCount}/${overview.fileCount}',
                     style: LingoDeskTheme.codeStyle.copyWith(
                       color: tokens.foreground,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'complete',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: tokens.muted,
                       fontSize: 12,
                     ),
                   ),
@@ -198,10 +210,18 @@ class _ProjectRow extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 3,
+              child: WorkspaceProgressBar(
+                value: overview.progress,
+                isComplete: overview.isComplete,
+                showPercentage: true,
+              ),
+            ),
+            Expanded(
               flex: 2,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: _Badge(label: status.label, color: status.color),
+                child: WorkspaceBadge(label: status.label, color: status.color),
               ),
             ),
             Expanded(
@@ -213,7 +233,7 @@ class _ProjectRow extends StatelessWidget {
                 ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
               ),
             ),
-            _ProjectRowMenu(overview: overview, tokens: tokens),
+            _AppRowMenu(overview: overview, tokens: tokens),
           ],
         ),
       ),
@@ -221,8 +241,8 @@ class _ProjectRow extends StatelessWidget {
   }
 }
 
-class _ProjectRowMenu extends StatelessWidget {
-  const _ProjectRowMenu({required this.overview, required this.tokens});
+class _AppRowMenu extends StatelessWidget {
+  const _AppRowMenu({required this.overview, required this.tokens});
 
   final AppOverview overview;
   final LingoDeskTokens tokens;
@@ -238,34 +258,34 @@ class _ProjectRowMenu extends StatelessWidget {
       onSelected: (action) {
         switch (action) {
           case 'editor':
-            _openEditor(context, overview);
+            openEditor(context, overview);
           case 'settings':
-            _openAppSettings(context, overview);
+            openAppSettings(context, overview);
           case 'upload':
-            _openFileUpload(context, overview);
+            openFileUpload(context, overview);
           case 'delete':
-            _confirmDeleteApp(context, overview);
+            confirmDeleteApp(context, overview);
         }
       },
       itemBuilder:
           (context) => const [
             PopupMenuItem(
               value: 'editor',
-              child: _MenuOption(
+              child: WorkspaceMenuOption(
                 icon: HugeIcons.strokeRoundedTableRowsSplit,
                 label: 'Open editor',
               ),
             ),
             PopupMenuItem(
               value: 'settings',
-              child: _MenuOption(
+              child: WorkspaceMenuOption(
                 icon: HugeIcons.strokeRoundedSettings01,
                 label: 'Settings',
               ),
             ),
             PopupMenuItem(
               value: 'upload',
-              child: _MenuOption(
+              child: WorkspaceMenuOption(
                 icon: HugeIcons.strokeRoundedFileUpload,
                 label: 'Upload files',
               ),
@@ -273,7 +293,7 @@ class _ProjectRowMenu extends StatelessWidget {
             PopupMenuDivider(),
             PopupMenuItem(
               value: 'delete',
-              child: _MenuOption(
+              child: WorkspaceMenuOption(
                 icon: HugeIcons.strokeRoundedDelete02,
                 label: 'Delete app',
               ),

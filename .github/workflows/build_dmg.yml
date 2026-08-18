@@ -72,7 +72,7 @@ jobs:
           if [ -f "macos/Runner/Configs/AppInfo.xcconfig" ]; then
             APP_NAME=$(grep "PRODUCT_NAME" macos/Runner/Configs/AppInfo.xcconfig | cut -d'=' -f2 | xargs)
           else
-            APP_NAME="lingo_desk"
+            APP_NAME="LingoDesk"
           fi
           
           APP_PATH="build/macos/Build/Products/Release/${APP_NAME}.app"
@@ -116,7 +116,7 @@ jobs:
         if: always()
         with:
           name: lingodesk-macos-dmg
-          path: build/lingo_desk-*.dmg
+          path: build/LingoDesk-*.dmg
           retention-days: 90
           if-no-files-found: error
 
@@ -146,7 +146,7 @@ jobs:
             
             See the commit history for detailed changes.
           files: |
-            build/lingo_desk-*.dmg
+            build/LingoDesk-*.dmg
           draft: false
           prerelease: false
           fail_on_unmatched_files: false

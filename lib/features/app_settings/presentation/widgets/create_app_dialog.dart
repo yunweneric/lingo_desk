@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/di/injection_container.dart';
+import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../app_management/domain/entities/app.dart';
 import '../bloc/app_settings_bloc.dart';
@@ -27,7 +28,13 @@ class CreateAppDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create:
-          (_) => getIt<AppSettingsBloc>()..add(InitializeAppSettingsEvent()),
+          (_) =>
+              getIt<AppSettingsBloc>()..add(
+                InitializeAppSettingsEvent(
+                  defaultTargetLanguages:
+                      getIt<AppSettingsController>().defaultTargetLanguages,
+                ),
+              ),
       child: const _CreateAppDialogView(),
     );
   }

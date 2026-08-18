@@ -5,6 +5,7 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/picked_translation_file.dart';
 import '../../domain/repositories/file_upload_repository.dart';
 import '../datasources/file_picker_data_source.dart';
+import '../datasources/scanned_project_data.dart';
 
 class FileUploadRepositoryImpl implements FileUploadRepository {
   const FileUploadRepositoryImpl({required this.filePickerDataSource});
@@ -20,6 +21,17 @@ class FileUploadRepositoryImpl implements FileUploadRepository {
         for (final file in files)
           PickedTranslationFile(fileName: file.fileName, content: file.content),
       ]);
+    } on FileException catch (e) {
+      return Left(FileFailure(message: e.message));
+    } on Exception catch (e) {
+      return Left(FileFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ScannedProjectData?>> scanProject() async {
+    try {
+      return Right(await filePickerDataSource.pickProjectFolder());
     } on FileException catch (e) {
       return Left(FileFailure(message: e.message));
     } on Exception catch (e) {

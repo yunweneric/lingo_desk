@@ -52,7 +52,8 @@ Layout (top → bottom):
 - **Coverage by app**: bar chart, one bar per app (app-name initials as labels), derived from real progress. Placeholder text when no apps.
 - **Language health**: per-target-locale progress bars aggregated across apps, weakest locale first; "Next review: <app>" hint.
 - **New app** opens a **modal dialog** (name, source language, target chips, inline validation); on success a follow-up prompt offers "Upload files" or "Later".
-- **Sidebar actions**: Dashboard scrolls to top; Apps / Languages smooth-scroll to the apps table / language health card; Imports & Editor open the target for the single app directly, show an app chooser when several exist, or open the create modal when there are none; Tools → Settings opens a Preferences dialog (theme System/Light/Dark + UI language).
+- **Sidebar actions**: Dashboard scrolls to top; Apps / Languages smooth-scroll to the apps table / language health card; Imports & Editor open the target for the single app directly, show an app chooser when several exist, or open the create modal when there are none; Tools → Settings opens the workspace Settings page.
+- **Workspace Settings page** (`/settings`): tabbed — **Profile** (name/email, sidebar avatar), **Appearance** (System/Light/Dark), **Languages** (interface language + default target locales for new apps). Language options everywhere show the country's **flag emoji** next to the name (chips, dropdowns, upload pills, export rows, progress tiles, language health).
 - **Apps table**: one row per app — name + `en.json - N keys`, target-language badges, progress bar + %, status badge (**New** = no keys yet / **Missing** = has gaps / **Complete**), relative "Updated" time, and a **⋯ menu** (Open editor / Settings / Upload files / Delete app).
 - **Sidebar** (only ≥1024 px): brand, nav items, "Local workspace" footer.
 

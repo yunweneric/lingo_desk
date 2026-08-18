@@ -23,11 +23,18 @@ class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
     Emitter<AppSettingsState> emit,
   ) {
     final app = event.app;
+    final source = app?.sourceLanguage ?? 'en';
+    // Creating: start from the workspace defaults, minus the source.
+    final targets =
+        app?.targetLanguages ??
+        (event.defaultTargetLanguages ?? const <String>[])
+            .where((language) => language != source)
+            .toList();
     emit(
       AppSettingsReady(
         editingApp: app,
-        sourceLanguage: app?.sourceLanguage ?? 'en',
-        targetLanguages: List.of(app?.targetLanguages ?? const []),
+        sourceLanguage: source,
+        targetLanguages: List.of(targets),
       ),
     );
   }

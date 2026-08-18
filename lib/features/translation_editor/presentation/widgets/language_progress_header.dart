@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/workspace_card.dart';
 import '../bloc/translation_editor_state.dart';
 
 /// Real-time completion bars for every target language.
@@ -59,6 +61,10 @@ class _LanguageProgressTile extends StatelessWidget {
           Row(
             children: [
               Text(
+                '${SupportedLanguages.flagOf(language)} ',
+                style: const TextStyle(fontSize: 13),
+              ),
+              Text(
                 language.toUpperCase(),
                 style: LingoDeskTheme.codeStyle.copyWith(
                   color: tokens.foreground,
@@ -76,14 +82,10 @@ class _LanguageProgressTile extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          LinearProgressIndicator(
+          WorkspaceProgressBar(
             value: progress,
+            isComplete: missing == 0,
             minHeight: 6,
-            borderRadius: BorderRadius.circular(99),
-            color:
-                missing == 0
-                    ? LingoDeskColors.complete
-                    : LingoDeskColors.brandTeal,
             backgroundColor: tokens.card,
           ),
           const SizedBox(height: 6),

@@ -1,0 +1,151 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
+
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/preferences/app_settings_controller.dart';
+import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/workspace_card.dart';
+import '../../../../core/widgets/workspace_page_header.dart';
+import '../../../../core/widgets/workspace_toolbar.dart';
+import '../app_actions.dart';
+import '../bloc/app_management_bloc.dart';
+import '../bloc/app_management_event.dart';
+import '../bloc/app_management_state.dart';
+import '../widgets/apps_search_field.dart';
+import '../widgets/apps_summary_card.dart';
+import '../widgets/apps_table.dart';
+
+/// Every localization app in one table, above workspace-wide counters and
+/// the overall translation-file progress.
+class AppsPage extends StatefulWidget {
+  const AppsPage({super.key});
+
+  @override
+  State<AppsPage> createState() => _AppsPageState();
+}
+
+class _AppsPageState extends State<AppsPage> with RouteAware {
+  final AppSettingsController _settings = getIt<AppSettingsController>();
+  AppManagementBloc? _bloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = context.read<AppManagementBloc>();
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  /// Counters go stale while the editor, upload or settings pages are on
+  /// top, so reload whenever we come back.
+  @override
+  void didPopNext() {
+    _bloc?.add(LoadAppsEvent());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return ColoredBox(
+      color: tokens.background,
+      child: SafeArea(
+        child: BlocBuilder<AppManagementBloc, AppManagementState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                ListenableBuilder(
+                  listenable: _settings,
+                  builder: (context, _) {
+                    return WorkspacePageHeader(
+                      breadcrumb: const ['Workspace', 'Apps'],
+                      actions: [
+                        const AppsSearchField(),
+                        ThemeModeSwitcher(
+                          themeMode: _settings.themeMode,
+                          onChanged: _settings.setThemeMode,
+                        ),
+                        OutlinedButton.icon(
+                          onPressed: () => openImportProject(context),
+                          icon: const LingoDeskIcon(
+                            HugeIcons.strokeRoundedFolderAdd,
+                            size: 18,
+                          ),
+                          label: const Text('Import project'),
+                        ),
+                        FilledButton.icon(
+                          onPressed: () => openCreateApp(context),
+                          icon: const LingoDeskIcon(
+                            HugeIcons.strokeRoundedAdd01,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          label: const Text('New app'),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Expanded(child: _buildBody(context, state)),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, AppManagementState state) {
+    if (state is AppManagementError) {
+      return WorkspaceErrorState(
+        message: state.message,
+        onRetry: () => context.read<AppManagementBloc>().add(LoadAppsEvent()),
+      );
+    }
+    if (state is! AppManagementLoaded) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontal = constraints.maxWidth < 780 ? 16.0 : 24.0;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AppsSummaryCard(state: state),
+              const SizedBox(height: 16),
+              if (state.overviews.isEmpty)
+                WorkspaceEmptyState(
+                  icon: HugeIcons.strokeRoundedFolder02,
+                  title: 'Create your first app',
+                  message:
+                      'Point LingoDesk at a project folder and it imports the '
+                      'translation files it finds, or set one up by hand with '
+                      'a source language and your targets.',
+                  actionLabel: 'Import project',
+                  actionIcon: HugeIcons.strokeRoundedFolderAdd,
+                  onAction: () => openImportProject(context),
+                )
+              else
+                AppsTable(state: state),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

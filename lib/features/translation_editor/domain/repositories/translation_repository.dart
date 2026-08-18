@@ -34,11 +34,13 @@ abstract class TranslationRepository {
 
   Future<Either<Failure, void>> deleteKey(String appId, String key);
 
-  /// Exports one nested JSON file per language via a save dialog.
+  /// Bundles one nested JSON file per language into a single archive
+  /// named [archiveName] and saves it via one save dialog.
   ///
-  /// Returns the number of files actually saved (0 when canceled).
+  /// Returns the number of files bundled (0 when canceled).
   Future<Either<Failure, int>> exportTranslations(
     String appId,
     List<String> languages,
+    String archiveName,
   );
 }

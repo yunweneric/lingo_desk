@@ -203,9 +203,9 @@ class LingoDeskTheme {
   }
 
   /// Machine strings: Space Mono ships 400/700 only — bold it is.
-  static const codeStyle = TextStyle(
+  static TextStyle codeStyle = TextStyle(
     color: LingoDeskColors.ink,
-    fontFamily: 'Space Mono',
+    fontFamily: GoogleFonts.spaceMono().fontFamily,
     fontSize: 13,
     fontWeight: FontWeight.w700,
     letterSpacing: 0,

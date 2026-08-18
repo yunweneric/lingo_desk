@@ -3,53 +3,49 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../../../core/constants/languages.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
-import '../../../../core/utils/date_formatter.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
-import '../../../../core/widgets/lingo_desk_mark.dart';
-import '../../../app_settings/presentation/widgets/create_app_dialog.dart';
-import '../../domain/entities/app_overview.dart';
+import '../../../../core/widgets/workspace_card.dart';
+import '../../../../core/widgets/workspace_page_header.dart';
+import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../../core/widgets/workspace_toolbar.dart';
+import '../app_actions.dart';
 import '../bloc/app_management_bloc.dart';
 import '../bloc/app_management_event.dart';
 import '../bloc/app_management_state.dart';
 
 part '../widgets/dashboard_cards.dart';
 part '../widgets/dashboard_content.dart';
-part '../widgets/dashboard_controls.dart';
 part '../widgets/dashboard_header.dart';
-part '../widgets/dashboard_shared.dart';
-part '../widgets/dashboard_sidebar.dart';
-part '../widgets/projects_table.dart';
 
-/// App Management Dashboard: the entry point listing every
-/// localization project with live stats.
-class AppDashboardPage extends StatelessWidget {
-  const AppDashboardPage({super.key});
+/// Workspace overview: headline stats, coverage per app and language
+/// health. The apps table itself lives on [AppsPage].
+class AppDashboardPage extends StatefulWidget {
+  const AppDashboardPage({super.key, this.section});
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<AppManagementBloc>()..add(LoadAppsEvent()),
-      child: const _DashboardShell(),
-    );
-  }
-}
-
-class _DashboardShell extends StatefulWidget {
-  const _DashboardShell();
+  /// Optional `?section=` anchor to scroll to once the stats load.
+  final String? section;
 
   @override
-  State<_DashboardShell> createState() => _DashboardShellState();
+  State<AppDashboardPage> createState() => _AppDashboardPageState();
 }
 
-class _DashboardShellState extends State<_DashboardShell> with RouteAware {
+class _AppDashboardPageState extends State<AppDashboardPage> with RouteAware {
   final AppSettingsController _settings = getIt<AppSettingsController>();
   final ScrollController _scrollController = ScrollController();
   AppManagementBloc? _bloc;
+  String? _pendingSection;
+
+  @override
+  void initState() {
+    super.initState();
+    _pendingSection = widget.section;
+  }
 
   @override
   void didChangeDependencies() {
@@ -58,6 +54,20 @@ class _DashboardShellState extends State<_DashboardShell> with RouteAware {
     final route = ModalRoute.of(context);
     if (route != null) {
       appRouteObserver.subscribe(this, route);
+    }
+    // The shell's bloc may already be loaded when we arrive from another
+    // page, in which case no state change will announce it.
+    if (_bloc?.state is AppManagementLoaded) {
+      _consumePendingSection();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AppDashboardPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.section != null && widget.section != oldWidget.section) {
+      _pendingSection = widget.section;
+      _consumePendingSection();
     }
   }
 
@@ -75,32 +85,34 @@ class _DashboardShellState extends State<_DashboardShell> with RouteAware {
     _bloc?.add(LoadAppsEvent());
   }
 
+  /// Honours the sidebar's "Languages" deep link once the anchor exists.
+  void _consumePendingSection() {
+    if (_pendingSection != 'languages') {
+      return;
+    }
+    _pendingSection = null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _scrollToSection(_scrollController, _languageHealthKey);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListenableBuilder(
+    return BlocListener<AppManagementBloc, AppManagementState>(
+      listener: (context, state) {
+        if (state is AppManagementLoaded) {
+          _consumePendingSection();
+        }
+      },
+      child: ListenableBuilder(
         listenable: _settings,
         builder: (context, _) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final isWide = constraints.maxWidth >= 1024;
-
-              return Row(
-                children: [
-                  if (isWide) _AppSidebar(scrollController: _scrollController),
-                  Expanded(
-                    child: _DashboardContent(
-                      scrollController: _scrollController,
-                      themeMode: _settings.themeMode,
-                      onThemeModeChanged: _settings.setThemeMode,
-                      selectedLanguage: _settings.uiLanguage,
-                      onLanguageChanged: _settings.setUiLanguage,
-                      showMobileBrand: !isWide,
-                    ),
-                  ),
-                ],
-              );
-            },
+          return _DashboardContent(
+            scrollController: _scrollController,
+            themeMode: _settings.themeMode,
+            onThemeModeChanged: _settings.setThemeMode,
           );
         },
       ),
@@ -108,95 +120,8 @@ class _DashboardShellState extends State<_DashboardShell> with RouteAware {
   }
 }
 
-/// Section anchors for the sidebar's scroll jumps.
-final GlobalKey _appsSectionKey = GlobalKey(debugLabel: 'apps-section');
+/// Section anchor for the sidebar's "Languages" deep link.
 final GlobalKey _languageHealthKey = GlobalKey(debugLabel: 'language-health');
-
-Future<void> _openCreateApp(BuildContext context) async {
-  final app = await CreateAppDialog.show(context);
-  if (app == null || !context.mounted) {
-    return;
-  }
-
-  // Offer to import files right away; the dashboard stats refresh via
-  // the shell's RouteAware.didPopNext when the dialogs close.
-  final uploadNow = await showDialog<bool>(
-    context: context,
-    builder:
-        (dialogContext) => AlertDialog(
-          title: Text('"${app.name}" created'),
-          content: const Text(
-            'Do you want to upload your existing JSON translation files now? '
-            'You can also do this later from the dashboard.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Later'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Upload files'),
-            ),
-          ],
-        ),
-  );
-
-  if (uploadNow == true && context.mounted) {
-    context.push(AppRoutes.fileUpload(app.id), extra: app);
-  }
-}
-
-/// Resolves which app a sidebar action should target: directly with a
-/// single app, via a chooser with several, or the create modal when none.
-Future<AppOverview?> _pickApp(BuildContext context) async {
-  final state = context.read<AppManagementBloc>().state;
-  final overviews =
-      state is AppManagementLoaded ? state.overviews : const <AppOverview>[];
-
-  if (overviews.isEmpty) {
-    await _openCreateApp(context);
-    return null;
-  }
-  if (overviews.length == 1) {
-    return overviews.first;
-  }
-
-  return showDialog<AppOverview>(
-    context: context,
-    builder:
-        (dialogContext) => SimpleDialog(
-          title: const Text('Choose an app'),
-          children: [
-            for (final overview in overviews)
-              SimpleDialogOption(
-                onPressed: () => Navigator.of(dialogContext).pop(overview),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        overview.app.name,
-                        style: Theme.of(dialogContext).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${overview.app.sourceLanguage}.json - '
-                        '${overview.keyCount} keys',
-                        style: LingoDeskTheme.codeStyle.copyWith(
-                          fontSize: 12,
-                          color: LingoDeskTokens.of(dialogContext).muted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
-  );
-}
 
 /// Smoothly scrolls the dashboard to a section anchor, building lazy
 /// slivers first when needed.
@@ -236,52 +161,6 @@ Future<void> _scrollToSection(
   }
 }
 
-void _openAppSettings(BuildContext context, AppOverview overview) {
-  context.push(AppRoutes.appSettings(overview.app.id), extra: overview.app);
-}
-
-void _openFileUpload(BuildContext context, AppOverview overview) {
-  context.push(AppRoutes.fileUpload(overview.app.id), extra: overview.app);
-}
-
-void _openEditor(BuildContext context, AppOverview overview) {
-  context.push(AppRoutes.editor(overview.app.id));
-}
-
-Future<void> _confirmDeleteApp(
-  BuildContext context,
-  AppOverview overview,
-) async {
-  final bloc = context.read<AppManagementBloc>();
-  final confirmed = await showDialog<bool>(
-    context: context,
-    builder:
-        (dialogContext) => AlertDialog(
-          title: Text('Delete "${overview.app.name}"?'),
-          content: const Text(
-            'This permanently removes the app and all of its translations. '
-            'This cannot be undone.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: LingoDeskColors.error,
-              ),
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Delete'),
-            ),
-          ],
-        ),
-  );
-  if (confirmed ?? false) {
-    bloc.add(DeleteAppEvent(overview.app.id));
-  }
-}
-
 List<_Metric> _dashboardMetrics(AppManagementLoaded state) {
   final missing = state.totalMissing;
 
@@ -314,17 +193,6 @@ List<_Metric> _dashboardMetrics(AppManagementLoaded state) {
   ];
 }
 
-/// Derived status of an app for the dashboard table.
-({String label, Color color}) _statusOf(AppOverview overview) {
-  if (overview.keyCount == 0) {
-    return (label: 'New', color: LingoDeskColors.brandTeal);
-  }
-  if (overview.isComplete) {
-    return (label: 'Complete', color: LingoDeskColors.complete);
-  }
-  return (label: 'Missing', color: LingoDeskColors.warning);
-}
-
 class _Metric {
   const _Metric({
     required this.label,
@@ -339,18 +207,4 @@ class _Metric {
   final String detail;
   final List<List<dynamic>> icon;
   final bool isPositive;
-}
-
-class _SidebarItemData {
-  const _SidebarItemData({
-    required this.label,
-    required this.icon,
-    this.isActive = false,
-    this.onTap,
-  });
-
-  final String label;
-  final List<List<dynamic>> icon;
-  final bool isActive;
-  final VoidCallback? onTap;
 }

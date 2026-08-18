@@ -8,15 +8,19 @@ class ExportTranslationsParams {
   const ExportTranslationsParams({
     required this.appId,
     required this.languages,
+    required this.archiveName,
   });
 
   final String appId;
   final List<String> languages;
+
+  /// File name of the archive, e.g. `customer-portal-translations.zip`.
+  final String archiveName;
 }
 
-/// Exports the selected languages as nested JSON files.
+/// Exports the selected languages as one zip of nested JSON files.
 ///
-/// Returns the number of files actually saved (0 when the user cancels).
+/// Returns the number of files bundled (0 when the user cancels).
 class ExportTranslations implements UseCase<int, ExportTranslationsParams> {
   ExportTranslations(this.repository);
 
@@ -31,6 +35,21 @@ class ExportTranslations implements UseCase<int, ExportTranslationsParams> {
         ),
       );
     }
-    return repository.exportTranslations(params.appId, params.languages);
+    return repository.exportTranslations(
+      params.appId,
+      params.languages,
+      params.archiveName,
+    );
   }
+}
+
+/// Turns an app name into a safe archive file name.
+///
+/// `Customer Portal` -> `customer-portal-translations.zip`.
+String archiveNameFor(String appName) {
+  final slug = appName
+      .toLowerCase()
+      .replaceAll(RegExp('[^a-z0-9]+'), '-')
+      .replaceAll(RegExp('^-+|-+\$'), '');
+  return slug.isEmpty ? 'translations.zip' : '$slug-translations.zip';
 }

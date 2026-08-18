@@ -1,4 +1,5 @@
 import '../../../app_management/domain/entities/app.dart';
+import '../../domain/entities/scanned_project.dart';
 import '../../domain/entities/uploaded_translation_file.dart';
 
 abstract class FileUploadState {}
@@ -7,41 +8,110 @@ class FileUploadInitial extends FileUploadState {}
 
 class FileUploadReady extends FileUploadState {
   FileUploadReady({
-    required this.app,
+    this.app,
     this.stagedFiles = const [],
+    this.project,
+    this.projectName,
+    this.selectedSource,
+    this.excludedLanguages = const {},
+    this.isScanning = false,
     this.isImporting = false,
     this.errorMessage,
   });
 
-  final App app;
+  /// The app being imported into, or null in project mode where the
+  /// import creates one from the scanned folder.
+  final App? app;
 
-  /// Files picked so far, valid or not.
+  /// Files picked so far, valid or not (app mode).
   final List<UploadedTranslationFile> stagedFiles;
 
+  /// Everything gathered so far from folder scans and picked files
+  /// (project mode).
+  final ScannedProject? project;
+
+  /// Name of the app the import will create; seeded from the scanned
+  /// folder and editable.
+  final String? projectName;
+
+  /// Language chosen as the app's source (project mode).
+  final String? selectedSource;
+
+  /// Scanned languages the user unchecked.
+  final Set<String> excludedLanguages;
+
+  final bool isScanning;
   final bool isImporting;
 
   /// Transient failure message (picker or import errors).
   final String? errorMessage;
 
+  /// True when no app was supplied, so importing creates one.
+  bool get isProjectMode => app == null;
+
+  bool get isBusy => isScanning || isImporting;
+
   List<UploadedTranslationFile> get validFiles =>
       stagedFiles.where((file) => file.isValid).toList();
 
-  bool get canImport => validFiles.isNotEmpty && !isImporting;
+  /// Scanned languages kept for the import, source first.
+  List<ScannedLanguageGroup> get includedGroups {
+    final groups = <ScannedLanguageGroup>[
+      ...?project?.groups.where(
+        (group) => !excludedLanguages.contains(group.languageCode),
+      ),
+    ];
+    groups.sort((a, b) {
+      if (a.languageCode == selectedSource) {
+        return -1;
+      }
+      if (b.languageCode == selectedSource) {
+        return 1;
+      }
+      return a.languageCode.compareTo(b.languageCode);
+    });
+    return groups;
+  }
 
-  /// Language codes covered by valid staged files.
+  bool get canImport {
+    if (isBusy) {
+      return false;
+    }
+    if (!isProjectMode) {
+      return validFiles.isNotEmpty;
+    }
+    return includedGroups.isNotEmpty && (projectName ?? '').trim().isNotEmpty;
+  }
+
+  /// True once something has been added to the project-mode preview.
+  bool get hasProject => (project?.groups.isNotEmpty ?? false);
+
+  /// Language codes covered by valid staged files (app mode).
   Set<String> get coveredLanguages =>
       validFiles.map((file) => file.languageCode).toSet();
 
   FileUploadReady copyWith({
     App? app,
     List<UploadedTranslationFile>? stagedFiles,
+    ScannedProject? project,
+    String? projectName,
+    String? selectedSource,
+    Set<String>? excludedLanguages,
+    bool? isScanning,
     bool? isImporting,
     String? errorMessage,
     bool clearError = false,
+    bool reset = false,
   }) {
     return FileUploadReady(
       app: app ?? this.app,
       stagedFiles: stagedFiles ?? this.stagedFiles,
+      project: reset ? null : (project ?? this.project),
+      projectName: reset ? null : (projectName ?? this.projectName),
+      selectedSource: reset ? null : (selectedSource ?? this.selectedSource),
+      excludedLanguages:
+          reset ? const {} : (excludedLanguages ?? this.excludedLanguages),
+      isScanning: isScanning ?? this.isScanning,
       isImporting: isImporting ?? this.isImporting,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );

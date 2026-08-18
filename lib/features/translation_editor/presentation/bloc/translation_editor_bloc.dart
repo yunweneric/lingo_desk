@@ -210,8 +210,13 @@ class TranslationEditorBloc
       return;
     }
 
+    final archiveName = archiveNameFor(current.app.name);
     final result = await exportTranslations(
-      ExportTranslationsParams(appId: appId, languages: event.languages),
+      ExportTranslationsParams(
+        appId: appId,
+        languages: event.languages,
+        archiveName: archiveName,
+      ),
     );
 
     result.fold(
@@ -223,8 +228,8 @@ class TranslationEditorBloc
             savedCount == 0
                 ? 'Export canceled.'
                 : savedCount == 1
-                ? 'Exported 1 file.'
-                : 'Exported $savedCount files.';
+                ? 'Exported 1 file as $archiveName.'
+                : 'Exported $savedCount files as $archiveName.';
         emit(current.copyWith(notice: EditorNotice(message)));
       },
     );

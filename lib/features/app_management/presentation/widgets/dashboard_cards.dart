@@ -9,7 +9,8 @@ class _MetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
 
-    return _Surface(
+    return WorkspaceSurface(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -78,12 +79,12 @@ class _CoverageCard extends StatelessWidget {
     final apps = state.overviews.take(8).toList();
     final translated = state.totalCells - state.totalMissing;
 
-    return _Surface(
+    return WorkspaceSurface(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _CardHeader(
+          const WorkspaceCardHeader(
             title: 'Coverage by app',
             subtitle: 'Translated share of target strings per app',
             icon: HugeIcons.strokeRoundedChartArea,
@@ -198,12 +199,12 @@ class _LanguageHealthCard extends StatelessWidget {
     final nextReview =
         state.overviews.where((overview) => overview.missingCount > 0).toList();
 
-    return _Surface(
+    return WorkspaceSurface(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _CardHeader(
+          const WorkspaceCardHeader(
             title: 'Language health',
             subtitle: 'Coverage by target locale',
             icon: HugeIcons.strokeRoundedLanguageSquare,
@@ -219,7 +220,9 @@ class _LanguageHealthCard extends StatelessWidget {
           else
             for (final stat in health) ...[
               _LanguageProgress(
-                language: stat.language.toUpperCase(),
+                language:
+                    '${SupportedLanguages.flagOf(stat.language)}  '
+                    '${stat.language.toUpperCase()}',
                 progress: stat.progress,
                 missing: stat.missing,
               ),
@@ -291,16 +294,7 @@ class _LanguageProgress extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: progress,
-          minHeight: 8,
-          borderRadius: BorderRadius.circular(99),
-          color:
-              missing == 0
-                  ? LingoDeskColors.complete
-                  : LingoDeskColors.brandTeal,
-          backgroundColor: tokens.active,
-        ),
+        WorkspaceProgressBar(value: progress, isComplete: missing == 0),
       ],
     );
   }

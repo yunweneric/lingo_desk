@@ -45,7 +45,7 @@ class SearchKeysEvent extends TranslationEditorEvent {
   final String query;
 }
 
-/// Exports the selected languages as nested JSON files.
+/// Exports the selected languages as one zip of nested JSON files.
 class ExportTranslationsEvent extends TranslationEditorEvent {
   ExportTranslationsEvent(this.languages);
 

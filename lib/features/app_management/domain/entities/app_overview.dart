@@ -36,4 +36,20 @@ class AppOverview {
   }
 
   bool get isComplete => keyCount > 0 && missingCount == 0;
+
+  /// Translation files the app exports: one JSON per language, source
+  /// included.
+  int get fileCount => app.allLanguages.length;
+
+  /// Files with no empty values. The source file is always complete once
+  /// the app has keys; an app without keys has nothing to export.
+  int get completeFileCount {
+    if (keyCount == 0) {
+      return 0;
+    }
+    final completeTargets = app.targetLanguages.where(
+      (language) => (missingByLanguage[language] ?? 0) == 0,
+    );
+    return 1 + completeTargets.length;
+  }
 }

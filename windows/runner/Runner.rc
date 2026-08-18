@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "lingo_desk" "\0"
+            VALUE "FileDescription", "LingoDesk" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "lingo_desk" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "lingo_desk.exe" "\0"
-            VALUE "ProductName", "lingo_desk" "\0"
+            VALUE "ProductName", "LingoDesk" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

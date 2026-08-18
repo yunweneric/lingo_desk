@@ -1,5 +1,5 @@
 name: lingo_desk
-description: "A new Flutter project."
+description: "Manage app translations, imports and exports."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  archive: ^4.0.9
   dartz: ^0.10.1
   file_picker: ^10.1.2
   flutter:

@@ -9,35 +9,68 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/widgets/workspace_page_header.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../../app_management/domain/entities/app.dart';
+import '../../domain/entities/scanned_project.dart';
 import '../bloc/file_upload_bloc.dart';
 import '../bloc/file_upload_event.dart';
 import '../bloc/file_upload_state.dart';
+import '../widgets/scanned_language_tile.dart';
 import '../widgets/staged_file_tile.dart';
 
-/// Import existing JSON translation files into an app's workspace.
-class FileUploadPage extends StatelessWidget {
-  const FileUploadPage({
-    super.key,
-    required this.app,
-    this.popOnImport = false,
-  });
+/// Bring existing JSON translation files into LingoDesk.
+///
+/// Two modes. With an [app] it fills that app's workspace: pick files or
+/// scan a folder, and anything outside the app's languages is rejected.
+/// Without one it is project mode — point it at a codebase, it finds the
+/// translation files itself, and importing creates the app from the
+/// folder name.
+class FileUploadPage extends StatefulWidget {
+  const FileUploadPage({super.key, this.app, this.popOnImport = false});
 
-  final App app;
+  /// The app being imported into, or null to import a whole project.
+  final App? app;
 
   /// When true (opened from the editor), a successful import pops back
   /// instead of pushing a new editor page.
   final bool popOnImport;
 
   @override
+  State<FileUploadPage> createState() => _FileUploadPageState();
+}
+
+class _FileUploadPageState extends State<FileUploadPage> {
+  /// Owned here rather than rebuilt from state, so typing in the name
+  /// field does not fight the cursor.
+  final _nameController = TextEditingController();
+
+  bool get _isProjectMode => widget.app == null;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<FileUploadBloc>()..add(LoadUploadContextEvent(app)),
+      create:
+          (_) =>
+              getIt<FileUploadBloc>()..add(LoadUploadContextEvent(widget.app)),
       child: BlocConsumer<FileUploadBloc, FileUploadState>(
         listener: (context, state) {
+          if (state is FileUploadReady) {
+            // Typing keeps the two in sync, so they only diverge when a
+            // scan seeds the name or a reset clears it.
+            final name = state.projectName ?? '';
+            if (_nameController.text != name) {
+              _nameController.text = name;
+            }
+          }
           if (state is FileUploadImportSuccess) {
-            if (popOnImport) {
+            if (widget.popOnImport) {
               context.pop(true);
             } else {
               context.pushReplacement(AppRoutes.editor(state.app.id));
@@ -45,24 +78,67 @@ class FileUploadPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          final tokens = LingoDeskTokens.of(context);
           final ready = state is FileUploadReady ? state : null;
 
-          return WorkspaceScaffold(
-            title: 'Upload files',
-            subtitle: app.name,
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 760),
-                  child:
-                      ready == null
-                          ? const Padding(
-                            padding: EdgeInsets.only(top: 48),
-                            child: CircularProgressIndicator(),
-                          )
-                          : _UploadBody(state: ready, popOnImport: popOnImport),
-                ),
+          return ColoredBox(
+            color: tokens.background,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  WorkspacePageHeader(
+                    breadcrumb: [
+                      'Workspace',
+                      'Import',
+                      widget.app?.name ?? 'New project',
+                    ],
+                    actions: [
+                      OutlinedButton(
+                        onPressed:
+                            ready == null || ready.isBusy
+                                ? null
+                                : () => _leave(context),
+                        child: Text(_leaveLabel),
+                      ),
+                      FilledButton.icon(
+                        onPressed:
+                            ready != null && ready.canImport
+                                ? () => context.read<FileUploadBloc>().add(
+                                  ConfirmImportEvent(),
+                                )
+                                : null,
+                        icon:
+                            ready != null && ready.isImporting
+                                ? const SizedBox.square(
+                                  dimension: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : const LingoDeskIcon(
+                                  HugeIcons.strokeRoundedArrowRight01,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                        label: Text(
+                          _isProjectMode
+                              ? 'Import project'
+                              : 'Import & open editor',
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child:
+                        ready == null
+                            ? const Center(child: CircularProgressIndicator())
+                            : _UploadBody(
+                              state: ready,
+                              nameController: _nameController,
+                            ),
+                  ),
+                ],
               ),
             ),
           );
@@ -70,186 +146,244 @@ class FileUploadPage extends StatelessWidget {
       ),
     );
   }
+
+  String get _leaveLabel {
+    if (_isProjectMode) {
+      return 'Back to apps';
+    }
+    return widget.popOnImport ? 'Back to editor' : 'Skip to editor';
+  }
+
+  void _leave(BuildContext context) {
+    if (_isProjectMode) {
+      context.go(AppRoutes.apps);
+    } else if (widget.popOnImport) {
+      context.pop(false);
+    } else {
+      context.pushReplacement(AppRoutes.editor(widget.app!.id));
+    }
+  }
 }
 
 class _UploadBody extends StatelessWidget {
-  const _UploadBody({required this.state, required this.popOnImport});
+  const _UploadBody({required this.state, required this.nameController});
 
   final FileUploadReady state;
-  final bool popOnImport;
+  final TextEditingController nameController;
+
+  @override
+  Widget build(BuildContext context) {
+    final isEmpty =
+        state.isProjectMode ? !state.hasProject : state.stagedFiles.isEmpty;
+
+    final content = ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: isEmpty ? 620 : 760),
+      child:
+          isEmpty
+              ? _EmptyState(state: state)
+              : state.isProjectMode
+              ? _ScannedProjectState(
+                state: state,
+                nameController: nameController,
+              )
+              : _StagedState(state: state),
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            // With nothing to import there is one thing to do, so the card
+            // sits in the middle of the page rather than clinging to the
+            // top of a mostly empty screen. A bare Center cannot do this
+            // inside a scroll view: the viewport takes its child's own
+            // height, so there is no slack to centre within. Floor the
+            // child at the viewport height (minus this padding) and the
+            // Center has room to work, while longer content still scrolls.
+            constraints: BoxConstraints(
+              minHeight: isEmpty ? constraints.maxHeight - 48 : 0,
+            ),
+            child:
+                isEmpty
+                    ? Center(child: content)
+                    : Align(alignment: Alignment.topCenter, child: content),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Nothing to import yet: one centred card carrying the only action on
+/// the page, with the naming contract spelled out underneath it.
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.state});
+
+  final FileUploadReady state;
 
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final app = state.app;
+    final isProject = state.isProjectMode;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WorkspaceSurface(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Required languages',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Name each file after its language code (e.g. '
-                '${app.sourceLanguage}.json). Files outside this set are '
-                'rejected.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: tokens.muted,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final language in app.allLanguages)
-                    _LanguageChip(
-                      language: language,
-                      isSource: language == app.sourceLanguage,
-                      isCovered: state.coveredLanguages.contains(language),
-                    ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        WorkspaceSurface(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
           child: Column(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 56,
+                height: 56,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: LingoDeskColors.brandTeal.withAlpha(26),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
                 ),
-                child: const LingoDeskIcon(
-                  HugeIcons.strokeRoundedFileUpload,
+                child: LingoDeskIcon(
+                  isProject
+                      ? HugeIcons.strokeRoundedFolder02
+                      : HugeIcons.strokeRoundedFileUpload,
                   color: LingoDeskColors.brandTeal,
-                  size: 26,
+                  size: 28,
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 18),
               Text(
-                'Add your translation files',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontSize: 17),
+                isProject
+                    ? 'Import your translations'
+                    : 'Add your translation files',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Text(
-                'Select one or more .json files exported from your codebase.',
+                isProject
+                    ? 'Pick the project (or any folder) and LingoDesk finds '
+                        'the translation files inside it — or select the '
+                        '.json files yourself.'
+                    : 'Scan a folder, or select the .json files yourself. '
+                        'Each file is matched to a language by its name.',
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
               ),
-              const SizedBox(height: 18),
-              FilledButton.icon(
-                onPressed:
-                    state.isImporting
-                        ? null
-                        : () => context.read<FileUploadBloc>().add(
-                          PickFilesEvent(),
-                        ),
-                icon: const LingoDeskIcon(
-                  HugeIcons.strokeRoundedFolderAdd,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                label: const Text('Browse files'),
+              const SizedBox(height: 22),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                alignment: WrapAlignment.center,
+                children: [
+                  FilledButton.icon(
+                    onPressed:
+                        state.isBusy
+                            ? null
+                            : () => context.read<FileUploadBloc>().add(
+                              ScanProjectEvent(),
+                            ),
+                    icon:
+                        state.isScanning
+                            ? const SizedBox.square(
+                              dimension: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                            : const LingoDeskIcon(
+                              HugeIcons.strokeRoundedFolderAdd,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                    label: Text(
+                      state.isScanning ? 'Scanning…' : 'Choose folder',
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed:
+                        state.isBusy
+                            ? null
+                            : () => context.read<FileUploadBloc>().add(
+                              PickFilesEvent(),
+                            ),
+                    icon: const LingoDeskIcon(
+                      HugeIcons.strokeRoundedFileUpload,
+                      size: 18,
+                    ),
+                    label: const Text('Browse files'),
+                  ),
+                ],
               ),
+              const SizedBox(height: 32),
+              Divider(color: tokens.border, height: 1),
+              const SizedBox(height: 24),
+              if (isProject)
+                const _ScanContract()
+              else
+                _LanguageChecklist(state: state, centered: true),
             ],
           ),
         ),
-        if (state.stagedFiles.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text('Staged files', style: Theme.of(context).textTheme.labelLarge),
-          const SizedBox(height: 10),
-          for (final file in state.stagedFiles) ...[
-            StagedFileTile(
-              file: file,
-              onRemove:
-                  () => context.read<FileUploadBloc>().add(
-                    RemoveFileEvent(file.fileName),
-                  ),
-            ),
-            const SizedBox(height: 8),
-          ],
-        ],
         if (state.errorMessage != null) ...[
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              const LingoDeskIcon(
-                HugeIcons.strokeRoundedAlertCircle,
-                size: 18,
-                color: LingoDeskColors.error,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
+          const SizedBox(height: 14),
+          _ErrorRow(message: state.errorMessage!),
+        ],
+      ],
+    );
+  }
+}
+
+/// What the folder scan looks for, so an empty result is explainable.
+class _ScanContract extends StatelessWidget {
+  const _ScanContract();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return Column(
+      children: [
+        Text('Where we look', style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 6),
+        Text(
+          'Any .json file inside a /translation, /translations or /languages '
+          'folder, anywhere in the project. Build and dependency folders are '
+          'skipped.',
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final example in const [
+              'translations/en.json',
+              'lib/languages/fr.json',
+              'src/translations/de/common.json',
+            ])
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 11,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: tokens.active,
+                  borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
+                  border: Border.all(color: tokens.border),
+                ),
                 child: Text(
-                  state.errorMessage!,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: LingoDeskColors.error,
+                  example,
+                  style: LingoDeskTheme.codeStyle.copyWith(
+                    color: tokens.foreground,
+                    fontSize: 12,
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            OutlinedButton(
-              onPressed:
-                  state.isImporting
-                      ? null
-                      : () {
-                        if (popOnImport) {
-                          context.pop(false);
-                        } else {
-                          context.pushReplacement(AppRoutes.editor(app.id));
-                        }
-                      },
-              child: Text(popOnImport ? 'Back to editor' : 'Skip to editor'),
-            ),
-            const SizedBox(width: 10),
-            FilledButton.icon(
-              onPressed:
-                  state.canImport
-                      ? () => context.read<FileUploadBloc>().add(
-                        ConfirmImportEvent(),
-                      )
-                      : null,
-              icon:
-                  state.isImporting
-                      ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                      : const LingoDeskIcon(
-                        HugeIcons.strokeRoundedArrowRight01,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-              label: const Text('Import & open editor'),
-            ),
           ],
         ),
       ],
@@ -257,6 +391,468 @@ class _UploadBody extends StatelessWidget {
   }
 }
 
+/// A scanned project: what will be created, then what will go into it.
+class _ScannedProjectState extends StatelessWidget {
+  const _ScannedProjectState({
+    required this.state,
+    required this.nameController,
+  });
+
+  final FileUploadReady state;
+  final TextEditingController nameController;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final project = state.project!;
+    final totalKeys = project.allKeys.length;
+    final included = state.includedGroups;
+    final source = state.selectedSource ?? project.suggestedSource;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        WorkspaceSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('App name', style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(height: 8),
+              TextField(
+                controller: nameController,
+                enabled: !state.isBusy,
+                decoration: const InputDecoration(
+                  hintText: 'e.g. Customer Portal',
+                ),
+                onChanged:
+                    (value) => context.read<FileUploadBloc>().add(
+                      ProjectNameChangedEvent(value),
+                    ),
+              ),
+              if (project.rootPath.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  project.rootPath,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: LingoDeskTheme.codeStyle.copyWith(
+                    color: tokens.muted,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(
+                    child: _SummaryStat(
+                      label: 'Languages',
+                      value: '${included.length}',
+                    ),
+                  ),
+                  Expanded(
+                    child: _SummaryStat(label: 'Keys', value: '$totalKeys'),
+                  ),
+                  Expanded(
+                    child: _SummaryStat(
+                      label: 'Translated',
+                      value: _coverageLabel(included, totalKeys),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Source language',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                initialValue: source,
+                items: [
+                  for (final group in project.groups)
+                    DropdownMenuItem(
+                      value: group.languageCode,
+                      child: Text(
+                        '${SupportedLanguages.flagOf(group.languageCode)}  '
+                        '${SupportedLanguages.nameOf(group.languageCode)} '
+                        '(${group.languageCode})',
+                      ),
+                    ),
+                ],
+                onChanged:
+                    state.isBusy
+                        ? null
+                        : (value) {
+                          if (value != null) {
+                            context.read<FileUploadBloc>().add(
+                              SourceLanguageSelectedEvent(value),
+                            );
+                          }
+                        },
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Everything else becomes a target language you can translate '
+                'into.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: tokens.muted,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Detected languages',
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Add more folders or files and they merge into these.',
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+        ),
+        const SizedBox(height: 12),
+        for (final group in project.groups) ...[
+          ScannedLanguageTile(
+            group: group,
+            totalKeys: totalKeys,
+            isIncluded: !state.excludedLanguages.contains(group.languageCode),
+            isSource: group.languageCode == source,
+            onToggle:
+                group.languageCode == source || state.isBusy
+                    ? null
+                    : () => context.read<FileUploadBloc>().add(
+                      ToggleScannedLanguageEvent(group.languageCode),
+                    ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        if (project.skipped.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          _SkippedFiles(skipped: project.skipped),
+        ],
+        if (state.errorMessage != null) ...[
+          const SizedBox(height: 14),
+          _ErrorRow(message: state.errorMessage!),
+        ],
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                included.isEmpty
+                    ? 'Keep at least one language to import.'
+                    : '${included.length} language(s) and $totalKeys keys '
+                        'ready to import.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: tokens.muted,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            TextButton.icon(
+              onPressed:
+                  state.isBusy
+                      ? null
+                      : () => context.read<FileUploadBloc>().add(
+                        ScanProjectEvent(),
+                      ),
+              icon: const LingoDeskIcon(
+                HugeIcons.strokeRoundedFolderAdd,
+                size: 17,
+              ),
+              label: const Text('Add folder'),
+            ),
+            TextButton.icon(
+              onPressed:
+                  state.isBusy
+                      ? null
+                      : () =>
+                          context.read<FileUploadBloc>().add(PickFilesEvent()),
+              icon: const LingoDeskIcon(
+                HugeIcons.strokeRoundedFileUpload,
+                size: 17,
+              ),
+              label: const Text('Add files'),
+            ),
+            TextButton(
+              onPressed:
+                  state.isBusy
+                      ? null
+                      : () => context.read<FileUploadBloc>().add(
+                        ResetImportEvent(),
+                      ),
+              child: Text('Start over', style: TextStyle(color: tokens.muted)),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  String _coverageLabel(List<ScannedLanguageGroup> groups, int totalKeys) {
+    final cells = totalKeys * groups.length;
+    if (cells == 0) {
+      return '—';
+    }
+    final filled = groups.fold<int>(
+      0,
+      (sum, group) => sum + group.filledKeyCount,
+    );
+    return '${(filled / cells * 100).round()}%';
+  }
+}
+
+class _SummaryStat extends StatelessWidget {
+  const _SummaryStat({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          value,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+        ),
+      ],
+    );
+  }
+}
+
+/// Files the scan found but could not use, folded away by default.
+class _SkippedFiles extends StatelessWidget {
+  const _SkippedFiles({required this.skipped});
+
+  final List<SkippedScanFile> skipped;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return WorkspaceSurface(
+      padding: EdgeInsets.zero,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          title: Text(
+            '${skipped.length} file(s) skipped',
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(color: tokens.muted),
+          ),
+          children: [
+            for (final file in skipped)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      file.relativePath,
+                      style: LingoDeskTheme.codeStyle.copyWith(
+                        color: tokens.foreground,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      file.reason,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: tokens.muted,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Files staged: coverage first, then the list of what will be imported.
+class _StagedState extends StatelessWidget {
+  const _StagedState({required this.state});
+
+  final FileUploadReady state;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        WorkspaceSurface(child: _LanguageChecklist(state: state)),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Staged files',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            OutlinedButton.icon(
+              onPressed:
+                  state.isBusy
+                      ? null
+                      : () =>
+                          context.read<FileUploadBloc>().add(PickFilesEvent()),
+              icon: const LingoDeskIcon(
+                HugeIcons.strokeRoundedFolderAdd,
+                size: 17,
+              ),
+              label: const Text('Add more'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        for (final file in state.stagedFiles) ...[
+          StagedFileTile(
+            file: file,
+            onRemove:
+                () => context.read<FileUploadBloc>().add(
+                  RemoveFileEvent(file.fileName),
+                ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        if (state.errorMessage != null) ...[
+          const SizedBox(height: 6),
+          _ErrorRow(message: state.errorMessage!),
+        ],
+        const SizedBox(height: 4),
+        Text(
+          state.canImport
+              ? '${state.validFiles.length} file(s) ready to import.'
+              : 'Add at least one valid file to import.',
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+        ),
+      ],
+    );
+  }
+}
+
+/// The naming contract, as a checklist that fills in as files are staged.
+class _LanguageChecklist extends StatelessWidget {
+  const _LanguageChecklist({required this.state, this.centered = false});
+
+  final FileUploadReady state;
+  final bool centered;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = LingoDeskTokens.of(context);
+    final app = state.app!;
+    final covered = state.coveredLanguages;
+    final total = app.allLanguages.length;
+
+    return Column(
+      crossAxisAlignment:
+          centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: centered ? MainAxisSize.min : MainAxisSize.max,
+          children: [
+            Text(
+              'Required languages',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              '${covered.length}/$total',
+              style: LingoDeskTheme.codeStyle.copyWith(
+                color:
+                    covered.length == total
+                        ? LingoDeskColors.complete
+                        : tokens.muted,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Name each file after its language code. Anything outside this set '
+          'is rejected.',
+          textAlign: centered ? TextAlign.center : TextAlign.start,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: centered ? WrapAlignment.center : WrapAlignment.start,
+          children: [
+            for (final language in app.allLanguages)
+              _LanguageChip(
+                language: language,
+                isSource: language == app.sourceLanguage,
+                isCovered: covered.contains(language),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ErrorRow extends StatelessWidget {
+  const _ErrorRow({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const LingoDeskIcon(
+          HugeIcons.strokeRoundedAlertCircle,
+          size: 18,
+          color: LingoDeskColors.error,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            message,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: LingoDeskColors.error),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// One expected file: the literal name to give it, ticked once staged.
 class _LanguageChip extends StatelessWidget {
   const _LanguageChip({
     required this.language,
@@ -271,14 +867,16 @@ class _LanguageChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final color = isCovered ? LingoDeskColors.complete : tokens.muted;
+    final accent = isCovered ? LingoDeskColors.complete : tokens.muted;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
       decoration: BoxDecoration(
-        color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withAlpha(90)),
+        color: isCovered ? accent.withAlpha(20) : tokens.active,
+        borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
+        border: Border.all(
+          color: isCovered ? accent.withAlpha(90) : tokens.border,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -287,19 +885,25 @@ class _LanguageChip extends StatelessWidget {
             isCovered
                 ? HugeIcons.strokeRoundedCheckmarkCircle02
                 : HugeIcons.strokeRoundedCircle,
-            size: 14,
-            color: color,
+            size: 15,
+            color: accent,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Text(
-            '${language.toUpperCase()}'
-            '${isSource ? ' - source' : ''}'
-            ' (${SupportedLanguages.nameOf(language)})',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isCovered ? color : tokens.foreground,
+            '$language.json',
+            style: LingoDeskTheme.codeStyle.copyWith(
+              color: isCovered ? accent : tokens.foreground,
               fontSize: 12,
-              fontWeight: FontWeight.w700,
             ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            isSource
+                ? '${SupportedLanguages.nameOf(language)} - source'
+                : SupportedLanguages.nameOf(language),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
           ),
         ],
       ),

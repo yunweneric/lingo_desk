@@ -64,7 +64,7 @@ class AppSettingsFormFields extends StatelessWidget {
             for (final option in SupportedLanguages.all)
               DropdownMenuItem(
                 value: option.code,
-                child: Text('${option.name} (${option.code})'),
+                child: Text('${option.flag}  ${option.name} (${option.code})'),
               ),
           ],
           onChanged: (value) {

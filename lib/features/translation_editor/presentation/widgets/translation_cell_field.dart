@@ -9,6 +9,12 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 ///
 /// Keeps its own controller so typing is instant, and debounces
 /// [onChanged] so the bloc persists after the user pauses.
+///
+/// Chrome is earned, not permanent: at rest the cell is just text on the
+/// row. Hovering fills it faintly to say "this is editable", focus draws
+/// the only real border on the row, and an empty target cell carries a
+/// warm tint. A grid of outlined boxes reads as a form; this reads as a
+/// document you can type into.
 class TranslationCellField extends StatefulWidget {
   const TranslationCellField({
     super.key,
@@ -30,11 +36,13 @@ class TranslationCellField extends StatefulWidget {
 
 class _TranslationCellFieldState extends State<TranslationCellField> {
   static const _debounce = Duration(milliseconds: 400);
+  static const _height = 36.0;
 
   late final TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
   Timer? _debounceTimer;
   String _lastSent = '';
+  bool _hovered = false;
 
   @override
   void initState() {
@@ -91,46 +99,68 @@ class _TranslationCellFieldState extends State<TranslationCellField> {
     final tokens = LingoDeskTokens.of(context);
     final isEmpty = _controller.text.trim().isEmpty;
     final showMissing = widget.highlightMissing && isEmpty;
+    final hasFocus = _focusNode.hasFocus;
 
-    return Container(
-      height: 38,
-      decoration: BoxDecoration(
-        color:
-            showMissing
-                ? LingoDeskColors.warning.withAlpha(tokens.isDark ? 46 : 26)
-                : tokens.card,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color:
-              _focusNode.hasFocus
-                  ? LingoDeskColors.brandTeal
-                  : showMissing
-                  ? LingoDeskColors.warning.withAlpha(120)
-                  : tokens.border,
-        ),
-      ),
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        onChanged: _handleChanged,
-        onSubmitted: (_) => _flush(),
-        maxLines: 1,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: tokens.foreground,
-          fontSize: 13,
-        ),
-        decoration: InputDecoration(
-          isDense: true,
-          hintText: showMissing ? 'Missing' : null,
-          hintStyle: TextStyle(
-            color: LingoDeskColors.warning.withAlpha(190),
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+    final Color background;
+    if (hasFocus) {
+      background = tokens.card;
+    } else if (showMissing) {
+      background = LingoDeskColors.warning.withAlpha(tokens.isDark ? 38 : 22);
+    } else if (_hovered) {
+      background = tokens.active;
+    } else {
+      background = Colors.transparent;
+    }
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
+        height: _height,
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(LingoDeskTheme.radiusSm),
+          // Kept at a constant width so gaining focus never nudges the
+          // text sideways.
+          border: Border.all(
+            color: hasFocus ? LingoDeskColors.brandTeal : Colors.transparent,
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
+        ),
+        // isCollapsed strips the decorator's built-in minimums so the box
+        // is exactly _height, leaving real slack for textAlignVertical to
+        // centre into. The line height is pinned too: the theme's 1.45
+        // body leading plus padding overflows this box, and an
+        // over-constrained field silently rides high instead of centring.
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 9),
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            onChanged: _handleChanged,
+            onSubmitted: (_) => _flush(),
+            maxLines: 1,
+            cursorColor: LingoDeskColors.brandTeal,
+            textAlignVertical: TextAlignVertical.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: tokens.foreground,
+              fontSize: 13,
+              height: 1.2,
+            ),
+            decoration: InputDecoration(
+              isCollapsed: true,
+              hintText: showMissing ? 'Missing' : null,
+              hintStyle: TextStyle(
+                color: LingoDeskColors.warning.withAlpha(170),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+              ),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+            ),
           ),
         ),
       ),

@@ -35,6 +35,14 @@ class AppManagementLoaded extends AppManagementState {
   int get totalCells =>
       overviews.fold(0, (sum, overview) => sum + overview.totalCells);
 
+  /// Translation files across all apps (one JSON per language).
+  int get totalFiles =>
+      overviews.fold(0, (sum, overview) => sum + overview.fileCount);
+
+  /// Translation files with no missing values.
+  int get completeFiles =>
+      overviews.fold(0, (sum, overview) => sum + overview.completeFileCount);
+
   /// Overall completion across every app's target cells.
   double get coverage {
     final cells = totalCells;

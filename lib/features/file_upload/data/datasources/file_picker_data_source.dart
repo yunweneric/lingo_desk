@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/errors/exceptions.dart';
+import 'project_scanner_stub.dart'
+    if (dart.library.io) 'project_scanner_io.dart';
+import 'scanned_project_data.dart';
 
 /// Raw picked file data (name + decoded text content).
 class PickedFileData {
@@ -12,10 +15,15 @@ class PickedFileData {
   final String content;
 }
 
-/// Wraps the `file_picker` plugin for multi-select JSON picking.
+/// Wraps the `file_picker` plugin for JSON picking and folder scanning.
 abstract class FilePickerDataSource {
   /// Returns the selected files, or an empty list when canceled.
   Future<List<PickedFileData>> pickJsonFiles();
+
+  /// Asks for a project folder and walks it for translation files.
+  ///
+  /// Returns `null` when the user cancels the folder picker.
+  Future<ScannedProjectData?> pickProjectFolder();
 }
 
 class FilePickerDataSourceImpl implements FilePickerDataSource {
@@ -53,5 +61,39 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
     } on Exception catch (e) {
       throw FileException('Could not open the file picker: $e');
     }
+  }
+
+  @override
+  Future<ScannedProjectData?> pickProjectFolder() async {
+    final String? root;
+    try {
+      root = await FilePicker.platform.getDirectoryPath(
+        dialogTitle: 'Select your project folder',
+      );
+    } on Exception catch (e) {
+      throw FileException('Could not open the folder picker: $e');
+    }
+
+    if (root == null || root.isEmpty) {
+      return null;
+    }
+
+    try {
+      return ScannedProjectData(
+        rootPath: root,
+        projectName: _folderName(root),
+        files: await scanProjectDirectory(root),
+      );
+    } on Exception catch (e) {
+      throw FileException('Could not read the project folder: $e');
+    }
+  }
+
+  /// Last non-empty segment of [path], for either separator style.
+  static String _folderName(String path) {
+    final segments = path
+        .split(RegExp(r'[/\\]'))
+        .where((segment) => segment.isNotEmpty);
+    return segments.isEmpty ? 'Imported project' : segments.last;
   }
 }
