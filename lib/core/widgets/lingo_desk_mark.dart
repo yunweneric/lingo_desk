@@ -8,7 +8,7 @@ import '../theme/lingo_desk_theme.dart';
 ///
 /// Drawn natively from the brand SVG geometry (viewBox 64) so it stays
 /// crisp at every size. The lockup is not an image: the wordmark is set
-/// live in Space Grotesk 700 beside the mark, per the design system.
+/// live at weight 700 in the app font (from the theme) beside the mark.
 class LingoDeskMark extends StatelessWidget {
   const LingoDeskMark({
     super.key,
@@ -44,7 +44,6 @@ class LingoDeskMark extends StatelessWidget {
         Text(
           'LingoDesk',
           style: TextStyle(
-            fontFamily: 'Space Grotesk',
             fontSize: wordmarkSize,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.01 * wordmarkSize,

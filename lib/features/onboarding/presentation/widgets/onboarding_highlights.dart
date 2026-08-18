@@ -7,7 +7,7 @@ import 'onboarding_step.dart';
 
 /// The proof list under a step's body: three claims, each with the
 /// machine string that backs it. This replaces the old decorative code
-/// pill — same Space Mono voice, but it now says something.
+/// pill — same machine-string voice, but it now says something.
 class OnboardingHighlights extends StatelessWidget {
   const OnboardingHighlights({super.key, required this.highlights});
 

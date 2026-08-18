@@ -46,6 +46,8 @@ class LingoDeskTheme {
 
   static ThemeData _build(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
+    // Urbanist is the app's only family — declared once, here.
+    final urbanist = GoogleFonts.urbanist();
     final textColor = isDark ? Colors.white : LingoDeskColors.ink;
     final scheme = ColorScheme(
       brightness: brightness,
@@ -64,7 +66,8 @@ class LingoDeskTheme {
       brightness: brightness,
       scaffoldBackgroundColor:
           isDark ? LingoDeskColors.darkInk : LingoDeskColors.surface,
-      fontFamily: GoogleFonts.urbanist().fontFamily,
+      fontFamily: urbanist.fontFamily,
+      fontFamilyFallback: urbanist.fontFamilyFallback,
       textTheme: GoogleFonts.urbanistTextTheme(),
     );
 
@@ -125,7 +128,7 @@ class LingoDeskTheme {
         ),
         checkmarkColor:
             isDark ? LingoDeskColors.brandTealSoft : LingoDeskColors.brandTeal,
-        labelStyle: TextStyle(
+        labelStyle: GoogleFonts.urbanist(
           color: WidgetStateColor.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return isDark
@@ -166,7 +169,7 @@ class LingoDeskTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),
-          textStyle: const TextStyle(
+          textStyle: GoogleFonts.urbanist(
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
           ),
@@ -194,7 +197,7 @@ class LingoDeskTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),
-          textStyle: const TextStyle(
+          textStyle: GoogleFonts.urbanist(
             fontWeight: FontWeight.w700,
             letterSpacing: 0,
           ),
@@ -222,7 +225,7 @@ class LingoDeskTheme {
         elevation: 6,
         backgroundColor:
             isDark ? LingoDeskColors.activeDeep : LingoDeskColors.ink,
-        contentTextStyle: const TextStyle(
+        contentTextStyle: GoogleFonts.urbanist(
           color: Colors.white,
           fontWeight: FontWeight.w600,
         ),
@@ -241,7 +244,7 @@ class LingoDeskTheme {
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        textStyle: const TextStyle(
+        textStyle: GoogleFonts.urbanist(
           color: Colors.white,
           fontSize: 12,
           fontWeight: FontWeight.w600,
@@ -252,62 +255,65 @@ class LingoDeskTheme {
         cursorColor: LingoDeskColors.brandTeal,
       ),
       textTheme: base.textTheme
-          .apply(
-            bodyColor: textColor,
-            displayColor: textColor,
-            fontFamily: GoogleFonts.urbanist().fontFamily,
-          )
           .copyWith(
-            headlineLarge: TextStyle(
+            headlineLarge: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 40,
               height: 1.05,
               fontWeight: FontWeight.w700,
               letterSpacing: 0,
             ),
-            headlineMedium: TextStyle(
+            headlineMedium: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 30,
               height: 1.12,
               fontWeight: FontWeight.w700,
               letterSpacing: 0,
             ),
-            titleLarge: TextStyle(
+            titleLarge: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 22,
               height: 1.2,
               fontWeight: FontWeight.w700,
               letterSpacing: 0,
             ),
-            bodyLarge: TextStyle(
+            bodyLarge: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 16,
               height: 1.55,
               fontWeight: FontWeight.w400,
               letterSpacing: 0,
             ),
-            bodyMedium: TextStyle(
+            bodyMedium: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 14,
               height: 1.45,
               fontWeight: FontWeight.w400,
               letterSpacing: 0,
             ),
-            labelLarge: TextStyle(
+            labelLarge: GoogleFonts.urbanist(
               color: textColor,
               fontSize: 14,
               height: 1.2,
               fontWeight: FontWeight.w700,
               letterSpacing: 0,
             ),
+          )
+          // Applied last so every style above — and every style the
+          // Material defaults bring along — resolves to Urbanist.
+          .apply(
+            bodyColor: textColor,
+            displayColor: textColor,
+            fontFamily: urbanist.fontFamily,
+            fontFamilyFallback: urbanist.fontFamilyFallback,
           ),
     );
   }
 
-  /// Machine strings: Space Mono ships 400/700 only — bold it is.
-  static TextStyle codeStyle = TextStyle(
+  /// Machine strings: same Urbanist family as everything else, set bold
+  /// and small so keys still read as machine text.
+  static TextStyle codeStyle = GoogleFonts.urbanist(
     color: LingoDeskColors.ink,
-    fontFamily: GoogleFonts.spaceMono().fontFamily,
     fontSize: 13,
     fontWeight: FontWeight.w700,
     letterSpacing: 0,

@@ -3,7 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/assets/lingo_desk_assets.dart';
 
 /// One proof row under a step's body copy: an icon, a plain-language
-/// claim, and the machine string that backs it up (Space Mono, per the
+/// claim, and the machine string that backs it up (codeStyle, per the
 /// design system's "machine strings" rule).
 class OnboardingHighlight {
   const OnboardingHighlight({
