@@ -116,6 +116,7 @@ class HeroSection extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         _ReleaseCaption(controller: controller),
+                        _ApkLink(controller: controller),
                       ],
                     ),
                   ),
@@ -230,6 +231,31 @@ class _HeroActions extends StatelessWidget {
           url: GithubRepo.url,
         ),
       ],
+    );
+  }
+}
+
+/// A direct APK download under the hero, shown whenever a release carries
+/// one and the primary button is already pointing somewhere else.
+class _ApkLink extends StatelessWidget {
+  const _ApkLink({required this.controller});
+
+  final LandingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final apk = controller.androidAsset;
+    // Nothing to add when the big button is already the APK.
+    if (apk == null || controller.suggestedAsset == apk) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: LandingLink(
+        label: 'Or download the Android APK · ${apk.readableSize}  →',
+        url: apk.downloadUrl,
+      ),
     );
   }
 }

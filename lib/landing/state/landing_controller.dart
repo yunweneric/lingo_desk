@@ -58,6 +58,19 @@ class LandingController extends ChangeNotifier {
     return state.release.assetFor(target);
   }
 
+  /// The Android build, whatever platform the visitor is browsing from.
+  ///
+  /// Sideloading an APK is normally done from a desktop and copied over,
+  /// so this is offered next to the desktop download rather than only to
+  /// visitors who happen to be on a phone.
+  ReleaseAsset? get androidAsset {
+    final state = _release;
+    if (state is! ReleaseReady) {
+      return null;
+    }
+    return state.release.assetFor(DownloadTarget.android);
+  }
+
   Future<void> load({bool refresh = false}) async {
     if (refresh) {
       _release = const ReleaseLoading();

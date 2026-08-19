@@ -24,6 +24,7 @@ account.
 - [Architecture](#architecture)
 - [Design system](#design-system)
 - [Landing page](#landing-page)
+- [Roadmap](#roadmap)
 - [Testing](#testing)
 - [Building & releases](#building--releases)
 - [Contributing](#contributing)
@@ -324,9 +325,11 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-> Desktop builds are **unsigned**. On macOS, right-click → Open the first time;
-> on Windows, choose "More info" → "Run anyway" past SmartScreen. Add signing
-> certificates as repository secrets to remove both.
+> Desktop builds are **unsigned**. On macOS the first launch is blocked — open
+> **System Settings → Privacy & Security** and choose **Open Anyway**;
+> right-click → Open stopped bypassing Gatekeeper in macOS 15. On Windows,
+> choose **More info → Run anyway** past SmartScreen. Add signing certificates
+> as repository secrets to remove both.
 
 Before pushing, you can run the CI jobs on your own machine:
 
@@ -342,6 +345,33 @@ against `.fvmrc`, which is the mismatch that has broken CI before. `build-window
 is the one job it can't cover — that needs a Windows runner.
 
 See [.github/workflows/README.md](.github/workflows/README.md) for details.
+
+---
+
+## Roadmap
+
+Everything in [Features](#features) is shipped and in `main`. The full list —
+what's done, what's next, and what has been ruled out — lives in
+[docs/future.md](docs/future.md).
+
+The three things being worked towards:
+
+- **Project sync** — the import is a snapshot today. Make the link to the
+  source folder live: detect changes on disk, show them before applying, and
+  make a conflict a decision rather than a silent overwrite.
+- **Cloud workspaces** — an *opt-in* Firebase layer for teams: shared apps,
+  roles, live editing. Local-first stays the default and stays fully functional
+  offline, and nothing leaves your machine unless you push it.
+- **Sharing** — read-only coverage views for a PM or a client, and
+  single-locale invites for a translator, without handing over the whole
+  editor.
+
+Beyond those: more file formats, placeholder and ICU validation, a CLI check
+for CI, glossaries and translation memory for better AI output. See
+[Exploring](docs/future.md#exploring).
+
+If something you need isn't there, open an issue describing the workflow that's
+painful — that lands better than a feature name.
 
 ---
 

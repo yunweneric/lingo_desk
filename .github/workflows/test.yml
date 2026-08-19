@@ -1,9 +1,13 @@
 name: Flutter Tests
 
 on:
+  push:
+    branches:
+      - release
   pull_request:
     branches:
       - main
+      - release
   workflow_dispatch: # Allow manual triggering
 
 jobs:

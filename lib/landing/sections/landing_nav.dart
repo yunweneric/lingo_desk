@@ -9,39 +9,60 @@ import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_mark.dart';
 import '../data/github_release.dart';
 import '../state/landing_controller.dart';
+import '../widgets/glass_panel.dart';
 import '../widgets/landing_button.dart';
-import '../widgets/landing_layout.dart';
 import '../widgets/theme_menu.dart';
 
 /// Every control in the bar is this tall, so the right-hand cluster reads
 /// as one row of objects rather than three sizes stacked side by side.
-const double kNavControlHeight = 44.0;
+const double kNavControlHeight = 40.0;
+
+/// The floating bar's own metrics. It rides above the page rather than
+/// spanning it, and draws in as the page scrolls so it takes less room
+/// the further down you are.
+const double kNavRestWidth = 1180.0;
+const double kNavShrunkWidth = 940.0;
+const double kNavRestHeight = 68.0;
+const double kNavShrunkHeight = 58.0;
+const double kNavRestTop = 18.0;
+const double kNavShrunkTop = 10.0;
 
 /// One entry in the navigation.
 class NavTarget {
-  const NavTarget(this.label, this.onTap);
+  const NavTarget(this.id, this.label, this.onTap);
+
+  /// Matches the anchor name the page reports as active.
+  final String id;
 
   final String label;
   final VoidCallback onTap;
 }
 
-/// The sticky bar across the top of the page.
+/// A floating glass bar: wordmark on the left, destinations centred,
+/// actions on the right.
 ///
-/// Transparent over the hero and opaque once the page has moved, so the
-/// hero reads full-bleed without the bar ever sitting on top of copy it
-/// cannot be read against.
+/// The centre stays optically centred against the window rather than
+/// against whatever is left over, because both flanks are [Expanded] —
+/// the links do not drift when the star count arrives and widens the
+/// right-hand side.
 class LandingNav extends StatelessWidget {
   const LandingNav({
     super.key,
     required this.controller,
     required this.targets,
     required this.scrolled,
+    required this.activeId,
     required this.onDownload,
   });
 
   final LandingController controller;
   final List<NavTarget> targets;
   final bool scrolled;
+
+  /// The section currently under the reading line, or null while the hero
+  /// still owns the screen.
+  final String? activeId;
+
   final VoidCallback onDownload;
 
   @override
@@ -49,67 +70,105 @@ class LandingNav extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final size = context.windowSize;
 
-    // Below `large` the five links plus the full control cluster no
-    // longer fit the content width, so the bar collapses to a menu.
+    // Below `large` the five destinations plus the full control cluster no
+    // longer fit, so the bar collapses to a menu.
     final collapsed = size.isBelow(WindowSizeClass.large);
+    final gutter = size.resolve<double>(compact: 12, medium: 20, expanded: 28);
 
-    return AnimatedContainer(
-      duration: LingoDeskMotion.standard,
-      curve: LingoDeskMotion.curve,
-      height: kLandingNavHeight,
-      decoration: BoxDecoration(
-        color: scrolled
-            ? tokens.background.withValues(alpha: 0.94)
-            : Colors.transparent,
-        border: Border(
-          bottom: BorderSide(
-            color: scrolled ? tokens.border : Colors.transparent,
-          ),
-        ),
-      ),
-      child: LandingContainer(
-        child: Row(
-          children: [
-            const LingoDeskMark(size: 30, showWordmark: true),
-            if (!collapsed) ...[
-              const SizedBox(width: 40),
-              // The links belong to the wordmark, not to the buttons.
-              for (final target in targets) ...[
-                _NavLink(target: target),
-                const SizedBox(width: 24),
-              ],
-            ],
-            const Spacer(),
-            // Sized to its contents: after the Spacer this Row is laid
-            // out against an unbounded width, where MainAxisSize.max
-            // would try to expand to infinity.
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ThemeMenuButton(
-                  controller: controller,
-                  height: kNavControlHeight,
-                  showLabel: size.atLeast(WindowSizeClass.extraLarge),
+    final height = scrolled ? kNavShrunkHeight : kNavRestHeight;
+    final radius = BorderRadius.circular(height / 2);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: gutter),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: AnimatedContainer(
+          duration: LingoDeskMotion.standard,
+          curve: LingoDeskMotion.curve,
+          margin: EdgeInsets.only(top: scrolled ? kNavShrunkTop : kNavRestTop),
+          width: scrolled ? kNavShrunkWidth : kNavRestWidth,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(
+                  alpha: (tokens.isDark ? 0.44 : 0.12) * (scrolled ? 1 : 0.5),
                 ),
-                const SizedBox(width: 10),
-                if (!collapsed) ...[
-                  _StarChip(stars: controller.stars),
-                  const SizedBox(width: 10),
-                  LandingButton(
-                    label: 'Download',
-                    icon: HugeIcons.strokeRoundedDownload04,
-                    height: kNavControlHeight,
-                    onPressed: onDownload,
+                blurRadius: scrolled ? 30 : 18,
+                offset: Offset(0, scrolled ? 10 : 6),
+              ),
+            ],
+          ),
+          child: GlassPanel(
+            borderRadius: radius,
+            blur: scrolled ? 26 : 16,
+            // Nearly clear over the hero, solid once there is content
+            // moving underneath that the labels have to stay legible on.
+            opacity: scrolled ? 1 : 0.72,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: scrolled ? 14 : 18),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: LingoDeskMark(
+                        size: scrolled ? 26 : 29,
+                        showWordmark: true,
+                      ),
+                    ),
                   ),
-                ] else
-                  _IconAction(
-                    icon: HugeIcons.strokeRoundedMenu01,
-                    tooltip: 'Menu',
-                    onTap: () => _openMenu(context),
+                  if (!collapsed)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final target in targets)
+                          _NavLink(
+                            target: target,
+                            active: target.id == activeId,
+                            compact: scrolled,
+                          ),
+                      ],
+                    ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ThemeMenuButton(
+                            controller: controller,
+                            height: kNavControlHeight,
+                            showLabel: false,
+                          ),
+                          const SizedBox(width: 8),
+                          if (!collapsed) ...[
+                            _StarChip(stars: controller.stars),
+                            const SizedBox(width: 8),
+                            LandingButton(
+                              label: 'Download',
+                              icon: HugeIcons.strokeRoundedDownload04,
+                              height: kNavControlHeight,
+                              // Once the bar has drawn in, the label is
+                              // the first thing that stops fitting.
+                              iconOnly: scrolled,
+                              onPressed: onDownload,
+                            ),
+                          ] else
+                            _IconAction(
+                              icon: HugeIcons.strokeRoundedMenu01,
+                              tooltip: 'Menu',
+                              onTap: () => _openMenu(context),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-              ],
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -137,7 +196,9 @@ class LandingNav extends StatelessWidget {
                     target.label,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: tokens.foreground,
+                      color: target.id == activeId
+                          ? tokens.accent
+                          : tokens.foreground,
                     ),
                   ),
                   onTap: () {
@@ -169,10 +230,18 @@ class LandingNav extends StatelessWidget {
   }
 }
 
+/// A destination. The section you are reading wears a filled pill, so the
+/// bar answers "where am I" without being asked.
 class _NavLink extends StatefulWidget {
-  const _NavLink({required this.target});
+  const _NavLink({
+    required this.target,
+    required this.active,
+    required this.compact,
+  });
 
   final NavTarget target;
+  final bool active;
+  final bool compact;
 
   @override
   State<_NavLink> createState() => _NavLinkState();
@@ -184,20 +253,44 @@ class _NavLinkState extends State<_NavLink> {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
+    final active = widget.active;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: widget.target.onTap,
-        child: AnimatedDefaultTextStyle(
-          duration: LingoDeskMotion.fast,
-          style: TextStyle(
-            fontSize: 14.5,
-            fontWeight: FontWeight.w600,
-            color: _hovered ? tokens.foreground : tokens.muted,
+        child: AnimatedContainer(
+          duration: LingoDeskMotion.standard,
+          curve: LingoDeskMotion.curve,
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          padding: EdgeInsets.symmetric(
+            horizontal: widget.compact ? 12 : 14,
+            vertical: 9,
           ),
-          child: Text(widget.target.label),
+          decoration: BoxDecoration(
+            color: active
+                ? tokens.brandFill
+                : (_hovered
+                      ? tokens.foreground.withValues(alpha: 0.07)
+                      : Colors.transparent),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: active ? tokens.brandFillBorder : Colors.transparent,
+            ),
+          ),
+          child: AnimatedDefaultTextStyle(
+            duration: LingoDeskMotion.fast,
+            style: TextStyle(
+              fontSize: widget.compact ? 13.5 : 14,
+              fontWeight: active ? FontWeight.w700 : FontWeight.w600,
+              color: active
+                  ? tokens.onBrandFill
+                  : (_hovered ? tokens.foreground : tokens.muted),
+            ),
+            child: Text(widget.target.label),
+          ),
         ),
       ),
     );
@@ -237,14 +330,19 @@ class _IconActionState extends State<_IconAction> {
             duration: LingoDeskMotion.fast,
             width: kNavControlHeight,
             height: kNavControlHeight,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: _hovered ? tokens.active : tokens.card,
+              color: _hovered
+                  ? tokens.foreground.withValues(alpha: 0.09)
+                  : tokens.foreground.withValues(alpha: 0.04),
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
-              border: Border.all(color: tokens.border),
+              border: Border.all(
+                color: tokens.foreground.withValues(alpha: 0.10),
+              ),
             ),
             child: LingoDeskIcon(
               widget.icon,
-              size: 19,
+              size: 18,
               color: tokens.foreground,
             ),
           ),
@@ -287,31 +385,35 @@ class _StarChipState extends State<_StarChip> {
           child: AnimatedContainer(
             duration: LingoDeskMotion.fast,
             height: kNavControlHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: _hovered ? tokens.active : tokens.card,
+              color: _hovered
+                  ? tokens.foreground.withValues(alpha: 0.09)
+                  : tokens.foreground.withValues(alpha: 0.04),
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
-              border: Border.all(color: tokens.border),
+              border: Border.all(
+                color: tokens.foreground.withValues(alpha: 0.10),
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 LingoDeskIcon(
                   HugeIcons.strokeRoundedGithub,
-                  size: 17,
+                  size: 16,
                   color: tokens.foreground,
                 ),
-                const SizedBox(width: 9),
+                const SizedBox(width: 7),
                 LingoDeskIcon(
                   HugeIcons.strokeRoundedStar,
-                  size: 14,
+                  size: 13,
                   color: tokens.muted,
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 4),
                 Text(
                   '$count',
                   style: TextStyle(
-                    fontSize: 13.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: tokens.foreground,
                   ),

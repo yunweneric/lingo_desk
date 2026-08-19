@@ -50,6 +50,10 @@ class _LandingPageState extends State<LandingPage> {
 
   bool _scrolled = false;
 
+  /// Anchor id of the section currently under the reading line, or null
+  /// while the hero still owns the screen.
+  String? _activeId;
+
   /// Anchor names accepted in the URL fragment, so a link can point at a
   /// section: `…/lingo_desk/#download`.
   late final Map<String, GlobalKey> _anchors = {
@@ -84,11 +88,57 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   void _onScroll() {
-    // The bar only needs to know it has left the top of the hero.
     final scrolled = _scroll.offset > 12;
-    if (scrolled != _scrolled) {
-      setState(() => _scrolled = scrolled);
+    final active = _sectionInView();
+    if (scrolled != _scrolled || active != _activeId) {
+      setState(() {
+        _scrolled = scrolled;
+        _activeId = active;
+      });
     }
+  }
+
+  /// Scroll spy: the last section whose top has passed the reading line.
+  ///
+  /// The line sits a third of the way down the viewport rather than at
+  /// the very top, so a section counts as "the one you are reading" once
+  /// it genuinely dominates the screen — measuring at the top edge makes
+  /// the highlight flip a whole section early.
+  ///
+  /// Positions come from the render tree instead of a table of cached
+  /// offsets, because section heights change with width, with the fonts
+  /// arriving, and with images loading.
+  String? _sectionInView() {
+    if (!_scroll.hasClients) {
+      return null;
+    }
+    final line = MediaQuery.sizeOf(context).height * 0.34;
+
+    String? found;
+    for (final entry in _anchors.entries) {
+      final target = entry.value.currentContext;
+      if (target == null) {
+        continue;
+      }
+      final box = target.findRenderObject() as RenderBox?;
+      if (box == null || !box.hasSize) {
+        continue;
+      }
+      final top = box.localToGlobal(Offset.zero).dy;
+      if (top <= line) {
+        // _anchors is in page order, so the last match wins.
+        found = entry.key;
+      }
+    }
+
+    // The final section can be shorter than the space below the line, so
+    // it would never win on its own; at the bottom of the page it is
+    // unambiguously what you are looking at.
+    final position = _scroll.position;
+    if (position.pixels >= position.maxScrollExtent - 4) {
+      return _anchors.keys.last;
+    }
+    return found;
   }
 
   /// Scrolls [key]'s section under the nav rather than behind it.
@@ -168,13 +218,18 @@ class _LandingPageState extends State<LandingPage> {
               child: LandingNav(
                 controller: controller,
                 scrolled: _scrolled,
+                activeId: _activeId,
                 onDownload: () => _jumpTo(_download),
                 targets: [
-                  NavTarget('Why', () => _jumpTo(_problem)),
-                  NavTarget('Features', () => _jumpTo(_features)),
-                  NavTarget('Screens', () => _jumpTo(_tour)),
-                  NavTarget('How it works', () => _jumpTo(_steps)),
-                  NavTarget('Flutter', () => _jumpTo(_flutter)),
+                  NavTarget('why', 'Why', () => _jumpTo(_problem)),
+                  NavTarget('features', 'Features', () => _jumpTo(_features)),
+                  NavTarget('screens', 'Screens', () => _jumpTo(_tour)),
+                  NavTarget(
+                    'how-it-works',
+                    'How it works',
+                    () => _jumpTo(_steps),
+                  ),
+                  NavTarget('flutter', 'Flutter', () => _jumpTo(_flutter)),
                 ],
               ),
             ),

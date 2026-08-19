@@ -35,6 +35,7 @@ class LandingButton extends StatefulWidget {
     this.busy = false,
     this.large = false,
     this.height,
+    this.iconOnly = false,
   });
 
   final String label;
@@ -51,6 +52,11 @@ class LandingButton extends StatefulWidget {
   /// Pins the button to an exact height, so a row of mixed controls (the
   /// navigation bar) lines up instead of each one sizing to its padding.
   final double? height;
+
+  /// Drops the label and squares the button off, keeping the icon and
+  /// moving the text into a tooltip. Used by the navigation bar once it
+  /// has drawn in, where the full label no longer earns its width.
+  final bool iconOnly;
 
   @override
   State<LandingButton> createState() => _LandingButtonState();
@@ -96,8 +102,10 @@ class _LandingButtonState extends State<LandingButton> {
     };
 
     final lift = _hovered && _enabled ? -LingoDeskMotion.hoverLift : 0.0;
+    // Squaring off needs a height to be square against.
+    final square = widget.iconOnly && widget.height != null;
 
-    return MouseRegion(
+    final button = MouseRegion(
       cursor: _enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
@@ -108,10 +116,19 @@ class _LandingButtonState extends State<LandingButton> {
           curve: LingoDeskMotion.curve,
           transform: Matrix4.translationValues(0, lift, 0),
           height: widget.height,
-          padding: EdgeInsets.symmetric(
-            horizontal: widget.large ? 28 : 20,
-            vertical: widget.height != null ? 0 : (widget.large ? 18 : 14),
-          ),
+          width: square ? widget.height : null,
+          // A fixed width hands the Row tight constraints, so MainAxisSize
+          // .min cannot shrink it and the icon would sit against the left
+          // edge without this.
+          alignment: square ? Alignment.center : null,
+          padding: square
+              ? EdgeInsets.zero
+              : EdgeInsets.symmetric(
+                  horizontal: widget.large ? 28 : 20,
+                  vertical: widget.height != null
+                      ? 0
+                      : (widget.large ? 18 : 14),
+                ),
           decoration: BoxDecoration(
             color: _enabled ? background : background.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
@@ -128,6 +145,7 @@ class _LandingButtonState extends State<LandingButton> {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (widget.busy)
                 SizedBox(
@@ -144,23 +162,28 @@ class _LandingButtonState extends State<LandingButton> {
                   size: widget.large ? 20 : 18,
                   color: isGhost ? tokens.muted : foreground,
                 ),
-              if (widget.busy || widget.icon != null) const SizedBox(width: 10),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: widget.large ? 16 : 14.5,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.1,
-                  color: _enabled
-                      ? foreground
-                      : foreground.withValues(alpha: 0.6),
+              if (!square && (widget.busy || widget.icon != null))
+                const SizedBox(width: 10),
+              if (!square)
+                Text(
+                  widget.label,
+                  style: TextStyle(
+                    fontSize: widget.large ? 16 : 14.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.1,
+                    color: _enabled
+                        ? foreground
+                        : foreground.withValues(alpha: 0.6),
+                  ),
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
+
+    // The label still has to be reachable when it is not drawn.
+    return square ? Tooltip(message: widget.label, child: button) : button;
   }
 }
 

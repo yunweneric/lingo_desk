@@ -8,9 +8,13 @@ import 'reveal.dart';
 /// instead, so a 4K window reads as a well-set page rather than a wall.
 const double kLandingMaxWidth = 1180.0;
 
-/// Height of the sticky navigation bar, used both to lay it out and to
-/// offset in-page anchor scrolling so headings aren't hidden under it.
-const double kLandingNavHeight = 72.0;
+/// Vertical room the floating navigation bar takes out of the top of the
+/// window: its own height plus the margin it rides on, plus a little air.
+///
+/// Used to keep the hero clear of it and to offset in-page anchor
+/// scrolling so a heading never lands underneath it. Measured against the
+/// scrolled (smaller) bar, which is the state anchor jumps end in.
+const double kLandingNavHeight = 80.0;
 
 /// Centres content at [kLandingMaxWidth] and applies the gutter for the
 /// current width class.
