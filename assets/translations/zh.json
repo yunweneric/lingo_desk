@@ -594,7 +594,8 @@
     "languages": "语言",
     "localStorage": "本地存储",
     "profile": "个人资料",
-    "settings": "设置"
+    "settings": "设置",
+    "updates": "更新"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "本地工作区",
       "note": "LingoDesk 没有账号体系。这只是给你的本地工作区起个名字。",
       "subtitle": "显示在侧边栏中，仅保存在本设备上。"
+    },
+    "updates": {
+      "available": "{version} 版可用",
+      "browser": "在浏览器中下载",
+      "check": "检查更新",
+      "checking": "正在询问 GitHub…",
+      "current": "你正在使用 {version} 版。",
+      "download": "下载（{size}）",
+      "downloadFailed": "下载未完成。浏览器链接仍然可用。",
+      "downloading": "正在下载…",
+      "failedOffline": "无法连接 GitHub。请检查网络后重试。",
+      "failedRateLimited": "GitHub 正在限制此设备的请求，请几分钟后再试。",
+      "failedUnexpected": "GitHub 返回了意外的响应。",
+      "noBuild": "此版本没有 {platform} 的构建 —— 其余构建在发布页面。",
+      "notes": "更新说明",
+      "reveal": "在文件夹中显示",
+      "saved": "已保存到你的下载文件夹。",
+      "subtitle": "LingoDesk 会在 GitHub 上查找新版本，不会自动安装任何东西。",
+      "unsigned": "构建未签名，首次打开时系统会要求你确认。",
+      "upToDate": "已是最新版本。"
     }
   },
   "theme": {

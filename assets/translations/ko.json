@@ -594,7 +594,8 @@
     "languages": "언어",
     "localStorage": "로컬 저장소",
     "profile": "프로필",
-    "settings": "설정"
+    "settings": "설정",
+    "updates": "업데이트"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "로컬 작업 공간",
       "note": "LingoDesk에는 계정이 없습니다. 이것은 로컬 작업 공간에 이름을 붙일 뿐입니다.",
       "subtitle": "사이드바에 표시되며, 이 기기에만 저장됩니다."
+    },
+    "updates": {
+      "available": "버전 {version}을(를) 사용할 수 있습니다",
+      "browser": "브라우저에서 다운로드",
+      "check": "업데이트 확인",
+      "checking": "GitHub에 확인하는 중…",
+      "current": "현재 버전은 {version}입니다.",
+      "download": "다운로드 ({size})",
+      "downloadFailed": "다운로드가 끝나지 않았습니다. 브라우저 링크는 계속 사용할 수 있습니다.",
+      "downloading": "다운로드 중…",
+      "failedOffline": "GitHub에 연결할 수 없습니다. 연결을 확인한 뒤 다시 시도하세요.",
+      "failedRateLimited": "GitHub가 이 기기의 요청을 제한하고 있습니다. 몇 분 뒤에 다시 시도하세요.",
+      "failedUnexpected": "GitHub가 예상치 못한 응답을 보냈습니다.",
+      "noBuild": "이 릴리스에는 {platform} 빌드가 없습니다 — 나머지는 릴리스 페이지에 있습니다.",
+      "notes": "릴리스 노트",
+      "reveal": "폴더에서 보기",
+      "saved": "다운로드 폴더에 저장했습니다.",
+      "subtitle": "LingoDesk는 GitHub에서 새 릴리스를 확인합니다. 자동으로 설치되는 것은 없습니다.",
+      "unsigned": "빌드에 서명이 없어 처음 열 때 시스템이 확인을 요청합니다.",
+      "upToDate": "최신 릴리스를 사용 중입니다."
     }
   },
   "theme": {

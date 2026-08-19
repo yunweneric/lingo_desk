@@ -594,7 +594,8 @@
     "languages": "Languages",
     "localStorage": "Local storage",
     "profile": "Profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "updates": "Updates"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Local workspace",
       "note": "LingoDesk has no accounts. This only labels your local workspace.",
       "subtitle": "Shown in the sidebar. Stored on this device only."
+    },
+    "updates": {
+      "available": "Version {version} is available",
+      "browser": "Download in browser",
+      "check": "Check for updates",
+      "checking": "Asking GitHub…",
+      "current": "You're running version {version}.",
+      "download": "Download ({size})",
+      "downloadFailed": "The download did not finish. The browser link still works.",
+      "downloading": "Downloading…",
+      "failedOffline": "Could not reach GitHub. Check your connection and try again.",
+      "failedRateLimited": "GitHub is rate limiting this device. Try again in a few minutes.",
+      "failedUnexpected": "GitHub answered with something unexpected.",
+      "noBuild": "This release publishes no {platform} build — the releases page has the rest.",
+      "notes": "Release notes",
+      "reveal": "Show in folder",
+      "saved": "Saved to your Downloads folder.",
+      "subtitle": "LingoDesk checks GitHub for new releases. Nothing installs by itself.",
+      "unsigned": "Builds are unsigned, so your system asks for a confirmation the first time you open one.",
+      "upToDate": "You're on the latest release."
     }
   },
   "theme": {

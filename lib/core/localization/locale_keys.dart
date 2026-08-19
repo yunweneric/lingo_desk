@@ -22,6 +22,7 @@ class LocaleKeys {
   static const String navLocalStorage = 'nav.localStorage';
   static const String navProfile = 'nav.profile';
   static const String navSettings = 'nav.settings';
+  static const String navUpdates = 'nav.updates';
 
   // ---- common ----
   static const String commonBack = 'common.back';
@@ -151,6 +152,29 @@ class LocaleKeys {
   static const String settingsProfileNameHint = 'settings.profile.nameHint';
   static const String settingsProfileNote = 'settings.profile.note';
   static const String settingsProfileSubtitle = 'settings.profile.subtitle';
+  static const String settingsUpdatesAvailable = 'settings.updates.available';
+  static const String settingsUpdatesBrowser = 'settings.updates.browser';
+  static const String settingsUpdatesCheck = 'settings.updates.check';
+  static const String settingsUpdatesChecking = 'settings.updates.checking';
+  static const String settingsUpdatesCurrent = 'settings.updates.current';
+  static const String settingsUpdatesDownload = 'settings.updates.download';
+  static const String settingsUpdatesDownloadFailed =
+      'settings.updates.downloadFailed';
+  static const String settingsUpdatesDownloading =
+      'settings.updates.downloading';
+  static const String settingsUpdatesFailedOffline =
+      'settings.updates.failedOffline';
+  static const String settingsUpdatesFailedRateLimited =
+      'settings.updates.failedRateLimited';
+  static const String settingsUpdatesFailedUnexpected =
+      'settings.updates.failedUnexpected';
+  static const String settingsUpdatesNoBuild = 'settings.updates.noBuild';
+  static const String settingsUpdatesNotes = 'settings.updates.notes';
+  static const String settingsUpdatesReveal = 'settings.updates.reveal';
+  static const String settingsUpdatesSaved = 'settings.updates.saved';
+  static const String settingsUpdatesSubtitle = 'settings.updates.subtitle';
+  static const String settingsUpdatesUnsigned = 'settings.updates.unsigned';
+  static const String settingsUpdatesUpToDate = 'settings.updates.upToDate';
   static const String settingsSwatchActive = 'settings.appearance.swatchActive';
   static const String settingsSwatchBackground =
       'settings.appearance.swatchBackground';

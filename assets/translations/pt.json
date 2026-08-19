@@ -594,7 +594,8 @@
     "languages": "Idiomas",
     "localStorage": "Armazenamento local",
     "profile": "Perfil",
-    "settings": "Definições"
+    "settings": "Definições",
+    "updates": "Atualizações"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Área de trabalho local",
       "note": "O LingoDesk não tem contas. Isto apenas dá nome à sua área de trabalho local.",
       "subtitle": "Mostrado na barra lateral. Guardado apenas neste dispositivo."
+    },
+    "updates": {
+      "available": "A versão {version} está disponível",
+      "browser": "Transferir no navegador",
+      "check": "Procurar atualizações",
+      "checking": "A consultar o GitHub…",
+      "current": "Está a usar a versão {version}.",
+      "download": "Transferir ({size})",
+      "downloadFailed": "A transferência não terminou. O link do navegador continua a funcionar.",
+      "downloading": "A transferir…",
+      "failedOffline": "Não foi possível contactar o GitHub. Verifique a ligação e tente novamente.",
+      "failedRateLimited": "O GitHub está a limitar os pedidos deste dispositivo. Tente daqui a alguns minutos.",
+      "failedUnexpected": "O GitHub respondeu algo inesperado.",
+      "noBuild": "Esta versão não publica nenhuma compilação para {platform} — as restantes estão na página de versões.",
+      "notes": "Notas da versão",
+      "reveal": "Mostrar na pasta",
+      "saved": "Guardado na sua pasta Transferências.",
+      "subtitle": "O LingoDesk procura novas versões no GitHub. Nada é instalado sozinho.",
+      "unsigned": "As compilações não estão assinadas, por isso o sistema pede confirmação na primeira abertura.",
+      "upToDate": "Tem a versão mais recente."
     }
   },
   "theme": {

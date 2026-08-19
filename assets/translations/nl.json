@@ -594,7 +594,8 @@
     "languages": "Talen",
     "localStorage": "Lokale opslag",
     "profile": "Profiel",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "updates": "Updates"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Lokale werkruimte",
       "note": "LingoDesk heeft geen accounts. Dit geeft alleen je lokale werkruimte een naam.",
       "subtitle": "Te zien in de zijbalk. Alleen op dit apparaat bewaard."
+    },
+    "updates": {
+      "available": "Versie {version} is beschikbaar",
+      "browser": "Downloaden in browser",
+      "check": "Controleren op updates",
+      "checking": "GitHub wordt gevraagd…",
+      "current": "Je gebruikt versie {version}.",
+      "download": "Downloaden ({size})",
+      "downloadFailed": "De download is niet voltooid. De browserlink werkt nog wel.",
+      "downloading": "Bezig met downloaden…",
+      "failedOffline": "GitHub was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "failedRateLimited": "GitHub beperkt de aanvragen van dit apparaat. Probeer het over een paar minuten opnieuw.",
+      "failedUnexpected": "GitHub gaf een onverwacht antwoord.",
+      "noBuild": "Deze release bevat geen build voor {platform} — de rest staat op de releasespagina.",
+      "notes": "Releasenotities",
+      "reveal": "Toon in map",
+      "saved": "Opgeslagen in je map Downloads.",
+      "subtitle": "LingoDesk kijkt op GitHub of er een nieuwe release is. Er wordt niets vanzelf geïnstalleerd.",
+      "unsigned": "De builds zijn niet ondertekend, dus je systeem vraagt de eerste keer om een bevestiging.",
+      "upToDate": "Je hebt de nieuwste release."
     }
   },
   "theme": {

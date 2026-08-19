@@ -610,7 +610,8 @@
     "languages": "Limbi",
     "localStorage": "Stocare locală",
     "profile": "Profil",
-    "settings": "Setări"
+    "settings": "Setări",
+    "updates": "Actualizări"
   },
   "onboarding": {
     "proof": {
@@ -684,6 +685,26 @@
       "nameHint": "Spațiu de lucru local",
       "note": "LingoDesk nu are conturi. Asta doar dă un nume spațiului tău de lucru local.",
       "subtitle": "Apare în bara laterală. Salvat doar pe acest dispozitiv."
+    },
+    "updates": {
+      "available": "Versiunea {version} este disponibilă",
+      "browser": "Descarcă în browser",
+      "check": "Caută actualizări",
+      "checking": "Întreb GitHub…",
+      "current": "Folosești versiunea {version}.",
+      "download": "Descarcă ({size})",
+      "downloadFailed": "Descărcarea nu s-a încheiat. Linkul din browser funcționează în continuare.",
+      "downloading": "Se descarcă…",
+      "failedOffline": "GitHub nu a putut fi contactat. Verifică conexiunea și încearcă din nou.",
+      "failedRateLimited": "GitHub limitează cererile de pe acest dispozitiv. Încearcă peste câteva minute.",
+      "failedUnexpected": "GitHub a răspuns ceva neașteptat.",
+      "noBuild": "Această versiune nu publică niciun build pentru {platform} — restul sunt pe pagina de versiuni.",
+      "notes": "Note de lansare",
+      "reveal": "Arată în folder",
+      "saved": "Salvat în folderul Descărcări.",
+      "subtitle": "LingoDesk caută versiuni noi pe GitHub. Nu se instalează nimic de la sine.",
+      "unsigned": "Build-urile nu sunt semnate, așa că sistemul cere o confirmare la prima deschidere.",
+      "upToDate": "Ai cea mai recentă versiune."
     }
   },
   "theme": {

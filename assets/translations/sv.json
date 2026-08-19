@@ -594,7 +594,8 @@
     "languages": "Språk",
     "localStorage": "Lokal lagring",
     "profile": "Profil",
-    "settings": "Inställningar"
+    "settings": "Inställningar",
+    "updates": "Uppdateringar"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Lokal arbetsyta",
       "note": "LingoDesk har inga konton. Det här sätter bara namn på din lokala arbetsyta.",
       "subtitle": "Visas i sidofältet. Sparas bara på den här enheten."
+    },
+    "updates": {
+      "available": "Version {version} finns tillgänglig",
+      "browser": "Ladda ner i webbläsaren",
+      "check": "Sök efter uppdateringar",
+      "checking": "Frågar GitHub…",
+      "current": "Du kör version {version}.",
+      "download": "Ladda ner ({size})",
+      "downloadFailed": "Nedladdningen blev inte klar. Webbläsarlänken fungerar fortfarande.",
+      "downloading": "Laddar ner…",
+      "failedOffline": "Kunde inte nå GitHub. Kontrollera anslutningen och försök igen.",
+      "failedRateLimited": "GitHub begränsar förfrågningarna från den här enheten. Försök igen om några minuter.",
+      "failedUnexpected": "GitHub svarade med något oväntat.",
+      "noBuild": "Den här utgåvan har ingen build för {platform} — resten finns på utgåvesidan.",
+      "notes": "Versionsinformation",
+      "reveal": "Visa i mapp",
+      "saved": "Sparad i din mapp Hämtade filer.",
+      "subtitle": "LingoDesk letar efter nya utgåvor på GitHub. Ingenting installeras av sig självt.",
+      "unsigned": "Byggena är osignerade, så systemet ber om en bekräftelse första gången du öppnar ett.",
+      "upToDate": "Du har den senaste utgåvan."
     }
   },
   "theme": {

@@ -626,7 +626,8 @@
     "languages": "Języki",
     "localStorage": "Pamięć lokalna",
     "profile": "Profil",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "updates": "Aktualizacje"
   },
   "onboarding": {
     "proof": {
@@ -701,6 +702,26 @@
       "nameHint": "Lokalny obszar roboczy",
       "note": "LingoDesk nie ma kont. To tylko nazwa twojego lokalnego obszaru roboczego.",
       "subtitle": "Widoczna na pasku bocznym. Przechowywana wyłącznie na tym urządzeniu."
+    },
+    "updates": {
+      "available": "Dostępna jest wersja {version}",
+      "browser": "Pobierz w przeglądarce",
+      "check": "Sprawdź aktualizacje",
+      "checking": "Pytam GitHuba…",
+      "current": "Używasz wersji {version}.",
+      "download": "Pobierz ({size})",
+      "downloadFailed": "Pobieranie się nie zakończyło. Link w przeglądarce nadal działa.",
+      "downloading": "Pobieranie…",
+      "failedOffline": "Nie udało się połączyć z GitHubem. Sprawdź połączenie i spróbuj ponownie.",
+      "failedRateLimited": "GitHub ogranicza liczbę żądań z tego urządzenia. Spróbuj za kilka minut.",
+      "failedUnexpected": "GitHub odpowiedział czymś nieoczekiwanym.",
+      "noBuild": "To wydanie nie publikuje kompilacji dla {platform} — resztę znajdziesz na stronie wydań.",
+      "notes": "Informacje o wydaniu",
+      "reveal": "Pokaż w folderze",
+      "saved": "Zapisano w folderze Pobrane.",
+      "subtitle": "LingoDesk sprawdza na GitHubie nowe wydania. Nic nie instaluje się samo.",
+      "unsigned": "Kompilacje nie są podpisane, więc przy pierwszym uruchomieniu system poprosi o potwierdzenie.",
+      "upToDate": "Masz najnowsze wydanie."
     }
   },
   "theme": {

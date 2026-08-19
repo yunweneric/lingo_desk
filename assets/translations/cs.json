@@ -626,7 +626,8 @@
     "languages": "Jazyky",
     "localStorage": "Místní úložiště",
     "profile": "Profil",
-    "settings": "Nastavení"
+    "settings": "Nastavení",
+    "updates": "Aktualizace"
   },
   "onboarding": {
     "proof": {
@@ -701,6 +702,26 @@
       "nameHint": "Místní pracovní prostor",
       "note": "LingoDesk nemá účty. Tohle jen pojmenovává váš místní pracovní prostor.",
       "subtitle": "Zobrazuje se v postranním panelu. Uloženo jen na tomto zařízení."
+    },
+    "updates": {
+      "available": "Je dostupná verze {version}",
+      "browser": "Stáhnout v prohlížeči",
+      "check": "Zkontrolovat aktualizace",
+      "checking": "Dotazuji se GitHubu…",
+      "current": "Používáte verzi {version}.",
+      "download": "Stáhnout ({size})",
+      "downloadFailed": "Stahování se nedokončilo. Odkaz v prohlížeči stále funguje.",
+      "downloading": "Stahuji…",
+      "failedOffline": "GitHub není dostupný. Zkontrolujte připojení a zkuste to znovu.",
+      "failedRateLimited": "GitHub omezuje počet požadavků z tohoto zařízení. Zkuste to za pár minut.",
+      "failedUnexpected": "GitHub odpověděl něčím neočekávaným.",
+      "noBuild": "Toto vydání nenabízí sestavení pro {platform} — ostatní najdete na stránce vydání.",
+      "notes": "Poznámky k vydání",
+      "reveal": "Zobrazit ve složce",
+      "saved": "Uloženo do složky Stažené soubory.",
+      "subtitle": "LingoDesk hledá nová vydání na GitHubu. Nic se neinstaluje samo.",
+      "unsigned": "Sestavení nejsou podepsaná, takže systém při prvním spuštění vyžádá potvrzení.",
+      "upToDate": "Máte nejnovější vydání."
     }
   },
   "theme": {

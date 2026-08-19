@@ -16,3 +16,7 @@ Future<bool> pathExists(String path) async => false;
 Future<void> revealInFileManager(String path) async {
   throw UnsupportedError(LocaleKeys.errorsRevealUnsupported.tr());
 }
+
+/// Web never joins paths, but the signature has to exist for the
+/// conditional import to type-check.
+String pathSeparator() => '/';

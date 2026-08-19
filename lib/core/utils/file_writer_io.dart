@@ -89,3 +89,7 @@ String _parentOf(String path) {
   final index = path.lastIndexOf(Platform.pathSeparator);
   return index <= 0 ? path : path.substring(0, index);
 }
+
+/// The platform's path separator, used when joining a folder to a
+/// filename without pulling in a path package.
+String pathSeparator() => Platform.pathSeparator;

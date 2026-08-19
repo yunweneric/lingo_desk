@@ -594,7 +594,8 @@
     "languages": "言語",
     "localStorage": "ローカル保存",
     "profile": "プロフィール",
-    "settings": "設定"
+    "settings": "設定",
+    "updates": "アップデート"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "ローカルワークスペース",
       "note": "LingoDesk にアカウントはありません。これはローカルのワークスペースに名前を付けるだけです。",
       "subtitle": "サイドバーに表示されます。この端末にのみ保存されます。"
+    },
+    "updates": {
+      "available": "バージョン {version} が利用できます",
+      "browser": "ブラウザでダウンロード",
+      "check": "アップデートを確認",
+      "checking": "GitHub に問い合わせています…",
+      "current": "現在のバージョンは {version} です。",
+      "download": "ダウンロード（{size}）",
+      "downloadFailed": "ダウンロードが完了しませんでした。ブラウザのリンクは引き続き使えます。",
+      "downloading": "ダウンロード中…",
+      "failedOffline": "GitHub に接続できませんでした。接続を確認してもう一度お試しください。",
+      "failedRateLimited": "GitHub がこの端末のリクエストを制限しています。数分後にお試しください。",
+      "failedUnexpected": "GitHub から予期しない応答が返りました。",
+      "noBuild": "このリリースには {platform} 向けのビルドがありません。ほかはリリースページにあります。",
+      "notes": "リリースノート",
+      "reveal": "フォルダで表示",
+      "saved": "ダウンロードフォルダに保存しました。",
+      "subtitle": "LingoDesk は GitHub の新しいリリースを確認します。自動でインストールされることはありません。",
+      "unsigned": "ビルドは署名されていないため、初回起動時にシステムの確認が必要です。",
+      "upToDate": "最新のリリースです。"
     }
   },
   "theme": {

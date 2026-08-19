@@ -594,7 +594,8 @@
     "languages": "Lingue",
     "localStorage": "Archiviazione locale",
     "profile": "Profilo",
-    "settings": "Impostazioni"
+    "settings": "Impostazioni",
+    "updates": "Aggiornamenti"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Area di lavoro locale",
       "note": "LingoDesk non ha account. Questo dà solo un nome alla tua area di lavoro locale.",
       "subtitle": "Mostrato nella barra laterale. Salvato solo su questo dispositivo."
+    },
+    "updates": {
+      "available": "La versione {version} è disponibile",
+      "browser": "Scarica dal browser",
+      "check": "Cerca aggiornamenti",
+      "checking": "Sto chiedendo a GitHub…",
+      "current": "Stai usando la versione {version}.",
+      "download": "Scarica ({size})",
+      "downloadFailed": "Il download non è stato completato. Il link nel browser funziona ancora.",
+      "downloading": "Download in corso…",
+      "failedOffline": "Impossibile raggiungere GitHub. Controlla la connessione e riprova.",
+      "failedRateLimited": "GitHub sta limitando le richieste da questo dispositivo. Riprova tra qualche minuto.",
+      "failedUnexpected": "GitHub ha risposto in modo inatteso.",
+      "noBuild": "Questa release non pubblica build per {platform}: il resto è nella pagina delle release.",
+      "notes": "Note di rilascio",
+      "reveal": "Mostra nella cartella",
+      "saved": "Salvato nella cartella Download.",
+      "subtitle": "LingoDesk cerca nuove release su GitHub. Non installa nulla da solo.",
+      "unsigned": "Le build non sono firmate, quindi il sistema chiede una conferma alla prima apertura.",
+      "upToDate": "Hai l'ultima release."
     }
   },
   "theme": {

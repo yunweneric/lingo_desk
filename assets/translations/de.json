@@ -594,7 +594,8 @@
     "languages": "Sprachen",
     "localStorage": "Lokaler Speicher",
     "profile": "Profil",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "updates": "Updates"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Lokaler Workspace",
       "note": "LingoDesk hat keine Konten. Das benennt nur deinen lokalen Workspace.",
       "subtitle": "Wird in der Seitenleiste gezeigt. Nur auf diesem Gerät gespeichert."
+    },
+    "updates": {
+      "available": "Version {version} ist verfügbar",
+      "browser": "Im Browser herunterladen",
+      "check": "Nach Updates suchen",
+      "checking": "GitHub wird gefragt…",
+      "current": "Du nutzt Version {version}.",
+      "download": "Herunterladen ({size})",
+      "downloadFailed": "Der Download wurde nicht fertig. Der Browser-Link funktioniert weiterhin.",
+      "downloading": "Wird heruntergeladen…",
+      "failedOffline": "GitHub war nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+      "failedRateLimited": "GitHub drosselt die Anfragen dieses Geräts. Versuch es in ein paar Minuten noch einmal.",
+      "failedUnexpected": "GitHub hat unerwartet geantwortet.",
+      "noBuild": "Dieses Release enthält keinen Build für {platform} — den Rest findest du auf der Releases-Seite.",
+      "notes": "Release-Notes",
+      "reveal": "Im Ordner anzeigen",
+      "saved": "In deinem Downloads-Ordner gespeichert.",
+      "subtitle": "LingoDesk sucht auf GitHub nach neuen Releases. Installiert wird nichts von allein.",
+      "unsigned": "Die Builds sind unsigniert, dein System fragt beim ersten Öffnen deshalb nach einer Bestätigung.",
+      "upToDate": "Du hast das neueste Release."
     }
   },
   "theme": {

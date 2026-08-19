@@ -594,7 +594,8 @@
     "languages": "Diller",
     "localStorage": "Yerel depolama",
     "profile": "Profil",
-    "settings": "Ayarlar"
+    "settings": "Ayarlar",
+    "updates": "Güncellemeler"
   },
   "onboarding": {
     "proof": {
@@ -667,6 +668,26 @@
       "nameHint": "Yerel çalışma alanı",
       "note": "LingoDesk'te hesap yoktur. Bu yalnızca yerel çalışma alanınızı adlandırır.",
       "subtitle": "Kenar çubuğunda görünür. Yalnızca bu cihazda saklanır."
+    },
+    "updates": {
+      "available": "Sürüm {version} yayında",
+      "browser": "Tarayıcıda indir",
+      "check": "Güncellemeleri denetle",
+      "checking": "GitHub'a soruluyor…",
+      "current": "Sürüm {version} kullanıyorsunuz.",
+      "download": "İndir ({size})",
+      "downloadFailed": "İndirme tamamlanmadı. Tarayıcı bağlantısı hâlâ çalışıyor.",
+      "downloading": "İndiriliyor…",
+      "failedOffline": "GitHub'a ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "failedRateLimited": "GitHub bu cihazdan gelen istekleri sınırlıyor. Birkaç dakika sonra deneyin.",
+      "failedUnexpected": "GitHub beklenmedik bir yanıt verdi.",
+      "noBuild": "Bu sürümde {platform} için bir yapı yok — geri kalanı sürümler sayfasında.",
+      "notes": "Sürüm notları",
+      "reveal": "Klasörde göster",
+      "saved": "İndirilenler klasörünüze kaydedildi.",
+      "subtitle": "LingoDesk yeni sürümler için GitHub'a bakar. Hiçbir şey kendiliğinden kurulmaz.",
+      "unsigned": "Yapılar imzasızdır, bu yüzden sistem ilk açılışta onay ister.",
+      "upToDate": "En son sürümü kullanıyorsunuz."
     }
   },
   "theme": {
