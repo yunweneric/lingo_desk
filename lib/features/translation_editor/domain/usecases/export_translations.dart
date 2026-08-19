@@ -80,9 +80,7 @@ class ExportTranslationsToFolder
     }
     if (params.rootPath.trim().isEmpty) {
       return Future.value(
-        Left(
-          ValidationFailure(message: LocaleKeys.errorsChooseFolder.tr()),
-        ),
+        Left(ValidationFailure(message: LocaleKeys.errorsChooseFolder.tr())),
       );
     }
     return repository.exportToFolder(

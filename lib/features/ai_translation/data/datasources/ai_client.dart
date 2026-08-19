@@ -38,12 +38,12 @@ class AiErrors {
     final detail = _messageFrom(body);
 
     final summary = switch (statusCode) {
-      401 || 403 =>
-        LocaleKeys.errorsAiKeyRejected.tr(namedArgs: {'provider': provider}),
-      404 =>
-        LocaleKeys.errorsAiModelNotFound.tr(
-          namedArgs: {'provider': provider},
-        ),
+      401 || 403 => LocaleKeys.errorsAiKeyRejected.tr(
+        namedArgs: {'provider': provider},
+      ),
+      404 => LocaleKeys.errorsAiModelNotFound.tr(
+        namedArgs: {'provider': provider},
+      ),
       429 => '$provider rate limit reached. Try again in a moment.',
       >= 500 => '$provider is unavailable right now.',
       _ => '$provider rejected the request.',

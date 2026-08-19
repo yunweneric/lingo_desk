@@ -125,9 +125,7 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     // toast says which — the one thing you would want to know afterwards.
     if (wasActive && promoted != null) {
       context.showWarningToast(
-        LocaleKeys.aiKeyPromotedBody.tr(
-          namedArgs: {'label': promoted.label},
-        ),
+        LocaleKeys.aiKeyPromotedBody.tr(namedArgs: {'label': promoted.label}),
         title: LocaleKeys.aiKeyDeletedNamedTitle.tr(
           namedArgs: {'label': entry.label},
         ),

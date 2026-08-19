@@ -35,6 +35,7 @@ class LanguageDropdown extends StatelessWidget {
   final String? description;
   final String? helperText;
   final String? errorText;
+
   /// Defaults to the translated "Select a language" placeholder.
   final String? hintText;
   final LingoDeskFieldSize size;

@@ -70,6 +70,7 @@ class LingoDeskDropdown<T> extends StatefulWidget {
   final String? description;
   final String? helperText;
   final String? errorText;
+
   /// Defaults to the translated "Select an option" placeholder.
   final String? hintText;
 

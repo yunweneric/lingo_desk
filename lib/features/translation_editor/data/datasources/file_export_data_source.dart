@@ -5,7 +5,8 @@ import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/errors/exceptions.dart';
-import 'file_writer_stub.dart' if (dart.library.io) 'file_writer_io.dart';
+import '../../../../core/utils/file_writer_stub.dart'
+    if (dart.library.io) '../../../../core/utils/file_writer_io.dart';
 import '../../../../core/localization/export.dart';
 
 /// Writes exported translation files to disk.
@@ -54,9 +55,7 @@ class FileExportDataSourceImpl implements FileExportDataSource {
   ) async {
     final downloads = await downloadsDirectoryPath();
     if (downloads == null) {
-      throw FileException(
-        LocaleKeys.errorsNoDownloadsFolder.tr(),
-      );
+      throw FileException(LocaleKeys.errorsNoDownloadsFolder.tr());
     }
 
     final archive = Archive();
@@ -123,9 +122,7 @@ class FileExportDataSourceImpl implements FileExportDataSource {
       await revealInFileManager(path);
     } on Exception catch (e) {
       throw FileException(
-        LocaleKeys.errorsOpenPath.tr(
-          namedArgs: {'path': path, 'error': '$e'},
-        ),
+        LocaleKeys.errorsOpenPath.tr(namedArgs: {'path': path, 'error': '$e'}),
       );
       // The web stub reports an unsupported platform as an Error rather
       // than an Exception, and it still belongs in the toast.

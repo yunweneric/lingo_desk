@@ -190,8 +190,7 @@ class _ChartBarState extends State<_ChartBar> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: Tooltip(
-        message:
-            '${widget.name} - ${(widget.value * 100).round()}%',
+        message: '${widget.name} - ${(widget.value * 100).round()}%',
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

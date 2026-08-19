@@ -200,10 +200,7 @@ class _LanguageRowState extends State<_LanguageRow> {
           ),
           child: Row(
             children: [
-              Text(
-                widget.option.flag,
-                style: const TextStyle(fontSize: 15),
-              ),
+              Text(widget.option.flag, style: const TextStyle(fontSize: 15)),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
@@ -215,9 +212,7 @@ class _LanguageRowState extends State<_LanguageRow> {
                     fontWeight: widget.selected
                         ? FontWeight.w700
                         : FontWeight.w500,
-                    color: widget.selected
-                        ? tokens.accent
-                        : tokens.foreground,
+                    color: widget.selected ? tokens.accent : tokens.foreground,
                   ),
                 ),
               ),

@@ -58,10 +58,7 @@ class TranslationGrouper {
     );
 
     if (language == null) {
-      _skip(
-        candidate.displayPath,
-        LocaleKeys.errorsUnknownLanguage.tr(),
-      );
+      _skip(candidate.displayPath, LocaleKeys.errorsUnknownLanguage.tr());
       return;
     }
 

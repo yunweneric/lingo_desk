@@ -110,8 +110,7 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
                 'start': '${start + 1}',
                 'end': '$end',
                 'lines': '${slots.length}',
-                'keys':
-                    '${groups.fold(0, (sum, g) => sum + g.entries.length)}',
+                'keys': '${groups.fold(0, (sum, g) => sum + g.entries.length)}',
               },
             ),
       onPageChanged: (value) => setState(() => _page = value),
@@ -1088,9 +1087,7 @@ class KeyActionsMenu extends StatelessWidget {
             case 'copy':
               Clipboard.setData(ClipboardData(text: entry.key));
               context.showInfoToast(
-                LocaleKeys.editorCopiedToast.tr(
-                  namedArgs: {'key': entry.key},
-                ),
+                LocaleKeys.editorCopiedToast.tr(namedArgs: {'key': entry.key}),
               );
             case 'delete':
               _confirmDelete(context);

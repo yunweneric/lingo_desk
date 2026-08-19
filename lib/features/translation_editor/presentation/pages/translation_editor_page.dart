@@ -369,15 +369,13 @@ class _EditorViewState extends State<_EditorView> {
         _ExportDestination.folder => LocaleKeys.editorExportToFolder.tr(),
       },
       summary: switch (destination) {
-        _ExportDestination.downloads =>
-          LocaleKeys.editorExportZipSummary.tr(
-            namedArgs: {'file': archiveNameFor(app.name)},
-          ),
+        _ExportDestination.downloads => LocaleKeys.editorExportZipSummary.tr(
+          namedArgs: {'file': archiveNameFor(app.name)},
+        ),
         _ExportDestination.project => LocaleKeys.editorExportProjectSummary.tr(
           namedArgs: {'path': app.projectPath ?? ''},
         ),
-        _ExportDestination.folder =>
-          LocaleKeys.editorExportFolderSummary.tr(),
+        _ExportDestination.folder => LocaleKeys.editorExportFolderSummary.tr(),
       },
       confirmLabel: switch (destination) {
         _ExportDestination.downloads => LocaleKeys.editorExportDownload.tr(),

@@ -100,7 +100,8 @@ class ScannedLanguageTile extends StatelessWidget {
                           if (isSource) ...[
                             const SizedBox(width: 8),
                             WorkspaceBadge(
-                              label: LocaleKeys.appSettingsMetaSource.tr()
+                              label: LocaleKeys.appSettingsMetaSource
+                                  .tr()
                                   .toUpperCase(),
                               color: tokens.accent,
                             ),

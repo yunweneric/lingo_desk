@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
-import '../../../../core/localization/export.dart';
+import '../localization/export.dart';
 
 /// Writes [bytes] to [path] on IO platforms (desktop/mobile), creating
 /// any missing parent directories first.

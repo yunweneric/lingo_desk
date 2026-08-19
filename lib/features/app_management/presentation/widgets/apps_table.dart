@@ -104,7 +104,11 @@ class AppsTable extends StatelessWidget {
           _minChipSlot,
           math.max(
                 _pillWidth('+99', badgeStyle, textScaler),
-                _pillWidth(LocaleKeys.appsTableLess.tr(), badgeStyle, textScaler),
+                _pillWidth(
+                  LocaleKeys.appsTableLess.tr(),
+                  badgeStyle,
+                  textScaler,
+                ),
               ) +
               _badgeGap,
         );

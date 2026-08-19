@@ -1,4 +1,4 @@
-import '../../../../core/localization/export.dart';
+import '../localization/export.dart';
 
 /// No-op file writer used on platforms without `dart:io` (web).
 ///

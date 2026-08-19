@@ -37,9 +37,7 @@ class TranslateBatch
     }
     if (!params.credentials.isConfigured) {
       return Future.value(
-        Left(
-          ValidationFailure(message: LocaleKeys.errorsAiAddKey.tr()),
-        ),
+        Left(ValidationFailure(message: LocaleKeys.errorsAiAddKey.tr())),
       );
     }
     return repository.translateBatch(

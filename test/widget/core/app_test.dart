@@ -16,9 +16,7 @@ void main() {
 
     testWidgets('App renders onboarding title', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(
-        TestHelpers.localized(const LingoDeskApp()),
-      );
+      await tester.pumpWidget(TestHelpers.localized(const LingoDeskApp()));
       // The localization scope loads its JSON before the first real
       // frame, so the app is not on screen until it settles.
       await tester.pumpAndSettle();
@@ -34,9 +32,7 @@ void main() {
       WidgetTester tester,
     ) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(
-        TestHelpers.localized(const LingoDeskApp()),
-      );
+      await tester.pumpWidget(TestHelpers.localized(const LingoDeskApp()));
       // The localization scope loads its JSON before the first real
       // frame, so the app is not on screen until it settles.
       await tester.pumpAndSettle();
@@ -48,9 +44,7 @@ void main() {
 
     testWidgets('App uses Material 3 theme', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(
-        TestHelpers.localized(const LingoDeskApp()),
-      );
+      await tester.pumpWidget(TestHelpers.localized(const LingoDeskApp()));
       // The localization scope loads its JSON before the first real
       // frame, so the app is not on screen until it settles.
       await tester.pumpAndSettle();
@@ -65,9 +59,7 @@ void main() {
 
     testWidgets('App does not show debug banner', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(
-        TestHelpers.localized(const LingoDeskApp()),
-      );
+      await tester.pumpWidget(TestHelpers.localized(const LingoDeskApp()));
       // The localization scope loads its JSON before the first real
       // frame, so the app is not on screen until it settles.
       await tester.pumpAndSettle();

@@ -80,7 +80,8 @@ class LocaleKeys {
   static const String appsStatusNew = 'apps.status.new';
   static const String appsSummaryFilesComplete = 'apps.summary.filesComplete';
   static const String appsSummaryMissingStrings = 'apps.summary.missingStrings';
-  static const String appsSummaryOverallCoverage = 'apps.summary.overallCoverage';
+  static const String appsSummaryOverallCoverage =
+      'apps.summary.overallCoverage';
   static const String appsSummarySubtitle = 'apps.summary.subtitle';
   static const String appsSummaryTitle = 'apps.summary.title';
   static const String appsTableColApp = 'apps.table.colApp';
@@ -99,7 +100,8 @@ class LocaleKeys {
 
   // ---- dashboard ----
   static const String dashboardAppCount = 'dashboard.appCount';
-  static const String dashboardAppsShortcutSubtitle = 'dashboard.appsShortcutSubtitle';
+  static const String dashboardAppsShortcutSubtitle =
+      'dashboard.appsShortcutSubtitle';
   static const String dashboardCoverageEmpty = 'dashboard.coverage.empty';
   static const String dashboardCoverageNoData = 'dashboard.coverage.noData';
   static const String dashboardCoverageSubtitle = 'dashboard.coverage.subtitle';
@@ -107,19 +109,24 @@ class LocaleKeys {
   static const String dashboardCoverageTitle = 'dashboard.coverage.title';
   static const String dashboardEmptyMessage = 'dashboard.empty.message';
   static const String dashboardEmptyTitle = 'dashboard.empty.title';
-  static const String dashboardHealthAllTranslated = 'dashboard.health.allTranslated';
+  static const String dashboardHealthAllTranslated =
+      'dashboard.health.allTranslated';
   static const String dashboardHealthEmpty = 'dashboard.health.empty';
   static const String dashboardHealthNextReview = 'dashboard.health.nextReview';
-  static const String dashboardHealthNextReviewPrefix = 'dashboard.health.nextReviewPrefix';
+  static const String dashboardHealthNextReviewPrefix =
+      'dashboard.health.nextReviewPrefix';
   static const String dashboardHealthSubtitle = 'dashboard.health.subtitle';
   static const String dashboardHealthTitle = 'dashboard.health.title';
   static const String dashboardMetricAcrossApps = 'dashboard.metric.acrossApps';
   static const String dashboardMetricAllClear = 'dashboard.metric.allClear';
   static const String dashboardMetricCoverage = 'dashboard.metric.coverage';
-  static const String dashboardMetricLocalWorkspace = 'dashboard.metric.localWorkspace';
+  static const String dashboardMetricLocalWorkspace =
+      'dashboard.metric.localWorkspace';
   static const String dashboardMetricMissing = 'dashboard.metric.missing';
-  static const String dashboardMetricNeedsReview = 'dashboard.metric.needsReview';
-  static const String dashboardMetricTargetLocales = 'dashboard.metric.targetLocales';
+  static const String dashboardMetricNeedsReview =
+      'dashboard.metric.needsReview';
+  static const String dashboardMetricTargetLocales =
+      'dashboard.metric.targetLocales';
   static const String dashboardMetricTotalKeys = 'dashboard.metric.totalKeys';
   static const String dashboardStatKeys = 'dashboard.stat.keys';
   static const String dashboardStatLocales = 'dashboard.stat.locales';
@@ -128,14 +135,16 @@ class LocaleKeys {
   static const String dashboardViewAllApps = 'dashboard.viewAllApps';
 
   // ---- settings ----
-  static const String settingsAppearanceSubtitle = 'settings.appearance.subtitle';
+  static const String settingsAppearanceSubtitle =
+      'settings.appearance.subtitle';
   static const String settingsDefaultsCount = 'settings.defaults.count';
   static const String settingsDefaultsEmpty = 'settings.defaults.empty';
   static const String settingsDefaultsSubtitle = 'settings.defaults.subtitle';
   static const String settingsDefaultsTitle = 'settings.defaults.title';
   static const String settingsInterfaceLanguage = 'settings.language.title';
   static const String settingsInterfaceLanguageNote = 'settings.language.note';
-  static const String settingsInterfaceLanguageSubtitle = 'settings.language.subtitle';
+  static const String settingsInterfaceLanguageSubtitle =
+      'settings.language.subtitle';
   static const String settingsProfileEmail = 'settings.profile.email';
   static const String settingsProfileEmailHint = 'settings.profile.emailHint';
   static const String settingsProfileName = 'settings.profile.name';
@@ -143,10 +152,12 @@ class LocaleKeys {
   static const String settingsProfileNote = 'settings.profile.note';
   static const String settingsProfileSubtitle = 'settings.profile.subtitle';
   static const String settingsSwatchActive = 'settings.appearance.swatchActive';
-  static const String settingsSwatchBackground = 'settings.appearance.swatchBackground';
+  static const String settingsSwatchBackground =
+      'settings.appearance.swatchBackground';
   static const String settingsSwatchBrand = 'settings.appearance.swatchBrand';
   static const String settingsSwatchCard = 'settings.appearance.swatchCard';
-  static const String settingsThemeSubtitle = 'settings.appearance.themeSubtitle';
+  static const String settingsThemeSubtitle =
+      'settings.appearance.themeSubtitle';
 
   // ---- appSettings ----
   static const String appSettingsAppIcon = 'appSettings.appIcon';
@@ -156,7 +167,8 @@ class LocaleKeys {
   static const String appSettingsAppNameHint = 'appSettings.appNameHint';
   static const String appSettingsCreateApp = 'appSettings.createApp';
   static const String appSettingsGeneral = 'appSettings.general';
-  static const String appSettingsGeneralSubtitle = 'appSettings.generalSubtitle';
+  static const String appSettingsGeneralSubtitle =
+      'appSettings.generalSubtitle';
   static const String appSettingsLocaleCount = 'appSettings.localeCount';
   static const String appSettingsMetaNoTargets = 'appSettings.metaNoTargets';
   static const String appSettingsMetaSource = 'appSettings.metaSource';
@@ -168,12 +180,18 @@ class LocaleKeys {
   static const String appSettingsSelectAll = 'appSettings.selectAll';
   static const String appSettingsSelectedCount = 'appSettings.selectedCount';
   static const String appSettingsSourceLanguage = 'appSettings.sourceLanguage';
-  static const String appSettingsSourceLanguageHelp = 'appSettings.sourceLanguageHelp';
-  static const String appSettingsSourceNotTarget = 'appSettings.sourceNotTarget';
-  static const String appSettingsTargetLanguages = 'appSettings.targetLanguages';
-  static const String appSettingsTargetLanguagesHelp = 'appSettings.targetLanguagesHelp';
-  static const String appSettingsTargetLanguagesNote = 'appSettings.targetLanguagesNote';
-  static const String appSettingsTargetLanguagesSubtitle = 'appSettings.targetLanguagesSubtitle';
+  static const String appSettingsSourceLanguageHelp =
+      'appSettings.sourceLanguageHelp';
+  static const String appSettingsSourceNotTarget =
+      'appSettings.sourceNotTarget';
+  static const String appSettingsTargetLanguages =
+      'appSettings.targetLanguages';
+  static const String appSettingsTargetLanguagesHelp =
+      'appSettings.targetLanguagesHelp';
+  static const String appSettingsTargetLanguagesNote =
+      'appSettings.targetLanguagesNote';
+  static const String appSettingsTargetLanguagesSubtitle =
+      'appSettings.targetLanguagesSubtitle';
   static const String appSettingsUploadIcon = 'appSettings.uploadIcon';
 
   // ---- language ----
@@ -289,7 +307,8 @@ class LocaleKeys {
   static const String errorsAiRefused = 'errors.ai.refused';
   static const String errorsAiStoppedEarly = 'errors.ai.stoppedEarly';
   static const String errorsAiTimeout = 'errors.ai.timeout';
-  static const String errorsAiUnexpectedResponse = 'errors.ai.unexpectedResponse';
+  static const String errorsAiUnexpectedResponse =
+      'errors.ai.unexpectedResponse';
   static const String errorsAppListCorrupt = 'errors.cache.appListCorrupt';
   static const String errorsAppNameEmpty = 'errors.app.nameEmpty';
   static const String errorsAppNotFound = 'errors.cache.appNotFound';
@@ -308,7 +327,8 @@ class LocaleKeys {
   static const String errorsKeyExists = 'errors.editor.keyExists';
   static const String errorsKeyNotFound = 'errors.editor.keyNotFound';
   static const String errorsLaunchFailed = 'errors.file.launchFailed';
-  static const String errorsNoDownloadsFolder = 'errors.export.noDownloadsFolder';
+  static const String errorsNoDownloadsFolder =
+      'errors.export.noDownloadsFolder';
   static const String errorsNoFilesToImport = 'errors.import.noFiles';
   static const String errorsNoProjectFolder = 'errors.export.noProjectFolder';
   static const String errorsNoTargetLanguage = 'errors.app.noTargetLanguage';
@@ -320,12 +340,15 @@ class LocaleKeys {
   static const String errorsSaveFile = 'errors.file.save';
   static const String errorsSelectLanguage = 'errors.export.selectLanguage';
   static const String errorsSourceIsTarget = 'errors.app.sourceIsTarget';
-  static const String errorsStoredTranslationsCorrupt = 'errors.cache.translationsCorrupt';
+  static const String errorsStoredTranslationsCorrupt =
+      'errors.cache.translationsCorrupt';
   static const String errorsUnknownLanguage = 'errors.file.unknownLanguage';
-  static const String errorsUnsupportedPlatform = 'errors.file.unsupportedPlatform';
+  static const String errorsUnsupportedPlatform =
+      'errors.file.unsupportedPlatform';
   static const String errorsWriteAppList = 'errors.cache.writeAppList';
   static const String errorsWriteFolder = 'errors.file.writeFolder';
-  static const String errorsWriteTranslations = 'errors.cache.writeTranslations';
+  static const String errorsWriteTranslations =
+      'errors.cache.writeTranslations';
 
   // ---- upload ----
   static const String uploadAddFiles = 'upload.addFiles';
@@ -338,7 +361,8 @@ class LocaleKeys {
   static const String uploadDefaultImportName = 'upload.defaultImportName';
   static const String uploadDefaultProjectName = 'upload.defaultProjectName';
   static const String uploadDetectedLanguages = 'upload.detectedLanguages';
-  static const String uploadDetectedLanguagesHint = 'upload.detectedLanguagesHint';
+  static const String uploadDetectedLanguagesHint =
+      'upload.detectedLanguagesHint';
   static const String uploadExportsBackTo = 'upload.exportsBackTo';
   static const String uploadFilesReady = 'upload.filesReady';
   static const String uploadHeroFilesBody = 'upload.hero.filesBody';
@@ -380,7 +404,8 @@ class LocaleKeys {
   static const String editorAiFailedCountReason = 'editor.aiFailedCountReason';
   static const String editorAiFinishing = 'editor.aiFinishing';
   static const String editorAiNotConfiguredBody = 'editor.aiNotConfiguredBody';
-  static const String editorAiNotConfiguredTitle = 'editor.aiNotConfiguredTitle';
+  static const String editorAiNotConfiguredTitle =
+      'editor.aiNotConfiguredTitle';
   static const String editorAiNothingHere = 'editor.aiNothingHere';
   static const String editorAiNothingLeft = 'editor.aiNothingLeft';
   static const String editorAiNothingTranslated = 'editor.aiNothingTranslated';
@@ -389,7 +414,8 @@ class LocaleKeys {
   static const String editorAiTranslate = 'editor.aiTranslate';
   static const String editorAiTranslateMissing = 'editor.aiTranslateMissing';
   static const String editorAiTranslateRow = 'editor.aiTranslateRow';
-  static const String editorAiTranslatedCanceled = 'editor.aiTranslatedCanceled';
+  static const String editorAiTranslatedCanceled =
+      'editor.aiTranslatedCanceled';
   static const String editorAiTranslatedDone = 'editor.aiTranslatedDone';
   static const String editorAiUsing = 'editor.aiUsing';
   static const String editorClearAll = 'editor.clearAll';
@@ -403,17 +429,20 @@ class LocaleKeys {
   static const String editorEmpty = 'editor.empty';
   static const String editorExport = 'editor.export';
   static const String editorExportCanceled = 'editor.exportCanceled';
-  static const String editorExportChooseDestination = 'editor.exportChooseDestination';
+  static const String editorExportChooseDestination =
+      'editor.exportChooseDestination';
   static const String editorExportDownload = 'editor.exportDownload';
   static const String editorExportFolderSummary = 'editor.exportFolderSummary';
   static const String editorExportNoProject = 'editor.exportNoProject';
   static const String editorExportOverwrite = 'editor.exportOverwrite';
-  static const String editorExportProjectSummary = 'editor.exportProjectSummary';
+  static const String editorExportProjectSummary =
+      'editor.exportProjectSummary';
   static const String editorExportSaveTo = 'editor.exportSaveTo';
   static const String editorExportSaveToProject = 'editor.exportSaveToProject';
   static const String editorExportSavedToast = 'editor.exportSavedToast';
   static const String editorExportToFolder = 'editor.exportToFolder';
-  static const String editorExportToFolderEllipsis = 'editor.exportToFolderEllipsis';
+  static const String editorExportToFolderEllipsis =
+      'editor.exportToFolderEllipsis';
   static const String editorExportZip = 'editor.exportZip';
   static const String editorExportZipHint = 'editor.exportZipHint';
   static const String editorExportZipSummary = 'editor.exportZipSummary';
@@ -421,7 +450,8 @@ class LocaleKeys {
   static const String editorExportedToast = 'editor.exportedToast';
   static const String editorFileCount = 'editor.fileCount';
   static const String editorHiddenLanguages = 'editor.hiddenLanguages';
-  static const String editorHiddenLanguagesInRow = 'editor.hiddenLanguagesInRow';
+  static const String editorHiddenLanguagesInRow =
+      'editor.hiddenLanguagesInRow';
   static const String editorHideOtherLanguages = 'editor.hideOtherLanguages';
   static const String editorKeyActions = 'editor.keyActions';
   static const String editorKeyAddedToast = 'editor.keyAddedToast';
@@ -429,7 +459,8 @@ class LocaleKeys {
   static const String editorKeyHelper = 'editor.keyHelper';
   static const String editorKeyLabel = 'editor.keyLabel';
   static const String editorLanguageCount = 'editor.languageCount';
-  static const String editorLanguageSourceSuffix = 'editor.languageSourceSuffix';
+  static const String editorLanguageSourceSuffix =
+      'editor.languageSourceSuffix';
   static const String editorMissingOnly = 'editor.missingOnly';
   static const String editorMissingOnlyCount = 'editor.missingOnlyCount';
   static const String editorNoKeys = 'editor.noKeys';
@@ -498,13 +529,16 @@ class LocaleKeys {
   static const String landingFooterReleases = 'landing.footer.releases';
   static const String landingFromSource = 'landing.flutter.fromSource';
   static const String landingGetStarted = 'landing.getStarted';
-  static const String landingGithubUnreachableBody = 'landing.download.unreachableBody';
-  static const String landingGithubUnreachableTitle = 'landing.download.unreachableTitle';
+  static const String landingGithubUnreachableBody =
+      'landing.download.unreachableBody';
+  static const String landingGithubUnreachableTitle =
+      'landing.download.unreachableTitle';
   static const String landingHeroBody = 'landing.hero.body';
   static const String landingHeroPill = 'landing.hero.pill';
   static const String landingHeroTitle = 'landing.hero.title';
   static const String landingLatest = 'landing.download.latest';
-  static const String landingLatestBuildRuns = 'landing.download.latestBuildRuns';
+  static const String landingLatestBuildRuns =
+      'landing.download.latestBuildRuns';
   static const String landingLocaleStrip = 'landing.localeStrip';
   static const String landingMarkProofBody = 'landing.flutter.markBody';
   static const String landingMarkProofTitle = 'landing.flutter.markTitle';
@@ -522,18 +556,25 @@ class LocaleKeys {
   static const String landingOpenSourceBody = 'landing.openSource.body';
   static const String landingOpenSourceTitle = 'landing.openSource.title';
   static const String landingPrebuilt = 'landing.flutter.prebuilt';
-  static const String landingPreviewAllTranslated = 'landing.preview.allTranslated';
-  static const String landingPreviewAppearanceNote = 'landing.preview.appearanceNote';
-  static const String landingPreviewEditorWindow = 'landing.preview.editorWindow';
+  static const String landingPreviewAllTranslated =
+      'landing.preview.allTranslated';
+  static const String landingPreviewAppearanceNote =
+      'landing.preview.appearanceNote';
+  static const String landingPreviewEditorWindow =
+      'landing.preview.editorWindow';
   static const String landingPreviewKeysNote = 'landing.preview.keysNote';
-  static const String landingPreviewMissingStrings = 'landing.preview.missingStrings';
+  static const String landingPreviewMissingStrings =
+      'landing.preview.missingStrings';
   static const String landingPreviewNoMatches = 'landing.preview.noMatches';
-  static const String landingPreviewNothingMissing = 'landing.preview.nothingMissing';
+  static const String landingPreviewNothingMissing =
+      'landing.preview.nothingMissing';
   static const String landingPreviewProjects = 'landing.preview.projects';
   static const String landingPreviewSemantics = 'landing.preview.semantics';
-  static const String landingProblemAfterEyebrow = 'landing.problem.afterEyebrow';
+  static const String landingProblemAfterEyebrow =
+      'landing.problem.afterEyebrow';
   static const String landingProblemAfterTitle = 'landing.problem.afterTitle';
-  static const String landingProblemBeforeEyebrow = 'landing.problem.beforeEyebrow';
+  static const String landingProblemBeforeEyebrow =
+      'landing.problem.beforeEyebrow';
   static const String landingProblemBeforeTitle = 'landing.problem.beforeTitle';
   static const String landingProblemBody = 'landing.problem.body';
   static const String landingProblemExportNote = 'landing.problem.exportNote';
@@ -544,13 +585,16 @@ class LocaleKeys {
   static const String landingReleasePending = 'landing.releasePending';
   static const String landingReleasePickBuild = 'landing.releasePickBuild';
   static const String landingReleaseUnavailable = 'landing.releaseUnavailable';
-  static const String landingReleasesOnGithub = 'landing.download.releasesOnGithub';
+  static const String landingReleasesOnGithub =
+      'landing.download.releasesOnGithub';
   static const String landingRunFromSource = 'landing.download.runFromSource';
-  static const String landingRunFromSourceNote = 'landing.download.runFromSourceNote';
+  static const String landingRunFromSourceNote =
+      'landing.download.runFromSourceNote';
   static const String landingSeeAllDownloads = 'landing.seeAllDownloads';
   static const String landingStarOnGithub = 'landing.starOnGithub';
   static const String landingStarOnGithubCount = 'landing.starOnGithubCount';
-  static const String landingStarOnGithubTooltip = 'landing.starOnGithubTooltip';
+  static const String landingStarOnGithubTooltip =
+      'landing.starOnGithubTooltip';
   static const String landingStatCodebase = 'landing.flutter.statCodebase';
   static const String landingStatJavascript = 'landing.flutter.statJavascript';
   static const String landingStatTargets = 'landing.flutter.statTargets';

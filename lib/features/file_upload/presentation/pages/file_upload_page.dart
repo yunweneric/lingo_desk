@@ -1016,7 +1016,9 @@ class _LanguageChip extends StatelessWidget {
           Text(
             isSource
                 ? LocaleKeys.uploadLanguageSource.tr(
-                    namedArgs: {'language': SupportedLanguages.nameOf(language)},
+                    namedArgs: {
+                      'language': SupportedLanguages.nameOf(language),
+                    },
                   )
                 : SupportedLanguages.nameOf(language),
             style: Theme.of(

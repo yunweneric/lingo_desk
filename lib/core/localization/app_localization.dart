@@ -114,9 +114,8 @@ class AppLocalization {
 
   /// `12 Aug 2026` in English, and the equivalent ordering and month name
   /// in every other locale.
-  static String formatDate(DateTime date) => DateFormat.yMMMd(
-    _activeLocale.toLanguageTag(),
-  ).format(date.toLocal());
+  static String formatDate(DateTime date) =>
+      DateFormat.yMMMd(_activeLocale.toLanguageTag()).format(date.toLocal());
 
   /// `12 Aug 2026, 14:05`.
   static String formatDateTime(DateTime date) => DateFormat.yMMMd(

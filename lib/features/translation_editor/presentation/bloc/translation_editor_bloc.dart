@@ -206,9 +206,7 @@ class TranslationEditorBloc
           emit,
           appId,
           notice: ToastNotice.success(
-            LocaleKeys.editorKeyDeletedToast.tr(
-              namedArgs: {'key': event.key},
-            ),
+            LocaleKeys.editorKeyDeletedToast.tr(namedArgs: {'key': event.key}),
           ),
         );
       },

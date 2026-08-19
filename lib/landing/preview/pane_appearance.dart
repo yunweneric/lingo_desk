@@ -93,8 +93,7 @@ class PreviewAppearancePane extends StatelessWidget {
                 children: [
                   WorkspaceCardHeader(
                     title: LocaleKeys.commonTheme.tr(),
-                    subtitle:
-                        LocaleKeys.settingsThemeSubtitle.tr(),
+                    subtitle: LocaleKeys.settingsThemeSubtitle.tr(),
                     icon: HugeIcons.strokeRoundedColors,
                   ),
                   const SizedBox(height: 18),

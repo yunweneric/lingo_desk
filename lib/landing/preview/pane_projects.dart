@@ -157,10 +157,7 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
                           22,
                           LocaleKeys.appsTableColProgress.tr().toUpperCase(),
                         ),
-                        (
-                          16,
-                          LocaleKeys.appsTableColUpdated.tr().toUpperCase(),
-                        ),
+                        (16, LocaleKeys.appsTableColUpdated.tr().toUpperCase()),
                       ],
                     ),
                     Expanded(

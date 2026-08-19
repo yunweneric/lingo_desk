@@ -67,9 +67,7 @@ class AppLocalDataSourceImpl implements AppLocalDataSource {
     final index = apps.indexWhere((item) => item['id'] == app['id']);
     if (index == -1) {
       throw CacheException(
-        LocaleKeys.errorsAppNotFoundId.tr(
-          namedArgs: {'id': '${app['id']}'},
-        ),
+        LocaleKeys.errorsAppNotFoundId.tr(namedArgs: {'id': '${app['id']}'}),
       );
     }
     apps[index] = app;

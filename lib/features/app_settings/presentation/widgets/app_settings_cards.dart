@@ -111,10 +111,7 @@ class AppSettingsLanguagesCard extends StatelessWidget {
               const SizedBox(width: 12),
               WorkspaceBadge(
                 label: LocaleKeys.appSettingsSelectedCount.tr(
-                  namedArgs: {
-                    'selected': '$selected',
-                    'total': '$selectable',
-                  },
+                  namedArgs: {'selected': '$selected', 'total': '$selectable'},
                 ),
                 color: selected == 0 ? LingoDeskColors.warning : tokens.accent,
               ),

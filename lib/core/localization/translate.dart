@@ -72,11 +72,6 @@ extension TranslateContextExtension on BuildContext {
     num value, {
     List<String>? args,
     Map<String, String>? namedArgs,
-  }) => easy.plural(
-    key,
-    value,
-    context: this,
-    args: args,
-    namedArgs: namedArgs,
-  );
+  }) =>
+      easy.plural(key, value, context: this, args: args, namedArgs: namedArgs);
 }

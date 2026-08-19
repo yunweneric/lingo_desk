@@ -184,10 +184,9 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
           emit(
             scanning.copyWith(
               isScanning: false,
-              errorMessage:
-                  LocaleKeys.uploadNoFilesFound.tr(
-                    namedArgs: {'name': project.projectName},
-                  ),
+              errorMessage: LocaleKeys.uploadNoFilesFound.tr(
+                namedArgs: {'name': project.projectName},
+              ),
             ),
           );
           return;

@@ -81,19 +81,11 @@ class AiTranslationRepositoryImpl implements AiTranslationRepository {
           attempt++;
           continue;
         }
-        return Left(
-          AiFailure(message: LocaleKeys.errorsAiNoConnection.tr()),
-        );
+        return Left(AiFailure(message: LocaleKeys.errorsAiNoConnection.tr()));
       } on TimeoutException {
-        return Left(
-          AiFailure(message: LocaleKeys.errorsAiTimeout.tr()),
-        );
+        return Left(AiFailure(message: LocaleKeys.errorsAiTimeout.tr()));
       } on FormatException {
-        return Left(
-          AiFailure(
-            message: LocaleKeys.errorsAiMalformed.tr(),
-          ),
-        );
+        return Left(AiFailure(message: LocaleKeys.errorsAiMalformed.tr()));
       } on Exception catch (e) {
         return Left(AiFailure(message: e.toString()));
       }

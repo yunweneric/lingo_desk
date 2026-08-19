@@ -74,9 +74,7 @@ Future<void> confirmDeleteApp(
     context: context,
     builder: (dialogContext) => AlertDialog(
       title: Text(
-        LocaleKeys.appsDeleteTitle.tr(
-          namedArgs: {'name': overview.app.name},
-        ),
+        LocaleKeys.appsDeleteTitle.tr(namedArgs: {'name': overview.app.name}),
       ),
       content: Text(LocaleKeys.appsDeleteBody.tr()),
       actions: [

@@ -457,7 +457,10 @@ class _SidebarSection extends StatelessWidget {
           if (!collapsed)
             Padding(
               padding: EdgeInsets.fromLTRB(10, index == 0 ? 0 : 18, 10, 8),
-              child: Text(group.titleKey.tr().toUpperCase(), style: headingStyle),
+              child: Text(
+                group.titleKey.tr().toUpperCase(),
+                style: headingStyle,
+              ),
             )
           // The first group needs no rule above it — the mark already
           // separates it from the top of the rail.
