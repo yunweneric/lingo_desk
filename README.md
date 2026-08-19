@@ -24,6 +24,7 @@ account.
 - [How it works](#how-it-works)
 - [Architecture](#architecture)
 - [Design system](#design-system)
+- [Landing page](#landing-page)
 - [Testing](#testing)
 - [Building & releases](#building--releases)
 - [Contributing](#contributing)
@@ -271,6 +272,42 @@ system. Prefer extending one of those over styling a Material widget inline.
 
 Further reading: [docs/ui.md](docs/ui.md),
 [docs/nomenclature.md](docs/nomenclature.md).
+
+---
+
+## Landing page
+
+The marketing site at **<https://yunweneric.github.io/lingo_desk/>** is a second
+Flutter entry point in this repository, not a separate project:
+
+```bash
+flutter run -d chrome -t lib/main_landing.dart          # develop
+flutter build web --release -t lib/main_landing.dart \
+  --base-href /lingo_desk/ --pwa-strategy none          # what CI publishes
+```
+
+| Path | What it is |
+| --- | --- |
+| [`lib/main_landing.dart`](lib/main_landing.dart) | Web entry point — no DI, no router, no storage |
+| [`lib/landing/sections/`](lib/landing/sections/) | One file per band of the page |
+| [`lib/landing/data/`](lib/landing/data/) | GitHub Releases lookup behind the download button |
+| [`web/`](web/) | Shell, social cards, and the HTML curtain shown before Flutter boots |
+| [`pages.yml`](.github/workflows/pages.yml) | Builds and publishes to GitHub Pages on push to `main` |
+
+It imports the app's own [`LingoDeskTheme`](lib/core/theme/lingo_desk_theme.dart),
+palettes, motion tokens and [`LingoDeskMark`](lib/core/widgets/lingo_desk_mark.dart)
+rather than restating them, so the site and the product cannot drift apart — and
+the "built with Flutter" section lets a visitor repaint the whole page through
+all six palettes to prove it.
+
+The download button resolves the newest **GitHub Release** at runtime and offers
+the asset matching the visitor's OS. It has to be a release rather than an
+Actions artifact: artifact downloads require an authenticated token, so a public
+page cannot fetch them. Until a `v*` tag is pushed, the section falls back to the
+build-from-source instructions.
+
+Any section can be linked directly: `#why`, `#features`, `#screens`,
+`#how-it-works`, `#flutter`, `#download`.
 
 ---
 

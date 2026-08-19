@@ -23,9 +23,16 @@ import 'widgets/reveal.dart';
 /// is also why the GitHub Pages deploy needs no 404 rewrite — there is
 /// only ever one URL.
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.controller});
+  const LandingPage({
+    super.key,
+    required this.controller,
+    this.initialAnchor = '',
+  });
 
   final LandingController controller;
+
+  /// Section named in the URL fragment when the page was opened.
+  final String initialAnchor;
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -43,10 +50,37 @@ class _LandingPageState extends State<LandingPage> {
 
   bool _scrolled = false;
 
+  /// Anchor names accepted in the URL fragment, so a link can point at a
+  /// section: `…/lingo_desk/#download`.
+  late final Map<String, GlobalKey> _anchors = {
+    'why': _problem,
+    'features': _features,
+    'screens': _tour,
+    'how-it-works': _steps,
+    'flutter': _flutter,
+    'download': _download,
+  };
+
   @override
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openFragment());
+    // Fonts resolve over the network and can reflow the page after the
+    // first frame, which moves every section below the fold; re-apply the
+    // anchor once things have settled.
+    Future<void>.delayed(const Duration(milliseconds: 600), _openFragment);
+  }
+
+  /// Jumps straight to the section named in the URL fragment, if any.
+  ///
+  /// Runs after the first frame so the sections have been laid out and
+  /// their offsets are real.
+  void _openFragment() {
+    final target = _anchors[widget.initialAnchor.toLowerCase()];
+    if (target != null) {
+      _jumpTo(target, animate: false);
+    }
   }
 
   void _onScroll() {
@@ -58,7 +92,7 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   /// Scrolls [key]'s section under the nav rather than behind it.
-  void _jumpTo(GlobalKey key) {
+  void _jumpTo(GlobalKey key, {bool animate = true}) {
     final target = key.currentContext;
     if (target == null || !_scroll.hasClients) {
       return;
@@ -68,9 +102,15 @@ class _LandingPageState extends State<LandingPage> {
       return;
     }
     final offset =
-        _scroll.offset + box.localToGlobal(Offset.zero).dy - kLandingNavHeight;
+        (_scroll.offset + box.localToGlobal(Offset.zero).dy - kLandingNavHeight)
+            .clamp(0.0, _scroll.position.maxScrollExtent);
+
+    if (!animate || !LingoDeskMotion.enabled(context)) {
+      _scroll.jumpTo(offset);
+      return;
+    }
     _scroll.animateTo(
-      offset.clamp(0.0, _scroll.position.maxScrollExtent),
+      offset,
       duration: LingoDeskMotion.slow,
       curve: LingoDeskMotion.curve,
     );

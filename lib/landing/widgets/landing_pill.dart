@@ -81,12 +81,17 @@ class PlatformTile extends StatefulWidget {
     required this.label,
     required this.icon,
     required this.available,
+    this.note,
     this.onTap,
   });
 
   final String label;
   final List<List<dynamic>> icon;
   final bool available;
+
+  /// Overrides the default prebuilt/from-source caption.
+  final String? note;
+
   final VoidCallback? onTap;
 
   @override
@@ -139,7 +144,7 @@ class _PlatformTileState extends State<PlatformTile> {
               ),
               const SizedBox(height: 3),
               Text(
-                widget.available ? 'Prebuilt' : 'From source',
+                widget.note ?? (widget.available ? 'Prebuilt' : 'From source'),
                 style: TextStyle(fontSize: 11.5, color: tokens.muted),
               ),
             ],

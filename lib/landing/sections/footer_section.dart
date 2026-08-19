@@ -68,10 +68,12 @@ class FooterSection extends StatelessWidget {
                       color: tokens.muted,
                     ),
                     const SizedBox(width: 9),
-                    Text(
-                      'This page is a Flutter web app, built from the same '
-                      'repository as the product.',
-                      style: TextStyle(fontSize: 13, color: tokens.muted),
+                    Flexible(
+                      child: Text(
+                        'This page is a Flutter web app, built from the same '
+                        'repository as the product.',
+                        style: TextStyle(fontSize: 13, color: tokens.muted),
+                      ),
                     ),
                   ],
                 ),

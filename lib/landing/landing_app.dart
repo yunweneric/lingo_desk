@@ -10,7 +10,10 @@ import 'state/landing_controller.dart';
 /// the visitor has selected, which is what lets the "built with Flutter"
 /// section repaint the entire page from a single tap.
 class LandingApp extends StatefulWidget {
-  const LandingApp({super.key});
+  const LandingApp({super.key, this.initialAnchor = ''});
+
+  /// Section named in the URL fragment at load, e.g. `download`.
+  final String initialAnchor;
 
   @override
   State<LandingApp> createState() => _LandingAppState();
@@ -43,7 +46,10 @@ class _LandingAppState extends State<LandingApp> {
           theme: LingoDeskTheme.light(palette),
           darkTheme: LingoDeskTheme.dark(palette),
           themeMode: _controller.isDark ? ThemeMode.dark : ThemeMode.light,
-          home: LandingPage(controller: _controller),
+          home: LandingPage(
+            controller: _controller,
+            initialAnchor: widget.initialAnchor,
+          ),
         );
       },
     );

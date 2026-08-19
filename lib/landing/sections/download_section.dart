@@ -118,6 +118,11 @@ class _ReleaseCard extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final published = release.publishedLabel;
     final narrow = context.windowSize.isBelow(WindowSizeClass.medium);
+    // Only worth saying when there is actually a desktop build to warn
+    // about; an Android-only release has nothing to right-click.
+    final hasDesktop = release.assets.any(
+      (asset) => asset.target != DownloadTarget.android,
+    );
 
     return LandingCard(
       padding: const EdgeInsets.all(28),
@@ -155,29 +160,31 @@ class _ReleaseCard extends StatelessWidget {
             _AssetRow(asset: asset, narrow: narrow),
             const SizedBox(height: 12),
           ],
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              LingoDeskIcon(
-                HugeIcons.strokeRoundedInformationCircle,
-                size: 15,
-                color: tokens.muted,
-              ),
-              const SizedBox(width: 9),
-              Expanded(
-                child: Text(
-                  'The desktop builds are unsigned: on macOS right-click the '
-                  'app and choose Open the first time, on Windows choose '
-                  'More info then Run anyway.',
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    height: 1.5,
-                    color: tokens.muted,
+          if (hasDesktop) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                LingoDeskIcon(
+                  HugeIcons.strokeRoundedInformationCircle,
+                  size: 15,
+                  color: tokens.muted,
+                ),
+                const SizedBox(width: 9),
+                Expanded(
+                  child: Text(
+                    'The desktop builds are unsigned: on macOS right-click the '
+                    'app and choose Open the first time, on Windows choose '
+                    'More info then Run anyway.',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      height: 1.5,
+                      color: tokens.muted,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
           const SizedBox(height: 16),
           LandingLink(
             label: 'All releases and changelogs on GitHub  →',

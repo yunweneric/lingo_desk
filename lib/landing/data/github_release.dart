@@ -64,6 +64,11 @@ enum DownloadTarget {
   /// Play Store `.aab`, source archives) returns null and is not listed.
   static DownloadTarget? classify(String filename) {
     final name = filename.toLowerCase();
+    // build_apk.yml attaches a debug APK beside the release one. It is a
+    // build artifact, not something to hand a visitor.
+    if (name.contains('debug')) {
+      return null;
+    }
     if (name.endsWith('.dmg')) {
       return DownloadTarget.macos;
     }

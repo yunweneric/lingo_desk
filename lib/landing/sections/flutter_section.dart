@@ -49,52 +49,45 @@ class FlutterSection extends StatelessWidget {
           Reveal(
             child: LandingCard(
               padding: EdgeInsets.all(narrow ? 24 : 36),
-              child: Flex(
-                direction: narrow ? Axis.vertical : Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: narrow ? 0 : 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const LandingPill(
-                          label: 'Live, right now',
-                          icon: HugeIcons.strokeRoundedZap,
-                          emphasis: true,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Every colour on this page comes from the app.',
-                          style: TextStyle(
-                            fontSize: 22,
-                            height: 1.28,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.4,
-                            color: tokens.foreground,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          'These are the six palettes shipped in LingoDesk, '
-                          'read from the same theme extension the desktop '
-                          'build reads. Pick one and the whole site repaints '
-                          '— no reload, no stylesheet swap.',
-                          style: TextStyle(
-                            fontSize: 15,
-                            height: 1.62,
-                            color: tokens.muted,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        _PaletteRow(controller: controller),
-                      ],
+              child: _ProofLayout(
+                narrow: narrow,
+                copy: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const LandingPill(
+                      label: 'Live, right now',
+                      icon: HugeIcons.strokeRoundedZap,
+                      emphasis: true,
                     ),
-                  ),
-                  SizedBox(width: narrow ? 0 : 40, height: narrow ? 32 : 0),
-                  Expanded(flex: narrow ? 0 : 2, child: _MarkProof()),
-                ],
+                    const SizedBox(height: 20),
+                    Text(
+                      'Every colour on this page comes from the app.',
+                      style: TextStyle(
+                        fontSize: 22,
+                        height: 1.28,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.4,
+                        color: tokens.foreground,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      'These are the six palettes shipped in LingoDesk, '
+                      'read from the same theme extension the desktop '
+                      'build reads. Pick one and the whole site repaints '
+                      '— no reload, no stylesheet swap.',
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.62,
+                        color: tokens.muted,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    _PaletteRow(controller: controller),
+                  ],
+                ),
+                proof: const _MarkProof(),
               ),
             ),
           ),
@@ -104,6 +97,43 @@ class FlutterSection extends StatelessWidget {
           const Reveal(child: _StatRow()),
         ],
       ),
+    );
+  }
+}
+
+/// Two panes side by side on desktop, stacked on narrow windows.
+///
+/// Written as a branch rather than a [Flex] with a swapped direction
+/// because [Expanded] is only legal inside the horizontal arm: in a
+/// [Column] of unbounded height it has no space to expand into and
+/// throws.
+class _ProofLayout extends StatelessWidget {
+  const _ProofLayout({
+    required this.narrow,
+    required this.copy,
+    required this.proof,
+  });
+
+  final bool narrow;
+  final Widget copy;
+  final Widget proof;
+
+  @override
+  Widget build(BuildContext context) {
+    if (narrow) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [copy, const SizedBox(height: 32), proof],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(flex: 3, child: copy),
+        const SizedBox(width: 40),
+        Expanded(flex: 2, child: proof),
+      ],
     );
   }
 }
@@ -202,6 +232,8 @@ class _Swatch extends StatelessWidget {
 
 /// The brandmark, plus the fact that it is geometry rather than an image.
 class _MarkProof extends StatelessWidget {
+  const _MarkProof();
+
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
@@ -293,6 +325,7 @@ class _PlatformGrid extends StatelessWidget {
         label: 'Web',
         icon: HugeIcons.strokeRoundedBrowser,
         available: true,
+        note: 'You are here',
       ),
     ];
 
@@ -330,19 +363,22 @@ class _StatRow extends StatelessWidget {
       ('0', 'lines of JavaScript written by hand'),
     ];
 
-    return LandingCard(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 26),
-      child: Wrap(
-        spacing: 44,
-        runSpacing: 24,
-        alignment: WrapAlignment.spaceBetween,
-        children: [
-          for (final (value, label) in stats)
-            SizedBox(
-              width: narrow ? double.infinity : null,
-              child: _Stat(value: value, label: label),
-            ),
-        ],
+    return SizedBox(
+      width: double.infinity,
+      child: LandingCard(
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 26),
+        child: Wrap(
+          spacing: 44,
+          runSpacing: 24,
+          alignment: WrapAlignment.spaceBetween,
+          children: [
+            for (final (value, label) in stats)
+              SizedBox(
+                width: narrow ? double.infinity : null,
+                child: _Stat(value: value, label: label),
+              ),
+          ],
+        ),
       ),
     );
   }

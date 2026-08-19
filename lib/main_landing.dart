@@ -9,5 +9,9 @@ import 'landing/landing_app.dart';
 /// its bootstrap: no dependency injection, no local storage, no router —
 /// so none of that reaches the web bundle.
 void main() {
-  runApp(const LandingApp());
+  // Read before [runApp]: once a Navigator is mounted, Flutter's browser
+  // history integration normalises the hash and the anchor is gone.
+  final anchor = Uri.base.fragment;
+
+  runApp(LandingApp(initialAnchor: anchor));
 }
