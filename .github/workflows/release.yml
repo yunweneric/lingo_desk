@@ -169,36 +169,49 @@ jobs:
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
 
+      # PowerShell, not bash: Git Bash on the Windows runner applies MSYS
+      # path conversion to any argument starting with "/", so ISCC's
+      # /DName=Value defines arrive rewritten as filesystem paths. The
+      # compiler then sees five script filenames instead of one option and
+      # fails with "You may not specify more than one script filename".
       - name: Build installer
-        shell: bash
+        shell: pwsh
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
           NUMERIC_VERSION: ${{ needs.prepare.outputs.numeric_version }}
         run: |
-          set -euo pipefail
+          $ErrorActionPreference = 'Stop'
 
-          BUILD_DIR="build/windows/x64/runner/Release"
-          test -f "${BUILD_DIR}/lingo_desk.exe"
+          $buildDir = 'build\windows\x64\runner\Release'
+          if (-not (Test-Path "$buildDir\lingo_desk.exe")) {
+            throw "Missing Flutter build output: $buildDir\lingo_desk.exe"
+          }
 
-          mkdir -p build/dist
+          New-Item -ItemType Directory -Force -Path build\dist | Out-Null
 
-          "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" \
-            "/DMyAppVersion=${NUMERIC_VERSION}" \
-            "/DSourceDir=$(pwd -W)/${BUILD_DIR}" \
-            "/DOutputDir=$(pwd -W)/build/dist" \
-            "/DOutputName=LingoDesk-${VERSION}-windows-setup" \
-            windows/installer/lingo_desk.iss
+          $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          & $iscc `
+            "/DMyAppVersion=$env:NUMERIC_VERSION" `
+            "/DSourceDir=$PWD\$buildDir" `
+            "/DOutputDir=$PWD\build\dist" `
+            "/DOutputName=LingoDesk-$env:VERSION-windows-setup" `
+            'windows\installer\lingo_desk.iss'
 
-          ls -lh build/dist
+          if ($LASTEXITCODE -ne 0) { throw "ISCC exited with $LASTEXITCODE" }
+
+          Get-ChildItem build\dist
 
       - name: Create portable ZIP
-        shell: bash
+        shell: pwsh
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          set -euo pipefail
-          powershell -Command "Compress-Archive -Path 'build/windows/x64/runner/Release/*' -DestinationPath 'build/dist/LingoDesk-${VERSION}-windows-portable.zip' -Force"
-          ls -lh build/dist
+          $ErrorActionPreference = 'Stop'
+          Compress-Archive `
+            -Path 'build\windows\x64\runner\Release\*' `
+            -DestinationPath "build\dist\LingoDesk-$env:VERSION-windows-portable.zip" `
+            -Force
+          Get-ChildItem build\dist
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

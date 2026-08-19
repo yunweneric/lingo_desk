@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../core/responsive/breakpoints.dart';
 import '../../core/theme/lingo_desk_motion.dart';
+import '../../core/theme/lingo_desk_theme.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_mark.dart';
@@ -10,6 +11,11 @@ import '../data/github_release.dart';
 import '../state/landing_controller.dart';
 import '../widgets/landing_button.dart';
 import '../widgets/landing_layout.dart';
+import '../widgets/theme_menu.dart';
+
+/// Every control in the bar is this tall, so the right-hand cluster reads
+/// as one row of objects rather than three sizes stacked side by side.
+const double kNavControlHeight = 44.0;
 
 /// One entry in the navigation.
 class NavTarget {
@@ -41,7 +47,11 @@ class LandingNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final compact = context.windowSize.isBelow(WindowSizeClass.expanded);
+    final size = context.windowSize;
+
+    // Below `large` the five links plus the full control cluster no
+    // longer fit the content width, so the bar collapses to a menu.
+    final collapsed = size.isBelow(WindowSizeClass.large);
 
     return AnimatedContainer(
       duration: LingoDeskMotion.standard,
@@ -49,7 +59,7 @@ class LandingNav extends StatelessWidget {
       height: kLandingNavHeight,
       decoration: BoxDecoration(
         color: scrolled
-            ? tokens.background.withValues(alpha: 0.92)
+            ? tokens.background.withValues(alpha: 0.94)
             : Colors.transparent,
         border: Border(
           bottom: BorderSide(
@@ -61,30 +71,44 @@ class LandingNav extends StatelessWidget {
         child: Row(
           children: [
             const LingoDeskMark(size: 30, showWordmark: true),
-            const Spacer(),
-            if (!compact) ...[
+            if (!collapsed) ...[
+              const SizedBox(width: 40),
+              // The links belong to the wordmark, not to the buttons.
               for (final target in targets) ...[
                 _NavLink(target: target),
-                const SizedBox(width: 26),
+                const SizedBox(width: 24),
               ],
-              _BrightnessToggle(controller: controller),
-              const SizedBox(width: 10),
-              _StarChip(stars: controller.stars),
-              const SizedBox(width: 12),
-              LandingButton(
-                label: 'Download',
-                icon: HugeIcons.strokeRoundedDownload04,
-                onPressed: onDownload,
-              ),
-            ] else ...[
-              _BrightnessToggle(controller: controller),
-              const SizedBox(width: 6),
-              _IconAction(
-                icon: HugeIcons.strokeRoundedMenu01,
-                tooltip: 'Menu',
-                onTap: () => _openMenu(context),
-              ),
             ],
+            const Spacer(),
+            // Sized to its contents: after the Spacer this Row is laid
+            // out against an unbounded width, where MainAxisSize.max
+            // would try to expand to infinity.
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ThemeMenuButton(
+                  controller: controller,
+                  height: kNavControlHeight,
+                  showLabel: size.atLeast(WindowSizeClass.extraLarge),
+                ),
+                const SizedBox(width: 10),
+                if (!collapsed) ...[
+                  _StarChip(stars: controller.stars),
+                  const SizedBox(width: 10),
+                  LandingButton(
+                    label: 'Download',
+                    icon: HugeIcons.strokeRoundedDownload04,
+                    height: kNavControlHeight,
+                    onPressed: onDownload,
+                  ),
+                ] else
+                  _IconAction(
+                    icon: HugeIcons.strokeRoundedMenu01,
+                    tooltip: 'Menu',
+                    onTap: () => _openMenu(context),
+                  ),
+              ],
+            ),
           ],
         ),
       ),
@@ -180,23 +204,6 @@ class _NavLinkState extends State<_NavLink> {
   }
 }
 
-class _BrightnessToggle extends StatelessWidget {
-  const _BrightnessToggle({required this.controller});
-
-  final LandingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return _IconAction(
-      icon: controller.isDark
-          ? HugeIcons.strokeRoundedSun03
-          : HugeIcons.strokeRoundedMoon02,
-      tooltip: controller.isDark ? 'Switch to light' : 'Switch to dark',
-      onTap: controller.toggleBrightness,
-    );
-  }
-}
-
 class _IconAction extends StatefulWidget {
   const _IconAction({
     required this.icon,
@@ -228,11 +235,12 @@ class _IconActionState extends State<_IconAction> {
           onTap: widget.onTap,
           child: AnimatedContainer(
             duration: LingoDeskMotion.fast,
-            width: 42,
-            height: 42,
+            width: kNavControlHeight,
+            height: kNavControlHeight,
             decoration: BoxDecoration(
-              color: _hovered ? tokens.active : Colors.transparent,
-              borderRadius: BorderRadius.circular(11),
+              color: _hovered ? tokens.active : tokens.card,
+              borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
+              border: Border.all(color: tokens.border),
             ),
             child: LingoDeskIcon(
               widget.icon,
@@ -248,54 +256,68 @@ class _IconActionState extends State<_IconAction> {
 
 /// Live star count, hidden until GitHub answers so the bar never shows a
 /// zero that is really "unknown".
-class _StarChip extends StatelessWidget {
+class _StarChip extends StatefulWidget {
   const _StarChip({required this.stars});
 
   final int? stars;
 
   @override
+  State<_StarChip> createState() => _StarChipState();
+}
+
+class _StarChipState extends State<_StarChip> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final tokens = LingoDeskTokens.of(context);
-    final count = stars;
+    final count = widget.stars;
     if (count == null) {
       return const SizedBox.shrink();
     }
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => openLink(GithubRepo.url),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-          decoration: BoxDecoration(
-            color: tokens.card,
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: tokens.border),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LingoDeskIcon(
-                HugeIcons.strokeRoundedGithub,
-                size: 15,
-                color: tokens.foreground,
-              ),
-              const SizedBox(width: 7),
-              LingoDeskIcon(
-                HugeIcons.strokeRoundedStar,
-                size: 13,
-                color: tokens.muted,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                '$count',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
+    return Tooltip(
+      message: 'Star LingoDesk on GitHub',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          onTap: () => openLink(GithubRepo.url),
+          child: AnimatedContainer(
+            duration: LingoDeskMotion.fast,
+            height: kNavControlHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: _hovered ? tokens.active : tokens.card,
+              borderRadius: BorderRadius.circular(LingoDeskTheme.radius),
+              border: Border.all(color: tokens.border),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LingoDeskIcon(
+                  HugeIcons.strokeRoundedGithub,
+                  size: 17,
                   color: tokens.foreground,
                 ),
-              ),
-            ],
+                const SizedBox(width: 9),
+                LingoDeskIcon(
+                  HugeIcons.strokeRoundedStar,
+                  size: 14,
+                  color: tokens.muted,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                    color: tokens.foreground,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

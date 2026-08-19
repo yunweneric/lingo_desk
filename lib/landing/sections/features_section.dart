@@ -170,6 +170,11 @@ class _FeatureCardState extends State<_FeatureCard> {
             Container(
               width: 42,
               height: 42,
+              // Without an alignment the tile hands the icon its own tight
+              // 42x42, which overrides `size` and scales the glyph to the
+              // full tile. Centring loosens the constraints so the icon is
+              // drawn at 20 with even padding around it.
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: tokens.brandFill,
                 borderRadius: BorderRadius.circular(11),
@@ -205,10 +210,11 @@ class _FeatureCardState extends State<_FeatureCard> {
               const SizedBox(height: 18),
               Row(
                 children: [
-                  for (final provider in AiProvider.values) ...[
-                    AiProviderLogo(provider: provider, size: 20),
-                    const SizedBox(width: 14),
-                  ],
+                  for (final provider in AiProvider.values)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 14),
+                      child: AiProviderLogo(provider: provider, size: 20),
+                    ),
                 ],
               ),
             ],

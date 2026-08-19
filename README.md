@@ -320,7 +320,7 @@ flutter test test/widget              # widget tests
 flutter test integration_test         # integration tests
 
 ./scripts/test.sh all                 # or: unit | widget | integration | coverage
-./scripts/test_ci.sh                  # run what CI runs, locally
+./scripts/ci_local.sh verify         # run what CI runs, locally
 ```
 
 Coverage:
@@ -365,6 +365,19 @@ git push origin v1.0.0
 > Desktop builds are **unsigned**. On macOS, right-click → Open the first time;
 > on Windows, choose "More info" → "Run anyway" past SmartScreen. Add signing
 > certificates as repository secrets to remove both.
+
+Before pushing, you can run the CI jobs on your own machine:
+
+```bash
+./scripts/ci_local.sh            # verify + every job this Mac can build
+./scripts/ci_local.sh verify     # format, analyze, test
+./scripts/ci_local.sh android    # APK + AAB
+./scripts/ci_local.sh macos      # .dmg
+```
+
+It uses the same commands as the workflows and checks your local Flutter
+against `.fvmrc`, which is the mismatch that has broken CI before. `build-windows`
+is the one job it can't cover — that needs a Windows runner.
 
 See [.github/workflows/README.md](.github/workflows/README.md) for details.
 

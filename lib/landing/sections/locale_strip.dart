@@ -91,18 +91,27 @@ class _LocaleStripState extends State<LocaleStrip>
               blendMode: BlendMode.dstOut,
               child: ClipRect(
                 child: moving
-                    ? AnimatedBuilder(
-                        animation: _drift,
-                        builder: (context, child) => Transform.translate(
-                          offset: Offset(-_drift.value * runWidth, 0),
-                          child: child,
-                        ),
-                        // Two runs side by side: as the first slides out
-                        // the second is already in place, so the loop
-                        // never shows a seam.
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [row, row],
+                    // A marquee track is wider than its viewport by
+                    // definition, so it has to be laid out unbounded.
+                    // Handed the strip's own width instead, the Row reports
+                    // the difference as a RenderFlex overflow and paints the
+                    // debug stripes straight across the locales.
+                    ? OverflowBox(
+                        alignment: Alignment.centerLeft,
+                        maxWidth: double.infinity,
+                        child: AnimatedBuilder(
+                          animation: _drift,
+                          builder: (context, child) => Transform.translate(
+                            offset: Offset(-_drift.value * runWidth, 0),
+                            child: child,
+                          ),
+                          // Two runs side by side: as the first slides out
+                          // the second is already in place, so the loop
+                          // never shows a seam.
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [row, row],
+                          ),
                         ),
                       )
                     : SingleChildScrollView(

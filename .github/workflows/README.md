@@ -166,25 +166,31 @@ You can manually trigger any workflow from the GitHub Actions tab:
 
 ## Testing Workflows Locally
 
-### Option 1: Using Test Scripts (Recommended)
+### Option 1: `scripts/ci_local.sh` (Recommended)
 
-We provide test scripts that simulate the workflow steps locally:
+One script mirrors the workflows, job by job:
 
-**For DMG Build:**
 ```bash
-./scripts/test_dmg_build.sh
+./scripts/ci_local.sh            # verify + every job this machine can build
+./scripts/ci_local.sh verify     # format, analyze, test  (release.yml verify)
+./scripts/ci_local.sh android    # APK debug/release + AAB (build_apk.yml)
+./scripts/ci_local.sh macos      # .dmg                    (release.yml build-macos)
+
+./scripts/ci_local.sh --skip-verify android   # straight to the artifact
 ```
 
-**For CI Tests:**
-```bash
-./scripts/test_ci.sh
-```
+It runs the same commands the workflows run, produces the real artifacts,
+and first checks that your local Flutter matches the version pinned in
+`.fvmrc` — a mismatch there is what broke the release run of 2026-08-18,
+where CI resolved 3.29.3 against a pubspec needing Dart ^3.10.0 and died at
+`pub get` before building anything.
 
-These scripts will:
-- Run all the same checks as the workflow
-- Actually build the DMG/APK locally
-- Provide colored output showing what passed/failed
-- Create the actual build artifacts you can test
+It deliberately uses plain `flutter`, not `fvm flutter`: CI installs FVM to
+pin the SDK, while locally your PATH Flutter is the one you develop with,
+and the version check covers what the pin was protecting against.
+
+**`build-windows` is not covered** — it needs a Windows runner, and there is
+no way around that from macOS or Linux.
 
 ### Option 2: Using `act` (GitHub Actions Local Runner)
 
@@ -215,7 +221,7 @@ You can use [`act`](https://github.com/nektos/act) to run GitHub Actions workflo
    ```
 
 3. **Limitations:**
-   - `act` runs workflows in Docker containers, so the macOS and Windows jobs in `release.yml` won't work with `act` since it can't run macOS or Windows runners
+   - `act` runs workflows in Docker containers, so only the ubuntu `verify` job is reachable; `build-macos` and `build-windows` cannot run under it, as there are no macOS or Windows container images
    - For macOS workflows, use the test scripts instead
    - Some actions may not work perfectly in local Docker environment
 

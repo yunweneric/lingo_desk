@@ -38,7 +38,7 @@ class JsonPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: tokens.border)),
             ),
@@ -63,7 +63,7 @@ class JsonPanel extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -98,7 +98,7 @@ class _JsonLineView extends StatelessWidget {
     final colour = line.missing ? LingoDeskColors.warningLift : tokens.muted;
 
     return Padding(
-      padding: EdgeInsets.only(left: line.indent * 14.0, bottom: 5),
+      padding: EdgeInsets.only(left: line.indent * 14.0, bottom: 3),
       child: Text(
         line.text,
         maxLines: 1,

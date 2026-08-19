@@ -34,6 +34,7 @@ class LandingButton extends StatefulWidget {
     this.kind = LandingButtonKind.primary,
     this.busy = false,
     this.large = false,
+    this.height,
   });
 
   final String label;
@@ -46,6 +47,10 @@ class LandingButton extends StatefulWidget {
   final LandingButtonKind kind;
   final bool busy;
   final bool large;
+
+  /// Pins the button to an exact height, so a row of mixed controls (the
+  /// navigation bar) lines up instead of each one sizing to its padding.
+  final double? height;
 
   @override
   State<LandingButton> createState() => _LandingButtonState();
@@ -102,9 +107,10 @@ class _LandingButtonState extends State<LandingButton> {
           duration: LingoDeskMotion.fast,
           curve: LingoDeskMotion.curve,
           transform: Matrix4.translationValues(0, lift, 0),
+          height: widget.height,
           padding: EdgeInsets.symmetric(
             horizontal: widget.large ? 28 : 20,
-            vertical: widget.large ? 18 : 14,
+            vertical: widget.height != null ? 0 : (widget.large ? 18 : 14),
           ),
           decoration: BoxDecoration(
             color: _enabled ? background : background.withValues(alpha: 0.5),

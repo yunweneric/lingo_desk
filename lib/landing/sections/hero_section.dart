@@ -7,9 +7,10 @@ import '../data/github_release.dart';
 import '../state/landing_controller.dart';
 import '../widgets/landing_button.dart';
 import '../widgets/landing_layout.dart';
+import '../widgets/app_preview.dart';
 import '../widgets/landing_pill.dart';
-import '../widgets/landing_shot.dart';
 import '../widgets/reveal.dart';
+import '../widgets/scroll_tilt.dart';
 
 /// The opening screen: what it is, who it's for, and one button that
 /// resolves the right build for the browser asking.
@@ -153,12 +154,18 @@ class HeroSection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: narrow ? 48 : 72),
-                  const Reveal(
-                    child: LandingShot(
-                      name: 'dashboard.png',
-                      semanticLabel:
-                          'The LingoDesk dashboard showing translation '
-                          'coverage across apps and locales.',
+                  // Not a capture: the dashboard below is the real thing,
+                  // rendered live from the same tokens as the page, so the
+                  // theme menu restyles it too. It lies back in 3D and
+                  // stands up as it scrolls into view — decoration here, so
+                  // it takes no pointer input. The tour section is where
+                  // the same window becomes usable.
+                  Reveal(
+                    child: ScrollTilt(
+                      child: LandingAppPreview(
+                        controller: controller,
+                        interactive: false,
+                      ),
                     ),
                   ),
                 ],

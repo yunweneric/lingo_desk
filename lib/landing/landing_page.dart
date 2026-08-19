@@ -147,7 +147,7 @@ class _LandingPageState extends State<LandingPage> {
                     const LocaleStrip(),
                     ProblemSection(anchor: _problem),
                     FeaturesSection(anchor: _features),
-                    TourSection(anchor: _tour),
+                    TourSection(anchor: _tour, controller: controller),
                     StepsSection(anchor: _steps),
                     FlutterSection(
                       anchor: _flutter,

@@ -16,39 +16,34 @@ class ProblemSection extends StatelessWidget {
 
   final GlobalKey? anchor;
 
+  // Deliberately short: the point is that the same two keys live in
+  // three places, not what a full locale file looks like. Inlining the
+  // nested object keeps the shape visible in four lines instead of
+  // seven, so the "before" column stays the height of the grid it is
+  // being compared against.
   static const _en = [
     JsonLine('{'),
-    JsonLine('"nav": {', indent: 1),
-    JsonLine('"home": "Home",', indent: 2),
-    JsonLine('"settings": "Settings"', indent: 2),
-    JsonLine('},', indent: 1),
+    JsonLine('"nav": { "home": "Home" },', indent: 1),
     JsonLine('"cta": "Get started"', indent: 1),
     JsonLine('}'),
   ];
 
   static const _fr = [
     JsonLine('{'),
-    JsonLine('"nav": {', indent: 1),
-    JsonLine('"home": "Accueil",', indent: 2),
-    JsonLine('"settings": "Réglages"', indent: 2),
-    JsonLine('},', indent: 1),
+    JsonLine('"nav": { "home": "Accueil" },', indent: 1),
     JsonLine('"cta": ""', indent: 1, missing: true),
     JsonLine('}'),
   ];
 
   static const _es = [
     JsonLine('{'),
-    JsonLine('"nav": {', indent: 1),
-    JsonLine('"home": "Inicio",', indent: 2),
-    JsonLine('"settings": ""', indent: 2, missing: true),
-    JsonLine('},', indent: 1),
+    JsonLine('"nav": { "home": "" },', indent: 1, missing: true),
     JsonLine('"cta": "Empezar"', indent: 1),
     JsonLine('}'),
   ];
 
   static const _rows = [
-    GridRow('nav.home', ['Accueil', 'Inicio']),
-    GridRow('nav.settings', ['Réglages', null]),
+    GridRow('nav.home', ['Accueil', null]),
     GridRow('cta', [null, 'Empezar']),
   ];
 
@@ -63,9 +58,9 @@ class ProblemSection extends StatelessWidget {
       child: Column(
         children: [
           JsonPanel(filename: 'en.json', lines: _en),
-          SizedBox(height: 12),
+          SizedBox(height: 10),
           JsonPanel(filename: 'fr.json', lines: _fr, flagged: true),
-          SizedBox(height: 12),
+          SizedBox(height: 10),
           JsonPanel(filename: 'es.json', lines: _es, flagged: true),
         ],
       ),
@@ -121,8 +116,13 @@ class ProblemSection extends StatelessWidget {
           Reveal(
             child: stacked
                 ? Column(children: [before, const SizedBox(height: 40), after])
+                // The two sides are unequal by construction — three files
+                // against one grid is the whole argument — so the short side
+                // is centred against the tall one. Aligned to the top it
+                // read as a layout fault, with the height difference dumped
+                // as dead space under the grid.
                 : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Expanded(child: before),
                       const SizedBox(width: 32),
