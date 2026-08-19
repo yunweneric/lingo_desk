@@ -70,25 +70,32 @@ class _LanguageMenuButtonState extends State<LanguageMenuButton> {
               ),
               // Twenty locales are more than a menu can show at once, so
               // the list scrolls rather than running off the viewport.
+              //
+              // A scroll view rather than a ListView: MenuAnchor measures
+              // its panel with IntrinsicWidth, and a shrink-wrapping
+              // ListView viewport cannot answer an intrinsic query — it
+              // throws the moment the menu opens. SingleChildScrollView
+              // passes the question down to its child.
               ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 320),
                 child: Scrollbar(
                   controller: _scroll,
-                  child: ListView(
+                  child: SingleChildScrollView(
                     controller: _scroll,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    children: [
-                      for (final option in SupportedLanguages.all)
-                        _LanguageRow(
-                          option: option,
-                          selected: option.code == active,
-                          onTap: () {
-                            AppLocalization.setLocale(context, option.code);
-                            _menu.close();
-                          },
-                        ),
-                    ],
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final option in SupportedLanguages.all)
+                          _LanguageRow(
+                            option: option,
+                            selected: option.code == active,
+                            onTap: () {
+                              AppLocalization.setLocale(context, option.code);
+                              _menu.close();
+                            },
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
