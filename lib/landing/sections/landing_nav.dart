@@ -133,6 +133,12 @@ class LandingNav extends StatelessWidget {
                           ),
                       ],
                     ),
+                  // Both flanks are equal shares of whatever the centred
+                  // links leave behind, so this cluster cannot borrow width
+                  // from the roomier left-hand side: everything in it has
+                  // to earn its place. The language trigger is a flag and a
+                  // chevron for that reason, and the download button's
+                  // label is the one thing here that can give way.
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,

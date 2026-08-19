@@ -165,15 +165,23 @@ class _LandingButtonState extends State<LandingButton> {
               if (!square && (widget.busy || widget.icon != null))
                 const SizedBox(width: 10),
               if (!square)
-                Text(
-                  widget.label,
-                  style: TextStyle(
-                    fontSize: widget.large ? 16 : 14.5,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.1,
-                    color: _enabled
-                        ? foreground
-                        : foreground.withValues(alpha: 0.6),
+                // Flexible, so a long label in another language squeezes
+                // rather than overflowing the row this button sits in —
+                // the navigation bar has no spare width to give it.
+                Flexible(
+                  child: Text(
+                    widget.label,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: widget.large ? 16 : 14.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.1,
+                      color: _enabled
+                          ? foreground
+                          : foreground.withValues(alpha: 0.6),
+                    ),
                   ),
                 ),
             ],

@@ -18,8 +18,8 @@ import '../../core/widgets/lingo_desk_menu.dart';
 class LanguageMenuButton extends StatefulWidget {
   const LanguageMenuButton({super.key, this.showLabel = true, this.height});
 
-  /// Drops the language name, leaving flag and chevron, when the bar is
-  /// short of room.
+  /// Drops the language name, leaving just the flag and the chevron, when
+  /// the bar is short of room. The flag still says which language it is.
   final bool showLabel;
 
   /// Pins the trigger to an exact height to match its neighbours.
@@ -133,16 +133,6 @@ class _LanguageMenuButtonState extends State<LanguageMenuButton> {
                         style: TextStyle(
                           fontSize: 13.5,
                           fontWeight: FontWeight.w600,
-                          color: tokens.foreground,
-                        ),
-                      ),
-                    ] else ...[
-                      const SizedBox(width: 6),
-                      Text(
-                        active.toUpperCase(),
-                        style: LingoDeskTheme.codeStyle.copyWith(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
                           color: tokens.foreground,
                         ),
                       ),
