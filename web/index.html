@@ -15,13 +15,21 @@
        these tags are what link unfurls and crawlers actually read. -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="LingoDesk">
+  <meta property="og:url" content="https://lingodesk.yunweneric.com/">
   <meta property="og:title" content="LingoDesk — Translate every locale from one clean desk">
   <meta property="og:description" content="One workspace for every translation key. Free, open source, local-first. Built with Flutter.">
-  <meta property="og:image" content="og-image.png">
+  <!-- Absolute, because LinkedIn and X resolve og:image against nothing.
+       The ?v= is what makes them re-fetch a card they already cached. -->
+  <meta property="og:image" content="https://lingodesk.yunweneric.com/og-image.png?v=2">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LingoDesk — localization manager for developers. Translate every locale from one clean desk.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LingoDesk — Translate every locale from one clean desk">
   <meta name="twitter:description" content="One workspace for every translation key. Free, open source, local-first. Built with Flutter.">
-  <meta name="twitter:image" content="og-image.png">
+  <meta name="twitter:image" content="https://lingodesk.yunweneric.com/og-image.png?v=2">
+  <meta name="twitter:image:alt" content="LingoDesk — localization manager for developers. Translate every locale from one clean desk.">
 
   <!-- The theme resolves Urbanist through google_fonts at runtime. -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
