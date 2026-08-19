@@ -29,3 +29,8 @@ flutter_launcher_icons:
 
   # Linux has no flutter_launcher_icons target; its hicolor set is rendered
   # straight into linux/icons by scripts/generate_brand_icons.py.
+
+  # Web is deliberately absent here too. The package's web target rewrites
+  # web/manifest.json, which would drop the description and colours set
+  # there by hand, so the favicon and PWA icons are rendered straight into
+  # web/ by the same script.

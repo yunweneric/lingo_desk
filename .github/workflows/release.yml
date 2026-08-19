@@ -238,6 +238,21 @@ jobs:
       - name: List artifacts
         run: ls -lhR dist
 
+      - name: Generate checksums
+        run: |
+          set -euo pipefail
+          cd dist
+          # The app ships unsigned, so a published digest is the only way a
+          # downloader can verify what they got.
+          shopt -s nullglob
+          files=(*.dmg *.exe *.zip)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No release artifacts found to checksum" >&2
+            exit 1
+          fi
+          sha256sum "${files[@]}" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -254,13 +269,18 @@ jobs:
             | Windows (installer) | `LingoDesk-${{ needs.prepare.outputs.version }}-windows-setup.exe` |
             | Windows (portable) | `LingoDesk-${{ needs.prepare.outputs.version }}-windows-portable.zip` |
 
+            The macOS build is a universal binary — one download runs natively
+            on both Apple Silicon and Intel.
+
             > The macOS app and Windows installer are unsigned. On macOS, right-click → Open
             > the first time; on Windows, choose "More info" → "Run anyway" in SmartScreen.
 
-            ### 📝 Changes
-
-            See the commit history for detailed changes.
+            Verify a download against `SHA256SUMS.txt`:
+            `shasum -a 256 -c SHA256SUMS.txt --ignore-missing`
           files: dist/**/*
+          # Appends the commit/PR changelog under the body above, so the notes
+          # stop pointing at the commit history and just carry it.
+          generate_release_notes: true
           draft: false
           prerelease: false
           fail_on_unmatched_files: true

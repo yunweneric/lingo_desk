@@ -35,6 +35,9 @@ TILE_FRACTION = 0.598
 OUT = pathlib.Path("assets/brand/icons")
 SVG_OUT = OUT / "svg"
 
+# The reference artwork the whole design system is drawn from.
+SOURCE_MARK = pathlib.Path("assets/brand/lingodesk_mark.svg")
+
 
 def _n(value):
     return f"{value:.2f}".rstrip("0").rstrip(".")
@@ -147,11 +150,26 @@ VARIANTS = {
     "splash_logo": dict(canvas=768, body=768, radius_ratio=0.25),
     "splash_logo_dark": dict(canvas=768, body=768, radius_ratio=0.25, reversed_=True),
     "splash_android12": dict(canvas=1152, tile_scale=768 * 0.95 / GROUP_DIAG),
+    # Web: the browser tab and the PWA install prompt. `web_app_icon` keeps
+    # its own rounded shape, the way a favicon is drawn everywhere; the
+    # maskable variant goes edge to edge in teal with the tiles pulled into
+    # the same 61% safe circle Android's adaptive layers use, because an
+    # installed PWA gets masked exactly like a launcher icon.
+    "web_app_icon": dict(canvas=1024, body=1024, radius_ratio=0.22),
+    "web_maskable_icon": dict(
+        canvas=1024, body=1024, radius_ratio=0, tile_scale=1024 * 0.61 / GROUP_DIAG
+    ),
 }
 
 # Sizes freedesktop expects under share/icons/hicolor/<size>x<size>/apps.
 HICOLOR_SIZES = (16, 24, 32, 48, 64, 128, 256, 512)
 LINUX_ICONS = pathlib.Path("linux/icons/hicolor")
+
+# What web/index.html and web/manifest.json reference. Rendered here rather
+# than by flutter_launcher_icons, whose web target rewrites manifest.json
+# and would drop the description and theme colours set there by hand.
+WEB = pathlib.Path("web")
+WEB_ICONS = WEB / "icons"
 
 
 def render(svg_path, png_path, size):
@@ -178,6 +196,18 @@ def main():
     for size in HICOLOR_SIZES:
         render(linux_svg, LINUX_ICONS / f"{size}x{size}/apps/lingo_desk.png", size)
     print(f"  linux/icons/hicolor/*/apps/lingo_desk.png  ({len(HICOLOR_SIZES)} sizes)")
+
+    web_svg = SVG_OUT / "web_app_icon.svg"
+    maskable_svg = SVG_OUT / "web_maskable_icon.svg"
+    render(web_svg, WEB / "favicon.png", 48)
+    for size in (192, 512):
+        render(web_svg, WEB_ICONS / f"Icon-{size}.png", size)
+        render(maskable_svg, WEB_ICONS / f"Icon-maskable-{size}.png", size)
+    # iOS masks the home-screen icon itself, so reuse the full-bleed master.
+    render(SVG_OUT / "ios_app_icon.svg", WEB_ICONS / "apple-touch-icon.png", 180)
+    # An SVG favicon stays sharp at any density; the PNGs above are fallback.
+    shutil.copyfile(SOURCE_MARK, WEB / "favicon.svg")
+    print("  web/favicon.{svg,png} + web/icons/*.png")
 
 
 if __name__ == "__main__":

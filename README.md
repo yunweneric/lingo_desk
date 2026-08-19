@@ -2,6 +2,8 @@
 
 **A desktop workspace for JSON localization files.**
 
+### 🌍 [**See LingoDesk &rarr;**](https://yunweneric.github.io/lingo_desk/)
+
 LingoDesk replaces the loop of opening `en.json`, `fr.json`, `es.json` side by
 side and hand-syncing keys between them. Point it at a project folder, edit
 every locale in one grid, let an AI fill the gaps, and write the files back
@@ -11,14 +13,11 @@ Built with **Flutter** — macOS, Windows, Linux, web and mobile from one
 codebase. Everything is stored on your machine; there is no backend and no
 account.
 
-![LingoDesk dashboard](./screenshots/dashboard.png)
-
 ---
 
 ## Contents
 
 - [Why](#why)
-- [Screenshots](#screenshots)
 - [Features](#features)
 - [Getting started](#getting-started)
 - [How it works](#how-it-works)
@@ -46,43 +45,6 @@ have absorbed years ago:
 
 LingoDesk turns the whole set into one table, shows you exactly what's missing,
 and writes valid nested JSON back out.
-
----
-
-## Screenshots
-
-### Translation editor
-
-Every locale in one grid. Keys stay grouped by their JSON structure, missing
-cells are called out, and a search box and **Missing only** filter narrow a few
-thousand rows to the handful you care about.
-
-![Translation editor](./screenshots/editor.png)
-
-### Apps
-
-Each project is an "app" with a source locale and a set of targets. The table
-shows coverage, file counts and status at a glance.
-
-![Apps](./screenshots/apps.png)
-
-### AI providers
-
-Bring your own key for Anthropic, OpenAI or Gemini. Keys are stored on your
-device and only ever sent to the provider they belong to. One key is active at
-a time and every AI action in the editor uses it.
-
-![AI providers](./screenshots/ai-providers.png)
-
-### Appearance
-
-Six palettes, each restyling the whole chassis rather than swapping an accent,
-plus light / dark / follow-system.
-
-![Appearance](./screenshots/appearance.png)
-
-> Screenshots are captured from a real build and framed with
-> [`scripts/frame_screenshots.py`](scripts/frame_screenshots.py).
 
 ---
 
@@ -380,18 +342,6 @@ against `.fvmrc`, which is the mismatch that has broken CI before. `build-window
 is the one job it can't cover — that needs a Windows runner.
 
 See [.github/workflows/README.md](.github/workflows/README.md) for details.
-
-### Regenerating screenshots
-
-Screenshots in this README are real captures wrapped in a window frame:
-
-```bash
-python3 scripts/frame_screenshots.py raw.png screenshots/editor.png \
-    --width 1500 --title "LingoDesk — Translation editor"
-```
-
-The script needs Pillow (`python3 -m pip install --user Pillow`) and emits a
-transparent PNG, so one file reads correctly on GitHub's light and dark themes.
 
 ---
 
