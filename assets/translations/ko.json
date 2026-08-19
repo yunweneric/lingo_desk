@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "API 키 추가",
+    "addProviderKey": "{provider} 키 추가",
+    "col": {
+      "added": "추가일",
+      "apiKey": "API 키",
+      "model": "모델",
+      "provider": "제공업체"
+    },
+    "createKeyAt": "{console}에서 키를 만드세요.",
+    "defaultModel": "기본값",
+    "delete": {
+      "activeBody": "지금 번역에 쓰이는 키 「{label}」을(를) 제거합니다. 저장된 다른 키가 대신 쓰이며, 없다면 새 키를 추가할 때까지 AI 번역이 멈춥니다.",
+      "body": "이 기기에서 「{label}」을(를) 제거합니다. 키 자체는 {console}에서 그대로 유효합니다.",
+      "title": "API 키를 삭제할까요?"
+    },
+    "editKey": "API 키 편집",
+    "field": {
+      "name": "이름",
+      "nameHelp": "선택 사항 — 표에서 이 키를 부르는 이름입니다."
+    },
+    "hideKey": "키 숨기기",
+    "key": {
+      "actions": "키 작업",
+      "active": "사용 중",
+      "required": "계속하려면 API 키를 붙여넣으세요.",
+      "test": "연결 테스트",
+      "use": "번역에 사용"
+    },
+    "pickModel": "추천 모델 선택",
+    "pickProvider": "이 키는 어느 제공업체의 것인가요?",
+    "saveKey": "키 추가",
+    "showKey": "키 표시",
+    "status": {
+      "detail": "{provider} · {model} · 편집기의 모든 AI 작업이 이 키를 사용합니다.",
+      "noKey": "아직 준비된 키가 없습니다",
+      "noKeyDetail": "API 키를 추가하면 편집기가 빠진 번역을 대신 채워 줍니다.",
+      "translatingWith": "{label}(으)로 번역 중"
+    },
+    "storage": {
+      "plain": "이 빌드는 시스템 키체인에 접근할 수 없어, 키가 다른 로컬 설정과 함께 평문으로 저장됩니다. 키는 이 기기에만 남고, 해당 제공업체에만 전송됩니다.",
+      "secure": "키는 이 기기의 키체인에 저장되며, 해당 제공업체에만 전송됩니다."
+    },
+    "table": {
+      "empty": "아직 API 키가 없습니다. 하나 추가하면 편집기에서 번역할 수 있습니다.",
+      "keyCount": {
+        "one": "키 1개",
+        "other": "키 {}개"
+      },
+      "noKeys": "아직 키 없음",
+      "range": "{total}개 중 {start}-{end}"
+    },
+    "toast": {
+      "activeTitle": "이제 번역에 {label}을(를) 사용합니다",
+      "addedBody": "{provider}(으)로 번역할 준비가 되었습니다.",
+      "addedTitle": "키를 추가했습니다",
+      "deletedBody": "{label}을(를) 이 기기에서 제거했습니다.",
+      "deletedNamedTitle": "{label} 삭제됨",
+      "deletedTitle": "키를 삭제했습니다",
+      "promotedBody": "이제 번역에 {label}을(를) 사용합니다.",
+      "testFailedTitle": "{label} 실패",
+      "testPassedBody": "{provider}이(가) 키를 승인했습니다.",
+      "testPassedTitle": "{label} 연결됨",
+      "updatedBody": "{label}의 변경 사항을 저장했습니다.",
+      "updatedTitle": "키를 업데이트했습니다"
+    }
+  },
+  "appSettings": {
+    "appIcon": "앱 아이콘",
+    "appIconHelp": "선택 사항입니다. 없으면 앱 이름의 머리글자가 표시됩니다.",
+    "appIconNote": "PNG, JPG, WebP를 지원합니다. 이미지는 {size}px로 조정되어 앱과 함께 저장되므로 원본 파일은 옮겨도 됩니다.",
+    "appName": "앱 이름",
+    "appNameHint": "예: 고객 포털",
+    "createApp": "앱 만들기",
+    "general": "일반",
+    "generalSubtitle": "이 앱을 어떻게 부르고, 어떤 언어에서 번역하는지.",
+    "localeCount": {
+      "one": "1개 언어",
+      "other": "{}개 언어"
+    },
+    "metaNoTargets": "아직 없음",
+    "metaSource": "원본",
+    "metaTargets": "대상",
+    "metaUpdated": "마지막 업데이트",
+    "replaceIcon": "아이콘 교체",
+    "saveChanges": "변경 사항 저장",
+    "savedToast": "「{name}」을(를) 저장했습니다.",
+    "selectAll": "모두 선택",
+    "selectedCount": "{total}개 중 {selected}개 선택",
+    "sourceLanguage": "원본 언어",
+    "sourceLanguageHelp": "키가 작성된 기준 언어입니다.",
+    "sourceNotTarget": "원본 언어는 대상 언어가 될 수 없습니다.",
+    "targetLanguages": "대상 언어",
+    "targetLanguagesHelp": "번역해 넣고 싶은 언어입니다.",
+    "targetLanguagesNote": "추가한 키는 선택한 모든 언어에서 대기 상태가 됩니다. 언어를 빼면 편집기에서 해당 열이 숨겨지지만, 이미 넣은 번역은 그대로 남습니다.",
+    "targetLanguagesSubtitle": "이 앱이 번역되는 언어입니다.",
+    "uploadIcon": "아이콘 업로드"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total}개 파일 완료 - {updated}"
+    },
+    "created": {
+      "body": "기존 JSON 번역 파일을 지금 업로드할까요? 나중에 대시보드에서도 할 수 있습니다.",
+      "later": "나중에",
+      "title": "「{name}」을(를) 만들었습니다",
+      "upload": "파일 업로드"
+    },
+    "delete": {
+      "body": "앱과 모든 번역이 영구히 삭제됩니다. 되돌릴 수 없습니다.",
+      "title": "「{name}」을(를) 삭제할까요?"
+    },
+    "deletedNamedToast": "「{name}」을(를) 삭제했습니다.",
+    "deletedToast": "앱을 삭제했습니다.",
+    "empty": {
+      "message": "LingoDesk에 프로젝트 폴더를 알려주면 그 안의 번역 파일을 가져옵니다. 원본 언어와 대상 언어를 지정해 직접 만들 수도 있습니다.",
+      "title": "첫 앱을 만들어 보세요"
+    },
+    "importProject": "프로젝트 가져오기",
+    "menu": {
+      "deleteApp": "앱 삭제",
+      "openEditor": "편집기 열기",
+      "uploadFiles": "파일 업로드"
+    },
+    "newApp": "새 앱",
+    "searchHint": "앱 검색",
+    "status": {
+      "complete": "완료",
+      "missing": "누락",
+      "new": "신규"
+    },
+    "summary": {
+      "filesComplete": "완료된 파일",
+      "missingStrings": "빠진 문자열",
+      "overallCoverage": "전체 진행률",
+      "subtitle": "모든 앱과 언어의 번역 파일",
+      "title": "작업 공간 합계"
+    },
+    "table": {
+      "colApp": "앱",
+      "colFiles": "파일",
+      "colLanguages": "언어",
+      "colProgress": "진행률",
+      "colStatus": "상태",
+      "colUpdated": "업데이트",
+      "complete": "완료",
+      "hideLanguages": "언어 숨기기",
+      "less": "접기",
+      "noMatches": "검색과 일치하는 앱이 없습니다.",
+      "searchSubtitle": "{total}개 중 {matches}개가 「{query}」와 일치",
+      "showLanguages": "모든 언어 보기",
+      "subtitle": "현재 현지화 작업 공간"
+    }
+  },
+  "common": {
+    "back": "뒤로",
+    "cancel": "취소",
+    "clear": "지우기",
+    "close": "닫기",
+    "delete": "삭제",
+    "dismiss": "닫기",
+    "edit": "편집",
+    "errorPrefix": "오류: {message}",
+    "missingCount": {
+      "one": "1개 누락",
+      "other": "{}개 누락"
+    },
+    "more": "더 보기",
+    "next": "다음",
+    "nextPage": "다음 페이지",
+    "previousPage": "이전 페이지",
+    "remove": "제거",
+    "retry": "다시 시도",
+    "rows": "행 수",
+    "selectLanguage": "언어 선택",
+    "selectOption": "항목 선택",
+    "theme": "테마",
+    "themeDark": "다크",
+    "themeLight": "라이트",
+    "themeSystem": "시스템"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "앱 1개",
+      "other": "앱 {}개"
+    },
+    "appsShortcutSubtitle": "{apps} - 번역 파일 {complete}/{total}개 완료",
+    "coverage": {
+      "empty": "앱을 만들면 여기에서 진행률을 볼 수 있습니다.",
+      "noData": "아직 번역 데이터가 없습니다. JSON 파일을 업로드해 시작하세요.",
+      "subtitle": "앱별 대상 문자열의 번역 비율",
+      "summary": "{translated}개를 번역했습니다. 활성 대상 언어에서 아직 {missing}개가 빠져 있습니다.",
+      "title": "앱별 진행률"
+    },
+    "empty": {
+      "message": "앱은 한 프로젝트의 번역 파일을 모아 둡니다. 원본 언어를 정하고 대상 언어를 골라 번역을 시작하세요.",
+      "title": "첫 앱을 만들어 보세요"
+    },
+    "health": {
+      "allTranslated": "모든 앱이 완전히 번역되었습니다.",
+      "empty": "아직 대상 언어가 없습니다.",
+      "nextReview": "다음 확인 대상: {name}",
+      "nextReviewPrefix": "다음 확인 대상: ",
+      "subtitle": "대상 언어별 진행률",
+      "title": "언어 상태"
+    },
+    "metric": {
+      "acrossApps": "모든 앱 합계",
+      "allClear": "이상 없음",
+      "coverage": "진행률",
+      "localWorkspace": "로컬 작업 공간",
+      "missing": "누락",
+      "needsReview": "확인 필요",
+      "targetLocales": {
+        "one": "대상 언어 1개",
+        "other": "대상 언어 {}개"
+      },
+      "totalKeys": "전체 키"
+    },
+    "stat": {
+      "keys": "키",
+      "locales": "언어"
+    },
+    "subtitle": "진행률을 확인하고 빠진 문자열을 검토한 뒤 현지화 작업으로 돌아가세요.",
+    "title": "번역 대시보드",
+    "viewAllApps": "모든 앱 보기"
+  },
+  "editor": {
+    "addKey": "키 추가",
+    "addKeyHint": "지금 있는 내용만 채워도 됩니다. 비워 둔 칸은 누락으로 남고, 나중에 표에서 번역할 수 있습니다.",
+    "aiAllComplete": "모든 대상 언어가 완료되었습니다.",
+    "aiAlreadyRunning": "이미 번역 작업이 진행 중입니다.",
+    "aiCanceledEmpty": "아무것도 저장되기 전에 취소되었습니다.",
+    "aiDialogBody": "빈 칸만 채웁니다. 이미 있는 번역을 덮어쓰는 일은 없습니다.",
+    "aiFailedCount": {
+      "one": "1개는 번역하지 못했습니다.",
+      "other": "{}개는 번역하지 못했습니다."
+    },
+    "aiFailedCountReason": {
+      "one": "1개는 번역하지 못했습니다({error}).",
+      "other": "{}개는 번역하지 못했습니다({error})."
+    },
+    "aiFinishing": "현재 배치를 마무리하는 중…",
+    "aiNotConfiguredBody": "먼저 「설정 - AI 제공업체」에서 API 키를 추가하세요.",
+    "aiNotConfiguredTitle": "AI가 설정되지 않았습니다",
+    "aiNothingHere": "여기에는 더 번역할 것이 없습니다.",
+    "aiNothingLeft": "더 번역할 것이 없습니다",
+    "aiNothingTranslated": "아무것도 번역되지 않았습니다.",
+    "aiProgress": "{label} 번역 중 · {total}개 중 {done}개",
+    "aiRunning": "AI 번역 진행 중",
+    "aiTranslate": "AI로 번역",
+    "aiTranslateMissing": {
+      "one": "빠진 문자열 1개를 AI로 번역",
+      "other": "빠진 문자열 {}개를 AI로 번역"
+    },
+    "aiTranslateRow": "이 행을 AI로 번역",
+    "aiTranslatedCanceled": {
+      "one": "취소 전 1개를 번역했습니다.",
+      "other": "취소 전 {}개를 번역했습니다."
+    },
+    "aiTranslatedDone": {
+      "one": "1개를 번역했습니다.",
+      "other": "{}개를 번역했습니다."
+    },
+    "aiUsing": "{provider} · {model} 사용",
+    "clearAll": "선택 해제",
+    "clickToHide": "클릭하면 다른 언어를 숨깁니다",
+    "clickToShow": "클릭하면 다른 언어를 표시합니다",
+    "copiedToast": "「{key}」을(를) 클립보드에 복사했습니다.",
+    "copyKey": "키 복사",
+    "deleteKey": "키 삭제",
+    "deleteKeyBody": "「{key}」을(를) 모든 언어에서 제거합니다. 되돌릴 수 없습니다.",
+    "deleteKeyTitle": "키를 삭제할까요?",
+    "empty": "아직 키가 없습니다. JSON 파일을 업로드하거나 첫 키를 추가하세요.",
+    "export": "내보내기",
+    "exportCanceled": "내보내기를 취소했습니다.",
+    "exportChooseDestination": "대상 위치 선택",
+    "exportDownload": "다운로드",
+    "exportFolderSummary": "다음 단계에서 폴더를 고릅니다. 언어마다 파일 하나씩 저장됩니다.",
+    "exportNoProject": "먼저 프로젝트 폴더를 가져오세요",
+    "exportOverwrite": "파일 덮어쓰기",
+    "exportProjectSummary": "{path}에 기록해 해당 파일들을 대체합니다.",
+    "exportSaveTo": "{name}에 저장",
+    "exportSaveToProject": "프로젝트에 저장",
+    "exportSavedToast": "{files}을(를) {name}에 저장했습니다",
+    "exportToFolder": "폴더로 내보내기",
+    "exportToFolderEllipsis": "폴더로 내보내기…",
+    "exportZip": "ZIP 다운로드",
+    "exportZipHint": "다운로드 폴더에 압축",
+    "exportZipSummary": "다운로드 폴더에 {file}(으)로 묶습니다.",
+    "exportZippedToast": "{files}을(를) 다운로드 폴더에 압축했습니다",
+    "exportedToast": "{files}을(를) 내보냈습니다",
+    "fileCount": {
+      "one": "파일 1개",
+      "other": "파일 {}개"
+    },
+    "hiddenLanguages": {
+      "one": "언어 1개 더",
+      "other": "언어 {}개 더"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "각 행 안에 언어 1개 더",
+      "other": "각 행 안에 언어 {}개 더"
+    },
+    "hideOtherLanguages": "다른 언어 숨기기",
+    "keyActions": "키 작업",
+    "keyAddedToast": "키 「{key}」을(를) 추가했습니다.",
+    "keyDeletedToast": "키 「{key}」을(를) 삭제했습니다.",
+    "keyHelper": "점 표기법으로 키를 중첩된 JSON으로 묶습니다.",
+    "keyLabel": "키",
+    "languageCount": {
+      "one": "1개 언어",
+      "other": "{}개 언어"
+    },
+    "languageSourceSuffix": "{language}(원본)",
+    "missingOnly": "누락만 보기",
+    "missingOnlyCount": "누락만 보기({count})",
+    "noKeys": "키 없음",
+    "noMatches": "현재 필터와 일치하는 키가 없습니다.",
+    "noProvider": "제공업체 없음",
+    "paginationSummary": "{lines}행 중 {start}-{end}행 - 키 {keys}개",
+    "searchHint": "키와 값 검색",
+    "showInFolder": "폴더에서 보기",
+    "sourceText": "원문",
+    "title": "편집기",
+    "translate": "번역",
+    "translateCount": {
+      "one": "1개 번역",
+      "other": "{}개 번역"
+    },
+    "translateWithAi": "AI로 번역",
+    "translatingHint": "번역 중…",
+    "translationOptional": "번역 - 선택",
+    "translations": "번역"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "「설정 - AI 제공업체」에서 API 키를 추가하세요.",
+      "blocked": "{provider}이(가) 이 배치를 차단했습니다({reason}).",
+      "emptyResponse": "{provider}이(가) 빈 응답을 보냈습니다.",
+      "keyRejected": "{provider} API 키가 거부되었습니다. 「설정 - AI 제공업체」에서 확인하세요.",
+      "malformed": "번역 제공업체가 잘못된 JSON을 보냈습니다.",
+      "modelNotFound": "{provider} 모델을 찾을 수 없습니다. 「설정 - AI 제공업체」에서 모델 이름을 확인하세요.",
+      "noConnection": "번역 제공업체에 연결할 수 없습니다.",
+      "noKey": "먼저 API 키를 입력하세요.",
+      "refused": "{provider}이(가) 이 배치의 번역을 거부했습니다. 건너뛰거나 다른 모델을 사용해 보세요.",
+      "stoppedEarly": "{provider}이(가) 도중에 멈췄습니다({reason}).",
+      "timeout": "번역 제공업체 응답 시간이 초과되었습니다.",
+      "unexpectedResponse": "{provider}이(가) 예상치 못한 응답을 보냈습니다."
+    },
+    "app": {
+      "nameEmpty": "앱 이름은 비워 둘 수 없습니다.",
+      "noTargetLanguage": "대상 언어를 하나 이상 선택하세요.",
+      "sourceIsTarget": "원본 언어는 대상 언어가 될 수 없습니다."
+    },
+    "cache": {
+      "appListCorrupt": "저장된 앱 목록이 손상되었습니다: {error}",
+      "appNotFound": "앱을 찾을 수 없습니다.",
+      "appNotFoundId": "앱을 찾을 수 없습니다: {id}",
+      "translationsCorrupt": "저장된 번역이 손상되었습니다: {error}",
+      "writeAppList": "앱 목록을 저장하지 못했습니다.",
+      "writeTranslations": "번역을 저장하지 못했습니다."
+    },
+    "editor": {
+      "invalidKey": "문자, 숫자, 「_」 또는 「-」를 사용한 점 표기법으로 입력하세요(예: nav.home).",
+      "keyExists": "키 「{key}」이(가) 이미 있습니다.",
+      "keyNotFound": "키를 찾을 수 없습니다: {key}"
+    },
+    "export": {
+      "chooseFolder": "내보낼 폴더를 선택하세요.",
+      "noDownloadsFolder": "이 플랫폼에서 다운로드 폴더를 찾지 못했습니다.",
+      "noProjectFolder": "이 앱은 프로젝트 폴더에서 가져온 것이 아니어서 다시 기록할 위치가 없습니다.",
+      "nothingToExport": "아직 내보낼 키가 없습니다.",
+      "selectLanguage": "내보낼 언어를 하나 이상 선택하세요."
+    },
+    "file": {
+      "folderPickerOpen": "폴더 선택 창을 열지 못했습니다: {error}",
+      "launchFailed": "{executable}을(를) 실행하지 못했습니다: {error}",
+      "openPath": "{path}을(를) 열지 못했습니다: {error}",
+      "pickerOpen": "파일 선택 창을 열지 못했습니다: {error}",
+      "projectFolderRead": "프로젝트 폴더를 읽지 못했습니다: {error}",
+      "revealUnsupported": "이 플랫폼에서는 폴더 표시를 지원하지 않습니다.",
+      "save": "{file}을(를) 저장하지 못했습니다: {error}",
+      "unknownLanguage": "이 파일이 어느 언어인지 판단할 수 없습니다. 언어 코드로 이름을 짓거나 언어 폴더에 넣으세요.",
+      "unsupportedPlatform": "이 플랫폼에서는 사용할 수 없습니다.",
+      "writeFolder": "{path}에 기록하지 못했습니다: {error}"
+    },
+    "image": {
+      "convert": "이 이미지를 PNG로 변환하지 못했습니다.",
+      "notAnImage": "이 파일은 LingoDesk가 읽을 수 있는 이미지가 아닙니다: {error}",
+      "pickerOpen": "이미지 선택 창을 열지 못했습니다: {error}",
+      "tooLarge": "8MB보다 작은 이미지를 선택하세요.",
+      "unreadable": "이 이미지를 읽지 못했습니다."
+    },
+    "import": {
+      "noFiles": "가져올 파일이 없습니다."
+    },
+    "json": {
+      "invalid": "잘못된 JSON: {error}",
+      "noKeys": "이 파일에는 번역 키가 없습니다.",
+      "notObject": "파일 최상위는 JSON 객체여야 합니다."
+    }
+  },
+  "landing": {
+    "apkLink": "또는 Android APK 다운로드 · {size}  →",
+    "askingGithub": "GitHub에 최신 릴리스를 확인하는 중…",
+    "checkingBuilds": "빌드를 찾는 중…",
+    "codeMissing": "누락",
+    "cta": {
+      "apk": "APK 다운로드",
+      "latest": "최신 빌드 다운로드",
+      "macos": "macOS용 다운로드",
+      "windows": "Windows용 다운로드"
+    },
+    "download": {
+      "allReleases": "GitHub의 모든 릴리스와 변경 기록  →",
+      "body": "MIT 라이선스의 무료 오픈소스입니다. 계정도, 체험 기간도, 텔레메트리도 없습니다.",
+      "copied": "복사됨",
+      "copy": "복사",
+      "eyebrow": "다운로드",
+      "latest": "최신",
+      "latestBuildRuns": "최근 빌드 실행",
+      "noBuildBody": "macOS, Windows, Android 설치 파일은 GitHub Actions가 빌드하며, 버전 태그가 푸시되는 즉시 릴리스에 첨부됩니다. 그때까지는 소스에서 실행해도 2분 정도면 됩니다.",
+      "noBuildTitle": "아직 패키지 빌드가 공개되지 않았습니다",
+      "published": "{date} 공개",
+      "releasesOnGithub": "GitHub 릴리스",
+      "runFromSource": "또는 여섯 플랫폼 어디서든 소스에서 실행하세요",
+      "runFromSourceNote": "device를 windows, linux, chrome 또는 연결된 휴대폰으로 바꾸면 됩니다. 프로젝트는 .fvmrc에 Flutter 버전을 고정해 둡니다.",
+      "title": "LingoDesk 받기.",
+      "tryAgain": "다시 시도",
+      "unreachableBody": "{reason} 릴리스 페이지를 살펴보거나 소스에서 빌드할 수 있습니다.",
+      "unreachableTitle": "GitHub에 연결하지 못했습니다",
+      "unsignedNote": "데스크톱 빌드는 서명되지 않았습니다. macOS에서는 처음 실행할 때 앱을 우클릭해 「열기」를 선택하고, Windows에서는 「추가 정보」 후 「실행」을 선택하세요.",
+      "version": "버전 {version}"
+    },
+    "features": {
+      "body": "LingoDesk는 목적이 분명한 데스크톱 도구입니다. 좌석과 대시보드가 딸린 번역 플랫폼이 아닙니다.",
+      "eyebrow": "기능",
+      "f1Body": "중첩된 JSON은 점 표기 키로 펼쳐져, 문자열 하나와 모든 번역이 가로로 읽히는 한 행에 놓입니다.",
+      "f1Title": "모든 언어를 담는 하나의 표",
+      "f2Body": "언어별 실시간 진행률과 「누락만 보기」 필터가 수백 개의 키를 아직 비어 있는 몇 개로 좁혀 줍니다.",
+      "f2Title": "놓치는 건 버그가 아니라 빠진 문자열",
+      "f3Body": "빈 칸은 Anthropic, OpenAI, Gemini로 한 번에 번역하세요. 당신의 키, 당신의 계정, 당신의 청구서 — 중간을 거치지 않습니다.",
+      "f3Title": "내 AI 키로 번역",
+      "f4Body": "백엔드도, 텔레메트리도, 가입도 없습니다. 프로젝트는 내 컴퓨터에 남고 API 키는 OS의 보안 저장소로 들어갑니다.",
+      "f4Title": "로컬 우선, 그리고 비공개",
+      "f5Body": "프로젝트 폴더를 훑어 기존 언어 파일을 가져오고, 중첩 구조 그대로 저장소로 내보냅니다.",
+      "f5Title": "제자리에서 가져오고 내보내기",
+      "f6Body": "하루 종일 봐도 괜찮은 작업 공간 — 각 테마는 강조색만 바꾼 게 아니라 완전한 팔레트입니다.",
+      "f6Title": "여섯 가지 테마, 라이트와 다크",
+      "title": "일에 필요한 건 모두, 필요 없는 건 하나도."
+    },
+    "flutter": {
+      "body": "LingoDesk는 Dart로 한 번 작성해 macOS, Windows, Linux, Android, iOS, 웹으로 컴파일합니다. 이 페이지는 Flutter 데모를 붙인 HTML이 아니라, 같은 프로젝트·같은 디자인 토큰·같은 위젯을 지금 보고 있는 브라우저용으로 컴파일한 것입니다.",
+      "eyebrow": "Flutter와 Dart로 제작",
+      "fromSource": "소스에서",
+      "markBody": "위 로고는 CustomPainter가 캔버스에 둥근 사각형과 원 두 개를 그린 것입니다. 그래서 어떤 크기에서도 선명하고, 선택한 테마의 강조색을 따릅니다.",
+      "markTitle": "이미지 파일이 아닙니다",
+      "pill": "지금 실제로 동작 중",
+      "prebuilt": "사전 빌드",
+      "proofBody": "LingoDesk에 들어 있는 여섯 팔레트로, 데스크톱 빌드와 같은 테마 확장에서 읽어 옵니다. 하나 고르면 사이트 전체가 다시 칠해집니다 — 새로고침도, 스타일시트 교체도 없습니다.",
+      "proofTitle": "이 페이지의 모든 색은 앱에서 나옵니다.",
+      "statCodebase": "코드베이스",
+      "statJavascript": "직접 작성한 JavaScript 줄 수",
+      "statTargets": "컴파일 대상",
+      "title": "하나의 코드베이스. 여섯 플랫폼.\n이 페이지까지 포함해서.",
+      "youAreHere": "지금 여기"
+    },
+    "footer": {
+      "issues": "이슈",
+      "licence": "MIT 라이선스",
+      "note": "이 페이지는 제품과 같은 저장소에서 빌드한 Flutter 웹 앱입니다.",
+      "readme": "Readme",
+      "releases": "릴리스"
+    },
+    "getStarted": "시작하기",
+    "hero": {
+      "body": "LingoDesk는 en.json, fr.json, es.json이 든 폴더를 하나의 작업 공간으로 바꿉니다. 키는 행, 언어는 열, 빠진 문자열은 절대 눈에 안 띌 수 없습니다.",
+      "pill": "오픈소스 · MIT · 계정도 백엔드도 없이",
+      "title": "잘 정돈된 책상 하나에서\n모든 언어를 번역하세요."
+    },
+    "localeStrip": "20개 언어 기본 제공 · 다른 언어는 설정에서 추가",
+    "nav": {
+      "download": "다운로드",
+      "features": "기능",
+      "flutter": "Flutter",
+      "howItWorks": "작동 방식",
+      "language": "언어",
+      "menu": "메뉴",
+      "screens": "화면",
+      "why": "왜"
+    },
+    "openIssue": "이슈 남기기",
+    "openSource": {
+      "body": "MIT 라이선스입니다. 포크하거나 팀 내부에서 쓰거나, 가장 거슬리는 흐름에 대해 이슈를 남겨 주세요. 로드맵은 쓰는 사람들이 만듭니다.",
+      "title": "언제까지나 무료, 소스도 바로 거기에."
+    },
+    "preview": {
+      "allTranslated": "모든 언어가 완전히 번역되었습니다.",
+      "appearanceNote": "이건 진짜 설정입니다 — 이 창만이 아니라 페이지 전체를 다시 칠합니다.",
+      "editorWindow": "번역 편집기",
+      "keysNote": "키는 OS의 보안 저장소에 있습니다. 이 기기에만 남고, 해당 제공업체에만 전송됩니다.",
+      "missingStrings": {
+        "one": "빠진 문자열 1개",
+        "other": "빠진 문자열 {}개"
+      },
+      "noMatches": "「{query}」와 일치하는 키가 없습니다.",
+      "nothingMissing": "빠진 것이 없습니다 — 모든 문자열이 번역되었습니다.",
+      "projects": "프로젝트",
+      "semantics": "LingoDesk 대시보드: 작업 공간 전체의 진행률, 키 수, 언어 상태."
+    },
+    "problem": {
+      "afterEyebrow": "LingoDesk와 함께",
+      "afterTitle": "표 하나. 빈칸이 스스로 드러납니다.",
+      "beforeEyebrow": "LingoDesk 없이",
+      "beforeTitle": "파일 셋, 탭 셋, 그리고 리뷰에서야 발견되는 빠진 문자열 하나.",
+      "body": "문자열 하나를 추가하려면 모든 언어 파일을 열고 하나도 빠뜨리지 말아야 합니다. LingoDesk는 그것을 한 행으로 만듭니다.",
+      "exportNote": "내보내기는 앱이 기대하는 그대로, 파일 단위로 중첩 구조를 되살립니다.",
+      "eyebrow": "문제",
+      "title": "키 하나만 추가해도 현지화 파일은 어긋나기 시작합니다."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · 언제까지나 무료",
+    "releasePending": "아직 패키지 빌드가 없습니다 — 명령 두 줄로 소스에서 실행하세요.",
+    "releasePickBuild": "v{version}이(가) 나왔습니다 — 아래에서 빌드를 고르세요.",
+    "releaseUnavailable": "{reason} 릴리스 페이지를 확인해 보세요.",
+    "seeAllDownloads": "모든 다운로드 보기",
+    "starOnGithub": "GitHub에서 스타 주기",
+    "starOnGithubCount": "GitHub 스타 · {stars}",
+    "starOnGithubTooltip": "GitHub에서 LingoDesk에 스타를 남기세요",
+    "steps": {
+      "eyebrow": "작동 방식",
+      "s1Body": "앱마다 하나씩. 원본 언어는 한 번만 고르고, 실제로 출시하는 대상 언어를 정합니다.",
+      "s1Title": "작업 공간 만들기",
+      "s2Body": "언어 폴더를 지정하세요. 기존 JSON은 펼쳐지고, 선언한 언어와 대조된 뒤 불러옵니다.",
+      "s2Title": "가진 것부터 가져오기",
+      "s3Body": "빠진 것만 걸러 직접 입력하거나, 한 묶음을 AI 제공업체에 맡기세요. 수정은 작업 중에 저장됩니다.",
+      "s3Title": "빈칸 채우기",
+      "s4Body": "중첩 구조는 언어별로 다시 만들어져, 코드 옆으로 돌려놓고 커밋할 준비가 됩니다.",
+      "s4Title": "저장소로 되돌려 내보내기",
+      "title": "네 단계, 그리고 다시 코드로."
+    },
+    "switchToDark": "다크로 전환",
+    "switchToLight": "라이트로 전환",
+    "tour": {
+      "aiProviders": "Anthropic, OpenAI, Gemini의 키를 직접 준비하세요. 하나를 고르면 편집기의 모든 AI 작업이 그 키를 씁니다.",
+      "appearance": "여섯 가지 완전한 팔레트와 라이트/다크 전환. 이건 실제 설정이지 그 그림이 아닙니다 — 테마를 고르면 사이트 전체가 다시 칠해집니다.",
+      "body": "스크린샷이 아닙니다. 이 페이지에 컴파일된 앱 자체입니다 — 마음껏 눌러 보세요.",
+      "dashboard": "앱을 여는 순간 프로젝트별 진행률, 키 수, 언어 상태가 보입니다. 숫자는 편집기가 쓰는 바로 그 칸에서 나옵니다 — 하나 채우고 움직이는 걸 지켜보세요.",
+      "editor": "키는 왼쪽, 언어는 위쪽. 모든 칸이 실제 입력란입니다. 번역을 입력하고, 검색하고, 아직 빠진 것만 걸러낼 수 있습니다.",
+      "eyebrow": "안쪽 살펴보기",
+      "pill": "실시간 · 여기서 한 작업은 저장되지 않습니다",
+      "projects": "앱마다 작업 공간 하나, 각자 원본 언어와 대상 언어를 가집니다. 행을 클릭하면 열립니다.",
+      "title": "데스크톱 앱처럼 만들었습니다. 실제로 그렇기 때문입니다."
+    },
+    "viewOnGithub": "GitHub에서 보기",
+    "warning": {
+      "macos": "서명되지 않은 빌드입니다 — 처음 실행할 때 앱을 우클릭해 「열기」를 선택하세요.",
+      "windows": "서명되지 않은 빌드입니다 — SmartScreen에서 「추가 정보」 후 「실행」을 선택하세요."
+    }
+  },
+  "language": {
+    "ar": "아랍어",
+    "cs": "체코어",
+    "de": "독일어",
+    "en": "영어",
+    "es": "스페인어",
+    "fr": "프랑스어",
+    "hi": "힌디어",
+    "it": "이탈리아어",
+    "ja": "일본어",
+    "ko": "한국어",
+    "nl": "네덜란드어",
+    "pl": "폴란드어",
+    "pt": "포르투갈어",
+    "ro": "루마니아어",
+    "ru": "러시아어",
+    "sv": "스웨덴어",
+    "tr": "터키어",
+    "uk": "우크라이나어",
+    "vi": "베트남어",
+    "zh": "중국어"
+  },
+  "nav": {
+    "aiProviders": "AI 제공업체",
+    "appearance": "화면",
+    "apps": "앱",
+    "dashboard": "대시보드",
+    "group": {
+      "settings": "설정",
+      "workspace": "작업 공간"
+    },
+    "import": "가져오기",
+    "languages": "언어",
+    "localStorage": "로컬 저장소",
+    "profile": "프로필",
+    "settings": "설정"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "로컬 우선",
+      "locales": "20개 언어",
+      "nestedJson": "중첩 JSON"
+    },
+    "skip": "건너뛰기",
+    "stage": {
+      "body": "계정도, 동기화도, 여기저기 흩어진 스프레드시트도 없습니다 - 내 컴퓨터에 있는 내 JSON뿐입니다.",
+      "title": "모든 언어 파일을 위한 책상 하나."
+    },
+    "startSetup": "설정 시작",
+    "step1": {
+      "body": "키는 행, 언어는 열입니다. 작업하는 동안 빠진 문자열은 계속 강조되어, 절반만 번역된 채로 나가는 일이 없습니다.",
+      "caption": "모든 권을 한 방에",
+      "eyebrow": "번역 작업 공간",
+      "highlight1": "키와 언어를 한 표에",
+      "highlight2": "아직 빠진 것만 걸러 보기",
+      "highlight3": "입력하는 대로 이 컴퓨터에 저장",
+      "title": "잘 정돈된 책상 하나에서 모든 언어를 번역하세요"
+    },
+    "step2": {
+      "body": "앱마다 작업 공간 하나: 원본 언어는 한 번만 정하고, 중요한 대상 언어만 챙기면서 진행률이 스스로 말하게 두세요.",
+      "caption": "색인되고, 이름 붙고, 찾기 쉽게",
+      "eyebrow": "프로젝트 설정",
+      "highlight1": "앱마다 전용 작업 공간",
+      "highlight2": "지원되는 20개 언어에서 대상 선택",
+      "highlight3": "앱별·언어별 진행률",
+      "title": "제품마다 언어를 정리된 상태로"
+    },
+    "step3": {
+      "body": "LingoDesk는 내보내기 전에 원래 키 구조를 되살리므로, 저장소에 도착하는 파일은 앱이 기대하는 바로 그 파일입니다.",
+      "caption": "모든 목적지가 안내판에",
+      "eyebrow": "내보낼 준비 완료",
+      "highlight1": "점 표기 키가 다시 중첩 객체로",
+      "highlight2": "언어를 고르고 원하는 곳에 저장",
+      "highlight3": "키 순서가 일정한 깔끔한 서식",
+      "title": "중첩된 JSON 파일을 앱으로 되돌리기"
+    },
+    "stepOf": "{total}단계 중 {step}단계"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "시스템 테마를 따르거나 직접 고르세요.",
+      "swatchActive": "선택",
+      "swatchBackground": "배경",
+      "swatchBrand": "브랜드",
+      "swatchCard": "카드",
+      "themeSubtitle": "여섯 가지 팔레트. 각각 강조색만이 아니라 앱 전체를 다시 꾸밉니다."
+    },
+    "defaults": {
+      "count": {
+        "one": "1개 언어가 미리 선택됩니다.",
+        "other": "{}개 언어가 미리 선택됩니다."
+      },
+      "empty": "아직 기본값이 없습니다 — 새 앱은 대상 언어 없이 시작합니다.",
+      "subtitle": "새 앱을 만들 때마다 미리 선택됩니다.",
+      "title": "기본 대상 언어"
+    },
+    "language": {
+      "note": "선택한 언어는 저장되고 곧바로 적용됩니다 — 메뉴, 대화 상자, 메시지가 함께 바뀝니다.",
+      "subtitle": "LingoDesk 자체가 표시되는 언어입니다.",
+      "title": "인터페이스 언어"
+    },
+    "profile": {
+      "email": "이메일",
+      "emailHint": "선택 사항",
+      "name": "표시 이름",
+      "nameHint": "로컬 작업 공간",
+      "note": "LingoDesk에는 계정이 없습니다. 이것은 로컬 작업 공간에 이름을 붙일 뿐입니다.",
+      "subtitle": "사이드바에 표시되며, 이 기기에만 저장됩니다."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "따뜻한 앰버와 구운 모래빛 중립색."
+    },
+    "graphite": {
+      "description": "색조는 아예 없이 — 대비가 강조 역할을 합니다."
+    },
+    "indigo": {
+      "description": "푸른 회색 중립색 위의 차분한 인디고."
+    },
+    "rose": {
+      "description": "부드러운 표면 위의 짙은 로즈."
+    },
+    "teal": {
+      "description": "기본 스타일 — 따뜻한 돌빛 위의 진한 청록."
+    },
+    "violet": {
+      "description": "옅은 자주빛 바탕 위의 선명한 바이올렛."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1일 전",
+      "other": "{}일 전"
+    },
+    "hoursAgo": {
+      "one": "1시간 전",
+      "other": "{}시간 전"
+    },
+    "justNow": "방금",
+    "minutesAgo": {
+      "one": "1분 전",
+      "other": "{}분 전"
+    },
+    "monthsAgo": {
+      "one": "1개월 전",
+      "other": "{}개월 전"
+    },
+    "weeksAgo": {
+      "one": "1주 전",
+      "other": "{}주 전"
+    },
+    "yearsAgo": {
+      "one": "1년 전",
+      "other": "{}년 전"
+    },
+    "yesterday": "어제"
+  },
+  "upload": {
+    "addFiles": "파일 추가",
+    "addFolder": "폴더 추가",
+    "addMore": "더 추가",
+    "backToApps": "앱 목록으로",
+    "backToEditor": "편집기로 돌아가기",
+    "browseFiles": "파일 찾아보기",
+    "chooseFolder": "폴더 선택",
+    "defaultImportName": "가져온 프로젝트",
+    "defaultProjectName": "가져온 번역",
+    "detectedLanguages": "감지된 언어",
+    "detectedLanguagesHint": "폴더나 파일을 더 추가하면 여기에 합쳐집니다.",
+    "exportsBackTo": "{path}(으)로 되돌려 내보냅니다",
+    "filesReady": {
+      "one": "파일 1개를 가져올 수 있습니다.",
+      "other": "파일 {}개를 가져올 수 있습니다."
+    },
+    "hero": {
+      "filesBody": "폴더를 훑거나 .json 파일을 직접 고르세요. 각 파일은 이름에 따라 언어와 짝지어집니다.",
+      "filesTitle": "번역 파일을 추가하세요",
+      "projectBody": "프로젝트(또는 아무 폴더)를 고르면 LingoDesk가 그 안의 번역 파일을 찾습니다 — .json 파일을 직접 골라도 됩니다.",
+      "projectTitle": "번역을 가져오세요"
+    },
+    "importAndOpen": "가져오고 편집기 열기",
+    "importedToast": "「{name}」(으)로 가져왔습니다.",
+    "keepOneLanguage": "가져오려면 언어를 하나 이상 남겨 두세요.",
+    "languageSource": "{language} - 원본",
+    "logo": "로고",
+    "namingRule": "각 파일은 언어 코드로 이름을 지으세요. 그 범위를 벗어나면 거부됩니다.",
+    "needValidFile": "가져오려면 올바른 파일을 하나 이상 추가하세요.",
+    "noFilesFound": "「{name}」에서 번역 파일을 찾지 못했습니다. /translation, /translations, /languages 폴더에서 .json 파일을 찾았습니다.",
+    "pickFilesTitle": "번역 파일 선택",
+    "pickFolderTitle": "프로젝트 폴더 선택",
+    "readySummary": "{languages}개 언어와 {keys}개 키를 가져올 수 있습니다.",
+    "removeLogo": "로고 제거",
+    "replaceLogo": "로고 교체",
+    "requiredLanguages": "필요한 언어",
+    "scanning": "검색 중…",
+    "skipToEditor": "편집기로 건너뛰기",
+    "sourceHelper": "나머지는 모두 번역해 넣을 수 있는 대상 언어가 됩니다.",
+    "stagedFiles": "준비된 파일",
+    "startOver": "처음부터 다시",
+    "stat": {
+      "translated": "번역됨"
+    },
+    "uploadLogo": "로고 업로드",
+    "whereWeLook": "찾는 위치",
+    "whereWeLookBody": "프로젝트 어디에 있든 /translation, /translations, /languages 폴더 안의 모든 .json 파일. 빌드와 의존성 폴더는 건너뜁니다."
+  }
+}

@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "添加 API 密钥",
+    "addProviderKey": "添加 {provider} 密钥",
+    "col": {
+      "added": "添加时间",
+      "apiKey": "API 密钥",
+      "model": "模型",
+      "provider": "服务商"
+    },
+    "createKeyAt": "请在 {console} 创建密钥。",
+    "defaultModel": "默认",
+    "delete": {
+      "activeBody": "这会移除「{label}」，也就是当前用于翻译的密钥。另一个已保存的密钥会接手；如果没有，AI 翻译会暂停，直到你添加新密钥。",
+      "body": "这会从本设备移除「{label}」。密钥本身在 {console} 上仍然有效。",
+      "title": "删除 API 密钥？"
+    },
+    "editKey": "编辑 API 密钥",
+    "field": {
+      "name": "名称",
+      "nameHelp": "可选 —— 你在表格中给这个密钥起的名字。"
+    },
+    "hideKey": "隐藏密钥",
+    "key": {
+      "actions": "密钥操作",
+      "active": "使用中",
+      "required": "请粘贴 API 密钥以继续。",
+      "test": "测试连接",
+      "use": "用于翻译"
+    },
+    "pickModel": "选择推荐模型",
+    "pickProvider": "这个密钥属于哪个服务商？",
+    "saveKey": "添加密钥",
+    "showKey": "显示密钥",
+    "status": {
+      "detail": "{provider} · {model} · 编辑器中的每个 AI 操作都会使用它。",
+      "noKey": "还没有可用的密钥",
+      "noKeyDetail": "添加一个 API 密钥，编辑器就能帮你补齐缺失的翻译。",
+      "translatingWith": "正在使用 {label} 翻译"
+    },
+    "storage": {
+      "plain": "此版本无法访问系统钥匙串，因此密钥会以纯文本形式与其他本地设置一起保存。它们只留在本设备上，并且只会发送给所属的服务商。",
+      "secure": "密钥保存在本设备的钥匙串中，并且只会发送给所属的服务商。"
+    },
+    "table": {
+      "empty": "还没有 API 密钥。添加一个即可在编辑器中翻译。",
+      "keyCount": {
+        "one": "1 个密钥",
+        "other": "{} 个密钥"
+      },
+      "noKeys": "暂无密钥",
+      "range": "第 {start}-{end} 项，共 {total}"
+    },
+    "toast": {
+      "activeTitle": "翻译现在使用 {label}",
+      "addedBody": "{provider} 已可用于翻译。",
+      "addedTitle": "已添加密钥",
+      "deletedBody": "已从本设备移除 {label}。",
+      "deletedNamedTitle": "已删除 {label}",
+      "deletedTitle": "已删除密钥",
+      "promotedBody": "翻译现在使用 {label}。",
+      "testFailedTitle": "{label} 失败",
+      "testPassedBody": "{provider} 已接受该密钥。",
+      "testPassedTitle": "{label} 已连接",
+      "updatedBody": "已保存对 {label} 的更改。",
+      "updatedTitle": "已更新密钥"
+    }
+  },
+  "appSettings": {
+    "appIcon": "应用图标",
+    "appIconHelp": "可选。没有图标时，应用会显示名称首字母。",
+    "appIconNote": "支持 PNG、JPG 或 WebP。图片会缩放到 {size} 像素并与应用一起保存，所以随后移动原文件也没问题。",
+    "appName": "应用名称",
+    "appNameHint": "例如：客户门户",
+    "createApp": "创建应用",
+    "general": "常规",
+    "generalSubtitle": "这个应用如何标识，以及它从哪种语言翻译。",
+    "localeCount": {
+      "one": "1 种语言",
+      "other": "{} 种语言"
+    },
+    "metaNoTargets": "暂无",
+    "metaSource": "源语言",
+    "metaTargets": "目标语言",
+    "metaUpdated": "最后更新",
+    "replaceIcon": "更换图标",
+    "saveChanges": "保存更改",
+    "savedToast": "已保存「{name}」。",
+    "selectAll": "全选",
+    "selectedCount": "已选 {selected} / {total}",
+    "sourceLanguage": "源语言",
+    "sourceLanguageHelp": "你的键所使用的基准语言。",
+    "sourceNotTarget": "源语言不能同时作为目标语言。",
+    "targetLanguages": "目标语言",
+    "targetLanguagesHelp": "你想翻译成的语言。",
+    "targetLanguagesNote": "你添加的每个键都会为所选的每种语言排队。移除某种语言会隐藏它在编辑器中的列；已有的翻译仍会保留。",
+    "targetLanguagesSubtitle": "这个应用会被翻译成的语言。",
+    "uploadIcon": "上传图标"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} 个文件已完成 - {updated}"
+    },
+    "created": {
+      "body": "现在要上传你已有的 JSON 翻译文件吗？也可以稍后在仪表板中操作。",
+      "later": "稍后",
+      "title": "已创建「{name}」",
+      "upload": "上传文件"
+    },
+    "delete": {
+      "body": "这会永久删除该应用及其全部翻译，且无法撤销。",
+      "title": "删除「{name}」？"
+    },
+    "deletedNamedToast": "已删除「{name}」。",
+    "deletedToast": "已删除应用。",
+    "empty": {
+      "message": "把项目文件夹指给 LingoDesk，它会导入其中找到的翻译文件；也可以手动创建，设定源语言和目标语言。",
+      "title": "创建你的第一个应用"
+    },
+    "importProject": "导入项目",
+    "menu": {
+      "deleteApp": "删除应用",
+      "openEditor": "打开编辑器",
+      "uploadFiles": "上传文件"
+    },
+    "newApp": "新建应用",
+    "searchHint": "搜索应用",
+    "status": {
+      "complete": "已完成",
+      "missing": "有缺失",
+      "new": "新建"
+    },
+    "summary": {
+      "filesComplete": "已完成文件",
+      "missingStrings": "缺失文本",
+      "overallCoverage": "总体覆盖率",
+      "subtitle": "所有应用和语言的翻译文件",
+      "title": "工作区汇总"
+    },
+    "table": {
+      "colApp": "应用",
+      "colFiles": "文件",
+      "colLanguages": "语言",
+      "colProgress": "进度",
+      "colStatus": "状态",
+      "colUpdated": "更新时间",
+      "complete": "已完成",
+      "hideLanguages": "隐藏语言",
+      "less": "收起",
+      "noMatches": "没有应用符合你的搜索。",
+      "searchSubtitle": "{total} 个应用中有 {matches} 个匹配「{query}」",
+      "showLanguages": "显示全部语言",
+      "subtitle": "当前的本地化工作区"
+    }
+  },
+  "common": {
+    "back": "返回",
+    "cancel": "取消",
+    "clear": "清空",
+    "close": "关闭",
+    "delete": "删除",
+    "dismiss": "关闭",
+    "edit": "编辑",
+    "errorPrefix": "错误：{message}",
+    "missingCount": {
+      "one": "缺 1 项",
+      "other": "缺 {} 项"
+    },
+    "more": "更多",
+    "next": "下一步",
+    "nextPage": "下一页",
+    "previousPage": "上一页",
+    "remove": "移除",
+    "retry": "重试",
+    "rows": "每页行数",
+    "selectLanguage": "选择语言",
+    "selectOption": "选择一项",
+    "theme": "主题",
+    "themeDark": "深色",
+    "themeLight": "浅色",
+    "themeSystem": "跟随系统"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 个应用",
+      "other": "{} 个应用"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} 个翻译文件已完成",
+    "coverage": {
+      "empty": "创建一个应用即可在此查看覆盖率。",
+      "noData": "还没有翻译数据。上传 JSON 文件即可开始。",
+      "subtitle": "各应用目标文本的已翻译占比",
+      "summary": "已翻译 {translated} 条文本，活跃目标语言中仍缺 {missing} 条。",
+      "title": "各应用覆盖率"
+    },
+    "empty": {
+      "message": "一个应用汇集一个项目的翻译文件。设定源语言，选好目标语言，就可以开始翻译。",
+      "title": "创建你的第一个应用"
+    },
+    "health": {
+      "allTranslated": "所有应用都已完全翻译。",
+      "empty": "还没有目标语言。",
+      "nextReview": "下一个待处理：{name}",
+      "nextReviewPrefix": "下一个待处理：",
+      "subtitle": "各目标语言的覆盖率",
+      "title": "语言健康度"
+    },
+    "metric": {
+      "acrossApps": "所有应用合计",
+      "allClear": "全部就绪",
+      "coverage": "覆盖率",
+      "localWorkspace": "本地工作区",
+      "missing": "缺失",
+      "needsReview": "需要检查",
+      "targetLocales": {
+        "one": "1 种目标语言",
+        "other": "{} 种目标语言"
+      },
+      "totalKeys": "键总数"
+    },
+    "stat": {
+      "keys": "键",
+      "locales": "语言"
+    },
+    "subtitle": "跟踪覆盖率、检查缺失文本，随时回到本地化工作。",
+    "title": "翻译仪表板",
+    "viewAllApps": "查看全部应用"
+  },
+  "editor": {
+    "addKey": "添加键",
+    "addKeyHint": "先填你现在有的内容 —— 留空的仍算缺失，稍后可以在表格中翻译。",
+    "aiAllComplete": "所有目标语言均已完成。",
+    "aiAlreadyRunning": "已有一轮翻译正在进行。",
+    "aiCanceledEmpty": "还没写入任何内容就取消了。",
+    "aiDialogBody": "只会填充空白单元格 —— 已有的翻译绝不会被覆盖。",
+    "aiFailedCount": {
+      "one": "有 1 条未能翻译。",
+      "other": "有 {} 条未能翻译。"
+    },
+    "aiFailedCountReason": {
+      "one": "有 1 条未能翻译（{error}）。",
+      "other": "有 {} 条未能翻译（{error}）。"
+    },
+    "aiFinishing": "正在完成当前批次…",
+    "aiNotConfiguredBody": "请先在「设置 - AI 服务商」中添加 API 密钥。",
+    "aiNotConfiguredTitle": "尚未配置 AI",
+    "aiNothingHere": "这里没有需要翻译的内容了。",
+    "aiNothingLeft": "没有需要翻译的内容",
+    "aiNothingTranslated": "没有翻译任何内容。",
+    "aiProgress": "正在翻译 {label} · {done}/{total}",
+    "aiRunning": "AI 翻译进行中",
+    "aiTranslate": "AI 翻译",
+    "aiTranslateMissing": {
+      "one": "用 AI 翻译 1 条缺失文本",
+      "other": "用 AI 翻译 {} 条缺失文本"
+    },
+    "aiTranslateRow": "用 AI 翻译此行",
+    "aiTranslatedCanceled": {
+      "one": "取消前已翻译 1 条文本。",
+      "other": "取消前已翻译 {} 条文本。"
+    },
+    "aiTranslatedDone": {
+      "one": "已翻译 1 条文本。",
+      "other": "已翻译 {} 条文本。"
+    },
+    "aiUsing": "使用 {provider} · {model}",
+    "clearAll": "取消全选",
+    "clickToHide": "点击以隐藏其他语言",
+    "clickToShow": "点击以显示其他语言",
+    "copiedToast": "已将「{key}」复制到剪贴板。",
+    "copyKey": "复制键",
+    "deleteKey": "删除键",
+    "deleteKeyBody": "这会从所有语言中移除「{key}」，且无法撤销。",
+    "deleteKeyTitle": "删除该键？",
+    "empty": "还没有键。上传 JSON 文件，或添加你的第一个键。",
+    "export": "导出",
+    "exportCanceled": "已取消导出。",
+    "exportChooseDestination": "选择目标位置",
+    "exportDownload": "下载",
+    "exportFolderSummary": "接下来你会选择文件夹；每种语言各生成一个文件放进去。",
+    "exportNoProject": "请先导入一个项目文件夹",
+    "exportOverwrite": "覆盖文件",
+    "exportProjectSummary": "写入 {path}，并替换其中的这些文件。",
+    "exportSaveTo": "保存到 {name}",
+    "exportSaveToProject": "保存到项目",
+    "exportSavedToast": "{files} 已保存到 {name}",
+    "exportToFolder": "导出到文件夹",
+    "exportToFolderEllipsis": "导出到文件夹…",
+    "exportZip": "下载 ZIP",
+    "exportZipHint": "打包到你的下载文件夹",
+    "exportZipSummary": "打包为 {file}，放在你的下载文件夹中。",
+    "exportZippedToast": "{files} 已打包到下载文件夹",
+    "exportedToast": "已导出 {files}",
+    "fileCount": {
+      "one": "1 个文件",
+      "other": "{} 个文件"
+    },
+    "hiddenLanguages": {
+      "one": "还有 1 种语言",
+      "other": "还有 {} 种语言"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "每行内还有 1 种语言",
+      "other": "每行内还有 {} 种语言"
+    },
+    "hideOtherLanguages": "隐藏其他语言",
+    "keyActions": "键操作",
+    "keyAddedToast": "已添加键「{key}」。",
+    "keyDeletedToast": "已删除键「{key}」。",
+    "keyHelper": "点号写法会把键组织成嵌套 JSON。",
+    "keyLabel": "键",
+    "languageCount": {
+      "one": "1 种语言",
+      "other": "{} 种语言"
+    },
+    "languageSourceSuffix": "{language}（源语言）",
+    "missingOnly": "仅看缺失",
+    "missingOnlyCount": "仅看缺失（{count}）",
+    "noKeys": "暂无键",
+    "noMatches": "没有键符合当前筛选条件。",
+    "noProvider": "无服务商",
+    "paginationSummary": "第 {start}-{end} 行，共 {lines} 行 - {keys} 个键",
+    "searchHint": "搜索键和内容",
+    "showInFolder": "在文件夹中显示",
+    "sourceText": "源文本",
+    "title": "编辑器",
+    "translate": "翻译",
+    "translateCount": {
+      "one": "翻译 1 条文本",
+      "other": "翻译 {} 条文本"
+    },
+    "translateWithAi": "用 AI 翻译",
+    "translatingHint": "翻译中…",
+    "translationOptional": "翻译 - 选填",
+    "translations": "翻译"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "请在「设置 - AI 服务商」中添加 API 密钥。",
+      "blocked": "{provider} 拦截了这一批（{reason}）。",
+      "emptyResponse": "{provider} 返回了空响应。",
+      "keyRejected": "{provider} 的 API 密钥被拒绝。请在「设置 - AI 服务商」中核对。",
+      "malformed": "翻译服务商返回了格式错误的 JSON。",
+      "modelNotFound": "找不到 {provider} 的模型。请在「设置 - AI 服务商」中核对模型名称。",
+      "noConnection": "无法连接到翻译服务商。",
+      "noKey": "请先输入 API 密钥。",
+      "refused": "{provider} 拒绝翻译这一批。可以跳过，或换一个模型试试。",
+      "stoppedEarly": "{provider} 提前停止了（{reason}）。",
+      "timeout": "翻译服务商响应超时。",
+      "unexpectedResponse": "{provider} 返回了意外的响应。"
+    },
+    "app": {
+      "nameEmpty": "应用名称不能为空。",
+      "noTargetLanguage": "请至少选择一种目标语言。",
+      "sourceIsTarget": "源语言不能同时作为目标语言。"
+    },
+    "cache": {
+      "appListCorrupt": "保存的应用列表已损坏：{error}",
+      "appNotFound": "找不到该应用。",
+      "appNotFoundId": "找不到该应用：{id}",
+      "translationsCorrupt": "保存的翻译已损坏：{error}",
+      "writeAppList": "无法保存应用列表。",
+      "writeTranslations": "无法保存翻译。"
+    },
+    "editor": {
+      "invalidKey": "请使用点号写法，只用字母、数字、「_」或「-」（例如 nav.home）。",
+      "keyExists": "键「{key}」已存在。",
+      "keyNotFound": "找不到键：{key}"
+    },
+    "export": {
+      "chooseFolder": "请选择导出到的文件夹。",
+      "noDownloadsFolder": "在此平台上找不到你的下载文件夹。",
+      "noProjectFolder": "这个应用不是从项目文件夹导入的，因此没有可写回的位置。",
+      "nothingToExport": "目前还没有可导出的键。",
+      "selectLanguage": "请至少选择一种要导出的语言。"
+    },
+    "file": {
+      "folderPickerOpen": "无法打开文件夹选择器：{error}",
+      "launchFailed": "无法启动 {executable}：{error}",
+      "openPath": "无法打开 {path}：{error}",
+      "pickerOpen": "无法打开文件选择器：{error}",
+      "projectFolderRead": "无法读取项目文件夹：{error}",
+      "revealUnsupported": "此平台不支持在文件夹中显示。",
+      "save": "无法保存 {file}：{error}",
+      "unknownLanguage": "无法判断该文件属于哪种语言。请按语言代码命名，或放进对应的语言文件夹。",
+      "unsupportedPlatform": "此平台不可用。",
+      "writeFolder": "无法写入 {path}：{error}"
+    },
+    "image": {
+      "convert": "无法将该图片转换为 PNG。",
+      "notAnImage": "该文件不是 LingoDesk 能读取的图片：{error}",
+      "pickerOpen": "无法打开图片选择器：{error}",
+      "tooLarge": "请选择小于 8 MB 的图片。",
+      "unreadable": "无法读取该图片。"
+    },
+    "import": {
+      "noFiles": "没有可导入的文件。"
+    },
+    "json": {
+      "invalid": "无效的 JSON：{error}",
+      "noKeys": "该文件不包含任何翻译键。",
+      "notObject": "文件的顶层必须是一个 JSON 对象。"
+    }
+  },
+  "landing": {
+    "apkLink": "或下载 Android APK · {size}  →",
+    "askingGithub": "正在向 GitHub 查询最新版本…",
+    "checkingBuilds": "正在查找构建…",
+    "codeMissing": "缺失",
+    "cta": {
+      "apk": "下载 APK",
+      "latest": "下载最新构建",
+      "macos": "下载 macOS 版",
+      "windows": "下载 Windows 版"
+    },
+    "download": {
+      "allReleases": "GitHub 上的全部版本与更新日志  →",
+      "body": "基于 MIT 许可证的免费开源软件。无需账号，没有试用期，没有遥测。",
+      "copied": "已复制",
+      "copy": "复制",
+      "eyebrow": "下载",
+      "latest": "最新",
+      "latestBuildRuns": "最近的构建运行",
+      "noBuildBody": "macOS、Windows 和 Android 安装包由 GitHub Actions 构建，只要推送版本标签就会附加到发布中。在那之前，从源码运行大约需要两分钟。",
+      "noBuildTitle": "尚未发布打包版本",
+      "published": "发布于 {date}",
+      "releasesOnGithub": "GitHub 上的版本",
+      "runFromSource": "或在六个平台中的任意一个从源码运行",
+      "runFromSourceNote": "把设备换成 windows、linux、chrome 或已连接的手机即可。项目在 .fvmrc 中固定了 Flutter 版本。",
+      "title": "获取 LingoDesk。",
+      "tryAgain": "重试",
+      "unreachableBody": "{reason} 你仍然可以浏览发布页面，或从源码构建。",
+      "unreachableTitle": "无法连接 GitHub",
+      "unsignedNote": "桌面版构建未签名：在 macOS 上首次打开请右键点击应用并选择「打开」；在 Windows 上请选择「更多信息」，再点「仍要运行」。",
+      "version": "版本 {version}"
+    },
+    "features": {
+      "body": "LingoDesk 是一款专注的桌面工具，而不是带席位和仪表板的翻译平台。",
+      "eyebrow": "功能",
+      "f1Body": "嵌套 JSON 会被展平成点号键，于是一条文本和它的全部译文都落在同一行，横向一眼读完。",
+      "f1Title": "一张表格容纳所有语言",
+      "f2Body": "各语言实时覆盖率，加上「仅看缺失」筛选，把成百上千个键收敛成还空着的那几条。",
+      "f2Title": "缺的是文本，不是被漏掉的 bug",
+      "f3Body": "通过 Anthropic、OpenAI 或 Gemini 批量翻译空缺。你的密钥、你的账号、你的账单 —— 全程不经中转。",
+      "f3Title": "用你自己的 AI 密钥翻译",
+      "f4Body": "没有后端、没有遥测、无需注册。项目留在你的电脑上，API 密钥进入系统的安全存储。",
+      "f4Title": "本地优先，隐私自持",
+      "f5Body": "扫描项目文件夹，拉入你已有的语言文件，再把嵌套结构原样导出回代码仓库。",
+      "f5Title": "就地导入与导出",
+      "f6Body": "一个能看一整天的工作区 —— 每套主题都是完整配色，而不只是换了强调色。",
+      "f6Title": "六套主题，明暗皆宜",
+      "title": "工作需要的一切，不需要的都没有。"
+    },
+    "flutter": {
+      "body": "LingoDesk 用 Dart 编写一次，编译到 macOS、Windows、Linux、Android、iOS 和 Web。这个落地页不是嵌了 Flutter 演示的 HTML —— 它就是同一个项目、同一套设计变量、同一批组件，只是为你正在阅读的浏览器编译了一遍。",
+      "eyebrow": "由 Flutter 与 Dart 构建",
+      "fromSource": "从源码运行",
+      "markBody": "上面的标志是一个 CustomPainter，在画布上绘制圆角矩形和两个圆 —— 所以它在任何尺寸下都清晰，并会采用所选主题的强调色。",
+      "markTitle": "这不是图片文件",
+      "pill": "此刻实时运行",
+      "prebuilt": "预编译",
+      "proofBody": "这是 LingoDesk 内置的六套配色，读自桌面版所用的同一个主题扩展。选一套，整个站点随即重新上色 —— 无需刷新，也不换样式表。",
+      "proofTitle": "这个页面上的每一种颜色都来自应用本身。",
+      "statCodebase": "个代码库",
+      "statJavascript": "行手写的 JavaScript",
+      "statTargets": "个编译目标",
+      "title": "一个代码库。六个平台。\n包括这个页面。",
+      "youAreHere": "你正在这里"
+    },
+    "footer": {
+      "issues": "问题",
+      "licence": "MIT 许可证",
+      "note": "本页是一个 Flutter Web 应用，与产品出自同一个代码仓库。",
+      "readme": "说明文档",
+      "releases": "版本"
+    },
+    "getStarted": "开始使用",
+    "hero": {
+      "body": "LingoDesk 把装着 en.json、fr.json 和 es.json 的文件夹变成一个工作区：每个键一行，每种语言一列，每条缺失的文本都无处遁形。",
+      "pill": "开源 · MIT · 无需账号，没有后端",
+      "title": "在一张整洁的书桌前\n翻译所有语言。"
+    },
+    "localeStrip": "内置 20 种语言 · 其他语言可在设置中添加",
+    "nav": {
+      "download": "下载",
+      "features": "功能",
+      "flutter": "Flutter",
+      "howItWorks": "工作方式",
+      "language": "语言",
+      "menu": "菜单",
+      "screens": "界面",
+      "why": "为什么"
+    },
+    "openIssue": "提交问题",
+    "openSource": {
+      "body": "采用 MIT 许可证。你可以 fork 它、在团队内部使用，或就最让你难受的流程提个 issue —— 路线图由使用它的人决定。",
+      "title": "永久免费，源码就在那里。"
+    },
+    "preview": {
+      "allTranslated": "每种语言都已完全翻译。",
+      "appearanceNote": "这真的就是那个设置 —— 它会重绘整个页面，而不只是这个窗口。",
+      "editorWindow": "翻译编辑器",
+      "keysNote": "密钥保存在系统的安全存储中。它们只留在本设备上，并且只会发送给所属的服务商。",
+      "missingStrings": {
+        "one": "缺 1 条文本",
+        "other": "缺 {} 条文本"
+      },
+      "noMatches": "没有键匹配「{query}」。",
+      "nothingMissing": "没有缺失 —— 每条文本都已翻译。",
+      "projects": "项目",
+      "semantics": "LingoDesk 仪表板：整个工作区的覆盖率、键数量和语言健康度。"
+    },
+    "problem": {
+      "afterEyebrow": "使用 LingoDesk",
+      "afterTitle": "一张表格。空缺自己会站出来。",
+      "beforeEyebrow": "不用 LingoDesk",
+      "beforeTitle": "三个文件、三个标签页，还有一条到评审时才发现的缺失文本。",
+      "body": "加一条文本，就意味着打开每一个语言文件，还一个都不能忘。LingoDesk 把这件事变成一行。",
+      "exportNote": "导出会逐个文件重建嵌套结构，正是你的应用所期待的形状。",
+      "eyebrow": "问题所在",
+      "title": "只要新增一个键，本地化文件就会开始走样。"
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · 永久免费",
+    "releasePending": "尚未发布打包版本 —— 两条命令即可从源码运行。",
+    "releasePickBuild": "v{version} 已发布 —— 请在下方选择构建。",
+    "releaseUnavailable": "{reason} 去发布页面看看吧。",
+    "seeAllDownloads": "查看全部下载",
+    "starOnGithub": "在 GitHub 上加星",
+    "starOnGithubCount": "GitHub 星标 · {stars}",
+    "starOnGithubTooltip": "在 GitHub 上给 LingoDesk 加星",
+    "steps": {
+      "eyebrow": "工作方式",
+      "s1Body": "每个应用一个工作区。源语言只需选一次，再挑出你真正要发布的目标语言。",
+      "s1Title": "创建工作区",
+      "s2Body": "把语言文件夹指给它。已有的 JSON 会被展平、按你声明的语言校验，然后载入。",
+      "s2Title": "导入你已有的内容",
+      "s3Body": "筛出缺失的部分手动填写，或把整批交给你的 AI 服务商。改动会随手保存。",
+      "s3Title": "补上空缺",
+      "s4Body": "嵌套结构会按语言逐一重建，随时可以放回代码旁边提交。",
+      "s4Title": "导出回代码仓库",
+      "title": "四个步骤，然后回去写代码。"
+    },
+    "switchToDark": "切换到深色",
+    "switchToLight": "切换到浅色",
+    "tour": {
+      "aiProviders": "自带 Anthropic、OpenAI 或 Gemini 的密钥。选定其中一个，编辑器里的每个 AI 操作都会用它。",
+      "appearance": "六套完整配色，加上明暗切换。这是真正的设置，而不是一张截图 —— 选个主题，整个站点就会重新上色。",
+      "body": "这不是截图，而是编译进本页的应用本身 —— 尽管点点看。",
+      "dashboard": "打开应用的那一刻，就能看到每个项目的覆盖率、键数量和语言健康度。这些数字来自编辑器写入的同一批单元格 —— 填一条，看着它们变动。",
+      "editor": "键在左侧，语言在顶部。每个单元格都是真实的输入框：写译文、搜索，或只筛出仍然缺失的部分。",
+      "eyebrow": "内部一览",
+      "pill": "实时 · 你在这里做的一切都不会被保存",
+      "projects": "每个应用一个工作区，各有自己的源语言和目标语言。点击某一行即可打开。",
+      "title": "按桌面应用来打造，因为它本来就是。"
+    },
+    "viewOnGithub": "在 GitHub 上查看",
+    "warning": {
+      "macos": "未签名构建 —— 首次打开请右键点击应用并选择「打开」。",
+      "windows": "未签名构建 —— 在 SmartScreen 中选择「更多信息」，再点「仍要运行」。"
+    }
+  },
+  "language": {
+    "ar": "阿拉伯语",
+    "cs": "捷克语",
+    "de": "德语",
+    "en": "英语",
+    "es": "西班牙语",
+    "fr": "法语",
+    "hi": "印地语",
+    "it": "意大利语",
+    "ja": "日语",
+    "ko": "韩语",
+    "nl": "荷兰语",
+    "pl": "波兰语",
+    "pt": "葡萄牙语",
+    "ro": "罗马尼亚语",
+    "ru": "俄语",
+    "sv": "瑞典语",
+    "tr": "土耳其语",
+    "uk": "乌克兰语",
+    "vi": "越南语",
+    "zh": "中文"
+  },
+  "nav": {
+    "aiProviders": "AI 服务商",
+    "appearance": "外观",
+    "apps": "应用",
+    "dashboard": "仪表板",
+    "group": {
+      "settings": "设置",
+      "workspace": "工作区"
+    },
+    "import": "导入",
+    "languages": "语言",
+    "localStorage": "本地存储",
+    "profile": "个人资料",
+    "settings": "设置"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "本地优先",
+      "locales": "20 种语言",
+      "nestedJson": "嵌套 JSON"
+    },
+    "skip": "跳过",
+    "stage": {
+      "body": "没有账号、不用同步、不再有到处蔓延的表格 - 只有你的 JSON，留在你的电脑上。",
+      "title": "一张书桌，管住每个语言文件。"
+    },
+    "startSetup": "开始设置",
+    "step1": {
+      "body": "每个键是一行，每种语言是一列。工作过程中缺失的文本始终高亮，不会有半成品发布出去。",
+      "caption": "所有卷册，同处一室",
+      "eyebrow": "翻译工作区",
+      "highlight1": "键与语言同在一张表格里",
+      "highlight2": "筛出仍然缺失的部分",
+      "highlight3": "输入时改动就保存到本机",
+      "title": "在一张整洁的书桌前翻译所有语言"
+    },
+    "step2": {
+      "body": "每个应用一个工作区：源语言只设一次，只跟进真正要紧的目标语言，让覆盖率自己说话。",
+      "caption": "已编目、已标注、找得到",
+      "eyebrow": "项目设置",
+      "highlight1": "为每个应用准备专属工作区",
+      "highlight2": "从 20 种受支持语言中挑选目标",
+      "highlight3": "按应用、按语言查看覆盖率",
+      "title": "让每个产品按语言井井有条"
+    },
+    "step3": {
+      "body": "导出前，LingoDesk 会重建你原本的键结构，所以落进仓库的文件正是你的应用所期待的。",
+      "caption": "所有目的地都在告示板上",
+      "eyebrow": "随时可导出",
+      "highlight1": "点号键会重新展开为嵌套对象",
+      "highlight2": "选好语言，想存哪就存哪",
+      "highlight3": "排版整齐，键顺序稳定",
+      "title": "把嵌套的 JSON 文件送回你的应用"
+    },
+    "stepOf": "第 {step} 步，共 {total} 步"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "跟随系统主题，或明确指定一种。",
+      "swatchActive": "选中态",
+      "swatchBackground": "背景",
+      "swatchBrand": "品牌色",
+      "swatchCard": "卡片",
+      "themeSubtitle": "六套配色。每一套都会重塑整个应用，而不只是强调色。"
+    },
+    "defaults": {
+      "count": {
+        "one": "将预选 1 种语言。",
+        "other": "将预选 {} 种语言。"
+      },
+      "empty": "还没有默认值 —— 新应用的目标语言列表从空开始。",
+      "subtitle": "每次新建应用时都会预先选中。",
+      "title": "默认目标语言"
+    },
+    "language": {
+      "note": "你的选择会被保存并立即生效 —— 菜单、对话框和提示都会随之切换。",
+      "subtitle": "LingoDesk 界面本身使用的语言。",
+      "title": "界面语言"
+    },
+    "profile": {
+      "email": "电子邮件",
+      "emailHint": "选填",
+      "name": "显示名称",
+      "nameHint": "本地工作区",
+      "note": "LingoDesk 没有账号体系。这只是给你的本地工作区起个名字。",
+      "subtitle": "显示在侧边栏中，仅保存在本设备上。"
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "温暖的琥珀色，配上烘焙沙色的中性调。"
+    },
+    "graphite": {
+      "description": "完全不用色相 —— 靠对比来强调。"
+    },
+    "indigo": {
+      "description": "冷调靛蓝，落在蓝灰中性色上。"
+    },
+    "rose": {
+      "description": "深玫瑰色，配柔和的浅粉表面。"
+    },
+    "teal": {
+      "description": "本家风格 —— 饱和青绿配暖石色。"
+    },
+    "violet": {
+      "description": "电光紫，落在略带紫调的底色上。"
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1 天前",
+      "other": "{} 天前"
+    },
+    "hoursAgo": {
+      "one": "1 小时前",
+      "other": "{} 小时前"
+    },
+    "justNow": "刚刚",
+    "minutesAgo": {
+      "one": "1 分钟前",
+      "other": "{} 分钟前"
+    },
+    "monthsAgo": {
+      "one": "1 个月前",
+      "other": "{} 个月前"
+    },
+    "weeksAgo": {
+      "one": "1 周前",
+      "other": "{} 周前"
+    },
+    "yearsAgo": {
+      "one": "1 年前",
+      "other": "{} 年前"
+    },
+    "yesterday": "昨天"
+  },
+  "upload": {
+    "addFiles": "添加文件",
+    "addFolder": "添加文件夹",
+    "addMore": "继续添加",
+    "backToApps": "返回应用列表",
+    "backToEditor": "返回编辑器",
+    "browseFiles": "浏览文件",
+    "chooseFolder": "选择文件夹",
+    "defaultImportName": "导入的项目",
+    "defaultProjectName": "导入的翻译",
+    "detectedLanguages": "检测到的语言",
+    "detectedLanguagesHint": "再添加文件夹或文件，它们会与这些合并。",
+    "exportsBackTo": "导出时写回 {path}",
+    "filesReady": {
+      "one": "1 个文件可导入。",
+      "other": "{} 个文件可导入。"
+    },
+    "hero": {
+      "filesBody": "扫描一个文件夹，或自己挑选 .json 文件。每个文件会按文件名匹配到对应语言。",
+      "filesTitle": "添加你的翻译文件",
+      "projectBody": "选择项目（或任意文件夹），LingoDesk 会找出其中的翻译文件 —— 也可以自己挑选 .json 文件。",
+      "projectTitle": "导入你的翻译"
+    },
+    "importAndOpen": "导入并打开编辑器",
+    "importedToast": "已导入到「{name}」。",
+    "keepOneLanguage": "至少保留一种语言才能导入。",
+    "languageSource": "{language} - 源语言",
+    "logo": "标志",
+    "namingRule": "请按语言代码命名每个文件。不在这套代码之内的都会被拒绝。",
+    "needValidFile": "请至少添加一个有效文件再导入。",
+    "noFilesFound": "在「{name}」中没有找到翻译文件。已在 /translation、/translations 和 /languages 文件夹中查找 .json 文件。",
+    "pickFilesTitle": "选择翻译文件",
+    "pickFolderTitle": "选择你的项目文件夹",
+    "readySummary": "{languages} 种语言、{keys} 个键可导入。",
+    "removeLogo": "移除标志",
+    "replaceLogo": "更换标志",
+    "requiredLanguages": "所需语言",
+    "scanning": "扫描中…",
+    "skipToEditor": "直接进入编辑器",
+    "sourceHelper": "其余语言都会成为你可以翻译过去的目标语言。",
+    "stagedFiles": "待导入文件",
+    "startOver": "重新开始",
+    "stat": {
+      "translated": "已翻译"
+    },
+    "uploadLogo": "上传标志",
+    "whereWeLook": "我们在哪里查找",
+    "whereWeLookBody": "项目中任意位置、位于 /translation、/translations 或 /languages 文件夹内的所有 .json 文件。构建目录和依赖目录会被跳过。"
+  }
+}
