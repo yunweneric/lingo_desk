@@ -23,10 +23,47 @@ class AppLocalization {
   /// another locale renders English rather than a raw key.
   static const Locale fallbackLocale = Locale('en');
 
-  /// One [Locale] per entry in [SupportedLanguages], so the settings screen
-  /// and the localization delegates can never drift apart.
+  /// The languages LingoDesk's own interface is available in — one entry
+  /// per `<code>.json` under [translationsPath]. Adding a file here without
+  /// adding its code means nobody can pick it; adding a code without the
+  /// file means picking it silently falls back to English. Keep them
+  /// together.
+  ///
+  /// This is deliberately narrower than [SupportedLanguages], which lists
+  /// what *your* app can be translated into: LingoDesk can help you ship
+  /// Hindi without speaking Hindi itself.
+  static const List<String> interfaceLanguages = [
+    'en',
+    'fr',
+    'es',
+    'de',
+    'it',
+    'pt',
+    'nl',
+    'pl',
+    'uk',
+    'ru',
+    'tr',
+    'ar',
+    'zh',
+    'ja',
+    'ko',
+    'sv',
+    'cs',
+    'ro',
+  ];
+
+  /// The same list as [LanguageOption]s, for the pickers that draw a flag
+  /// and a name beside each choice.
+  static List<LanguageOption> get interfaceLanguageOptions => [
+    for (final option in SupportedLanguages.all)
+      if (interfaceLanguages.contains(option.code)) option,
+  ];
+
+  /// One [Locale] per shipped translation file, so the pickers and the
+  /// localization delegates can never drift apart.
   static List<Locale> get supportedLocales => [
-    for (final option in SupportedLanguages.all) Locale(option.code),
+    for (final code in interfaceLanguages) Locale(code),
   ];
 
   /// Must be awaited before `runApp` — it restores the saved locale,
@@ -94,7 +131,7 @@ class AppLocalization {
   /// [SupportedLanguages]; unknown codes are ignored so a stale preference
   /// can't throw.
   static Future<void> setLocale(BuildContext context, String code) async {
-    if (!SupportedLanguages.supports(code)) {
+    if (!interfaceLanguages.contains(code)) {
       return;
     }
     _activeLocale = Locale(code);

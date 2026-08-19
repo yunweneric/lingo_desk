@@ -32,7 +32,7 @@ class SettingsLanguageCard extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final option in SupportedLanguages.all)
+              for (final option in AppLocalization.interfaceLanguageOptions)
                 ChoiceChip(
                   label: Text(
                     '${option.flag}  ${SupportedLanguages.nameOf(option.code)} '

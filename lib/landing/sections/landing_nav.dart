@@ -52,13 +52,23 @@ class LandingNav extends StatelessWidget {
     super.key,
     required this.controller,
     required this.targets,
+    List<NavTarget>? menuTargets,
     required this.scrolled,
     required this.activeId,
     required this.onDownload,
-  });
+  }) : menuTargets = menuTargets ?? targets;
 
   final LandingController controller;
+
+  /// Destinations the bar itself shows. Kept short on purpose: five
+  /// labels fit in English and run the right-hand controls off the edge in
+  /// a language that spells them out ("So funktioniert es").
   final List<NavTarget> targets;
+
+  /// Everything the collapsed menu lists — the bar drops destinations to
+  /// stay within its width, but nothing should become unreachable.
+  final List<NavTarget> menuTargets;
+
   final bool scrolled;
 
   /// The section currently under the reading line, or null while the hero
@@ -136,9 +146,9 @@ class LandingNav extends StatelessWidget {
                   // Both flanks are equal shares of whatever the centred
                   // links leave behind, so this cluster cannot borrow width
                   // from the roomier left-hand side: everything in it has
-                  // to earn its place. The language trigger is a flag and a
-                  // chevron for that reason, and the download button's
-                  // label is the one thing here that can give way.
+                  // to earn its place. Hence a flag-and-chevron language
+                  // trigger and an icon-only download button — no label in
+                  // here grows when the interface language changes.
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -163,9 +173,12 @@ class LandingNav extends StatelessWidget {
                               label: LocaleKeys.landingNavDownload.tr(),
                               icon: HugeIcons.strokeRoundedDownload04,
                               height: kNavControlHeight,
-                              // Once the bar has drawn in, the label is
-                              // the first thing that stops fitting.
-                              iconOnly: scrolled,
+                              // Always square: the bar reads as a row of
+                              // equal controls, and the label — which is
+                              // the widest thing here and the first to
+                              // stop fitting in a longer language — moves
+                              // into the tooltip.
+                              iconOnly: true,
                               onPressed: onDownload,
                             ),
                           ] else
@@ -202,7 +215,7 @@ class LandingNav extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (final target in targets)
+              for (final target in menuTargets)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(

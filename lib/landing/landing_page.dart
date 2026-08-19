@@ -221,7 +221,27 @@ class _LandingPageState extends State<LandingPage> {
                 scrolled: _scrolled,
                 activeId: _activeId,
                 onDownload: () => _jumpTo(_download),
+                // Three in the bar, all five in the collapsed menu: the
+                // labels are translated, and five of them leave the
+                // right-hand controls no room in a wordier language.
                 targets: [
+                  NavTarget(
+                    'features',
+                    LocaleKeys.landingNavFeatures.tr(),
+                    () => _jumpTo(_features),
+                  ),
+                  NavTarget(
+                    'screens',
+                    LocaleKeys.landingNavScreens.tr(),
+                    () => _jumpTo(_tour),
+                  ),
+                  NavTarget(
+                    'how-it-works',
+                    LocaleKeys.landingNavHowItWorks.tr(),
+                    () => _jumpTo(_steps),
+                  ),
+                ],
+                menuTargets: [
                   NavTarget(
                     'why',
                     LocaleKeys.landingNavWhy.tr(),

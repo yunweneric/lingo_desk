@@ -85,7 +85,8 @@ class _LanguageMenuButtonState extends State<LanguageMenuButton> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (final option in SupportedLanguages.all)
+                        for (final option
+                            in AppLocalization.interfaceLanguageOptions)
                           _LanguageRow(
                             option: option,
                             selected: option.code == active,
