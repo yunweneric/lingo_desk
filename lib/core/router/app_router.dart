@@ -11,6 +11,7 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/settings/presentation/pages/settings_appearance_page.dart';
 import '../../features/settings/presentation/pages/settings_languages_page.dart';
 import '../../features/settings/presentation/pages/settings_profile_page.dart';
+import '../../features/settings/presentation/pages/settings_updates_page.dart';
 import '../../features/translation_editor/presentation/pages/translation_editor_page.dart';
 import '../preferences/app_settings_controller.dart';
 import '../theme/lingo_desk_motion.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const settingsProfile = '/settings/profile';
   static const settingsAppearance = '/settings/appearance';
   static const settingsLanguages = '/settings/languages';
+  static const settingsUpdates = '/settings/updates';
 
   /// API keys for the AI translation providers.
   static const aiProviders = '/ai-providers';
@@ -123,6 +125,11 @@ GoRouter buildAppRouter(AppSettingsController settings) {
             path: AppRoutes.settingsLanguages,
             pageBuilder: (context, state) =>
                 _fadePage(state, const SettingsLanguagesPage()),
+          ),
+          GoRoute(
+            path: AppRoutes.settingsUpdates,
+            pageBuilder: (context, state) =>
+                _fadePage(state, const SettingsUpdatesPage()),
           ),
           GoRoute(
             path: AppRoutes.aiProviders,

@@ -120,6 +120,13 @@ const List<AppDestination> kAppDestinations = [
   // Keys are a setting you manage, not a workspace task — and putting
   // them here means the old "AI" settings tab has exactly one successor.
   AppDestination(
+    labelKey: LocaleKeys.navUpdates,
+    icon: HugeIcons.strokeRoundedCloudDownload,
+    group: NavGroup.settings,
+    isActive: _isUpdates,
+    onTap: _goUpdates,
+  ),
+  AppDestination(
     labelKey: LocaleKeys.navAiProviders,
     icon: HugeIcons.strokeRoundedSparkles,
     group: NavGroup.settings,
@@ -182,6 +189,8 @@ bool _isAppearance(String location) => location == AppRoutes.settingsAppearance;
 
 bool _isLanguages(String location) => location == AppRoutes.settingsLanguages;
 
+bool _isUpdates(String location) => location == AppRoutes.settingsUpdates;
+
 /// Any pane in the settings group — what the phone's single entry lights
 /// up for.
 bool _isAnySettings(String location) =>
@@ -195,6 +204,7 @@ void _goAppearance(BuildContext context) =>
     context.go(AppRoutes.settingsAppearance);
 void _goLanguages(BuildContext context) =>
     context.go(AppRoutes.settingsLanguages);
+void _goUpdates(BuildContext context) => context.go(AppRoutes.settingsUpdates);
 
 /// Persistent frame around every signed-in page: the navigation, and the
 /// routed page beside or above it.

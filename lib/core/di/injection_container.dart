@@ -18,6 +18,8 @@ import '../preferences/ai_credential_store.dart';
 import '../preferences/ai_settings_controller.dart';
 import '../preferences/app_preferences.dart';
 import '../preferences/app_settings_controller.dart';
+import '../updates/update_controller.dart';
+import '../updates/update_service.dart';
 
 /// Global service locator instance
 ///
@@ -47,6 +49,14 @@ Future<void> init() async {
     () => AppSettingsController(getIt()),
   );
   getIt.registerLazySingleton<http.Client>(http.Client.new);
+  // One controller for the whole run: the update check is remembered so
+  // reopening the pane does not ask GitHub again.
+  getIt.registerLazySingleton<UpdateService>(
+    () => UpdateService(client: getIt()),
+  );
+  getIt.registerLazySingleton<UpdateController>(
+    () => UpdateController(getIt()),
+  );
   getIt.registerLazySingleton<AiCredentialStore>(
     () => AiCredentialStore(
       secureStorage: AiCredentialStore.defaultSecureStorage,

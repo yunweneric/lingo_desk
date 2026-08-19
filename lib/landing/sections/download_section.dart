@@ -223,7 +223,7 @@ class _AssetRowState extends State<_AssetRow> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
-        onTap: () => openLink(asset.downloadUrl),
+        onTap: () => openExternalUrl(asset.downloadUrl),
         child: AnimatedContainer(
           duration: LingoDeskMotion.fast,
           curve: LingoDeskMotion.curve,

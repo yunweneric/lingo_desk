@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_theme.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/utils/external_link.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 
-/// Opens [url] in a new browser tab.
-///
-/// Release assets are served with a download disposition, so the same
-/// call both downloads a build and follows an ordinary link.
-Future<void> openLink(String url) async {
-  final uri = Uri.tryParse(url);
-  if (uri == null) {
-    return;
-  }
-  await launchUrl(uri, mode: LaunchMode.externalApplication);
-}
+// The landing page and the in-app updater open the same kind of link, so
+// the launcher call lives in core and both sides use it.
+export '../../core/utils/external_link.dart' show openExternalUrl;
 
 enum LandingButtonKind { primary, secondary, ghost }
 
@@ -76,7 +68,7 @@ class _LandingButtonState extends State<LandingButton> {
     }
     final url = widget.url;
     if (url != null) {
-      openLink(url);
+      openExternalUrl(url);
     }
   }
 
@@ -237,7 +229,7 @@ class _LandingLinkState extends State<LandingLink> {
           }
           final url = widget.url;
           if (url != null) {
-            openLink(url);
+            openExternalUrl(url);
           }
         },
         child: AnimatedDefaultTextStyle(

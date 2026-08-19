@@ -407,7 +407,7 @@ class _StarChipState extends State<_StarChip> {
         onEnter: (_) => setState(() => _hovered = true),
         onExit: (_) => setState(() => _hovered = false),
         child: GestureDetector(
-          onTap: () => openLink(GithubRepo.url),
+          onTap: () => openExternalUrl(GithubRepo.url),
           child: AnimatedContainer(
             duration: LingoDeskMotion.fast,
             height: kNavControlHeight,

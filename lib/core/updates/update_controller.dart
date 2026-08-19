@@ -86,6 +86,15 @@ class UpdateController extends ChangeNotifier {
       _savedPath = await _service.download(
         asset,
         onProgress: (progress) {
+          // A 20 MB download arrives in hundreds of chunks; repainting a
+          // progress bar for each one is work nobody can see, so the UI
+          // only hears about whole percents.
+          if (progress != null &&
+              _progress != null &&
+              (progress - _progress!) < 0.01 &&
+              progress < 1) {
+            return;
+          }
           _progress = progress;
           notifyListeners();
         },

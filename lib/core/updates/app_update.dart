@@ -200,13 +200,14 @@ int compareVersions(String a, String b) {
 }
 
 List<int> _parseVersion(String value) {
-  final cleaned = value.trim().replaceFirst(RegExp('^v'), '').split(
-    RegExp(r'[-+]'),
-  ).first;
+  final cleaned = value
+      .trim()
+      .replaceFirst(RegExp('^v'), '')
+      .split(RegExp(r'[-+]'))
+      .first;
   final parts = cleaned.split('.');
   return List<int>.generate(
     3,
-    (index) =>
-        index < parts.length ? int.tryParse(parts[index]) ?? 0 : 0,
+    (index) => index < parts.length ? int.tryParse(parts[index]) ?? 0 : 0,
   );
 }
