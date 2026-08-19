@@ -1,4 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AI translation talks to OpenAI, Anthropic and Gemini over HTTPS.
+         Without this the debug and profile builds still work — the Flutter
+         tool declares INTERNET in their own manifests for hot reload — but a
+         release APK has no network at all, and every translation request
+         fails with "No connection to the translation provider." -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="LingoDesk"
         android:name="${applicationName}"

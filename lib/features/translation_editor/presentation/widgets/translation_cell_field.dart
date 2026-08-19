@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/responsive/touch.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
@@ -264,12 +265,18 @@ class _CellAiAction extends StatelessWidget {
       return const SizedBox(width: 4);
     }
 
+    // Without a pointer there is no hover to bring the affordance up, and
+    // no pointer precision to hit 24px with either: it stays on screen and
+    // grows to a finger's size.
+    final side = isTouchPlatform ? kTouchTarget : 24.0;
+    final isVisible = visible || isTouchPlatform;
+
     return AnimatedOpacity(
       duration: LingoDeskMotion.fast,
       curve: LingoDeskMotion.curve,
-      opacity: visible ? (emphasized && !isTranslating ? 0.75 : 1) : 0,
+      opacity: isVisible ? (emphasized && !isTranslating ? 0.75 : 1) : 0,
       child: SizedBox.square(
-        dimension: 24,
+        dimension: side,
         child: isTranslating
             ? Padding(
                 padding: const EdgeInsets.all(5),
@@ -279,13 +286,13 @@ class _CellAiAction extends StatelessWidget {
                 ),
               )
             : IgnorePointer(
-                ignoring: !visible,
+                ignoring: !isVisible,
                 child: IconButton(
                   tooltip: 'Translate with AI',
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints.tightFor(
-                    width: 24,
-                    height: 24,
+                  constraints: BoxConstraints.tightFor(
+                    width: side,
+                    height: side,
                   ),
                   onPressed: onPressed,
                   icon: LingoDeskIcon(
