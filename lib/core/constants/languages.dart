@@ -1,3 +1,5 @@
+import '../localization/export.dart';
+
 /// A language option selectable as source or target locale.
 class LanguageOption {
   const LanguageOption({
@@ -7,6 +9,9 @@ class LanguageOption {
   });
 
   final String code;
+
+  /// English name, used where the text must not be localized — the AI
+  /// prompt names the target language to the model in English.
   final String name;
 
   /// Emoji flag of a representative country for the language.
@@ -45,8 +50,18 @@ class SupportedLanguages {
     return all.any((option) => option.code == code);
   }
 
-  /// Display name for a language code, falling back to the code itself.
+  /// Display name for a language code in the interface language, falling
+  /// back to the code itself when it is not one of the supported locales.
   static String nameOf(String code) {
+    if (!supports(code)) {
+      return code;
+    }
+    return 'language.$code'.tr();
+  }
+
+  /// English name for a language code, for text that must stay in English
+  /// regardless of the interface language (the AI prompt).
+  static String englishNameOf(String code) {
     for (final option in all) {
       if (option.code == code) {
         return option.name;

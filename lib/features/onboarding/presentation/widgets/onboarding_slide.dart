@@ -5,6 +5,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import 'onboarding_highlights.dart';
 import 'onboarding_stage.dart';
 import 'onboarding_step.dart';
+import '../../../../core/localization/export.dart';
 
 /// One page of the onboarding narrative: eyebrow, headline, body, proof.
 ///
@@ -39,12 +40,12 @@ class OnboardingSlide extends StatelessWidget {
           OnboardingBanner(step: step, height: isTablet ? 240 : 168),
           SizedBox(height: isTablet ? 32 : 26),
         ],
-        _EyebrowChip(label: step.eyebrow),
+        _EyebrowChip(label: step.eyebrow.tr()),
         const SizedBox(height: 20),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
           child: Text(
-            step.title,
+            step.title.tr(),
             style: theme.textTheme.headlineLarge?.copyWith(
               fontSize: titleSize,
               height: 1.06,
@@ -55,7 +56,7 @@ class OnboardingSlide extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 520),
           child: Text(
-            step.body,
+            step.body.tr(),
             style: theme.textTheme.bodyLarge?.copyWith(
               color: tokens.muted,
               fontSize: bodySize,

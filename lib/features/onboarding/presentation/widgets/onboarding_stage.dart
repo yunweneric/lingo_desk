@@ -6,6 +6,7 @@ import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_mark.dart';
 import 'onboarding_step.dart';
+import '../../../../core/localization/export.dart';
 
 /// The deep-ink stage that carries the brand lockup, the step's
 /// photograph, and a quiet proof strip.
@@ -48,7 +49,7 @@ class OnboardingStage extends StatelessWidget {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 460),
                 child: Text(
-                  'One desk for every locale file.',
+                  LocaleKeys.onboardingStageTitle.tr(),
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: Colors.white,
                     fontSize: 24,
@@ -59,8 +60,7 @@ class OnboardingStage extends StatelessWidget {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 440),
                 child: Text(
-                  'No accounts, no sync, no spreadsheet sprawl - just your '
-                  'JSON, on your machine.',
+                  LocaleKeys.onboardingStageBody.tr(),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: Colors.white60),
@@ -128,7 +128,7 @@ class OnboardingPhoto extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      step.photoCaption,
+                      step.photoCaption.tr(),
                       overflow: TextOverflow.ellipsis,
                       style: LingoDeskTheme.codeStyle.copyWith(
                         color: Colors.white70,
@@ -162,13 +162,13 @@ class _ProofStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Wrap(
+    return Wrap(
       spacing: 20,
       runSpacing: 8,
       children: [
-        _ProofItem('Local-first'),
-        _ProofItem('Nested JSON'),
-        _ProofItem('20 locales'),
+        _ProofItem(LocaleKeys.onboardingProofLocalFirst.tr()),
+        _ProofItem(LocaleKeys.onboardingProofNestedJson.tr()),
+        _ProofItem(LocaleKeys.onboardingProofLocales.tr()),
       ],
     );
   }
@@ -263,7 +263,7 @@ class OnboardingBanner extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    step.photoCaption,
+                    step.photoCaption.tr(),
                     overflow: TextOverflow.ellipsis,
                     style: LingoDeskTheme.codeStyle.copyWith(
                       color: tokens.isDark ? Colors.white54 : tokens.muted,

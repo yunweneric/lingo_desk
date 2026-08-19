@@ -9,6 +9,7 @@ import '../state/landing_controller.dart';
 import '../widgets/landing_button.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// The closing ask: it is free, it is MIT, and the repository is open.
 class OpenSourceSection extends StatelessWidget {
@@ -40,7 +41,7 @@ class OpenSourceSection extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Free forever, and the source is right there.',
+                LocaleKeys.landingOpenSourceTitle.tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: narrow ? 24 : 32,
@@ -54,9 +55,7 @@ class OpenSourceSection extends StatelessWidget {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 560),
                 child: Text(
-                  'MIT licensed. Fork it, ship it inside your team, or open '
-                  'an issue about the workflow that annoys you most — the '
-                  'roadmap is driven by the people using it.',
+                  LocaleKeys.landingOpenSourceBody.tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15.5,
@@ -73,14 +72,16 @@ class OpenSourceSection extends StatelessWidget {
                 children: [
                   LandingButton(
                     label: stars == null
-                        ? 'Star on GitHub'
-                        : 'Star on GitHub · $stars',
+                        ? LocaleKeys.landingStarOnGithub.tr()
+                        : LocaleKeys.landingStarOnGithubCount.tr(
+                            namedArgs: {'stars': '$stars'},
+                          ),
                     icon: HugeIcons.strokeRoundedStar,
                     large: true,
                     url: GithubRepo.url,
                   ),
-                  const LandingButton(
-                    label: 'Open an issue',
+                  LandingButton(
+                    label: LocaleKeys.landingOpenIssue.tr(),
                     icon: HugeIcons.strokeRoundedAlertCircle,
                     kind: LandingButtonKind.secondary,
                     large: true,

@@ -9,6 +9,7 @@ import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_dropdown.dart';
 import 'lingo_desk_field.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// The footer every paginated table in the workspace ends with: a count on
 /// the left, page-size and page controls on the right.
@@ -65,7 +66,7 @@ class WorkspacePaginationBar extends StatelessWidget {
           );
 
           final controls = <Widget>[
-            Text('Rows', style: mutedStyle),
+            Text(LocaleKeys.commonRows.tr(), style: mutedStyle),
             const SizedBox(width: 8),
             LingoDeskDropdown<int>(
               items: [
@@ -82,7 +83,7 @@ class WorkspacePaginationBar extends StatelessWidget {
             const SizedBox(width: 16),
             _PageButton(
               icon: HugeIcons.strokeRoundedArrowLeft01,
-              tooltip: 'Previous page',
+              tooltip: LocaleKeys.commonPreviousPage.tr(),
               tokens: tokens,
               onPressed: page > 0 ? () => onPageChanged(page - 1) : null,
             ),
@@ -98,7 +99,7 @@ class WorkspacePaginationBar extends StatelessWidget {
             ),
             _PageButton(
               icon: HugeIcons.strokeRoundedArrowRight01,
-              tooltip: 'Next page',
+              tooltip: LocaleKeys.commonNextPage.tr(),
               tokens: tokens,
               onPressed: page < pageCount - 1
                   ? () => onPageChanged(page + 1)

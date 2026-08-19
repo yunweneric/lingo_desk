@@ -31,7 +31,7 @@ class _HeaderOverview extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Translation dashboard',
+                LocaleKeys.dashboardTitle.tr(),
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontSize: isTight ? 24 : 28,
                   height: 1.08,
@@ -39,7 +39,7 @@ class _HeaderOverview extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Track coverage, review missing strings, and jump back into active localization work.',
+                LocaleKeys.dashboardSubtitle.tr(),
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: tokens.muted,
                   height: 1.45,
@@ -54,17 +54,17 @@ class _HeaderOverview extends StatelessWidget {
             alignment: isTight ? WrapAlignment.start : WrapAlignment.end,
             children: [
               WorkspaceMetaTile(
-                label: 'Apps',
+                label: LocaleKeys.navApps.tr(),
                 value: appCount.toString(),
                 icon: HugeIcons.strokeRoundedFolder02,
               ),
               WorkspaceMetaTile(
-                label: 'Keys',
+                label: LocaleKeys.dashboardStatKeys.tr(),
                 value: totalKeys.toString(),
                 icon: HugeIcons.strokeRoundedKey01,
               ),
               WorkspaceMetaTile(
-                label: 'Locales',
+                label: LocaleKeys.dashboardStatLocales.tr(),
                 value: activeLanguages.toString(),
                 icon: HugeIcons.strokeRoundedLanguageSquare,
               ),

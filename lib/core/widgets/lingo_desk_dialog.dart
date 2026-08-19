@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../responsive/breakpoints.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// Horizontal inset an [AlertDialog] keeps between itself and the window,
 /// per side, plus the padding its content sits in.
@@ -114,7 +115,7 @@ class _FullScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     IconButton(
-                      tooltip: 'Close',
+                      tooltip: LocaleKeys.commonClose.tr(),
                       onPressed: () => Navigator.of(context).maybePop(),
                       icon: LingoDeskIcon(
                         HugeIcons.strokeRoundedCancel01,

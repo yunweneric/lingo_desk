@@ -11,6 +11,7 @@ import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../../domain/entities/ai_key.dart';
 import '../../domain/entities/ai_provider.dart';
 import 'ai_provider_logo.dart';
+import '../../../../core/localization/export.dart';
 
 /// What the dialog collected.
 class AiKeyDraft {
@@ -93,7 +94,7 @@ class _AiKeyDialogState extends State<AiKeyDialog> {
       return;
     }
     if (_keyController.text.trim().isEmpty) {
-      setState(() => _error = 'Paste the API key to continue.');
+      setState(() => _error = LocaleKeys.aiKeyRequired.tr());
       return;
     }
     Navigator.of(context).pop(
@@ -113,8 +114,12 @@ class _AiKeyDialogState extends State<AiKeyDialog> {
     return LingoDeskDialog(
       title: Text(
         _isEditing
-            ? 'Edit API key'
-            : (provider == null ? 'Add API key' : 'Add ${provider.label} key'),
+            ? LocaleKeys.aiEditKey.tr()
+            : (provider == null
+                  ? LocaleKeys.aiAddKey.tr()
+                  : LocaleKeys.aiAddProviderKey.tr(
+                      namedArgs: {'provider': provider.label},
+                    )),
       ),
       preferredWidth: 460,
       // The picker is a plain list of providers; the form brings its own
@@ -139,18 +144,22 @@ class _AiKeyDialogState extends State<AiKeyDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(LocaleKeys.commonCancel.tr()),
         ),
         // Back is only meaningful while adding, where a step preceded this.
         if (provider != null && !_isEditing)
           TextButton(
             onPressed: () => setState(() => _provider = null),
-            child: const Text('Back'),
+            child: Text(LocaleKeys.commonBack.tr()),
           ),
         if (provider != null)
           FilledButton(
             onPressed: _submit,
-            child: Text(_isEditing ? 'Save changes' : 'Add key'),
+            child: Text(
+              _isEditing
+                  ? LocaleKeys.appSettingsSaveChanges.tr()
+                  : LocaleKeys.aiSaveKey.tr(),
+            ),
           ),
       ],
     );
@@ -174,7 +183,7 @@ class _ProviderPicker extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Text(
-            'Which provider is this key for?',
+            LocaleKeys.aiPickProvider.tr(),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -297,7 +306,9 @@ class _KeyForm extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Create a key at ${provider.consoleLabel}.',
+                  LocaleKeys.aiCreateKeyAt.tr(
+                    namedArgs: {'console': provider.consoleLabel},
+                  ),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -308,8 +319,8 @@ class _KeyForm extends StatelessWidget {
           const SizedBox(height: 18),
           LingoDeskTextField(
             controller: labelController,
-            label: 'Name',
-            description: 'Optional — what you call this key in the table.',
+            label: LocaleKeys.aiFieldName.tr(),
+            description: LocaleKeys.aiFieldNameHelp.tr(),
             hintText: provider.label,
             prefixIcon: HugeIcons.strokeRoundedTag01,
             size: LingoDeskFieldSize.large,
@@ -317,7 +328,7 @@ class _KeyForm extends StatelessWidget {
           const SizedBox(height: 16),
           LingoDeskTextField(
             controller: keyController,
-            label: 'API key',
+            label: LocaleKeys.aiColApiKey.tr(),
             hintText: provider.keyHint,
             prefixIcon: HugeIcons.strokeRoundedKey01,
             size: LingoDeskFieldSize.large,
@@ -327,7 +338,9 @@ class _KeyForm extends StatelessWidget {
             autofocus: true,
             errorText: error,
             suffix: IconButton(
-              tooltip: showKey ? 'Hide key' : 'Show key',
+              tooltip: showKey
+                  ? LocaleKeys.aiHideKey.tr()
+                  : LocaleKeys.aiShowKey.tr(),
               onPressed: onToggleShowKey,
               icon: LingoDeskIcon(
                 showKey
@@ -341,7 +354,7 @@ class _KeyForm extends StatelessWidget {
           const SizedBox(height: 16),
           LingoDeskTextField(
             controller: modelController,
-            label: 'Model',
+            label: LocaleKeys.aiColModel.tr(),
             hintText: provider.defaultModel,
             prefixIcon: HugeIcons.strokeRoundedAiBrain01,
             size: LingoDeskFieldSize.large,
@@ -352,14 +365,14 @@ class _KeyForm extends StatelessWidget {
           // build ships can still just be typed in.
           LingoDeskDropdown<String>(
             value: null,
-            hintText: 'Pick a suggested model',
+            hintText: LocaleKeys.aiPickModel.tr(),
             items: [
               for (final model in provider.suggestedModels)
                 LingoDeskDropdownItem(
                   value: model,
                   label: model,
                   trailingText: model == provider.defaultModel
-                      ? 'default'
+                      ? LocaleKeys.aiDefaultModel.tr()
                       : null,
                 ),
             ],

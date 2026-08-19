@@ -9,6 +9,7 @@ import '../preview/pane_projects.dart';
 import '../preview/preview_chrome.dart';
 import '../preview/preview_workspace.dart';
 import '../state/landing_controller.dart';
+import '../../core/localization/export.dart';
 
 export '../preview/preview_workspace.dart' show PreviewScreen, PreviewWorkspace;
 
@@ -94,9 +95,7 @@ class _LandingAppPreviewState extends State<LandingAppPreview> {
       // One label for the whole thing, and no way for a pointer or a
       // screen reader to wander into a dashboard that does not work.
       window = Semantics(
-        label:
-            'The LingoDesk dashboard: coverage, key counts and language '
-            'health across a workspace of apps.',
+        label: LocaleKeys.landingPreviewSemantics.tr(),
         image: true,
         excludeSemantics: true,
         child: IgnorePointer(child: window),
@@ -169,7 +168,7 @@ class _PreviewWindow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              PreviewTitleBar(title: screen.windowTitle),
+              PreviewTitleBar(title: screen.windowTitle.tr()),
               Expanded(
                 child: Row(
                   children: [

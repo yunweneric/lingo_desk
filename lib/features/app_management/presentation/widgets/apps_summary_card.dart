@@ -6,6 +6,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../bloc/app_management_state.dart';
+import '../../../../core/localization/export.dart';
 
 /// Workspace-wide counters and the overall translation-file progress,
 /// shown above the apps table.
@@ -26,15 +27,17 @@ class AppsSummaryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: WorkspaceCardHeader(
-                  title: 'Workspace totals',
-                  subtitle: 'Translation files across every app and locale',
+                  title: LocaleKeys.appsSummaryTitle.tr(),
+                  subtitle: LocaleKeys.appsSummarySubtitle.tr(),
                   icon: HugeIcons.strokeRoundedChartBarIncreasing,
                 ),
               ),
               WorkspaceBadge(
-                label: missing == 0 ? 'All clear' : '$missing missing',
+                label: missing == 0
+                    ? LocaleKeys.dashboardMetricAllClear.tr()
+                    : LocaleKeys.commonMissingCount.plural(missing),
                 color: missing == 0
                     ? LingoDeskColors.complete
                     : LingoDeskColors.warning,
@@ -55,7 +58,7 @@ class AppsSummaryCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 3),
                 child: Text(
-                  'overall coverage',
+                  LocaleKeys.appsSummaryOverallCoverage.tr(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: tokens.muted,
                     fontSize: 12,
@@ -76,25 +79,25 @@ class AppsSummaryCard extends StatelessWidget {
             runSpacing: 8,
             children: [
               WorkspaceMetaTile(
-                label: 'Apps',
+                label: LocaleKeys.navApps.tr(),
                 value: state.overviews.length.toString(),
                 icon: HugeIcons.strokeRoundedFolder02,
                 width: 150,
               ),
               WorkspaceMetaTile(
-                label: 'Files complete',
+                label: LocaleKeys.appsSummaryFilesComplete.tr(),
                 value: '${state.completeFiles}/${state.totalFiles}',
                 icon: HugeIcons.strokeRoundedFileUpload,
                 width: 150,
               ),
               WorkspaceMetaTile(
-                label: 'Total keys',
+                label: LocaleKeys.dashboardMetricTotalKeys.tr(),
                 value: state.totalKeys.toString(),
                 icon: HugeIcons.strokeRoundedKey01,
                 width: 150,
               ),
               WorkspaceMetaTile(
-                label: 'Missing strings',
+                label: LocaleKeys.appsSummaryMissingStrings.tr(),
                 value: missing.toString(),
                 icon: HugeIcons.strokeRoundedAlertCircle,
                 width: 150,

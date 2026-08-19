@@ -7,6 +7,7 @@ import '../../domain/entities/ai_credentials.dart';
 import '../../domain/entities/ai_translation_item.dart';
 import 'ai_client.dart';
 import 'ai_prompt.dart';
+import '../../../../core/localization/export.dart';
 
 /// OpenAI chat completions API.
 class OpenAiClient implements AiClient {
@@ -66,12 +67,16 @@ class OpenAiClient implements AiClient {
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
     final choices = decoded['choices'];
     if (choices is! List || choices.isEmpty) {
-      throw const AiException('OpenAI returned an empty response.');
+      throw AiException(
+        LocaleKeys.errorsAiEmptyResponse.tr(namedArgs: {'provider': _provider}),
+      );
     }
     final message = (choices.first as Map)['message'];
     final text = message is Map ? message['content'] : null;
     if (text is! String || text.trim().isEmpty) {
-      throw const AiException('OpenAI returned an empty response.');
+      throw AiException(
+        LocaleKeys.errorsAiEmptyResponse.tr(namedArgs: {'provider': _provider}),
+      );
     }
 
     return AiPrompt.parseResponse(text, items);

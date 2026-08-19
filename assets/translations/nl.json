@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "API-sleutel toevoegen",
+    "addProviderKey": "{provider}-sleutel toevoegen",
+    "col": {
+      "added": "Toegevoegd",
+      "apiKey": "API-sleutel",
+      "model": "Model",
+      "provider": "Aanbieder"
+    },
+    "createKeyAt": "Maak een sleutel aan op {console}.",
+    "defaultModel": "standaard",
+    "delete": {
+      "activeBody": "Hiermee verdwijnt „{label}”, de sleutel waarmee nu wordt vertaald. Een andere opgeslagen sleutel neemt het over, anders stopt de AI-vertaling tot je er een toevoegt.",
+      "body": "Hiermee verdwijnt „{label}” van dit apparaat. De sleutel zelf blijft geldig bij {console}.",
+      "title": "API-sleutel verwijderen?"
+    },
+    "editKey": "API-sleutel bewerken",
+    "field": {
+      "name": "Naam",
+      "nameHelp": "Optioneel — hoe je deze sleutel in de tabel noemt."
+    },
+    "hideKey": "Sleutel verbergen",
+    "key": {
+      "actions": "Sleutelacties",
+      "active": "Actief",
+      "required": "Plak de API-sleutel om verder te gaan.",
+      "test": "Verbinding testen",
+      "use": "Gebruiken voor vertalingen"
+    },
+    "pickModel": "Kies een voorgesteld model",
+    "pickProvider": "Bij welke aanbieder hoort deze sleutel?",
+    "saveKey": "Sleutel toevoegen",
+    "showKey": "Sleutel tonen",
+    "status": {
+      "detail": "{provider} · {model} · gebruikt door elke AI-actie in de editor.",
+      "noKey": "Nog geen sleutel klaar",
+      "noKeyDetail": "Voeg een API-sleutel toe, dan kan de editor ontbrekende vertalingen voor je invullen.",
+      "translatingWith": "Vertalen met {label}"
+    },
+    "storage": {
+      "plain": "Deze build kan de sleutelhanger van het systeem niet bereiken, dus sleutels worden als platte tekst bij je andere lokale instellingen bewaard. Ze blijven op dit apparaat en gaan alleen naar de aanbieder waar ze bij horen.",
+      "secure": "Sleutels staan in de sleutelhanger van dit apparaat en gaan alleen naar de aanbieder waar ze bij horen."
+    },
+    "table": {
+      "empty": "Nog geen API-sleutels. Voeg er een toe om vanuit de editor te vertalen.",
+      "keyCount": {
+        "one": "1 sleutel",
+        "other": "{} sleutels"
+      },
+      "noKeys": "Nog geen sleutels",
+      "range": "{start}-{end} van {total}"
+    },
+    "toast": {
+      "activeTitle": "Vertalingen gebruiken nu {label}",
+      "addedBody": "{provider} is klaar om mee te vertalen.",
+      "addedTitle": "Sleutel toegevoegd",
+      "deletedBody": "{label} is van dit apparaat verwijderd.",
+      "deletedNamedTitle": "{label} verwijderd",
+      "deletedTitle": "Sleutel verwijderd",
+      "promotedBody": "Vertalingen gebruiken nu {label}.",
+      "testFailedTitle": "{label} mislukt",
+      "testPassedBody": "{provider} heeft de sleutel geaccepteerd.",
+      "testPassedTitle": "{label} verbonden",
+      "updatedBody": "Wijzigingen in {label} opgeslagen.",
+      "updatedTitle": "Sleutel bijgewerkt"
+    }
+  },
+  "appSettings": {
+    "appIcon": "App-icoon",
+    "appIconHelp": "Optioneel. Zonder icoon toont de app zijn initialen.",
+    "appIconNote": "PNG, JPG of WebP. De afbeelding wordt geschaald naar {size} px en bij de app opgeslagen, dus het originele bestand mag je verplaatsen.",
+    "appName": "App-naam",
+    "appNameHint": "bijv. Klantportaal",
+    "createApp": "App aanmaken",
+    "general": "Algemeen",
+    "generalSubtitle": "Hoe deze app heet en vanuit welke taal ze vertaalt.",
+    "localeCount": {
+      "one": "1 taal",
+      "other": "{} talen"
+    },
+    "metaNoTargets": "Nog geen",
+    "metaSource": "Bron",
+    "metaTargets": "Doelen",
+    "metaUpdated": "Laatst bijgewerkt",
+    "replaceIcon": "Icoon vervangen",
+    "saveChanges": "Wijzigingen opslaan",
+    "savedToast": "„{name}” opgeslagen.",
+    "selectAll": "Alles selecteren",
+    "selectedCount": "{selected} van {total} geselecteerd",
+    "sourceLanguage": "Brontaal",
+    "sourceLanguageHelp": "De basistaal waarin je sleutels geschreven zijn.",
+    "sourceNotTarget": "De brontaal kan niet ook een doeltaal zijn.",
+    "targetLanguages": "Doeltalen",
+    "targetLanguagesHelp": "Talen waarnaar je wilt vertalen.",
+    "targetLanguagesNote": "Elke sleutel die je toevoegt komt in de wachtrij voor iedere geselecteerde taal. Een taal weghalen verbergt haar kolom in de editor; bestaande vertalingen blijven bewaard.",
+    "targetLanguagesSubtitle": "De talen waarnaar deze app vertaald wordt.",
+    "uploadIcon": "Icoon uploaden"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} bestanden compleet - {updated}"
+    },
+    "created": {
+      "body": "Wil je je bestaande JSON-vertaalbestanden nu uploaden? Dat kan ook later vanaf het dashboard.",
+      "later": "Later",
+      "title": "„{name}” aangemaakt",
+      "upload": "Bestanden uploaden"
+    },
+    "delete": {
+      "body": "Hiermee verdwijnen de app en al haar vertalingen definitief. Dit kan niet ongedaan worden gemaakt.",
+      "title": "„{name}” verwijderen?"
+    },
+    "deletedNamedToast": "„{name}” verwijderd.",
+    "deletedToast": "App verwijderd.",
+    "empty": {
+      "message": "Wijs LingoDesk een projectmap aan en het importeert de vertaalbestanden die het vindt, of maak er met de hand een aan met een brontaal en je doeltalen.",
+      "title": "Maak je eerste app"
+    },
+    "importProject": "Project importeren",
+    "menu": {
+      "deleteApp": "App verwijderen",
+      "openEditor": "Editor openen",
+      "uploadFiles": "Bestanden uploaden"
+    },
+    "newApp": "Nieuwe app",
+    "searchHint": "Apps zoeken",
+    "status": {
+      "complete": "Compleet",
+      "missing": "Ontbreekt",
+      "new": "Nieuw"
+    },
+    "summary": {
+      "filesComplete": "Bestanden compleet",
+      "missingStrings": "Ontbrekende teksten",
+      "overallCoverage": "totale dekking",
+      "subtitle": "Vertaalbestanden over alle apps en talen",
+      "title": "Werkruimtetotalen"
+    },
+    "table": {
+      "colApp": "App",
+      "colFiles": "Bestanden",
+      "colLanguages": "Talen",
+      "colProgress": "Voortgang",
+      "colStatus": "Status",
+      "colUpdated": "Bijgewerkt",
+      "complete": "compleet",
+      "hideLanguages": "Talen verbergen",
+      "less": "Minder",
+      "noMatches": "Geen app komt overeen met je zoekopdracht.",
+      "searchSubtitle": "{matches} van {total} apps komen overeen met „{query}”",
+      "showLanguages": "Alle talen tonen",
+      "subtitle": "Huidige lokalisatiewerkruimtes"
+    }
+  },
+  "common": {
+    "back": "Terug",
+    "cancel": "Annuleren",
+    "clear": "Wissen",
+    "close": "Sluiten",
+    "delete": "Verwijderen",
+    "dismiss": "Sluiten",
+    "edit": "Bewerken",
+    "errorPrefix": "Fout: {message}",
+    "missingCount": {
+      "one": "1 ontbreekt",
+      "other": "{} ontbreken"
+    },
+    "more": "Meer",
+    "next": "Volgende",
+    "nextPage": "Volgende pagina",
+    "previousPage": "Vorige pagina",
+    "remove": "Verwijderen",
+    "retry": "Opnieuw proberen",
+    "rows": "Rijen",
+    "selectLanguage": "Kies een taal",
+    "selectOption": "Kies een optie",
+    "theme": "Thema",
+    "themeDark": "Donker",
+    "themeLight": "Licht",
+    "themeSystem": "Systeem"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 app",
+      "other": "{} apps"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} vertaalbestanden compleet",
+    "coverage": {
+      "empty": "Maak een app om hier de dekking te zien.",
+      "noData": "Nog geen vertaalgegevens. Upload JSON-bestanden om te beginnen.",
+      "subtitle": "Vertaald aandeel van de doelteksten per app",
+      "summary": "{translated} teksten vertaald. Er ontbreken er nog {missing} in de actieve doeltalen.",
+      "title": "Dekking per app"
+    },
+    "empty": {
+      "message": "Een app bundelt de vertaalbestanden van één project. Stel een brontaal in, kies je doeltalen en begin met vertalen.",
+      "title": "Maak je eerste app"
+    },
+    "health": {
+      "allTranslated": "Alle apps zijn volledig vertaald.",
+      "empty": "Nog geen doeltalen.",
+      "nextReview": "Volgende controle: {name}",
+      "nextReviewPrefix": "Volgende controle: ",
+      "subtitle": "Dekking per doeltaal",
+      "title": "Taalstatus"
+    },
+    "metric": {
+      "acrossApps": "Over alle apps",
+      "allClear": "Alles in orde",
+      "coverage": "Dekking",
+      "localWorkspace": "Lokale werkruimte",
+      "missing": "Ontbreekt",
+      "needsReview": "Nakijken",
+      "targetLocales": {
+        "one": "1 doeltaal",
+        "other": "{} doeltalen"
+      },
+      "totalKeys": "Totaal sleutels"
+    },
+    "stat": {
+      "keys": "Sleutels",
+      "locales": "Talen"
+    },
+    "subtitle": "Volg de dekking, kijk ontbrekende teksten na en pak je lokalisatiewerk weer op.",
+    "title": "Vertaaldashboard",
+    "viewAllApps": "Alle apps bekijken"
+  },
+  "editor": {
+    "addKey": "Sleutel toevoegen",
+    "addKeyHint": "Vul in wat je nu hebt — wat je leeg laat blijft ontbreken en kun je later in het raster vertalen.",
+    "aiAllComplete": "Alle doeltalen zijn compleet.",
+    "aiAlreadyRunning": "Er loopt al een vertaalronde.",
+    "aiCanceledEmpty": "Geannuleerd voordat er iets binnenkwam.",
+    "aiDialogBody": "Alleen lege cellen worden gevuld — bestaande vertalingen worden nooit overschreven.",
+    "aiFailedCount": {
+      "one": "1 kon niet vertaald worden.",
+      "other": "{} konden niet vertaald worden."
+    },
+    "aiFailedCountReason": {
+      "one": "1 kon niet vertaald worden ({error}).",
+      "other": "{} konden niet vertaald worden ({error})."
+    },
+    "aiFinishing": "Huidige batch afronden…",
+    "aiNotConfiguredBody": "Voeg eerst een API-sleutel toe bij Instellingen - AI-aanbieders.",
+    "aiNotConfiguredTitle": "AI is niet ingesteld",
+    "aiNothingHere": "Hier is niets meer te vertalen.",
+    "aiNothingLeft": "Niets meer te vertalen",
+    "aiNothingTranslated": "Er is niets vertaald.",
+    "aiProgress": "{label} vertalen · {done} van {total}",
+    "aiRunning": "AI-vertaling bezig",
+    "aiTranslate": "Vertalen met AI",
+    "aiTranslateMissing": {
+      "one": "1 ontbrekende tekst met AI vertalen",
+      "other": "{} ontbrekende teksten met AI vertalen"
+    },
+    "aiTranslateRow": "Rij met AI vertalen",
+    "aiTranslatedCanceled": {
+      "one": "1 tekst vertaald voor het annuleren.",
+      "other": "{} teksten vertaald voor het annuleren."
+    },
+    "aiTranslatedDone": {
+      "one": "1 tekst vertaald.",
+      "other": "{} teksten vertaald."
+    },
+    "aiUsing": "Met {provider} · {model}",
+    "clearAll": "Alles deselecteren",
+    "clickToHide": "Klik om de andere talen te verbergen",
+    "clickToShow": "Klik om de andere talen te tonen",
+    "copiedToast": "„{key}” naar het klembord gekopieerd.",
+    "copyKey": "Sleutel kopiëren",
+    "deleteKey": "Sleutel verwijderen",
+    "deleteKeyBody": "Hiermee verdwijnt „{key}” uit elke taal. Dit kan niet ongedaan worden gemaakt.",
+    "deleteKeyTitle": "Sleutel verwijderen?",
+    "empty": "Nog geen sleutels. Upload JSON-bestanden of voeg je eerste sleutel toe.",
+    "export": "Exporteren",
+    "exportCanceled": "Export geannuleerd.",
+    "exportChooseDestination": "Kies een bestemming",
+    "exportDownload": "Downloaden",
+    "exportFolderSummary": "Je kiest zo de map; daar komt één bestand per taal in te staan.",
+    "exportNoProject": "Importeer eerst een projectmap",
+    "exportOverwrite": "Bestanden overschrijven",
+    "exportProjectSummary": "Wordt naar {path} geschreven en vervangt die bestanden.",
+    "exportSaveTo": "Opslaan in {name}",
+    "exportSaveToProject": "Opslaan in het project",
+    "exportSavedToast": "{files} opgeslagen in {name}",
+    "exportToFolder": "Naar een map exporteren",
+    "exportToFolderEllipsis": "Naar een map exporteren…",
+    "exportZip": "ZIP downloaden",
+    "exportZipHint": "Ingepakt in je map Downloads",
+    "exportZipSummary": "Gebundeld in {file} in je map Downloads.",
+    "exportZippedToast": "{files} ingepakt in Downloads",
+    "exportedToast": "{files} geëxporteerd",
+    "fileCount": {
+      "one": "1 bestand",
+      "other": "{} bestanden"
+    },
+    "hiddenLanguages": {
+      "one": "nog 1 taal",
+      "other": "nog {} talen"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "nog 1 taal, binnen elke rij",
+      "other": "nog {} talen, binnen elke rij"
+    },
+    "hideOtherLanguages": "De andere talen verbergen",
+    "keyActions": "Sleutelacties",
+    "keyAddedToast": "Sleutel „{key}” toegevoegd.",
+    "keyDeletedToast": "Sleutel „{key}” verwijderd.",
+    "keyHelper": "Puntnotatie groepeert sleutels tot geneste JSON.",
+    "keyLabel": "Sleutel",
+    "languageCount": {
+      "one": "1 taal",
+      "other": "{} talen"
+    },
+    "languageSourceSuffix": "{language} (bron)",
+    "missingOnly": "Alleen ontbrekend",
+    "missingOnlyCount": "Alleen ontbrekend ({count})",
+    "noKeys": "Geen sleutels",
+    "noMatches": "Geen sleutel komt overeen met de huidige filters.",
+    "noProvider": "Geen aanbieder",
+    "paginationSummary": "{start}-{end} van {lines} regels - {keys} sleutels",
+    "searchHint": "Sleutels en waarden zoeken",
+    "showInFolder": "In map tonen",
+    "sourceText": "Brontekst",
+    "title": "Editor",
+    "translate": "Vertalen",
+    "translateCount": {
+      "one": "1 tekst vertalen",
+      "other": "{} teksten vertalen"
+    },
+    "translateWithAi": "Vertalen met AI",
+    "translatingHint": "Bezig met vertalen…",
+    "translationOptional": "Vertaling - optioneel",
+    "translations": "Vertalingen"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Voeg een API-sleutel toe bij Instellingen - AI-aanbieders.",
+      "blocked": "{provider} heeft deze batch geblokkeerd ({reason}).",
+      "emptyResponse": "{provider} gaf een leeg antwoord terug.",
+      "keyRejected": "De API-sleutel van {provider} is geweigerd. Controleer hem bij Instellingen - AI-aanbieders.",
+      "malformed": "De vertaalaanbieder gaf ongeldige JSON terug.",
+      "modelNotFound": "Het model van {provider} is niet gevonden. Controleer de modelnaam bij Instellingen - AI-aanbieders.",
+      "noConnection": "Geen verbinding met de vertaalaanbieder.",
+      "noKey": "Voer eerst een API-sleutel in.",
+      "refused": "{provider} weigerde deze batch te vertalen. Sla hem over of probeer een ander model.",
+      "stoppedEarly": "{provider} stopte voortijdig ({reason}).",
+      "timeout": "De vertaalaanbieder reageerde niet op tijd.",
+      "unexpectedResponse": "{provider} gaf een onverwacht antwoord terug."
+    },
+    "app": {
+      "nameEmpty": "De app-naam mag niet leeg zijn.",
+      "noTargetLanguage": "Kies minstens één doeltaal.",
+      "sourceIsTarget": "De brontaal kan niet ook een doeltaal zijn."
+    },
+    "cache": {
+      "appListCorrupt": "De opgeslagen app-lijst is beschadigd: {error}",
+      "appNotFound": "App niet gevonden.",
+      "appNotFoundId": "App niet gevonden: {id}",
+      "translationsCorrupt": "De opgeslagen vertalingen zijn beschadigd: {error}",
+      "writeAppList": "De app-lijst kon niet worden opgeslagen.",
+      "writeTranslations": "De vertalingen konden niet worden opgeslagen."
+    },
+    "editor": {
+      "invalidKey": "Gebruik puntnotatie met letters, cijfers, „_” of „-” (bijv. nav.home).",
+      "keyExists": "De sleutel „{key}” bestaat al.",
+      "keyNotFound": "Sleutel niet gevonden: {key}"
+    },
+    "export": {
+      "chooseFolder": "Kies een map om naar te exporteren.",
+      "noDownloadsFolder": "Je map Downloads is op dit platform niet gevonden.",
+      "noProjectFolder": "Deze app is niet uit een projectmap geïmporteerd, dus er is geen plek om haar naar terug te schrijven.",
+      "nothingToExport": "Er zijn nog geen sleutels om te exporteren.",
+      "selectLanguage": "Kies minstens één taal om te exporteren."
+    },
+    "file": {
+      "folderPickerOpen": "De mapkiezer kon niet worden geopend: {error}",
+      "launchFailed": "{executable} kon niet worden gestart: {error}",
+      "openPath": "{path} kon niet worden geopend: {error}",
+      "pickerOpen": "De bestandskiezer kon niet worden geopend: {error}",
+      "projectFolderRead": "De projectmap kon niet worden gelezen: {error}",
+      "revealUnsupported": "Een map tonen is op dit platform niet beschikbaar.",
+      "save": "{file} kon niet worden opgeslagen: {error}",
+      "unknownLanguage": "Van dit bestand was niet te bepalen bij welke taal het hoort. Noem het naar zijn taalcode of zet het in een taalmap.",
+      "unsupportedPlatform": "Niet beschikbaar op dit platform.",
+      "writeFolder": "Er kon niet naar {path} worden geschreven: {error}"
+    },
+    "image": {
+      "convert": "Die afbeelding kon niet naar PNG worden omgezet.",
+      "notAnImage": "Dat bestand is geen afbeelding die LingoDesk kan lezen: {error}",
+      "pickerOpen": "De afbeeldingskiezer kon niet worden geopend: {error}",
+      "tooLarge": "Kies een afbeelding kleiner dan 8 MB.",
+      "unreadable": "Die afbeelding kon niet worden gelezen."
+    },
+    "import": {
+      "noFiles": "Geen bestanden om te importeren."
+    },
+    "json": {
+      "invalid": "Ongeldige JSON: {error}",
+      "noKeys": "Het bestand bevat geen vertaalsleutels.",
+      "notObject": "Het bestand moet op het hoogste niveau een JSON-object bevatten."
+    }
+  },
+  "landing": {
+    "apkLink": "Of download de Android-APK · {size}  →",
+    "askingGithub": "GitHub om de nieuwste release vragen…",
+    "checkingBuilds": "Builds zoeken…",
+    "codeMissing": "ontbreekt",
+    "cta": {
+      "apk": "Download de APK",
+      "latest": "Download de nieuwste build",
+      "macos": "Download voor macOS",
+      "windows": "Download voor Windows"
+    },
+    "download": {
+      "allReleases": "Alle releases en changelogs op GitHub  →",
+      "body": "Gratis en open source onder de MIT-licentie. Geen account, geen proefperiode, geen telemetrie.",
+      "copied": "Gekopieerd",
+      "copy": "Kopiëren",
+      "eyebrow": "Downloaden",
+      "latest": "Nieuwste",
+      "latestBuildRuns": "Laatste buildruns",
+      "noBuildBody": "De installatiebestanden voor macOS, Windows en Android worden door GitHub Actions gebouwd en aan een release gehangen zodra er een versietag wordt gepusht. Tot dan duurt het draaien vanaf de broncode ongeveer twee minuten.",
+      "noBuildTitle": "Nog geen ingepakte build gepubliceerd",
+      "published": "Gepubliceerd op {date}",
+      "releasesOnGithub": "Releases op GitHub",
+      "runFromSource": "Of draai het vanaf de broncode op elk van de zes platformen",
+      "runFromSourceNote": "Vervang het device door windows, linux, chrome of een aangesloten telefoon. Het project legt zijn Flutter-versie vast in .fvmrc.",
+      "title": "Haal LingoDesk.",
+      "tryAgain": "Opnieuw proberen",
+      "unreachableBody": "{reason} Je kunt nog steeds de releasepagina bekijken of vanaf de broncode bouwen.",
+      "unreachableTitle": "GitHub niet bereikbaar",
+      "unsignedNote": "De desktopbuilds zijn niet ondertekend: klik op macOS de eerste keer met rechts op de app en kies Openen; kies op Windows Meer informatie en dan Toch uitvoeren.",
+      "version": "Versie {version}"
+    },
+    "features": {
+      "body": "LingoDesk is een gericht desktopgereedschap, geen vertaalplatform met licenties en dashboards.",
+      "eyebrow": "Functies",
+      "f1Body": "Geneste JSON wordt platgeslagen tot puntsleutels, zodat een tekst en al zijn vertalingen op één rij staan die je van links naar rechts leest.",
+      "f1Title": "Eén raster voor elke taal",
+      "f2Body": "Live dekking per taal en een filter „alleen ontbrekend” dat honderden sleutels terugbrengt tot het handjevol dat nog leeg is.",
+      "f2Title": "Ontbrekende teksten, geen gemiste bugs",
+      "f3Body": "Vertaal de gaten in batches via Anthropic, OpenAI of Gemini. Jouw sleutel, jouw account, jouw rekening — er gaat niets via een tussenpartij.",
+      "f3Title": "Vertaal met je eigen AI-sleutel",
+      "f4Body": "Geen backend, geen telemetrie, geen registratie. Projecten staan op je eigen machine en API-sleutels gaan de beveiligde opslag van het systeem in.",
+      "f4Title": "Lokaal en privé",
+      "f5Body": "Scan een projectmap, haal de taalbestanden binnen die je al hebt en exporteer de geneste vorm rechtstreeks terug naar de repository.",
+      "f5Title": "Importeren en exporteren ter plekke",
+      "f6Body": "Een werkruimte waar je de hele dag naar kunt kijken — elk thema is een volledig palet, niet alleen een andere accentkleur.",
+      "f6Title": "Zes thema's, licht en donker",
+      "title": "Alles wat het werk nodig heeft. Niets wat het niet nodig heeft."
+    },
+    "flutter": {
+      "body": "LingoDesk is één keer in Dart geschreven en gecompileerd voor macOS, Windows, Linux, Android, iOS en het web. Deze pagina is geen HTML met een Flutter-demo erbovenop — het is hetzelfde project, dezelfde design tokens en dezelfde widgets, gecompileerd voor de browser waarin je dit leest.",
+      "eyebrow": "Gebouwd met Flutter & Dart",
+      "fromSource": "Vanaf de broncode",
+      "markBody": "Het logo hierboven is een CustomPainter die afgeronde rechthoeken en twee cirkels op een canvas tekent — daardoor blijft het op elk formaat scherp en neemt het het accent van het gekozen thema over.",
+      "markTitle": "Geen afbeeldingsbestand",
+      "pill": "Live, nu meteen",
+      "prebuilt": "Voorgebouwd",
+      "proofBody": "Dit zijn de zes paletten die LingoDesk meelevert, gelezen uit dezelfde theme-extensie als de desktopbuild. Kies er een en de hele site kleurt opnieuw — zonder herladen, zonder stylesheetwissel.",
+      "proofTitle": "Elke kleur op deze pagina komt uit de app.",
+      "statCodebase": "codebase",
+      "statJavascript": "met de hand geschreven regels JavaScript",
+      "statTargets": "compilatiedoelen",
+      "title": "Eén codebase. Zes platformen.\nDeze pagina inbegrepen.",
+      "youAreHere": "Je bent hier"
+    },
+    "footer": {
+      "issues": "Issues",
+      "licence": "MIT-licentie",
+      "note": "Deze pagina is een Flutter-webapp, gebouwd uit dezelfde repository als het product.",
+      "readme": "Readme",
+      "releases": "Releases"
+    },
+    "getStarted": "Aan de slag",
+    "hero": {
+      "body": "LingoDesk maakt van een map met en.json, fr.json en es.json één werkruimte: elke sleutel een rij, elke taal een kolom, elke ontbrekende tekst onmogelijk te missen.",
+      "pill": "Open source · MIT · Geen account, geen backend",
+      "title": "Vertaal elke taal\nvanaf één opgeruimd bureau."
+    },
+    "localeStrip": "20 talen ingebouwd · voeg elke andere toe in de instellingen",
+    "nav": {
+      "download": "Downloaden",
+      "features": "Functies",
+      "flutter": "Flutter",
+      "howItWorks": "Hoe het werkt",
+      "language": "Taal",
+      "menu": "Menu",
+      "screens": "Schermen",
+      "why": "Waarom"
+    },
+    "openIssue": "Een issue openen",
+    "openSource": {
+      "body": "MIT-gelicentieerd. Fork het, gebruik het binnen je team of open een issue over de werkwijze die je het meest stoort — de roadmap wordt bepaald door wie het gebruikt.",
+      "title": "Voor altijd gratis, en de broncode ligt er gewoon."
+    },
+    "preview": {
+      "allTranslated": "Elke taal is volledig vertaald.",
+      "appearanceNote": "Dit is echt de instelling — hij kleurt de hele pagina opnieuw, niet alleen dit venster.",
+      "editorWindow": "Vertaaleditor",
+      "keysNote": "Sleutels staan in de beveiligde opslag van het systeem. Ze blijven op dit apparaat en gaan alleen naar de aanbieder waar ze bij horen.",
+      "missingStrings": {
+        "one": "1 ontbrekende tekst",
+        "other": "{} ontbrekende teksten"
+      },
+      "noMatches": "Geen sleutel komt overeen met „{query}”.",
+      "nothingMissing": "Er ontbreekt niets — elke tekst is vertaald.",
+      "projects": "Projecten",
+      "semantics": "Het LingoDesk-dashboard: dekking, aantallen sleutels en taalstatus over een hele werkruimte."
+    },
+    "problem": {
+      "afterEyebrow": "Met LingoDesk",
+      "afterTitle": "Eén raster. De gaten melden zichzelf.",
+      "beforeEyebrow": "Zonder LingoDesk",
+      "beforeTitle": "Drie bestanden, drie tabbladen, één ontbrekende tekst die je pas bij de review vindt.",
+      "body": "Eén tekst toevoegen betekent elk taalbestand openen en er geen vergeten. LingoDesk maakt daar één rij van.",
+      "exportNote": "De export bouwt de geneste vorm bestand voor bestand weer op, precies zoals je app hem verwacht.",
+      "eyebrow": "Het probleem",
+      "title": "Lokalisatiebestanden lopen uiteen zodra je een sleutel toevoegt."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · voor altijd gratis",
+    "releasePending": "Nog geen ingepakte build — draai het met twee commando's vanaf de broncode.",
+    "releasePickBuild": "v{version} is uit — kies hieronder een build.",
+    "releaseUnavailable": "{reason} Bekijk de releasepagina.",
+    "seeAllDownloads": "Alle downloads bekijken",
+    "starOnGithub": "Ster geven op GitHub",
+    "starOnGithubCount": "Ster op GitHub · {stars}",
+    "starOnGithubTooltip": "Geef LingoDesk een ster op GitHub",
+    "steps": {
+      "eyebrow": "Hoe het werkt",
+      "s1Body": "Eén per app. Kies de brontaal één keer en de doeltalen die je echt uitlevert.",
+      "s1Title": "Maak een werkruimte",
+      "s2Body": "Wijs je taalmap aan. Bestaande JSON wordt platgeslagen, getoetst aan de opgegeven talen en ingeladen.",
+      "s2Title": "Importeer wat je hebt",
+      "s3Body": "Filter op wat ontbreekt en typ, of geef de batch aan je AI-aanbieder. Wijzigingen worden onderweg opgeslagen.",
+      "s3Title": "Vul de gaten",
+      "s4Body": "De geneste structuur wordt per taal opnieuw opgebouwd, klaar om naast je code terug te zetten en te committen.",
+      "s4Title": "Exporteer terug naar de repo",
+      "title": "Vier stappen en dan weer coderen."
+    },
+    "switchToDark": "Overschakelen naar donker",
+    "switchToLight": "Overschakelen naar licht",
+    "tour": {
+      "aiProviders": "Neem je eigen sleutel mee voor Anthropic, OpenAI of Gemini. Kies er een en elke AI-actie in de editor gebruikt die sleutel.",
+      "appearance": "Zes volledige paletten en een licht/donker-schakelaar. Dit is de echte instelling, geen plaatje ervan — kies een thema en de hele site kleurt opnieuw.",
+      "body": "Dit is geen schermafbeelding. Dit is de app, in deze pagina gecompileerd — klik er gerust op.",
+      "dashboard": "Dekking, aantallen sleutels en taalstatus voor elk project, meteen als je de app opent. De cijfers komen uit dezelfde cellen waar de editor in schrijft — vul er een in en zie ze bewegen.",
+      "editor": "Sleutels langs de zijkant, talen bovenaan. Elke cel is een echt veld: typ een vertaling, zoek, of filter op wat nog ontbreekt.",
+      "eyebrow": "Een blik naar binnen",
+      "pill": "Live · niets van wat je hier doet wordt bewaard",
+      "projects": "Eén werkruimte per app, elk met een eigen brontaal en eigen doeltalen. Klik op een rij om hem te openen.",
+      "title": "Gebouwd als een desktop-app, want dat is het."
+    },
+    "viewOnGithub": "Bekijken op GitHub",
+    "warning": {
+      "macos": "Niet-ondertekende build — klik de eerste keer met rechts op de app en kies Openen.",
+      "windows": "Niet-ondertekende build — kies in SmartScreen Meer informatie en dan Toch uitvoeren."
+    }
+  },
+  "language": {
+    "ar": "Arabisch",
+    "cs": "Tsjechisch",
+    "de": "Duits",
+    "en": "Engels",
+    "es": "Spaans",
+    "fr": "Frans",
+    "hi": "Hindi",
+    "it": "Italiaans",
+    "ja": "Japans",
+    "ko": "Koreaans",
+    "nl": "Nederlands",
+    "pl": "Pools",
+    "pt": "Portugees",
+    "ro": "Roemeens",
+    "ru": "Russisch",
+    "sv": "Zweeds",
+    "tr": "Turks",
+    "uk": "Oekraïens",
+    "vi": "Vietnamees",
+    "zh": "Chinees"
+  },
+  "nav": {
+    "aiProviders": "AI-aanbieders",
+    "appearance": "Weergave",
+    "apps": "Apps",
+    "dashboard": "Dashboard",
+    "group": {
+      "settings": "Instellingen",
+      "workspace": "Werkruimte"
+    },
+    "import": "Importeren",
+    "languages": "Talen",
+    "localStorage": "Lokale opslag",
+    "profile": "Profiel",
+    "settings": "Instellingen"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Local-first",
+      "locales": "20 talen",
+      "nestedJson": "Geneste JSON"
+    },
+    "skip": "Overslaan",
+    "stage": {
+      "body": "Geen accounts, geen synchronisatie, geen wildgroei aan spreadsheets - alleen jouw JSON, op jouw machine.",
+      "title": "Eén bureau voor elk taalbestand."
+    },
+    "startSetup": "Instellen starten",
+    "step1": {
+      "body": "Elke sleutel is een rij en elke taal een kolom. Ontbrekende teksten blijven oplichten terwijl je werkt, zodat er niets half vertaald de deur uitgaat.",
+      "caption": "Alle delen, één ruimte",
+      "eyebrow": "Vertaalwerkruimte",
+      "highlight1": "Sleutels en talen in één raster",
+      "highlight2": "Filter op wat nog ontbreekt",
+      "highlight3": "Wijzigingen worden lokaal opgeslagen terwijl je typt",
+      "title": "Vertaal elke taal vanaf één opgeruimd bureau"
+    },
+    "step2": {
+      "body": "Eén werkruimte per app: kies de brontaal één keer, volg alleen de doeltalen die ertoe doen en laat de dekking voor zich spreken.",
+      "caption": "Geïndexeerd, gelabeld, vindbaar",
+      "eyebrow": "Projectinstelling",
+      "highlight1": "Een eigen werkruimte voor elke app",
+      "highlight2": "Kies doeltalen uit 20 ondersteunde talen",
+      "highlight3": "Dekking per app en per taal",
+      "title": "Houd elk product per taal geordend"
+    },
+    "step3": {
+      "body": "LingoDesk bouwt je oorspronkelijke sleutelstructuur opnieuw op vóór de export, zodat de bestanden die in je repository landen precies zijn wat je app verwacht.",
+      "caption": "Elke bestemming op het bord",
+      "eyebrow": "Klaar om te exporteren",
+      "highlight1": "Puntsleutels worden weer geneste objecten",
+      "highlight2": "Kies de talen, sla op waar je wilt",
+      "highlight3": "Netjes opgemaakt, met een vaste sleutelvolgorde",
+      "title": "Stuur geneste JSON-bestanden terug naar je app"
+    },
+    "stepOf": "Stap {step} van {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Volg het systeemthema of kies er zelf een.",
+      "swatchActive": "Actief",
+      "swatchBackground": "Achtergrond",
+      "swatchBrand": "Merk",
+      "swatchCard": "Kaart",
+      "themeSubtitle": "Zes paletten. Elk daarvan restylet de hele app, niet alleen het accent."
+    },
+    "defaults": {
+      "count": {
+        "one": "1 taal wordt vooraf geselecteerd.",
+        "other": "{} talen worden vooraf geselecteerd."
+      },
+      "empty": "Nog geen standaardwaarden — nieuwe apps beginnen zonder doeltalen.",
+      "subtitle": "Vooraf geselecteerd telkens als je een nieuwe app maakt.",
+      "title": "Standaard doeltalen"
+    },
+    "language": {
+      "note": "Je keuze wordt opgeslagen en meteen toegepast — menu's, dialogen en meldingen gaan allemaal mee.",
+      "subtitle": "De taal waarin LingoDesk zelf wordt weergegeven.",
+      "title": "Interfacetaal"
+    },
+    "profile": {
+      "email": "E-mail",
+      "emailHint": "optioneel",
+      "name": "Weergavenaam",
+      "nameHint": "Lokale werkruimte",
+      "note": "LingoDesk heeft geen accounts. Dit geeft alleen je lokale werkruimte een naam.",
+      "subtitle": "Te zien in de zijbalk. Alleen op dit apparaat bewaard."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Warm amber en geroosterde zandtinten."
+    },
+    "graphite": {
+      "description": "Helemaal geen kleurtint — het contrast doet het accent."
+    },
+    "indigo": {
+      "description": "Koel indigo op blauwgrijze neutralen."
+    },
+    "rose": {
+      "description": "Diep roze met zachte vlakken."
+    },
+    "teal": {
+      "description": "De huisstijl — verzadigd blauwgroen op warme steen."
+    },
+    "violet": {
+      "description": "Elektrisch violet op een licht purperen chassis."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1 dag geleden",
+      "other": "{} dagen geleden"
+    },
+    "hoursAgo": {
+      "one": "1 uur geleden",
+      "other": "{} uur geleden"
+    },
+    "justNow": "Zojuist",
+    "minutesAgo": {
+      "one": "1 min geleden",
+      "other": "{} min geleden"
+    },
+    "monthsAgo": {
+      "one": "1 maand geleden",
+      "other": "{} maanden geleden"
+    },
+    "weeksAgo": {
+      "one": "1 week geleden",
+      "other": "{} weken geleden"
+    },
+    "yearsAgo": {
+      "one": "1 jaar geleden",
+      "other": "{} jaar geleden"
+    },
+    "yesterday": "Gisteren"
+  },
+  "upload": {
+    "addFiles": "Bestanden toevoegen",
+    "addFolder": "Map toevoegen",
+    "addMore": "Meer toevoegen",
+    "backToApps": "Terug naar de apps",
+    "backToEditor": "Terug naar de editor",
+    "browseFiles": "Bestanden bladeren",
+    "chooseFolder": "Map kiezen",
+    "defaultImportName": "Geïmporteerd project",
+    "defaultProjectName": "Geïmporteerde vertalingen",
+    "detectedLanguages": "Gevonden talen",
+    "detectedLanguagesHint": "Voeg meer mappen of bestanden toe; ze worden hiermee samengevoegd.",
+    "exportsBackTo": "Exporteert terug naar {path}",
+    "filesReady": {
+      "one": "1 bestand klaar om te importeren.",
+      "other": "{} bestanden klaar om te importeren."
+    },
+    "hero": {
+      "filesBody": "Scan een map of kies de .json-bestanden zelf. Elk bestand wordt op naam aan een taal gekoppeld.",
+      "filesTitle": "Voeg je vertaalbestanden toe",
+      "projectBody": "Kies het project (of een willekeurige map) en LingoDesk vindt de vertaalbestanden erin — of kies de .json-bestanden zelf.",
+      "projectTitle": "Importeer je vertalingen"
+    },
+    "importAndOpen": "Importeren & editor openen",
+    "importedToast": "Geïmporteerd in „{name}”.",
+    "keepOneLanguage": "Houd minstens één taal over om te importeren.",
+    "languageSource": "{language} - bron",
+    "logo": "Logo",
+    "namingRule": "Noem elk bestand naar zijn taalcode. Alles daarbuiten wordt geweigerd.",
+    "needValidFile": "Voeg minstens één geldig bestand toe om te importeren.",
+    "noFilesFound": "Geen vertaalbestanden gevonden in „{name}”. Er is gezocht naar .json-bestanden in de mappen /translation, /translations en /languages.",
+    "pickFilesTitle": "Vertaalbestanden kiezen",
+    "pickFolderTitle": "Kies je projectmap",
+    "readySummary": "{languages} taal/talen en {keys} sleutels klaar om te importeren.",
+    "removeLogo": "Logo verwijderen",
+    "replaceLogo": "Logo vervangen",
+    "requiredLanguages": "Vereiste talen",
+    "scanning": "Scannen…",
+    "skipToEditor": "Door naar de editor",
+    "sourceHelper": "Al het overige wordt een doeltaal waarnaar je kunt vertalen.",
+    "stagedFiles": "Klaargezette bestanden",
+    "startOver": "Opnieuw beginnen",
+    "stat": {
+      "translated": "Vertaald"
+    },
+    "uploadLogo": "Een logo uploaden",
+    "whereWeLook": "Waar we kijken",
+    "whereWeLookBody": "Elk .json-bestand in een map /translation, /translations of /languages, waar dan ook in het project. Build- en afhankelijkheidsmappen worden overgeslagen."
+  }
+}

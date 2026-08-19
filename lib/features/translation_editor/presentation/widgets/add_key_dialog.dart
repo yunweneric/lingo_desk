@@ -7,6 +7,7 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
+import '../../../../core/localization/export.dart';
 
 /// The values collected by [AddKeyDialog]: the key plus whatever
 /// translations were typed, mapped by language code.
@@ -79,13 +80,14 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
     final key = _keyController.text.trim();
     if (!JsonFlattener.isValidKey(key)) {
       setState(() {
-        _error =
-            'Use dot notation with letters, digits, "_" or "-" (e.g. nav.home).';
+        _error = LocaleKeys.errorsInvalidKey.tr();
       });
       return;
     }
     if (widget.existingKeys.contains(key)) {
-      setState(() => _error = 'The key "$key" already exists.');
+      setState(
+        () => _error = LocaleKeys.errorsKeyExists.tr(namedArgs: {'key': key}),
+      );
       return;
     }
 
@@ -105,7 +107,7 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
     // Wide enough for full sentences, since every language is edited
     // here rather than only the source — but never wider than the window.
     return LingoDeskDialog(
-      title: const Text('Add key'),
+      title: Text(LocaleKeys.editorAddKey.tr()),
       preferredWidth: 1120,
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -113,9 +115,9 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
         children: [
           LingoDeskTextField(
             controller: _keyController,
-            label: 'Key',
+            label: LocaleKeys.editorKeyLabel.tr(),
             hintText: 'nav.home',
-            helperText: 'Dot notation groups keys into nested JSON.',
+            helperText: LocaleKeys.editorKeyHelper.tr(),
             errorText: _error,
             size: LingoDeskFieldSize.large,
             monospace: true,
@@ -130,15 +132,14 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Translations',
+            LocaleKeys.editorTranslations.tr(),
             style: theme.textTheme.labelLarge?.copyWith(
               color: tokens.foreground,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Fill in what you have now - anything left blank stays missing '
-            'and can be translated later in the grid.',
+            LocaleKeys.editorAddKeyHint.tr(),
             style: theme.textTheme.bodySmall?.copyWith(color: tokens.muted),
           ),
           const SizedBox(height: 12),
@@ -167,8 +168,8 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
                             controller: _valueControllers[language],
                             label: _labelFor(language),
                             hintText: language == widget.sourceLanguage
-                                ? 'Source text'
-                                : 'Translation - optional',
+                                ? LocaleKeys.editorSourceText.tr()
+                                : LocaleKeys.editorTranslationOptional.tr(),
                             size: LingoDeskFieldSize.large,
                             maxLines: 3,
                             minLines: 1,
@@ -186,9 +187,12 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(LocaleKeys.commonCancel.tr()),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Add key')),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(LocaleKeys.editorAddKey.tr()),
+        ),
       ],
     );
   }
@@ -197,6 +201,8 @@ class _AddKeyDialogState extends State<AddKeyDialog> {
     final label =
         '${SupportedLanguages.flagOf(language)}  '
         '${SupportedLanguages.nameOf(language)} ($language)';
-    return language == widget.sourceLanguage ? '$label - source' : label;
+    return language == widget.sourceLanguage
+        ? LocaleKeys.uploadLanguageSource.tr(namedArgs: {'language': label})
+        : label;
   }
 }

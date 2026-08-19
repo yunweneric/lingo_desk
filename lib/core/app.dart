@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'di/injection_container.dart';
+import 'localization/export.dart';
 import 'preferences/app_settings_controller.dart';
 import 'router/app_router.dart';
 import 'theme/lingo_desk_theme.dart';
@@ -48,7 +49,9 @@ class _LingoDeskAppState extends State<LingoDeskApp> {
           theme: LingoDeskTheme.light(palette),
           darkTheme: LingoDeskTheme.dark(palette),
           themeMode: _settings.themeMode,
-          locale: Locale(_settings.uiLanguage),
+          locale: AppLocalization.localeOf(context),
+          supportedLocales: AppLocalization.supportedLocalesOf(context),
+          localizationsDelegates: AppLocalization.delegatesOf(context),
           routerConfig: _router,
           // Above the router, so a toast survives the navigation that
           // often triggers it and paints over dialogs.

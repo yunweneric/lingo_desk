@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/localization/export.dart';
 
 /// Picks an image from disk and normalizes it into the form an app icon
 /// is stored in: a square-ish PNG no larger than [iconMaxSize] px,
@@ -37,7 +38,9 @@ class AppIconDataSourceImpl implements AppIconDataSource {
         withData: true,
       );
     } on Exception catch (e) {
-      throw FileException('Could not open the image picker: $e');
+      throw FileException(
+        LocaleKeys.errorsImagePickerOpen.tr(namedArgs: {'error': '$e'}),
+      );
     }
 
     if (result == null || result.files.isEmpty) {
@@ -46,10 +49,10 @@ class AppIconDataSourceImpl implements AppIconDataSource {
 
     final bytes = result.files.first.bytes;
     if (bytes == null || bytes.isEmpty) {
-      throw const FileException('That image could not be read.');
+      throw FileException(LocaleKeys.errorsImageUnreadable.tr());
     }
     if (bytes.length > _maxSourceBytes) {
-      throw const FileException('Pick an image smaller than 8 MB.');
+      throw FileException(LocaleKeys.errorsImageTooLarge.tr());
     }
 
     return encodeIconBytes(bytes);
@@ -66,7 +69,9 @@ Future<String> encodeIconBytes(Uint8List bytes) async {
   try {
     codec = await ui.instantiateImageCodec(bytes);
   } on Exception catch (e) {
-    throw FileException('That file is not an image LingoDesk can read: $e');
+    throw FileException(
+      LocaleKeys.errorsNotAnImage.tr(namedArgs: {'error': '$e'}),
+    );
   }
 
   final ui.Image source;
@@ -99,7 +104,7 @@ Future<String> encodeIconBytes(Uint8List bytes) async {
   final data = await image.toByteData(format: ui.ImageByteFormat.png);
   image.dispose();
   if (data == null) {
-    throw const FileException('That image could not be converted to PNG.');
+    throw FileException(LocaleKeys.errorsImageConvert.tr());
   }
 
   return base64Encode(data.buffer.asUint8List());

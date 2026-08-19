@@ -6,6 +6,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/lingo_desk_dialog.dart';
 import '../bloc/translation_editor_state.dart';
+import '../../../../core/localization/export.dart';
 
 /// Picks which target languages an AI pass should fill.
 ///
@@ -62,7 +63,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
     final allSelected = _selected.length == _missing.length;
 
     return LingoDeskDialog(
-      title: const Text('AI translate'),
+      title: Text(LocaleKeys.editorAiTranslate.tr()),
       preferredWidth: 420,
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -71,8 +72,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(
-              'Only empty cells are filled — translations you already have '
-              'are never overwritten.',
+              LocaleKeys.editorAiDialogBody.tr(),
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -82,7 +82,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18),
               child: Text(
-                'Every target language is complete.',
+                LocaleKeys.editorAiAllComplete.tr(),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             )
@@ -97,7 +97,11 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
                     _selected.addAll(_missing.keys);
                   }
                 }),
-                child: Text(allSelected ? 'Clear all' : 'Select all'),
+                child: Text(
+                  allSelected
+                      ? LocaleKeys.editorClearAll.tr()
+                      : LocaleKeys.appSettingsSelectAll.tr(),
+                ),
               ),
             ),
             Flexible(
@@ -111,7 +115,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
                         leading: SupportedLanguages.flagOf(entry.key),
                         title: SupportedLanguages.nameOf(entry.key),
                         trailing: Text(
-                          '${entry.value} missing',
+                          LocaleKeys.commonMissingCount.plural(entry.value),
                           style: LingoDeskTheme.codeStyle.copyWith(
                             color: tokens.muted,
                             fontSize: 12,
@@ -134,7 +138,12 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
           ],
           const SizedBox(height: 12),
           Text(
-            'Using ${widget.providerLabel} · ${widget.model}',
+            LocaleKeys.editorAiUsing.tr(
+              namedArgs: {
+                'provider': widget.providerLabel,
+                'model': widget.model,
+              },
+            ),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
@@ -144,7 +153,7 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(LocaleKeys.commonCancel.tr()),
         ),
         FilledButton(
           onPressed: _selected.isEmpty
@@ -156,9 +165,8 @@ class _AiTranslateDialogState extends State<AiTranslateDialog> {
                 ),
           child: Text(
             _selectedCount == 0
-                ? 'Translate'
-                : 'Translate $_selectedCount string'
-                      '${_selectedCount == 1 ? '' : 's'}',
+                ? LocaleKeys.editorTranslate.tr()
+                : LocaleKeys.editorTranslateCount.plural(_selectedCount),
           ),
         ),
       ],

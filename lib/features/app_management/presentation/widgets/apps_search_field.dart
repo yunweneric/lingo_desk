@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../bloc/app_management_bloc.dart';
 import '../bloc/app_management_event.dart';
+import '../../../../core/localization/export.dart';
 
 /// Filters the apps table by name through [SearchAppsEvent].
 class AppsSearchField extends StatelessWidget {
@@ -21,7 +22,7 @@ class AppsSearchField extends StatelessWidget {
     return SizedBox(
       width: expand ? double.infinity : width,
       child: LingoDeskTextField(
-        hintText: 'Search apps',
+        hintText: LocaleKeys.appsSearchHint.tr(),
         prefixIcon: HugeIcons.strokeRoundedGlobalSearch,
         clearable: true,
         onChanged: (value) =>

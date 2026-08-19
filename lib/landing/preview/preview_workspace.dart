@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import '../../core/localization/export.dart';
 
 /// Which screen the preview window is showing.
 enum PreviewScreen {
-  dashboard('Dashboard', 'Dashboard'),
-  editor('Editor', 'Translation editor'),
-  projects('Projects', 'Apps'),
-  aiProviders('AI providers', 'AI providers'),
-  appearance('Appearance', 'Appearance');
+  dashboard(LocaleKeys.navDashboard, LocaleKeys.navDashboard),
+  editor(LocaleKeys.editorTitle, LocaleKeys.landingPreviewEditorWindow),
+  projects(LocaleKeys.landingPreviewProjects, LocaleKeys.navApps),
+  aiProviders(LocaleKeys.navAiProviders, LocaleKeys.navAiProviders),
+  appearance(LocaleKeys.navAppearance, LocaleKeys.navAppearance);
 
   const PreviewScreen(this.label, this.windowTitle);
 
-  /// Name in the tour's tab strip and the preview's own sidebar.
+  /// Translation key for the name in the tour's tab strip and the
+  /// preview's own sidebar.
   final String label;
 
-  /// Shown in the drawn window chrome.
+  /// Translation key for the drawn window chrome.
   final String windowTitle;
 }
 

@@ -30,6 +30,7 @@ environment:
 dependencies:
   archive: ^4.0.9
   dartz: ^0.10.1
+  easy_localization: ^3.0.8
   file_picker: ^10.1.2
   flutter:
     sdk: flutter
@@ -41,6 +42,7 @@ dependencies:
   google_fonts: ^8.2.1
   http: ^1.2.2
   hugeicons: ^1.1.7
+  intl: ^0.20.2
   path_provider: ^2.1.6
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.0
@@ -80,6 +82,7 @@ flutter:
     - assets/brand/
     - assets/brand/providers/
     - assets/onboarding/
+    - assets/translations/
 
   fonts:
     - family: Space Grotesk

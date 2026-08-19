@@ -6,6 +6,7 @@ import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// Icon + title + subtitle heading used at the top of every card.
 class WorkspaceCardHeader extends StatelessWidget {
@@ -322,13 +323,16 @@ class WorkspaceErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Error: $message',
+              LocaleKeys.commonErrorPrefix.tr(namedArgs: {'message': message}),
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
             ),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onRetry, child: const Text('Retry')),
+            FilledButton(
+              onPressed: onRetry,
+              child: Text(LocaleKeys.commonRetry.tr()),
+            ),
           ],
         ),
       ),

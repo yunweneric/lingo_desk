@@ -9,6 +9,7 @@ import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
 import 'app_icon_field.dart';
 import 'language_target_selector.dart';
+import '../../../../core/localization/export.dart';
 
 /// The app-configuration form fields (name, source language, target
 /// languages, inline validation error), shared by the create dialog and
@@ -37,8 +38,8 @@ class AppSettingsFormFields extends StatelessWidget {
         const SizedBox(height: 22),
         LingoDeskTextField(
           controller: nameController,
-          label: 'App name',
-          hintText: 'e.g. Customer Portal',
+          label: LocaleKeys.appSettingsAppName.tr(),
+          hintText: LocaleKeys.appSettingsAppNameHint.tr(),
           size: LingoDeskFieldSize.large,
           autofocus: autofocusName,
           isRequired: true,
@@ -47,8 +48,8 @@ class AppSettingsFormFields extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         LanguageDropdown(
-          label: 'Source language',
-          description: 'The base language your keys are written in.',
+          label: LocaleKeys.appSettingsSourceLanguage.tr(),
+          description: LocaleKeys.appSettingsSourceLanguageHelp.tr(),
           value: state.sourceLanguage,
           onChanged: (value) => context.read<AppSettingsBloc>().add(
             SourceLanguageChangedEvent(value),
@@ -56,8 +57,8 @@ class AppSettingsFormFields extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         LingoDeskFieldScaffold(
-          label: 'Target languages',
-          description: 'Languages you want to translate into.',
+          label: LocaleKeys.appSettingsTargetLanguages.tr(),
+          description: LocaleKeys.appSettingsTargetLanguagesHelp.tr(),
           child: LanguageTargetSelector(
             sourceLanguage: state.sourceLanguage,
             selectedLanguages: state.targetLanguages,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_mark.dart';
+import '../../../../core/localization/export.dart';
 
 /// Top rail of the content pane: where you are, and the way out.
 ///
@@ -34,7 +35,10 @@ class OnboardingHeader extends StatelessWidget {
           counter,
         const Spacer(),
         if (showMark) ...[counter, const SizedBox(width: 16)],
-        TextButton(onPressed: onSkip, child: const Text('Skip')),
+        TextButton(
+          onPressed: onSkip,
+          child: Text(LocaleKeys.onboardingSkip.tr()),
+        ),
       ],
     );
   }

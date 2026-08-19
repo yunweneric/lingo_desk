@@ -19,6 +19,7 @@ import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/app_overview.dart';
 import '../app_actions.dart';
 import '../bloc/app_management_state.dart';
+import '../../../../core/localization/export.dart';
 
 /// Most language badges a row shows inline before the rest move into the
 /// collapsible section. Four keeps every row exactly one line tall; a
@@ -103,7 +104,7 @@ class AppsTable extends StatelessWidget {
           _minChipSlot,
           math.max(
                 _pillWidth('+99', badgeStyle, textScaler),
-                _pillWidth('Less', badgeStyle, textScaler),
+                _pillWidth(LocaleKeys.appsTableLess.tr(), badgeStyle, textScaler),
               ) +
               _badgeGap,
         );
@@ -124,12 +125,16 @@ class AppsTable extends StatelessWidget {
                   children: [
                     Expanded(
                       child: WorkspaceCardHeader(
-                        title: 'Apps',
+                        title: LocaleKeys.navApps.tr(),
                         subtitle: state.query.trim().isEmpty
-                            ? 'Current localization workspaces'
-                            : '${overviews.length} of '
-                                  '${state.overviews.length} apps match '
-                                  '"${state.query.trim()}"',
+                            ? LocaleKeys.appsTableSubtitle.tr()
+                            : LocaleKeys.appsTableSearchSubtitle.tr(
+                                namedArgs: {
+                                  'matches': '${overviews.length}',
+                                  'total': '${state.overviews.length}',
+                                  'query': state.query.trim(),
+                                },
+                              ),
                         icon: HugeIcons.strokeRoundedFolder02,
                       ),
                     ),
@@ -140,7 +145,7 @@ class AppsTable extends StatelessWidget {
                           HugeIcons.strokeRoundedAdd01,
                           size: 17,
                         ),
-                        label: const Text('New app'),
+                        label: Text(LocaleKeys.appsNewApp.tr()),
                       ),
                   ],
                 ),
@@ -154,7 +159,7 @@ class AppsTable extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(28),
                   child: Text(
-                    'No apps match your search.',
+                    LocaleKeys.appsTableNoMatches.tr(),
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -194,12 +199,32 @@ class _TableHeader extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: _expanderColumn),
-          _HeaderCell('App', flex: 4, tokens: tokens),
-          _HeaderCell('Languages', flex: 3, tokens: tokens),
-          _HeaderCell('Files', flex: 2, tokens: tokens),
-          _HeaderCell('Progress', flex: 3, tokens: tokens),
-          _HeaderCell('Status', flex: 2, tokens: tokens),
-          _HeaderCell('Updated', flex: 2, tokens: tokens),
+          _HeaderCell(LocaleKeys.appsTableColApp.tr(), flex: 4, tokens: tokens),
+          _HeaderCell(
+            LocaleKeys.appsTableColLanguages.tr(),
+            flex: 3,
+            tokens: tokens,
+          ),
+          _HeaderCell(
+            LocaleKeys.appsTableColFiles.tr(),
+            flex: 2,
+            tokens: tokens,
+          ),
+          _HeaderCell(
+            LocaleKeys.appsTableColProgress.tr(),
+            flex: 3,
+            tokens: tokens,
+          ),
+          _HeaderCell(
+            LocaleKeys.appsTableColStatus.tr(),
+            flex: 2,
+            tokens: tokens,
+          ),
+          _HeaderCell(
+            LocaleKeys.appsTableColUpdated.tr(),
+            flex: 2,
+            tokens: tokens,
+          ),
           const SizedBox(width: _rowMenuWidth),
         ],
       ),
@@ -415,7 +440,7 @@ class _AppRowState extends State<_AppRow> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'complete',
+                            LocaleKeys.appsTableComplete.tr(),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: tokens.muted, fontSize: 12),
                           ),
@@ -564,8 +589,13 @@ class _AppCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '${overview.completeFileCount}/${overview.fileCount} files '
-              'complete - ${DateFormatter.relative(overview.lastActivity)}',
+              LocaleKeys.appsCardFilesSummary.tr(
+                namedArgs: {
+                  'complete': '${overview.completeFileCount}',
+                  'total': '${overview.fileCount}',
+                  'updated': DateFormatter.relative(overview.lastActivity),
+                },
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -603,7 +633,9 @@ class _ExpanderButton extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Tooltip(
-        message: expanded ? 'Hide languages' : 'Show all languages',
+        message: expanded
+            ? LocaleKeys.appsTableHideLanguages.tr()
+            : LocaleKeys.appsTableShowLanguages.tr(),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(6),
@@ -663,7 +695,7 @@ class _OverflowChip extends StatelessWidget {
           border: Border.all(color: color.withAlpha(78)),
         ),
         child: Text(
-          expanded ? 'Less' : '+$count',
+          expanded ? LocaleKeys.appsTableLess.tr() : '+$count',
           maxLines: 1,
           softWrap: false,
           overflow: TextOverflow.clip,
@@ -783,7 +815,9 @@ class _LanguageTile extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            isComplete ? 'Complete' : '$missing missing',
+            isComplete
+                ? LocaleKeys.appsStatusComplete.tr()
+                : LocaleKeys.commonMissingCount.plural(missing),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: isComplete ? LingoDeskColors.complete : tokens.muted,
               fontSize: 12,
@@ -803,26 +837,26 @@ class _AppRowMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LingoDeskMenuButton<String>(
-      items: const [
+      items: [
         LingoDeskMenuItem(
           value: 'editor',
-          label: 'Open editor',
+          label: LocaleKeys.appsMenuOpenEditor.tr(),
           icon: HugeIcons.strokeRoundedTableRowsSplit,
         ),
         LingoDeskMenuItem(
           value: 'settings',
-          label: 'Settings',
+          label: LocaleKeys.navSettings.tr(),
           icon: HugeIcons.strokeRoundedSettings01,
         ),
         LingoDeskMenuItem(
           value: 'upload',
-          label: 'Upload files',
+          label: LocaleKeys.appsMenuUploadFiles.tr(),
           icon: HugeIcons.strokeRoundedFileUpload,
         ),
-        LingoDeskMenuItem.divider(),
+        const LingoDeskMenuItem.divider(),
         LingoDeskMenuItem(
           value: 'delete',
-          label: 'Delete app',
+          label: LocaleKeys.appsMenuDeleteApp.tr(),
           icon: HugeIcons.strokeRoundedDelete02,
           destructive: true,
         ),

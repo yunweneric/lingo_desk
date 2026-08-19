@@ -1,6 +1,7 @@
 import 'entities/scanned_project.dart';
 import 'language_resolver.dart';
 import 'usecases/parse_translation_file.dart';
+import '../../../core/localization/export.dart';
 
 /// A file waiting to be grouped: from a folder scan or picked by hand.
 class GroupingCandidate {
@@ -59,8 +60,7 @@ class TranslationGrouper {
     if (language == null) {
       _skip(
         candidate.displayPath,
-        'Could not tell which language this file is for. Name it after its '
-        'language code, or put it in a locale folder.',
+        LocaleKeys.errorsUnknownLanguage.tr(),
       );
       return;
     }

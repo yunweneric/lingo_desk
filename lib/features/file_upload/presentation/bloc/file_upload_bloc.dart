@@ -19,6 +19,7 @@ import '../../domain/usecases/scan_project_folder.dart';
 import '../../domain/translation_grouping.dart';
 import 'file_upload_event.dart';
 import 'file_upload_state.dart';
+import '../../../../core/localization/export.dart';
 
 class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
   FileUploadBloc({
@@ -118,7 +119,8 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
     final previous = current.project;
     return ScannedProject(
       rootPath: previous?.rootPath ?? '',
-      projectName: previous?.projectName ?? 'Imported translations',
+      projectName:
+          previous?.projectName ?? LocaleKeys.uploadDefaultProjectName.tr(),
       groups: grouper.groups,
       skipped: [
         ...?previous?.skipped.where(
@@ -183,9 +185,9 @@ class FileUploadBloc extends Bloc<FileUploadEvent, FileUploadState> {
             scanning.copyWith(
               isScanning: false,
               errorMessage:
-                  'No translation files found in "${project.projectName}". '
-                  'Looked for .json files inside /translation, /translations '
-                  'and /languages folders.',
+                  LocaleKeys.uploadNoFilesFound.tr(
+                    namedArgs: {'name': project.projectName},
+                  ),
             ),
           );
           return;

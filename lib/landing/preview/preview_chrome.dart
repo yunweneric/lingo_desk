@@ -7,6 +7,7 @@ import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_mark.dart';
 import 'preview_workspace.dart';
+import '../../core/localization/export.dart';
 
 /// Desktop window chrome, drawn rather than captured.
 class PreviewTitleBar extends StatelessWidget {
@@ -96,49 +97,49 @@ class PreviewSidebar extends StatelessWidget {
             child: LingoDeskMark(size: 30, showWordmark: true),
           ),
           const SizedBox(height: 26),
-          const _NavLabel('Workspace'),
+          _NavLabel(LocaleKeys.navGroupWorkspace.tr()),
           _NavItem(
-            label: 'Dashboard',
+            label: LocaleKeys.navDashboard.tr(),
             icon: HugeIcons.strokeRoundedDashboardSquare01,
             target: PreviewScreen.dashboard,
             screen: screen,
             onNavigate: onNavigate,
           ),
           _NavItem(
-            label: 'Apps',
+            label: LocaleKeys.navApps.tr(),
             icon: HugeIcons.strokeRoundedFolder02,
             target: PreviewScreen.projects,
             screen: screen,
             onNavigate: onNavigate,
           ),
           _NavItem(
-            label: 'Editor',
+            label: LocaleKeys.editorTitle.tr(),
             icon: HugeIcons.strokeRoundedTable02,
             target: PreviewScreen.editor,
             screen: screen,
             onNavigate: onNavigate,
           ),
           const SizedBox(height: 18),
-          const _NavLabel('Settings'),
+          _NavLabel(LocaleKeys.navGroupSettings.tr()),
           _NavItem(
-            label: 'Profile',
+            label: LocaleKeys.navProfile.tr(),
             icon: HugeIcons.strokeRoundedUser,
             screen: screen,
           ),
           _NavItem(
-            label: 'Appearance',
+            label: LocaleKeys.navAppearance.tr(),
             icon: HugeIcons.strokeRoundedPaintBoard,
             target: PreviewScreen.appearance,
             screen: screen,
             onNavigate: onNavigate,
           ),
           _NavItem(
-            label: 'Languages',
+            label: LocaleKeys.navLanguages.tr(),
             icon: HugeIcons.strokeRoundedLanguageSquare,
             screen: screen,
           ),
           _NavItem(
-            label: 'AI providers',
+            label: LocaleKeys.navAiProviders.tr(),
             icon: HugeIcons.strokeRoundedSparkles,
             target: PreviewScreen.aiProviders,
             screen: screen,
@@ -312,7 +313,7 @@ class _WorkspaceFooter extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Local workspace',
+                  LocaleKeys.settingsProfileNameHint.tr(),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -320,7 +321,7 @@ class _WorkspaceFooter extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Local storage',
+                  LocaleKeys.navLocalStorage.tr(),
                   style: TextStyle(fontSize: 11.5, color: tokens.muted),
                 ),
               ],

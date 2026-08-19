@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "API anahtarı ekle",
+    "addProviderKey": "{provider} anahtarı ekle",
+    "col": {
+      "added": "Eklendi",
+      "apiKey": "API anahtarı",
+      "model": "Model",
+      "provider": "Sağlayıcı"
+    },
+    "createKeyAt": "{console} adresinden bir anahtar oluşturun.",
+    "defaultModel": "varsayılan",
+    "delete": {
+      "activeBody": "Bu işlem, çevirilerin şu anda üzerinden yürüdüğü “{label}” anahtarını kaldırır. Kayıtlı başka bir anahtar devralır; yoksa siz yeni bir anahtar ekleyene kadar yapay zekâ çevirisi durur.",
+      "body": "Bu işlem “{label}” anahtarını bu cihazdan kaldırır. Anahtarın kendisi {console} tarafında geçerli kalır.",
+      "title": "API anahtarı silinsin mi?"
+    },
+    "editKey": "API anahtarını düzenle",
+    "field": {
+      "name": "Ad",
+      "nameHelp": "İsteğe bağlı — bu anahtara tabloda verdiğiniz ad."
+    },
+    "hideKey": "Anahtarı gizle",
+    "key": {
+      "actions": "Anahtar işlemleri",
+      "active": "Etkin",
+      "required": "Devam etmek için API anahtarını yapıştırın.",
+      "test": "Bağlantıyı test et",
+      "use": "Çeviriler için kullan"
+    },
+    "pickModel": "Önerilen bir model seçin",
+    "pickProvider": "Bu anahtar hangi sağlayıcıya ait?",
+    "saveKey": "Anahtar ekle",
+    "showKey": "Anahtarı göster",
+    "status": {
+      "detail": "{provider} · {model} · düzenleyicideki her yapay zekâ işlemi bunu kullanır.",
+      "noKey": "Henüz hazır bir anahtar yok",
+      "noKeyDetail": "Bir API anahtarı ekleyin; düzenleyici eksik çevirileri sizin için tamamlayabilsin.",
+      "translatingWith": "{label} ile çeviriliyor"
+    },
+    "storage": {
+      "plain": "Bu sürüm sistem anahtar zincirine erişemiyor, bu yüzden anahtarlar diğer yerel ayarlarınızla birlikte düz metin olarak saklanıyor. Bu cihazda kalırlar ve yalnızca ait oldukları sağlayıcıya gönderilirler.",
+      "secure": "Anahtarlar bu cihazın anahtar zincirinde saklanır ve yalnızca ait oldukları sağlayıcıya gönderilir."
+    },
+    "table": {
+      "empty": "Henüz API anahtarı yok. Düzenleyiciden çeviri yapmak için bir tane ekleyin.",
+      "keyCount": {
+        "one": "1 anahtar",
+        "other": "{} anahtar"
+      },
+      "noKeys": "Henüz anahtar yok",
+      "range": "{total} içinden {start}-{end}"
+    },
+    "toast": {
+      "activeTitle": "Çeviriler artık {label} kullanıyor",
+      "addedBody": "{provider} çeviri için hazır.",
+      "addedTitle": "Anahtar eklendi",
+      "deletedBody": "{label} bu cihazdan kaldırıldı.",
+      "deletedNamedTitle": "{label} silindi",
+      "deletedTitle": "Anahtar silindi",
+      "promotedBody": "Çeviriler artık {label} kullanıyor.",
+      "testFailedTitle": "{label} başarısız",
+      "testPassedBody": "{provider} anahtarı kabul etti.",
+      "testPassedTitle": "{label} bağlandı",
+      "updatedBody": "{label} için değişiklikler kaydedildi.",
+      "updatedTitle": "Anahtar güncellendi"
+    }
+  },
+  "appSettings": {
+    "appIcon": "Uygulama simgesi",
+    "appIconHelp": "İsteğe bağlı. Simge yoksa uygulama baş harflerini gösterir.",
+    "appIconNote": "PNG, JPG veya WebP. Görsel {size} piksele ölçeklenip uygulamayla birlikte saklanır; özgün dosyayı taşımanızda sakınca yoktur.",
+    "appName": "Uygulama adı",
+    "appNameHint": "örn. Müşteri Portalı",
+    "createApp": "Uygulama oluştur",
+    "general": "Genel",
+    "generalSubtitle": "Bu uygulamanın nasıl adlandırıldığı ve hangi dilden çevirdiği.",
+    "localeCount": {
+      "one": "1 dil",
+      "other": "{} dil"
+    },
+    "metaNoTargets": "Henüz yok",
+    "metaSource": "Kaynak",
+    "metaTargets": "Hedefler",
+    "metaUpdated": "Son güncelleme",
+    "replaceIcon": "Simgeyi değiştir",
+    "saveChanges": "Değişiklikleri kaydet",
+    "savedToast": "“{name}” kaydedildi.",
+    "selectAll": "Tümünü seç",
+    "selectedCount": "{total} içinden {selected} seçildi",
+    "sourceLanguage": "Kaynak dil",
+    "sourceLanguageHelp": "Anahtarlarınızın yazıldığı temel dil.",
+    "sourceNotTarget": "Kaynak dil aynı zamanda hedef olamaz.",
+    "targetLanguages": "Hedef diller",
+    "targetLanguagesHelp": "Çeviri yapmak istediğiniz diller.",
+    "targetLanguagesNote": "Eklediğiniz her anahtar, seçili her dil için sıraya alınır. Bir dili kaldırmak düzenleyicideki sütununu gizler; mevcut çevirileriniz korunur.",
+    "targetLanguagesSubtitle": "Bu uygulamanın çevrildiği diller.",
+    "uploadIcon": "Simge yükle"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} dosya tamam - {updated}"
+    },
+    "created": {
+      "body": "Mevcut JSON çeviri dosyalarınızı şimdi yüklemek ister misiniz? Bunu daha sonra panelden de yapabilirsiniz.",
+      "later": "Daha sonra",
+      "title": "“{name}” oluşturuldu",
+      "upload": "Dosya yükle"
+    },
+    "delete": {
+      "body": "Bu işlem uygulamayı ve tüm çevirilerini kalıcı olarak siler. Geri alınamaz.",
+      "title": "“{name}” silinsin mi?"
+    },
+    "deletedNamedToast": "“{name}” silindi.",
+    "deletedToast": "Uygulama silindi.",
+    "empty": {
+      "message": "LingoDesk'e bir proje klasörü gösterin; bulduğu çeviri dosyalarını içe aktarsın. Ya da bir kaynak dil ve hedeflerinizle elle bir uygulama oluşturun.",
+      "title": "İlk uygulamanızı oluşturun"
+    },
+    "importProject": "Proje içe aktar",
+    "menu": {
+      "deleteApp": "Uygulamayı sil",
+      "openEditor": "Düzenleyiciyi aç",
+      "uploadFiles": "Dosya yükle"
+    },
+    "newApp": "Yeni uygulama",
+    "searchHint": "Uygulamalarda ara",
+    "status": {
+      "complete": "Tamam",
+      "missing": "Eksik",
+      "new": "Yeni"
+    },
+    "summary": {
+      "filesComplete": "Tamamlanan dosyalar",
+      "missingStrings": "Eksik metinler",
+      "overallCoverage": "genel kapsam",
+      "subtitle": "Tüm uygulama ve dillerdeki çeviri dosyaları",
+      "title": "Çalışma alanı toplamları"
+    },
+    "table": {
+      "colApp": "Uygulama",
+      "colFiles": "Dosyalar",
+      "colLanguages": "Diller",
+      "colProgress": "İlerleme",
+      "colStatus": "Durum",
+      "colUpdated": "Güncellendi",
+      "complete": "tamam",
+      "hideLanguages": "Dilleri gizle",
+      "less": "Daha az",
+      "noMatches": "Aramanızla eşleşen uygulama yok.",
+      "searchSubtitle": "{total} uygulamadan {matches} tanesi “{query}” ile eşleşiyor",
+      "showLanguages": "Tüm dilleri göster",
+      "subtitle": "Mevcut yerelleştirme çalışma alanları"
+    }
+  },
+  "common": {
+    "back": "Geri",
+    "cancel": "İptal",
+    "clear": "Temizle",
+    "close": "Kapat",
+    "delete": "Sil",
+    "dismiss": "Kapat",
+    "edit": "Düzenle",
+    "errorPrefix": "Hata: {message}",
+    "missingCount": {
+      "one": "1 eksik",
+      "other": "{} eksik"
+    },
+    "more": "Daha fazla",
+    "next": "İleri",
+    "nextPage": "Sonraki sayfa",
+    "previousPage": "Önceki sayfa",
+    "remove": "Kaldır",
+    "retry": "Yeniden dene",
+    "rows": "Satır",
+    "selectLanguage": "Bir dil seçin",
+    "selectOption": "Bir seçenek seçin",
+    "theme": "Tema",
+    "themeDark": "Koyu",
+    "themeLight": "Açık",
+    "themeSystem": "Sistem"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 uygulama",
+      "other": "{} uygulama"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} çeviri dosyası tamam",
+    "coverage": {
+      "empty": "Kapsamı burada görmek için bir uygulama oluşturun.",
+      "noData": "Henüz çeviri verisi yok. Başlamak için JSON dosyaları yükleyin.",
+      "subtitle": "Uygulama başına çevrilen hedef metin oranı",
+      "summary": "{translated} metin çevrildi. Etkin hedef dillerde hâlâ {missing} tanesi eksik.",
+      "title": "Uygulamaya göre kapsam"
+    },
+    "empty": {
+      "message": "Bir uygulama, tek bir projenin çeviri dosyalarını bir araya toplar. Kaynak dili belirleyin, hedeflerinizi seçin ve çevirmeye başlayın.",
+      "title": "İlk uygulamanızı oluşturun"
+    },
+    "health": {
+      "allTranslated": "Tüm uygulamalar tümüyle çevrildi.",
+      "empty": "Henüz hedef dil yok.",
+      "nextReview": "Sıradaki gözden geçirme: {name}",
+      "nextReviewPrefix": "Sıradaki gözden geçirme: ",
+      "subtitle": "Hedef dile göre kapsam",
+      "title": "Dil durumu"
+    },
+    "metric": {
+      "acrossApps": "Tüm uygulamalarda",
+      "allClear": "Her şey yolunda",
+      "coverage": "Kapsam",
+      "localWorkspace": "Yerel çalışma alanı",
+      "missing": "Eksik",
+      "needsReview": "Gözden geçirilmeli",
+      "targetLocales": {
+        "one": "1 hedef dil",
+        "other": "{} hedef dil"
+      },
+      "totalKeys": "Toplam anahtar"
+    },
+    "stat": {
+      "keys": "Anahtarlar",
+      "locales": "Diller"
+    },
+    "subtitle": "Kapsamı izleyin, eksik metinleri gözden geçirin ve yerelleştirme işinize geri dönün.",
+    "title": "Çeviri panosu",
+    "viewAllApps": "Tüm uygulamaları gör"
+  },
+  "editor": {
+    "addKey": "Anahtar ekle",
+    "addKeyHint": "Şimdilik elinizde olanı doldurun — boş bıraktıklarınız eksik kalır ve sonra tabloda çevrilebilir.",
+    "aiAllComplete": "Tüm hedef diller tamam.",
+    "aiAlreadyRunning": "Zaten bir çeviri turu sürüyor.",
+    "aiCanceledEmpty": "Hiçbir şey kaydedilmeden iptal edildi.",
+    "aiDialogBody": "Yalnızca boş hücreler doldurulur — mevcut çevirilerinizin üzerine asla yazılmaz.",
+    "aiFailedCount": {
+      "one": "1 tanesi çevrilemedi.",
+      "other": "{} tanesi çevrilemedi."
+    },
+    "aiFailedCountReason": {
+      "one": "1 tanesi çevrilemedi ({error}).",
+      "other": "{} tanesi çevrilemedi ({error})."
+    },
+    "aiFinishing": "Geçerli grup tamamlanıyor…",
+    "aiNotConfiguredBody": "Önce Ayarlar - Yapay zekâ sağlayıcıları bölümünden bir API anahtarı ekleyin.",
+    "aiNotConfiguredTitle": "Yapay zekâ ayarlanmadı",
+    "aiNothingHere": "Burada çevrilecek başka bir şey kalmadı.",
+    "aiNothingLeft": "Çevrilecek bir şey kalmadı",
+    "aiNothingTranslated": "Hiçbir şey çevrilmedi.",
+    "aiProgress": "{label} çevriliyor · {total} içinden {done}",
+    "aiRunning": "Yapay zekâ çevirisi sürüyor",
+    "aiTranslate": "Yapay zekâ ile çevir",
+    "aiTranslateMissing": {
+      "one": "Eksik 1 metni yapay zekâ ile çevir",
+      "other": "Eksik {} metni yapay zekâ ile çevir"
+    },
+    "aiTranslateRow": "Satırı yapay zekâ ile çevir",
+    "aiTranslatedCanceled": {
+      "one": "İptalden önce 1 metin çevrildi.",
+      "other": "İptalden önce {} metin çevrildi."
+    },
+    "aiTranslatedDone": {
+      "one": "1 metin çevrildi.",
+      "other": "{} metin çevrildi."
+    },
+    "aiUsing": "{provider} · {model} ile",
+    "clearAll": "Seçimi kaldır",
+    "clickToHide": "Diğer dilleri gizlemek için tıklayın",
+    "clickToShow": "Diğer dilleri göstermek için tıklayın",
+    "copiedToast": "“{key}” panoya kopyalandı.",
+    "copyKey": "Anahtarı kopyala",
+    "deleteKey": "Anahtarı sil",
+    "deleteKeyBody": "Bu işlem “{key}” anahtarını her dilden kaldırır. Geri alınamaz.",
+    "deleteKeyTitle": "Anahtar silinsin mi?",
+    "empty": "Henüz anahtar yok. JSON dosyaları yükleyin ya da ilk anahtarınızı ekleyin.",
+    "export": "Dışa aktar",
+    "exportCanceled": "Dışa aktarma iptal edildi.",
+    "exportChooseDestination": "Bir hedef seçin",
+    "exportDownload": "İndir",
+    "exportFolderSummary": "Klasörü birazdan seçeceksiniz; her dil için bir dosya oraya kaydedilir.",
+    "exportNoProject": "Önce bir proje klasörü içe aktarın",
+    "exportOverwrite": "Dosyaların üzerine yaz",
+    "exportProjectSummary": "{path} içine yazılır ve bu dosyaların üzerine geçer.",
+    "exportSaveTo": "{name} içine kaydet",
+    "exportSaveToProject": "Projeye kaydet",
+    "exportSavedToast": "{files} {name} içine kaydedildi",
+    "exportToFolder": "Klasöre aktar",
+    "exportToFolderEllipsis": "Klasöre aktar…",
+    "exportZip": "ZIP indir",
+    "exportZipHint": "İndirilenler klasörünüze sıkıştırılır",
+    "exportZipSummary": "İndirilenler klasörünüzde {file} içinde toplandı.",
+    "exportZippedToast": "{files} İndirilenler klasörüne sıkıştırıldı",
+    "exportedToast": "{files} dışa aktarıldı",
+    "fileCount": {
+      "one": "1 dosya",
+      "other": "{} dosya"
+    },
+    "hiddenLanguages": {
+      "one": "1 dil daha",
+      "other": "{} dil daha"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "her satırın içinde 1 dil daha",
+      "other": "her satırın içinde {} dil daha"
+    },
+    "hideOtherLanguages": "Diğer dilleri gizle",
+    "keyActions": "Anahtar işlemleri",
+    "keyAddedToast": "“{key}” anahtarı eklendi.",
+    "keyDeletedToast": "“{key}” anahtarı silindi.",
+    "keyHelper": "Nokta gösterimi anahtarları iç içe JSON olarak gruplar.",
+    "keyLabel": "Anahtar",
+    "languageCount": {
+      "one": "1 dil",
+      "other": "{} dil"
+    },
+    "languageSourceSuffix": "{language} (kaynak)",
+    "missingOnly": "Yalnızca eksikler",
+    "missingOnlyCount": "Yalnızca eksikler ({count})",
+    "noKeys": "Anahtar yok",
+    "noMatches": "Geçerli filtrelerle eşleşen anahtar yok.",
+    "noProvider": "Sağlayıcı yok",
+    "paginationSummary": "{lines} satırdan {start}-{end} - {keys} anahtar",
+    "searchHint": "Anahtar ve değerlerde ara",
+    "showInFolder": "Klasörde göster",
+    "sourceText": "Kaynak metin",
+    "title": "Düzenleyici",
+    "translate": "Çevir",
+    "translateCount": {
+      "one": "1 metni çevir",
+      "other": "{} metni çevir"
+    },
+    "translateWithAi": "Yapay zekâ ile çevir",
+    "translatingHint": "Çevriliyor…",
+    "translationOptional": "Çeviri - isteğe bağlı",
+    "translations": "Çeviriler"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Ayarlar - Yapay zekâ sağlayıcıları bölümünden bir API anahtarı ekleyin.",
+      "blocked": "{provider} bu grubu engelledi ({reason}).",
+      "emptyResponse": "{provider} boş bir yanıt döndürdü.",
+      "keyRejected": "{provider} API anahtarı reddedildi. Ayarlar - Yapay zekâ sağlayıcıları bölümünden kontrol edin.",
+      "malformed": "Çeviri sağlayıcısı bozuk JSON döndürdü.",
+      "modelNotFound": "{provider} modeli bulunamadı. Model adını Ayarlar - Yapay zekâ sağlayıcıları bölümünden kontrol edin.",
+      "noConnection": "Çeviri sağlayıcısına bağlantı yok.",
+      "noKey": "Önce bir API anahtarı girin.",
+      "refused": "{provider} bu grubu çevirmeyi reddetti. Atlayın ya da farklı bir model deneyin.",
+      "stoppedEarly": "{provider} erken durdu ({reason}).",
+      "timeout": "Çeviri sağlayıcısı zaman aşımına uğradı.",
+      "unexpectedResponse": "{provider} beklenmedik bir yanıt döndürdü."
+    },
+    "app": {
+      "nameEmpty": "Uygulama adı boş olamaz.",
+      "noTargetLanguage": "En az bir hedef dil seçin.",
+      "sourceIsTarget": "Kaynak dil aynı zamanda hedef dil olamaz."
+    },
+    "cache": {
+      "appListCorrupt": "Kayıtlı uygulama listesi bozuk: {error}",
+      "appNotFound": "Uygulama bulunamadı.",
+      "appNotFoundId": "Uygulama bulunamadı: {id}",
+      "translationsCorrupt": "Kayıtlı çeviriler bozuk: {error}",
+      "writeAppList": "Uygulama listesi kaydedilemedi.",
+      "writeTranslations": "Çeviriler kaydedilemedi."
+    },
+    "editor": {
+      "invalidKey": "Harf, rakam, “_” veya “-” ile nokta gösterimi kullanın (örn. nav.home).",
+      "keyExists": "“{key}” anahtarı zaten var.",
+      "keyNotFound": "Anahtar bulunamadı: {key}"
+    },
+    "export": {
+      "chooseFolder": "Dışa aktarmak için bir klasör seçin.",
+      "noDownloadsFolder": "Bu platformda İndirilenler klasörünüz bulunamadı.",
+      "noProjectFolder": "Bu uygulama bir proje klasöründen içe aktarılmadı, dolayısıyla geri yazılacak bir yer yok.",
+      "nothingToExport": "Henüz dışa aktarılacak anahtar yok.",
+      "selectLanguage": "Dışa aktarmak için en az bir dil seçin."
+    },
+    "file": {
+      "folderPickerOpen": "Klasör seçici açılamadı: {error}",
+      "launchFailed": "{executable} başlatılamadı: {error}",
+      "openPath": "{path} açılamadı: {error}",
+      "pickerOpen": "Dosya seçici açılamadı: {error}",
+      "projectFolderRead": "Proje klasörü okunamadı: {error}",
+      "revealUnsupported": "Klasör gösterme bu platformda kullanılamıyor.",
+      "save": "{file} kaydedilemedi: {error}",
+      "unknownLanguage": "Bu dosyanın hangi dile ait olduğu anlaşılamadı. Dosyayı dil koduyla adlandırın ya da bir dil klasörüne koyun.",
+      "unsupportedPlatform": "Bu platformda kullanılamıyor.",
+      "writeFolder": "{path} içine yazılamadı: {error}"
+    },
+    "image": {
+      "convert": "Bu görsel PNG'ye dönüştürülemedi.",
+      "notAnImage": "Bu dosya LingoDesk'in okuyabileceği bir görsel değil: {error}",
+      "pickerOpen": "Görsel seçici açılamadı: {error}",
+      "tooLarge": "8 MB'tan küçük bir görsel seçin.",
+      "unreadable": "Bu görsel okunamadı."
+    },
+    "import": {
+      "noFiles": "İçe aktarılacak dosya yok."
+    },
+    "json": {
+      "invalid": "Geçersiz JSON: {error}",
+      "noKeys": "Dosyada hiç çeviri anahtarı yok.",
+      "notObject": "Dosya en üst düzeyde bir JSON nesnesi içermeli."
+    }
+  },
+  "landing": {
+    "apkLink": "Ya da Android APK'sını indirin · {size}  →",
+    "askingGithub": "En yeni sürüm için GitHub'a soruluyor…",
+    "checkingBuilds": "Derlemeler aranıyor…",
+    "codeMissing": "eksik",
+    "cta": {
+      "apk": "APK'yı indir",
+      "latest": "En yeni derlemeyi indir",
+      "macos": "macOS için indir",
+      "windows": "Windows için indir"
+    },
+    "download": {
+      "allReleases": "GitHub'daki tüm sürümler ve değişiklik günlükleri  →",
+      "body": "MIT lisansıyla ücretsiz ve açık kaynak. Hesap yok, deneme süresi yok, telemetri yok.",
+      "copied": "Kopyalandı",
+      "copy": "Kopyala",
+      "eyebrow": "İndirme",
+      "latest": "En yeni",
+      "latestBuildRuns": "Son derleme çalışmaları",
+      "noBuildBody": "macOS, Windows ve Android kurulum dosyalarını GitHub Actions derler ve bir sürüm etiketi gönderilir gönderilmez sürüme ekler. O zamana kadar kaynaktan çalıştırmak yaklaşık iki dakika sürer.",
+      "noBuildTitle": "Henüz paketlenmiş bir derleme yayımlanmadı",
+      "published": "{date} tarihinde yayımlandı",
+      "releasesOnGithub": "GitHub'daki sürümler",
+      "runFromSource": "Ya da altı platformun herhangi birinde kaynaktan çalıştırın",
+      "runFromSourceNote": "Cihazı windows, linux, chrome ya da bağlı bir telefonla değiştirin. Proje, Flutter sürümünü .fvmrc dosyasında sabitler.",
+      "title": "LingoDesk'i edinin.",
+      "tryAgain": "Yeniden dene",
+      "unreachableBody": "{reason} Yine de sürümler sayfasına göz atabilir ya da kaynaktan derleyebilirsiniz.",
+      "unreachableTitle": "GitHub'a ulaşılamadı",
+      "unsignedNote": "Masaüstü derlemeleri imzasızdır: macOS'ta uygulamaya sağ tıklayıp ilk seferde Aç'ı seçin, Windows'ta Diğer bilgiler, ardından Yine de çalıştır'ı seçin.",
+      "version": "Sürüm {version}"
+    },
+    "features": {
+      "body": "LingoDesk odaklı bir masaüstü aracıdır; koltuklu, panolu bir çeviri platformu değil.",
+      "eyebrow": "Özellikler",
+      "f1Body": "İç içe JSON, noktalı anahtarlara düzleştirilir; böylece bir metin ve tüm çevirileri baştan sona okunabilen tek bir satırda yer alır.",
+      "f1Title": "Her dil için tek bir tablo",
+      "f2Body": "Dil başına canlı kapsam ve yüzlerce anahtarı hâlâ boş olan bir avuç satıra indiren “yalnızca eksikler” filtresi.",
+      "f2Title": "Eksik metinler, gözden kaçan hatalar değil",
+      "f3Body": "Boşlukları Anthropic, OpenAI ya da Gemini üzerinden toplu çevirin. Sizin anahtarınız, sizin hesabınız, sizin faturanız — hiçbir şey aracıdan geçmez.",
+      "f3Title": "Kendi yapay zekâ anahtarınızla çevirin",
+      "f4Body": "Sunucu yok, telemetri yok, kayıt yok. Projeler kendi makinenizde durur, API anahtarları ise işletim sisteminin güvenli deposuna gider.",
+      "f4Title": "Önce yerel, üstelik gizli",
+      "f5Body": "Bir proje klasörünü tarayın, elinizdeki dil dosyalarını içeri alın ve iç içe yapıyı doğrudan depoya geri aktarın.",
+      "f5Title": "Yerinde içe ve dışa aktarma",
+      "f6Body": "Bütün gün bakılabilecek bir çalışma alanı — her tema tam bir palet, yalnızca değiştirilmiş bir vurgu rengi değil.",
+      "f6Title": "Altı tema, açık ve koyu",
+      "title": "İşin ihtiyacı olan her şey. Olmayan hiçbir şey."
+    },
+    "flutter": {
+      "body": "LingoDesk bir kez Dart ile yazılır ve macOS, Windows, Linux, Android, iOS ile web için derlenir. Bu sayfa, üzerine Flutter demosu yapıştırılmış bir HTML değil: aynı proje, aynı tasarım simgeleri ve aynı widget'lar, şu anda okuduğunuz tarayıcı için derlenmiş hâlde.",
+      "eyebrow": "Flutter ve Dart ile yapıldı",
+      "fromSource": "Kaynaktan",
+      "markBody": "Yukarıdaki logo, tuval üzerine yuvarlatılmış dikdörtgenler ve iki daire çizen bir CustomPainter'dır — bu yüzden her boyutta net kalır ve seçili temanın vurgu rengini alır.",
+      "markTitle": "Bu bir görsel dosyası değil",
+      "pill": "Şu anda, canlı",
+      "prebuilt": "Hazır derleme",
+      "proofBody": "Bunlar LingoDesk ile gelen altı palet; masaüstü derlemesinin okuduğu tema uzantısından okunuyor. Birini seçin, tüm site yeniden boyansın — sayfa yenilemeden, stil dosyası değiştirmeden.",
+      "proofTitle": "Bu sayfadaki her renk uygulamadan geliyor.",
+      "statCodebase": "kod tabanı",
+      "statJavascript": "elle yazılmış JavaScript satırı",
+      "statTargets": "derleme hedefi",
+      "title": "Tek kod tabanı. Altı platform.\nBu sayfa dahil.",
+      "youAreHere": "Buradasınız"
+    },
+    "footer": {
+      "issues": "Sorunlar",
+      "licence": "MIT lisansı",
+      "note": "Bu sayfa, ürünle aynı depodan derlenmiş bir Flutter web uygulamasıdır.",
+      "readme": "Readme",
+      "releases": "Sürümler"
+    },
+    "getStarted": "Başla",
+    "hero": {
+      "body": "LingoDesk; en.json, fr.json ve es.json dosyalarından oluşan bir klasörü tek bir çalışma alanına dönüştürür: her anahtar bir satır, her dil bir sütun, her eksik metin gözden kaçması imkânsız.",
+      "pill": "Açık kaynak · MIT · Hesap yok, sunucu yok",
+      "title": "Bütün dilleri\nderli toplu tek bir masadan çevirin."
+    },
+    "localeStrip": "20 dil yerleşik · başka herhangi birini ayarlardan ekleyin",
+    "nav": {
+      "download": "İndir",
+      "features": "Özellikler",
+      "flutter": "Flutter",
+      "howItWorks": "Nasıl çalışır",
+      "language": "Dil",
+      "menu": "Menü",
+      "screens": "Ekranlar",
+      "why": "Neden"
+    },
+    "openIssue": "Sorun bildir",
+    "openSource": {
+      "body": "MIT lisanslı. Çatallayın, ekibinizde kullanın ya da sizi en çok rahatsız eden akış için bir sorun açın — yol haritasını kullananlar belirliyor.",
+      "title": "Sonsuza dek ücretsiz, üstelik kaynak kodu hemen şurada."
+    },
+    "preview": {
+      "allTranslated": "Her dil tümüyle çevrildi.",
+      "appearanceNote": "Bu gerçekten o ayar — yalnızca bu pencereyi değil, sayfanın tamamını yeniden boyar.",
+      "editorWindow": "Çeviri düzenleyicisi",
+      "keysNote": "Anahtarlar işletim sisteminin güvenli deposunda durur. Bu cihazda kalırlar ve yalnızca ait oldukları sağlayıcıya gönderilirler.",
+      "missingStrings": {
+        "one": "1 eksik metin",
+        "other": "{} eksik metin"
+      },
+      "noMatches": "“{query}” ile eşleşen anahtar yok.",
+      "nothingMissing": "Eksik yok — her metin çevrildi.",
+      "projects": "Projeler",
+      "semantics": "LingoDesk panosu: bir çalışma alanının tamamında kapsam, anahtar sayıları ve dil durumu."
+    },
+    "problem": {
+      "afterEyebrow": "LingoDesk ile",
+      "afterTitle": "Tek bir tablo. Boşluklar kendini gösteriyor.",
+      "beforeEyebrow": "LingoDesk olmadan",
+      "beforeTitle": "Üç dosya, üç sekme ve incelemede fark ettiğiniz bir eksik metin.",
+      "body": "Tek bir metin eklemek, her dil dosyasını açıp hiçbirini unutmamak demektir. LingoDesk bunu tek bir satıra indirir.",
+      "exportNote": "Dışa aktarma, iç içe yapıyı dosya dosya, tam da uygulamanızın beklediği biçimde yeniden kurar.",
+      "eyebrow": "Sorun",
+      "title": "Bir anahtar eklediğiniz anda yerelleştirme dosyaları birbirinden ayrılır."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · sonsuza dek ücretsiz",
+    "releasePending": "Henüz paketlenmiş derleme yok — iki komutla kaynaktan çalıştırın.",
+    "releasePickBuild": "v{version} çıktı — aşağıdan bir derleme seçin.",
+    "releaseUnavailable": "{reason} Sürümler sayfasına göz atın.",
+    "seeAllDownloads": "Tüm indirmeleri gör",
+    "starOnGithub": "GitHub'da yıldız verin",
+    "starOnGithubCount": "GitHub'da yıldız · {stars}",
+    "starOnGithubTooltip": "LingoDesk'e GitHub'da yıldız verin",
+    "steps": {
+      "eyebrow": "Nasıl çalışır",
+      "s1Body": "Uygulama başına bir tane. Kaynak dili bir kez seçin, gerçekten yayımladığınız hedef dilleri belirleyin.",
+      "s1Title": "Bir çalışma alanı oluşturun",
+      "s2Body": "Dil klasörünüzü gösterin. Mevcut JSON düzleştirilir, bildirdiğiniz dillere göre doğrulanır ve yüklenir.",
+      "s2Title": "Elinizdekini içe aktarın",
+      "s3Body": "Eksik olanı süzüp yazın ya da grubu yapay zekâ sağlayıcınıza devredin. Değişiklikler siz çalışırken kaydedilir.",
+      "s3Title": "Boşlukları doldurun",
+      "s4Body": "İç içe yapı her dil için yeniden kurulur; kodunuzun yanına dönmeye ve işlenmeye hazırdır.",
+      "s4Title": "Depoya geri aktarın",
+      "title": "Dört adım, sonra yine kod yazmaya."
+    },
+    "switchToDark": "Koyuya geç",
+    "switchToLight": "Açığa geç",
+    "tour": {
+      "aiProviders": "Anthropic, OpenAI ya da Gemini için kendi anahtarınızı getirin. Birini seçin; düzenleyicideki her yapay zekâ işlemi onu kullansın.",
+      "appearance": "Altı tam palet ve bir açık/koyu anahtarı. Bu, resmi değil ayarın kendisi — bir tema seçin, tüm site yeniden boyansın.",
+      "body": "Bu bir ekran görüntüsü değil. Bu sayfaya derlenmiş uygulamanın kendisi — gönül rahatlığıyla tıklayın.",
+      "dashboard": "Uygulamayı açar açmaz her projenin kapsamı, anahtar sayıları ve dil durumu. Sayılar düzenleyicinin yazdığı hücrelerden gelir — birini doldurun ve değiştiklerini izleyin.",
+      "editor": "Anahtarlar yanda, diller üstte. Her hücre gerçek bir alan: bir çeviri yazın, arayın ya da yalnızca hâlâ eksik olanı süzün.",
+      "eyebrow": "İçeriden bir bakış",
+      "pill": "Canlı · burada yaptığınız hiçbir şey kaydedilmez",
+      "projects": "Uygulama başına bir çalışma alanı; her birinin kendi kaynak dili ve hedef dilleri var. Açmak için bir satıra tıklayın.",
+      "title": "Masaüstü uygulaması gibi yapıldı, çünkü öyle."
+    },
+    "viewOnGithub": "GitHub'da görüntüle",
+    "warning": {
+      "macos": "İmzasız derleme — uygulamaya sağ tıklayıp ilk seferde Aç'ı seçin.",
+      "windows": "İmzasız derleme — SmartScreen'de Diğer bilgiler, ardından Yine de çalıştır'ı seçin."
+    }
+  },
+  "language": {
+    "ar": "Arapça",
+    "cs": "Çekçe",
+    "de": "Almanca",
+    "en": "İngilizce",
+    "es": "İspanyolca",
+    "fr": "Fransızca",
+    "hi": "Hintçe",
+    "it": "İtalyanca",
+    "ja": "Japonca",
+    "ko": "Korece",
+    "nl": "Felemenkçe",
+    "pl": "Lehçe",
+    "pt": "Portekizce",
+    "ro": "Romence",
+    "ru": "Rusça",
+    "sv": "İsveççe",
+    "tr": "Türkçe",
+    "uk": "Ukraynaca",
+    "vi": "Vietnamca",
+    "zh": "Çince"
+  },
+  "nav": {
+    "aiProviders": "Yapay zekâ sağlayıcıları",
+    "appearance": "Görünüm",
+    "apps": "Uygulamalar",
+    "dashboard": "Pano",
+    "group": {
+      "settings": "Ayarlar",
+      "workspace": "Çalışma alanı"
+    },
+    "import": "İçe aktar",
+    "languages": "Diller",
+    "localStorage": "Yerel depolama",
+    "profile": "Profil",
+    "settings": "Ayarlar"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Önce yerel",
+      "locales": "20 dil",
+      "nestedJson": "İç içe JSON"
+    },
+    "skip": "Atla",
+    "stage": {
+      "body": "Hesap yok, eşitleme yok, dağılan hesap tabloları yok - yalnızca sizin JSON'unuz, sizin makinenizde.",
+      "title": "Her dil dosyası için tek bir masa."
+    },
+    "startSetup": "Kuruluma başla",
+    "step1": {
+      "body": "Her anahtar bir satır, her dil bir sütun. Eksik metinler siz çalışırken vurgulu kalır; böylece hiçbir şey yarım çevrilmiş hâlde yayına çıkmaz.",
+      "caption": "Bütün ciltler, tek bir oda",
+      "eyebrow": "Çeviri çalışma alanı",
+      "highlight1": "Anahtarlar ve diller tek bir tabloda",
+      "highlight2": "Hâlâ eksik olana kadar süzün",
+      "highlight3": "Değişiklikler siz yazarken bu makineye kaydedilir",
+      "title": "Bütün dilleri derli toplu tek bir masadan çevirin"
+    },
+    "step2": {
+      "body": "Uygulama başına tek çalışma alanı: kaynak dili bir kez seçin, yalnızca önemsediğiniz hedef dilleri izleyin ve kapsam kendi adına konuşsun.",
+      "caption": "Dizinlenmiş, etiketlenmiş, bulunabilir",
+      "eyebrow": "Proje kurulumu",
+      "highlight1": "Her uygulama için ayrı bir çalışma alanı",
+      "highlight2": "Desteklenen 20 dil arasından hedef seçin",
+      "highlight3": "Uygulama ve dil başına kapsam",
+      "title": "Her ürünü dile göre düzenli tutun"
+    },
+    "step3": {
+      "body": "LingoDesk, dışa aktarmadan önce özgün anahtar yapınızı yeniden kurar; böylece deponuza düşen dosyalar tam da uygulamanızın beklediği dosyalar olur.",
+      "caption": "Tabelada bütün varış noktaları",
+      "eyebrow": "Dışa aktarmaya hazır",
+      "highlight1": "Noktalı anahtarlar yeniden iç içe nesnelere açılır",
+      "highlight2": "Dilleri seçin, istediğiniz yere kaydedin",
+      "highlight3": "Düzgün biçimlendirilmiş, kararlı anahtar sırasıyla",
+      "title": "İç içe JSON dosyalarını uygulamanıza geri gönderin"
+    },
+    "stepOf": "Adım {step}/{total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Sistem temasını izleyin ya da açıkça bir tane seçin.",
+      "swatchActive": "Etkin",
+      "swatchBackground": "Arka plan",
+      "swatchBrand": "Marka",
+      "swatchCard": "Kart",
+      "themeSubtitle": "Altı palet. Her biri yalnızca vurguyu değil, uygulamanın tamamını yeniden biçimlendirir."
+    },
+    "defaults": {
+      "count": {
+        "one": "1 dil önceden seçilecek.",
+        "other": "{} dil önceden seçilecek."
+      },
+      "empty": "Henüz varsayılan yok — yeni uygulamalar hedef dilsiz başlar.",
+      "subtitle": "Yeni bir uygulama oluşturduğunuzda önceden seçilir.",
+      "title": "Varsayılan hedef diller"
+    },
+    "language": {
+      "note": "Seçiminiz kaydedilir ve hemen uygulanır — menüler, iletişim kutuları ve iletiler onunla birlikte değişir.",
+      "subtitle": "LingoDesk'in kendisinin gösterildiği dil.",
+      "title": "Arayüz dili"
+    },
+    "profile": {
+      "email": "E-posta",
+      "emailHint": "isteğe bağlı",
+      "name": "Görünen ad",
+      "nameHint": "Yerel çalışma alanı",
+      "note": "LingoDesk'te hesap yoktur. Bu yalnızca yerel çalışma alanınızı adlandırır.",
+      "subtitle": "Kenar çubuğunda görünür. Yalnızca bu cihazda saklanır."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Sıcak kehribar ve kavrulmuş kum tonları."
+    },
+    "graphite": {
+      "description": "Hiç renk yok — vurguyu kontrast yapıyor."
+    },
+    "indigo": {
+      "description": "Mavi-gri nötr tonlar üzerinde serin çivit."
+    },
+    "rose": {
+      "description": "Yumuşak yüzeylerde derin gül."
+    },
+    "teal": {
+      "description": "Ev görünümü — sıcak taş üzerinde doygun turkuaz."
+    },
+    "violet": {
+      "description": "Hafif mor bir gövde üzerinde elektrik moru."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1 gün önce",
+      "other": "{} gün önce"
+    },
+    "hoursAgo": {
+      "one": "1 saat önce",
+      "other": "{} saat önce"
+    },
+    "justNow": "Az önce",
+    "minutesAgo": {
+      "one": "1 dk önce",
+      "other": "{} dk önce"
+    },
+    "monthsAgo": {
+      "one": "1 ay önce",
+      "other": "{} ay önce"
+    },
+    "weeksAgo": {
+      "one": "1 hafta önce",
+      "other": "{} hafta önce"
+    },
+    "yearsAgo": {
+      "one": "1 yıl önce",
+      "other": "{} yıl önce"
+    },
+    "yesterday": "Dün"
+  },
+  "upload": {
+    "addFiles": "Dosya ekle",
+    "addFolder": "Klasör ekle",
+    "addMore": "Daha fazla ekle",
+    "backToApps": "Uygulamalara dön",
+    "backToEditor": "Düzenleyiciye dön",
+    "browseFiles": "Dosyalara göz at",
+    "chooseFolder": "Klasör seç",
+    "defaultImportName": "İçe aktarılan proje",
+    "defaultProjectName": "İçe aktarılan çeviriler",
+    "detectedLanguages": "Algılanan diller",
+    "detectedLanguagesHint": "Daha fazla klasör ya da dosya ekleyin; bunlarla birleşirler.",
+    "exportsBackTo": "{path} konumuna geri aktarılır",
+    "filesReady": {
+      "one": "1 dosya içe aktarmaya hazır.",
+      "other": "{} dosya içe aktarmaya hazır."
+    },
+    "hero": {
+      "filesBody": "Bir klasörü tarayın ya da .json dosyalarını kendiniz seçin. Her dosya adına göre bir dille eşleştirilir.",
+      "filesTitle": "Çeviri dosyalarınızı ekleyin",
+      "projectBody": "Projeyi (ya da herhangi bir klasörü) seçin; LingoDesk içindeki çeviri dosyalarını bulsun — ya da .json dosyalarını kendiniz seçin.",
+      "projectTitle": "Çevirilerinizi içe aktarın"
+    },
+    "importAndOpen": "İçe aktar ve düzenleyiciyi aç",
+    "importedToast": "“{name}” içine aktarıldı.",
+    "keepOneLanguage": "İçe aktarmak için en az bir dil bırakın.",
+    "languageSource": "{language} - kaynak",
+    "logo": "Logo",
+    "namingRule": "Her dosyayı dil koduyla adlandırın. Bu kümenin dışındaki her şey reddedilir.",
+    "needValidFile": "İçe aktarmak için en az bir geçerli dosya ekleyin.",
+    "noFilesFound": "“{name}” içinde çeviri dosyası bulunamadı. /translation, /translations ve /languages klasörlerinde .json dosyaları arandı.",
+    "pickFilesTitle": "Çeviri dosyalarını seçin",
+    "pickFolderTitle": "Proje klasörünüzü seçin",
+    "readySummary": "{languages} dil ve {keys} anahtar içe aktarmaya hazır.",
+    "removeLogo": "Logoyu kaldır",
+    "replaceLogo": "Logoyu değiştir",
+    "requiredLanguages": "Gerekli diller",
+    "scanning": "Taranıyor…",
+    "skipToEditor": "Düzenleyiciye geç",
+    "sourceHelper": "Geri kalan her şey, çeviri yapabileceğiniz bir hedef dile dönüşür.",
+    "stagedFiles": "Hazırlanan dosyalar",
+    "startOver": "Baştan başla",
+    "stat": {
+      "translated": "Çevrildi"
+    },
+    "uploadLogo": "Logo yükle",
+    "whereWeLook": "Nerelere bakıyoruz",
+    "whereWeLookBody": "Projenin herhangi bir yerinde, /translation, /translations ya da /languages klasörü içindeki her .json dosyası. Derleme ve bağımlılık klasörleri atlanır."
+  }
+}

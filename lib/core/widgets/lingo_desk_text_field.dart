@@ -6,6 +6,7 @@ import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_field.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// The app's text input.
 ///
@@ -193,7 +194,7 @@ class _LingoDeskTextFieldState extends State<LingoDeskTextField> {
               }
               return _FieldIconButton(
                 icon: HugeIcons.strokeRoundedCancel01,
-                tooltip: 'Clear',
+                tooltip: LocaleKeys.commonClear.tr(),
                 size: size,
                 color: tokens.muted,
                 onPressed: _clear,

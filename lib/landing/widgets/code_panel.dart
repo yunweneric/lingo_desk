@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/lingo_desk_theme.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/localization/export.dart';
 
 /// Space Mono ships in the bundle already; machine strings on the page
 /// are set in it so JSON reads as JSON.
@@ -247,9 +248,9 @@ class _ValueCell extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: LingoDeskColors.warningDeepBorder),
           ),
-          child: const Text(
-            'missing',
-            style: TextStyle(
+          child: Text(
+            LocaleKeys.landingCodeMissing.tr(),
+            style: const TextStyle(
               fontSize: 10.5,
               fontWeight: FontWeight.w700,
               color: LingoDeskColors.warningLift,

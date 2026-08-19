@@ -14,6 +14,7 @@ import '../../../../core/widgets/workspace_card.dart';
 import '../bloc/translation_editor_bloc.dart';
 import '../bloc/translation_editor_event.dart';
 import '../bloc/translation_editor_state.dart';
+import '../../../../core/localization/export.dart';
 
 /// Real-time completion bars for every target language.
 class LanguageProgressHeader extends StatelessWidget {
@@ -129,9 +130,9 @@ class _LanguageProgressTile extends StatelessWidget {
                     // 22px is a pointer's target, not a thumb's.
                     dimension: _aiButtonSide,
                     child: IconButton(
-                      tooltip:
-                          'AI translate $translatable missing '
-                          '${translatable == 1 ? 'string' : 'strings'}',
+                      tooltip: LocaleKeys.editorAiTranslateMissing.plural(
+                        translatable,
+                      ),
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints.tightFor(
                         width: _aiButtonSide,
@@ -170,7 +171,9 @@ class _LanguageProgressTile extends StatelessWidget {
             duration: LingoDeskMotion.standard,
             switchInCurve: LingoDeskMotion.curve,
             child: Text(
-              missing == 0 ? 'Complete' : '$missing missing',
+              missing == 0
+                  ? LocaleKeys.appsStatusComplete.tr()
+                  : LocaleKeys.commonMissingCount.plural(missing),
               key: ValueKey<bool>(missing == 0),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: missing == 0 ? LingoDeskColors.complete : tokens.muted,

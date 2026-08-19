@@ -9,6 +9,7 @@ import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/workspace_card.dart';
 import 'preview_chrome.dart';
 import 'preview_workspace.dart';
+import '../../core/localization/export.dart';
 
 /// The workspace: keys down the side, locales across the top.
 ///
@@ -32,17 +33,22 @@ class PreviewEditorPane extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           PreviewBreadcrumb(
-            segments: const ['Workspace', 'Apps', 'Storefront', 'Editor'],
+            segments: [
+              LocaleKeys.navGroupWorkspace.tr(),
+              LocaleKeys.navApps.tr(),
+              'Storefront',
+              LocaleKeys.editorTitle.tr(),
+            ],
             actions: [
               PreviewButton(
-                label: 'AI translate',
+                label: LocaleKeys.editorAiTranslate.tr(),
                 icon: HugeIcons.strokeRoundedSparkles,
                 onTap: workspace.totalMissing == 0
                     ? null
                     : workspace.translateEverything,
               ),
-              const PreviewButton(
-                label: 'Export',
+              PreviewButton(
+                label: LocaleKeys.editorExport.tr(),
                 icon: HugeIcons.strokeRoundedDownload04,
                 primary: true,
               ),
@@ -80,8 +86,12 @@ class PreviewEditorPane extends StatelessWidget {
                   children: [
                     PreviewTableHeader(
                       cells: [
-                        (26, 'KEY'),
-                        (22, 'EN · SOURCE'),
+                        (26, LocaleKeys.editorKeyLabel.tr().toUpperCase()),
+                        (
+                          22,
+                          'EN · '
+                              '${LocaleKeys.appSettingsMetaSource.tr().toUpperCase()}',
+                        ),
                         for (final locale in PreviewWorkspace.locales)
                           (
                             22,
@@ -168,7 +178,9 @@ class _LocaleCard extends StatelessWidget {
           ),
           const SizedBox(height: 7),
           Text(
-            missing == 0 ? 'Complete' : '$missing missing',
+            missing == 0
+                ? LocaleKeys.appsStatusComplete.tr()
+                : LocaleKeys.commonMissingCount.plural(missing),
             style: TextStyle(
               fontSize: 11.5,
               color: missing == 0
@@ -192,7 +204,7 @@ class _Toolbar extends StatelessWidget {
     return Row(
       children: [
         WorkspaceMetaTile(
-          label: 'Keys',
+          label: LocaleKeys.dashboardStatKeys.tr(),
           value: workspace.entries.length.toString(),
           icon: HugeIcons.strokeRoundedKey01,
           width: 96,
@@ -200,7 +212,7 @@ class _Toolbar extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         WorkspaceMetaTile(
-          label: 'Missing',
+          label: LocaleKeys.dashboardMetricMissing.tr(),
           value: workspace.totalMissing.toString(),
           icon: HugeIcons.strokeRoundedAlertCircle,
           width: 106,
@@ -208,7 +220,7 @@ class _Toolbar extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         WorkspaceMetaTile(
-          label: 'Languages',
+          label: LocaleKeys.appsTableColLanguages.tr(),
           value: PreviewWorkspace.locales.length.toString(),
           icon: HugeIcons.strokeRoundedLanguageSquare,
           width: 120,
@@ -219,8 +231,8 @@ class _Toolbar extends StatelessWidget {
         const SizedBox(width: 12),
         _MissingToggle(workspace: workspace),
         const SizedBox(width: 12),
-        const PreviewButton(
-          label: 'Add key',
+        PreviewButton(
+          label: LocaleKeys.editorAddKey.tr(),
           icon: HugeIcons.strokeRoundedAdd01,
           primary: true,
           height: 48,
@@ -290,7 +302,7 @@ class _SearchFieldState extends State<_SearchField> {
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: 'Search keys and values',
+                hintText: LocaleKeys.editorSearchHint.tr(),
                 hintStyle: TextStyle(fontSize: 13.5, color: tokens.muted),
               ),
             ),
@@ -337,7 +349,7 @@ class _MissingToggle extends StatelessWidget {
             ),
           ),
           child: Text(
-            'Missing only',
+            LocaleKeys.editorMissingOnly.tr(),
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
@@ -480,12 +492,12 @@ class _CellState extends State<_Cell> {
             widget.workspace.setValue(widget.entry, widget.locale, value),
         cursorColor: tokens.accent,
         style: TextStyle(fontSize: 13, color: tokens.foreground),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.zero,
           border: InputBorder.none,
-          hintText: 'Missing',
-          hintStyle: TextStyle(
+          hintText: LocaleKeys.dashboardMetricMissing.tr(),
+          hintStyle: const TextStyle(
             fontSize: 13,
             fontStyle: FontStyle.italic,
             color: LingoDeskColors.warning,
@@ -517,8 +529,10 @@ class _EmptyResult extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             query.isEmpty
-                ? 'Nothing is missing — every string is translated.'
-                : 'No keys match “$query”.',
+                ? LocaleKeys.landingPreviewNothingMissing.tr()
+                : LocaleKeys.landingPreviewNoMatches.tr(
+                    namedArgs: {'query': query},
+                  ),
             style: TextStyle(fontSize: 14, color: tokens.muted),
           ),
         ],
@@ -553,7 +567,7 @@ class _TableFooter extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            'Rows  25',
+            '${LocaleKeys.commonRows.tr()}  25',
             style: TextStyle(fontSize: 12.5, color: tokens.muted),
           ),
           const SizedBox(width: 12),

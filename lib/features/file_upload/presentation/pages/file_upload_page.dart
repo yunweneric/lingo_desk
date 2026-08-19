@@ -24,6 +24,7 @@ import '../bloc/file_upload_event.dart';
 import '../bloc/file_upload_state.dart';
 import '../widgets/scanned_language_tile.dart';
 import '../widgets/staged_file_tile.dart';
+import '../../../../core/localization/export.dart';
 
 /// Bring existing JSON translation files into LingoDesk.
 ///
@@ -75,7 +76,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
             }
           }
           if (state is FileUploadImportSuccess) {
-            context.showSuccessToast('Imported into "${state.app.name}".');
+            context.showSuccessToast(
+              LocaleKeys.uploadImportedToast.tr(
+                namedArgs: {'name': state.app.name},
+              ),
+            );
             if (widget.popOnImport) {
               context.pop(true);
             } else {
@@ -98,11 +103,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
                     breadcrumb: [
                       Crumb.workspace,
                       if (widget.app case final app?) ...[
-                        const Crumb('Apps', route: AppRoutes.apps),
+                        Crumb(LocaleKeys.navApps.tr(), route: AppRoutes.apps),
                         Crumb(app.name),
-                        const Crumb('Import'),
+                        Crumb(LocaleKeys.navImport.tr()),
                       ] else
-                        const Crumb('Import'),
+                        Crumb(LocaleKeys.navImport.tr()),
                     ],
                     actions: [
                       OutlinedButton(
@@ -132,8 +137,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
                               ),
                         label: Text(
                           _isProjectMode
-                              ? 'Import project'
-                              : 'Import & open editor',
+                              ? LocaleKeys.appsImportProject.tr()
+                              : LocaleKeys.uploadImportAndOpen.tr(),
                         ),
                       ),
                     ],
@@ -157,9 +162,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
 
   String get _leaveLabel {
     if (_isProjectMode) {
-      return 'Back to apps';
+      return LocaleKeys.uploadBackToApps.tr();
     }
-    return widget.popOnImport ? 'Back to editor' : 'Skip to editor';
+    return widget.popOnImport
+        ? LocaleKeys.uploadBackToEditor.tr()
+        : LocaleKeys.uploadSkipToEditor.tr();
   }
 
   void _leave(BuildContext context) {
@@ -256,18 +263,15 @@ class _EmptyState extends StatelessWidget {
               const SizedBox(height: 18),
               Text(
                 isProject
-                    ? 'Import your translations'
-                    : 'Add your translation files',
+                    ? LocaleKeys.uploadHeroProjectTitle.tr()
+                    : LocaleKeys.uploadHeroFilesTitle.tr(),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
                 isProject
-                    ? 'Pick the project (or any folder) and LingoDesk finds '
-                          'the translation files inside it — or select the '
-                          '.json files yourself.'
-                    : 'Scan a folder, or select the .json files yourself. '
-                          'Each file is matched to a language by its name.',
+                    ? LocaleKeys.uploadHeroProjectBody.tr()
+                    : LocaleKeys.uploadHeroFilesBody.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -299,7 +303,9 @@ class _EmptyState extends StatelessWidget {
                             size: 18,
                           ),
                     label: Text(
-                      state.isScanning ? 'Scanning…' : 'Choose folder',
+                      state.isScanning
+                          ? LocaleKeys.uploadScanning.tr()
+                          : LocaleKeys.uploadChooseFolder.tr(),
                     ),
                   ),
                   OutlinedButton.icon(
@@ -312,7 +318,7 @@ class _EmptyState extends StatelessWidget {
                       HugeIcons.strokeRoundedFileUpload,
                       size: 18,
                     ),
-                    label: const Text('Browse files'),
+                    label: Text(LocaleKeys.uploadBrowseFiles.tr()),
                   ),
                 ],
               ),
@@ -345,12 +351,13 @@ class _ScanContract extends StatelessWidget {
 
     return Column(
       children: [
-        Text('Where we look', style: Theme.of(context).textTheme.labelLarge),
+        Text(
+          LocaleKeys.uploadWhereWeLook.tr(),
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const SizedBox(height: 6),
         Text(
-          'Any .json file inside a /translation, /translations or /languages '
-          'folder, anywhere in the project. Build and dependency folders are '
-          'skipped.',
+          LocaleKeys.uploadWhereWeLookBody.tr(),
           textAlign: TextAlign.center,
           style: Theme.of(
             context,
@@ -428,8 +435,8 @@ class _ScannedProjectState extends StatelessWidget {
                   Expanded(
                     child: LingoDeskTextField(
                       controller: nameController,
-                      label: 'App name',
-                      hintText: 'e.g. Customer Portal',
+                      label: LocaleKeys.appSettingsAppName.tr(),
+                      hintText: LocaleKeys.appSettingsAppNameHint.tr(),
                       size: LingoDeskFieldSize.large,
                       enabled: !state.isBusy,
                       isRequired: true,
@@ -458,16 +465,19 @@ class _ScannedProjectState extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _SummaryStat(
-                      label: 'Languages',
+                      label: LocaleKeys.appsTableColLanguages.tr(),
                       value: '${included.length}',
                     ),
                   ),
                   Expanded(
-                    child: _SummaryStat(label: 'Keys', value: '$totalKeys'),
+                    child: _SummaryStat(
+                      label: LocaleKeys.dashboardStatKeys.tr(),
+                      value: '$totalKeys',
+                    ),
                   ),
                   Expanded(
                     child: _SummaryStat(
-                      label: 'Translated',
+                      label: LocaleKeys.uploadStatTranslated.tr(),
                       value: _coverageLabel(included, totalKeys),
                     ),
                   ),
@@ -475,10 +485,8 @@ class _ScannedProjectState extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               LanguageDropdown(
-                label: 'Source language',
-                helperText:
-                    'Everything else becomes a target language you can '
-                    'translate into.',
+                label: LocaleKeys.appSettingsSourceLanguage.tr(),
+                helperText: LocaleKeys.uploadSourceHelper.tr(),
                 languageCodes: [
                   for (final group in project.groups) group.languageCode,
                 ],
@@ -493,12 +501,12 @@ class _ScannedProjectState extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'Detected languages',
+          LocaleKeys.uploadDetectedLanguages.tr(),
           style: Theme.of(context).textTheme.labelLarge,
         ),
         const SizedBox(height: 4),
         Text(
-          'Add more folders or files and they merge into these.',
+          LocaleKeys.uploadDetectedLanguagesHint.tr(),
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
@@ -545,9 +553,13 @@ class _ScannedProjectState extends StatelessWidget {
             Expanded(
               child: Text(
                 included.isEmpty
-                    ? 'Keep at least one language to import.'
-                    : '${included.length} language(s) and $totalKeys keys '
-                          'ready to import.',
+                    ? LocaleKeys.uploadKeepOneLanguage.tr()
+                    : LocaleKeys.uploadReadySummary.tr(
+                        namedArgs: {
+                          'languages': '${included.length}',
+                          'keys': '$totalKeys',
+                        },
+                      ),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: tokens.muted,
                   fontSize: 12,
@@ -563,7 +575,7 @@ class _ScannedProjectState extends StatelessWidget {
                 HugeIcons.strokeRoundedFolderAdd,
                 size: 17,
               ),
-              label: const Text('Add folder'),
+              label: Text(LocaleKeys.uploadAddFolder.tr()),
             ),
             TextButton.icon(
               onPressed: state.isBusy
@@ -573,14 +585,17 @@ class _ScannedProjectState extends StatelessWidget {
                 HugeIcons.strokeRoundedFileUpload,
                 size: 17,
               ),
-              label: const Text('Add files'),
+              label: Text(LocaleKeys.uploadAddFiles.tr()),
             ),
             TextButton(
               onPressed: state.isBusy
                   ? null
                   : () =>
                         context.read<FileUploadBloc>().add(ResetImportEvent()),
-              child: Text('Start over', style: TextStyle(color: tokens.muted)),
+              child: Text(
+                LocaleKeys.uploadStartOver.tr(),
+                style: TextStyle(color: tokens.muted),
+              ),
             ),
           ],
         ),
@@ -625,11 +640,13 @@ class _ProjectIconField extends StatelessWidget {
     final busy = state.isBusy;
 
     return LingoDeskFieldScaffold(
-      label: 'Logo',
+      label: LocaleKeys.uploadLogo.tr(),
       child: Row(
         children: [
           Tooltip(
-            message: hasIcon ? 'Replace logo' : 'Upload a logo',
+            message: hasIcon
+                ? LocaleKeys.uploadReplaceLogo.tr()
+                : LocaleKeys.uploadUploadLogo.tr(),
             child: InkWell(
               onTap: busy
                   ? null
@@ -645,7 +662,9 @@ class _ProjectIconField extends StatelessWidget {
                       builder: (context, value, _) {
                         final name = value.text.trim();
                         return AppAvatar(
-                          name: name.isEmpty ? 'New app' : name,
+                          name: name.isEmpty
+                              ? LocaleKeys.appsNewApp.tr()
+                              : name,
                           initials: appInitialsFor(value.text),
                           iconImage: state.iconImage,
                           size: _size,
@@ -691,7 +710,7 @@ class _ProjectIconField extends StatelessWidget {
               onPressed: busy
                   ? null
                   : () => bloc.add(ProjectIconClearedEvent()),
-              tooltip: 'Remove logo',
+              tooltip: LocaleKeys.uploadRemoveLogo.tr(),
               visualDensity: VisualDensity.compact,
               icon: const LingoDeskIcon(
                 HugeIcons.strokeRoundedDelete02,
@@ -808,7 +827,7 @@ class _StagedState extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Staged files',
+                LocaleKeys.uploadStagedFiles.tr(),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -820,7 +839,7 @@ class _StagedState extends StatelessWidget {
                 HugeIcons.strokeRoundedFolderAdd,
                 size: 17,
               ),
-              label: const Text('Add more'),
+              label: Text(LocaleKeys.uploadAddMore.tr()),
             ),
           ],
         ),
@@ -844,8 +863,8 @@ class _StagedState extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           state.canImport
-              ? '${state.validFiles.length} file(s) ready to import.'
-              : 'Add at least one valid file to import.',
+              ? LocaleKeys.uploadFilesReady.plural(state.validFiles.length)
+              : LocaleKeys.uploadNeedValidFile.tr(),
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
@@ -878,7 +897,7 @@ class _LanguageChecklist extends StatelessWidget {
           mainAxisSize: centered ? MainAxisSize.min : MainAxisSize.max,
           children: [
             Text(
-              'Required languages',
+              LocaleKeys.uploadRequiredLanguages.tr(),
               style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(width: 10),
@@ -895,8 +914,7 @@ class _LanguageChecklist extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Name each file after its language code. Anything outside this set '
-          'is rejected.',
+          LocaleKeys.uploadNamingRule.tr(),
           textAlign: centered ? TextAlign.center : TextAlign.start,
           style: Theme.of(
             context,
@@ -997,7 +1015,9 @@ class _LanguageChip extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             isSource
-                ? '${SupportedLanguages.nameOf(language)} - source'
+                ? LocaleKeys.uploadLanguageSource.tr(
+                    namedArgs: {'language': SupportedLanguages.nameOf(language)},
+                  )
                 : SupportedLanguages.nameOf(language),
             style: Theme.of(
               context,

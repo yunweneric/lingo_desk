@@ -6,6 +6,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../../app_settings/presentation/widgets/language_target_selector.dart';
+import '../../../../core/localization/export.dart';
 
 /// Target locales pre-selected in the "New app" dialog.
 class SettingsDefaultsCard extends StatelessWidget {
@@ -22,9 +23,9 @@ class SettingsDefaultsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Default target languages',
-            subtitle: 'Pre-selected whenever you create a new app.',
+          WorkspaceCardHeader(
+            title: LocaleKeys.settingsDefaultsTitle.tr(),
+            subtitle: LocaleKeys.settingsDefaultsSubtitle.tr(),
             icon: HugeIcons.strokeRoundedGlobe02,
           ),
           const SizedBox(height: 22),
@@ -36,9 +37,8 @@ class SettingsDefaultsCard extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             selected.isEmpty
-                ? 'No defaults yet — new apps start with an empty target list.'
-                : '${selected.length} locale'
-                      '${selected.length == 1 ? '' : 's'} will be pre-selected.',
+                ? LocaleKeys.settingsDefaultsEmpty.tr()
+                : LocaleKeys.settingsDefaultsCount.plural(selected.length),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),

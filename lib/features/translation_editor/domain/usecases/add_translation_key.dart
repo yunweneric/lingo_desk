@@ -4,6 +4,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/json_flattener.dart';
 import '../repositories/translation_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class AddTranslationKeyParams {
   const AddTranslationKeyParams({
@@ -30,13 +31,7 @@ class AddTranslationKey implements UseCase<void, AddTranslationKeyParams> {
     final key = params.key.trim();
     if (!JsonFlattener.isValidKey(key)) {
       return Future.value(
-        const Left(
-          ValidationFailure(
-            message:
-                'Keys must use dot notation with letters, digits, "_" or "-" '
-                '(e.g. nav.home).',
-          ),
-        ),
+        Left(ValidationFailure(message: LocaleKeys.errorsInvalidKey.tr())),
       );
     }
     return repository.addKey(params.appId, key, params.values);

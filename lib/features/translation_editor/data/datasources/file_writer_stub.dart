@@ -1,3 +1,5 @@
+import '../../../../core/localization/export.dart';
+
 /// No-op file writer used on platforms without `dart:io` (web).
 ///
 /// Nothing on web can be written to a path, so the export data source
@@ -12,5 +14,5 @@ Future<bool> pathExists(String path) async => false;
 
 /// Web has no file manager to show a path in.
 Future<void> revealInFileManager(String path) async {
-  throw UnsupportedError('Showing a folder is not available on this platform.');
+  throw UnsupportedError(LocaleKeys.errorsRevealUnsupported.tr());
 }

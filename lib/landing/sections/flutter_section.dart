@@ -10,6 +10,7 @@ import '../state/landing_controller.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/landing_pill.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// The showcase beat: the same Dart that builds the desktop app builds
 /// this page, and the visitor can prove it by repainting the site.
@@ -35,15 +36,10 @@ class FlutterSection extends StatelessWidget {
       anchor: anchor,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'Built with Flutter & Dart',
-            title: 'One codebase. Six platforms.\nIncluding this page.',
-            body:
-                'LingoDesk is written once in Dart and compiled to macOS, '
-                'Windows, Linux, Android, iOS and the web. This landing page '
-                'is not HTML with a Flutter demo bolted on — it is the same '
-                'project, the same design tokens and the same widgets, '
-                'compiled for the browser you are reading it in.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingFlutterEyebrow.tr(),
+            title: LocaleKeys.landingFlutterTitle.tr(),
+            body: LocaleKeys.landingFlutterBody.tr(),
           ),
           const SizedBox(height: 48),
           Reveal(
@@ -55,14 +51,14 @@ class FlutterSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const LandingPill(
-                      label: 'Live, right now',
+                    LandingPill(
+                      label: LocaleKeys.landingFlutterPill.tr(),
                       icon: HugeIcons.strokeRoundedZap,
                       emphasis: true,
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Every colour on this page comes from the app.',
+                      LocaleKeys.landingFlutterProofTitle.tr(),
                       style: TextStyle(
                         fontSize: 22,
                         height: 1.28,
@@ -73,10 +69,7 @@ class FlutterSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      'These are the six palettes shipped in LingoDesk, '
-                      'read from the same theme extension the desktop '
-                      'build reads. Pick one and the whole site repaints '
-                      '— no reload, no stylesheet swap.',
+                      LocaleKeys.landingFlutterProofBody.tr(),
                       style: TextStyle(
                         fontSize: 15,
                         height: 1.62,
@@ -183,7 +176,7 @@ class _Swatch extends StatelessWidget {
     final scheme = LingoDeskPalettes.of(variant).scheme(isDark);
 
     return Tooltip(
-      message: variant.description,
+      message: variant.description.tr(),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
@@ -257,7 +250,7 @@ class _MarkProof extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'Not an image file',
+            LocaleKeys.landingMarkProofTitle.tr(),
             style: TextStyle(
               fontSize: 15.5,
               fontWeight: FontWeight.w700,
@@ -266,9 +259,7 @@ class _MarkProof extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'The logo above is a CustomPainter drawing rounded rectangles '
-            'and two circles onto a canvas — so it is crisp at any size and '
-            'takes the accent of whichever theme is selected.',
+            LocaleKeys.landingMarkProofBody.tr(),
             style: TextStyle(fontSize: 13.5, height: 1.6, color: tokens.muted),
           ),
         ],
@@ -321,11 +312,11 @@ class _PlatformGrid extends StatelessWidget {
         available: false,
         onTap: onSeeDownloads,
       ),
-      const PlatformTile(
+      PlatformTile(
         label: 'Web',
         icon: HugeIcons.strokeRoundedBrowser,
         available: true,
-        note: 'You are here',
+        note: LocaleKeys.landingYouAreHere.tr(),
       ),
     ];
 
@@ -356,11 +347,11 @@ class _StatRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final narrow = context.windowSize.isBelow(WindowSizeClass.medium);
 
-    const stats = [
-      ('1', 'codebase'),
-      ('6', 'compile targets'),
+    final stats = [
+      ('1', LocaleKeys.landingStatCodebase.tr()),
+      ('6', LocaleKeys.landingStatTargets.tr()),
       ('100%', 'Dart'),
-      ('0', 'lines of JavaScript written by hand'),
+      ('0', LocaleKeys.landingStatJavascript.tr()),
     ];
 
     return SizedBox(

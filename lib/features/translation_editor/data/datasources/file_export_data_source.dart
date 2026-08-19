@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/errors/exceptions.dart';
 import 'file_writer_stub.dart' if (dart.library.io) 'file_writer_io.dart';
+import '../../../../core/localization/export.dart';
 
 /// Writes exported translation files to disk.
 ///
@@ -53,8 +54,8 @@ class FileExportDataSourceImpl implements FileExportDataSource {
   ) async {
     final downloads = await downloadsDirectoryPath();
     if (downloads == null) {
-      throw const FileException(
-        'Could not find your Downloads folder on this platform.',
+      throw FileException(
+        LocaleKeys.errorsNoDownloadsFolder.tr(),
       );
     }
 
@@ -71,7 +72,11 @@ class FileExportDataSourceImpl implements FileExportDataSource {
     } on FileException {
       rethrow;
     } on Exception catch (e) {
-      throw FileException('Could not save $fileName: $e');
+      throw FileException(
+        LocaleKeys.errorsSaveFile.tr(
+          namedArgs: {'file': fileName, 'error': '$e'},
+        ),
+      );
     }
   }
 
@@ -88,7 +93,11 @@ class FileExportDataSourceImpl implements FileExportDataSource {
         written.add(path);
       }
     } on Exception catch (e) {
-      throw FileException('Could not write to $rootPath: $e');
+      throw FileException(
+        LocaleKeys.errorsWriteFolder.tr(
+          namedArgs: {'path': rootPath, 'error': '$e'},
+        ),
+      );
     }
     return written;
   }
@@ -102,7 +111,9 @@ class FileExportDataSourceImpl implements FileExportDataSource {
       );
       return (path == null || path.isEmpty) ? null : path;
     } on Exception catch (e) {
-      throw FileException('Could not open the folder picker: $e');
+      throw FileException(
+        LocaleKeys.errorsFolderPickerOpen.tr(namedArgs: {'error': '$e'}),
+      );
     }
   }
 
@@ -111,12 +122,18 @@ class FileExportDataSourceImpl implements FileExportDataSource {
     try {
       await revealInFileManager(path);
     } on Exception catch (e) {
-      throw FileException('Could not open $path: $e');
+      throw FileException(
+        LocaleKeys.errorsOpenPath.tr(
+          namedArgs: {'path': path, 'error': '$e'},
+        ),
+      );
       // The web stub reports an unsupported platform as an Error rather
       // than an Exception, and it still belongs in the toast.
       // ignore: avoid_catching_errors
     } on UnsupportedError catch (e) {
-      throw FileException(e.message ?? 'Not available on this platform.');
+      throw FileException(
+        e.message ?? LocaleKeys.errorsUnsupportedPlatform.tr(),
+      );
     }
   }
 

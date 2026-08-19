@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'di/injection_container.dart' as di;
+import 'localization/export.dart';
 
 /// Bootstrap class responsible for initializing the application
 /// before running the main app widget.
@@ -13,6 +14,9 @@ class Bootstrap {
   static Future<void> initialize() async {
     // Ensure Flutter bindings are initialized
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Translations and date symbols, before anything can ask for a string.
+    await AppLocalization.ensureInitialized();
 
     // Set up error handling
     _setupErrorHandling();

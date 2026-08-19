@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../localization/export.dart';
+
 /// The six palettes the user can pick from in Settings → Appearance.
 ///
 /// A variant is a *whole* look, not just an accent swap: each one carries
@@ -9,32 +11,32 @@ enum LingoDeskThemeVariant {
   teal(
     id: 'teal',
     label: 'Teal Desk',
-    description: 'The house look — saturated teal on warm stone.',
+    description: LocaleKeys.themeTealDescription,
   ),
   indigo(
     id: 'indigo',
     label: 'Indigo Slate',
-    description: 'Cool indigo over blue-grey neutrals.',
+    description: LocaleKeys.themeIndigoDescription,
   ),
   violet(
     id: 'violet',
     label: 'Violet Dusk',
-    description: 'Electric violet on a faintly purple chassis.',
+    description: LocaleKeys.themeVioletDescription,
   ),
   amber(
     id: 'amber',
     label: 'Amber Ember',
-    description: 'Warm amber and toasted-sand neutrals.',
+    description: LocaleKeys.themeAmberDescription,
   ),
   rose(
     id: 'rose',
     label: 'Rose Quartz',
-    description: 'Deep rose with soft blush surfaces.',
+    description: LocaleKeys.themeRoseDescription,
   ),
   graphite(
     id: 'graphite',
     label: 'Graphite Mono',
-    description: 'No hue at all — contrast does the accenting.',
+    description: LocaleKeys.themeGraphiteDescription,
   );
 
   const LingoDeskThemeVariant({
@@ -45,7 +47,12 @@ enum LingoDeskThemeVariant {
 
   /// Stable string written to preferences. Never rename.
   final String id;
+
+  /// Name of the palette. A product name, the same in every language.
   final String label;
+
+  /// Translation key for the one-line description; call `.tr()` where it
+  /// is drawn.
   final String description;
 
   LingoDeskPalette get palette => LingoDeskPalettes.of(this);

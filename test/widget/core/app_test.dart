@@ -16,7 +16,12 @@ void main() {
 
     testWidgets('App renders onboarding title', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(const LingoDeskApp());
+      await tester.pumpWidget(
+        TestHelpers.localized(const LingoDeskApp()),
+      );
+      // The localization scope loads its JSON before the first real
+      // frame, so the app is not on screen until it settles.
+      await tester.pumpAndSettle();
 
       expect(
         find.text('Translate every locale from one clean desk'),
@@ -29,7 +34,12 @@ void main() {
       WidgetTester tester,
     ) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(const LingoDeskApp());
+      await tester.pumpWidget(
+        TestHelpers.localized(const LingoDeskApp()),
+      );
+      // The localization scope loads its JSON before the first real
+      // frame, so the app is not on screen until it settles.
+      await tester.pumpAndSettle();
 
       expect(find.text('Translation workspace'.toUpperCase()), findsOneWidget);
       expect(find.textContaining('home.hero.title'), findsWidgets);
@@ -38,7 +48,12 @@ void main() {
 
     testWidgets('App uses Material 3 theme', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(const LingoDeskApp());
+      await tester.pumpWidget(
+        TestHelpers.localized(const LingoDeskApp()),
+      );
+      // The localization scope loads its JSON before the first real
+      // frame, so the app is not on screen until it settles.
+      await tester.pumpAndSettle();
 
       // Verify MaterialApp is present
       expect(find.byType(MaterialApp), findsOneWidget);
@@ -50,7 +65,12 @@ void main() {
 
     testWidgets('App does not show debug banner', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(const LingoDeskApp());
+      await tester.pumpWidget(
+        TestHelpers.localized(const LingoDeskApp()),
+      );
+      // The localization scope loads its JSON before the first real
+      // frame, so the app is not on screen until it settles.
+      await tester.pumpAndSettle();
 
       // Get the MaterialApp widget to verify debug banner is disabled
       final MaterialApp app = tester.widget(find.byType(MaterialApp));

@@ -25,7 +25,10 @@ class _DashboardContent extends StatelessWidget {
             return Column(
               children: [
                 WorkspacePageHeader(
-                  breadcrumb: const [Crumb.workspace, Crumb('Dashboard')],
+                  breadcrumb: [
+                    Crumb.workspace,
+                    Crumb(LocaleKeys.navDashboard.tr()),
+                  ],
                   actions: [
                     ThemeModeSwitcher(
                       themeMode: themeMode,
@@ -178,12 +181,9 @@ class _DashboardBody extends StatelessWidget {
                   child: state.overviews.isEmpty
                       ? WorkspaceEmptyState(
                           icon: HugeIcons.strokeRoundedFolder02,
-                          title: 'Create your first app',
-                          message:
-                              'An app groups the translation files of one '
-                              'project. Set a source language, pick your '
-                              'targets, and start translating.',
-                          actionLabel: 'New app',
+                          title: LocaleKeys.dashboardEmptyTitle.tr(),
+                          message: LocaleKeys.dashboardEmptyMessage.tr(),
+                          actionLabel: LocaleKeys.appsNewApp.tr(),
                           actionIcon: HugeIcons.strokeRoundedAdd01,
                           onAction: () => openCreateApp(context),
                         )
@@ -212,11 +212,14 @@ class _AppsShortcutCard extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final header = WorkspaceCardHeader(
-            title: 'Apps',
-            subtitle:
-                '$appCount ${appCount == 1 ? 'app' : 'apps'} - '
-                '${state.completeFiles}/${state.totalFiles} translation files '
-                'complete',
+            title: LocaleKeys.navApps.tr(),
+            subtitle: LocaleKeys.dashboardAppsShortcutSubtitle.tr(
+              namedArgs: {
+                'apps': LocaleKeys.dashboardAppCount.plural(appCount),
+                'complete': '${state.completeFiles}',
+                'total': '${state.totalFiles}',
+              },
+            ),
             icon: HugeIcons.strokeRoundedFolder02,
           );
           final action = FilledButton.icon(
@@ -226,7 +229,7 @@ class _AppsShortcutCard extends StatelessWidget {
               color: Colors.white,
               size: 18,
             ),
-            label: const Text('View all apps'),
+            label: Text(LocaleKeys.dashboardViewAllApps.tr()),
           );
 
           // The title and its button share a line once there is room for

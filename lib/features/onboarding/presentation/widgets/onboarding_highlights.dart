@@ -4,6 +4,7 @@ import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import 'onboarding_step.dart';
+import '../../../../core/localization/export.dart';
 
 /// The proof list under a step's body: three claims, each with the
 /// machine string that backs it. This replaces the old decorative code
@@ -65,7 +66,7 @@ class _HighlightRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                highlight.label,
+                highlight.label.tr(),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   height: 1.3,

@@ -27,6 +27,7 @@ import '../widgets/ai_translate_dialog.dart';
 import '../widgets/export_languages_dialog.dart';
 import '../widgets/language_progress_header.dart';
 import '../widgets/translation_table.dart';
+import '../../../../core/localization/export.dart';
 
 /// The translation workspace: flattened key grid, progress bars,
 /// missing-only filter, key CRUD, and JSON export.
@@ -81,9 +82,9 @@ class _EditorViewState extends State<_EditorView> {
         } else if (state is TranslationEditorError) {
           view = _buildError(context, state);
         } else {
-          view = const _EditorChrome(
-            breadcrumb: [Crumb.workspace, Crumb('Editor')],
-            body: Center(child: CircularProgressIndicator()),
+          view = _EditorChrome(
+            breadcrumb: [Crumb.workspace, Crumb(LocaleKeys.editorTitle.tr())],
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -102,7 +103,7 @@ class _EditorViewState extends State<_EditorView> {
 
   Widget _buildError(BuildContext context, TranslationEditorError state) {
     return _EditorChrome(
-      breadcrumb: const [Crumb.workspace, Crumb('Editor')],
+      breadcrumb: [Crumb.workspace, Crumb(LocaleKeys.editorTitle.tr())],
       body: WorkspaceErrorState(
         message: state.message,
         onRetry: () => context.read<TranslationEditorBloc>().add(
@@ -116,9 +117,9 @@ class _EditorViewState extends State<_EditorView> {
     return _EditorChrome(
       breadcrumb: [
         Crumb.workspace,
-        const Crumb('Apps', route: AppRoutes.apps),
+        Crumb(LocaleKeys.navApps.tr(), route: AppRoutes.apps),
         Crumb(state.app.name),
-        const Crumb('Editor'),
+        Crumb(LocaleKeys.editorTitle.tr()),
       ],
       // Page-level actions live in the header, each naming itself: three
       // fit the band once importing moved out to the apps list, where it
@@ -186,7 +187,7 @@ class _EditorViewState extends State<_EditorView> {
       height: _barHeight,
       child: LingoDeskTextField(
         controller: _searchController,
-        hintText: 'Search keys and values',
+        hintText: LocaleKeys.editorSearchHint.tr(),
         prefixIcon: HugeIcons.strokeRoundedSearch01,
         clearable: true,
         onChanged: (value) => bloc.add(SearchKeysEvent(value)),
@@ -198,8 +199,10 @@ class _EditorViewState extends State<_EditorView> {
       child: FilterChip(
         label: Text(
           state.showMissingOnly
-              ? 'Missing only (${state.filteredEntries.length})'
-              : 'Missing only',
+              ? LocaleKeys.editorMissingOnlyCount.tr(
+                  namedArgs: {'count': '${state.filteredEntries.length}'},
+                )
+              : LocaleKeys.editorMissingOnly.tr(),
         ),
         selected: state.showMissingOnly,
         onSelected: (_) => bloc.add(ToggleMissingOnlyEvent()),
@@ -213,7 +216,7 @@ class _EditorViewState extends State<_EditorView> {
         color: Colors.white,
         size: 17,
       ),
-      label: const Text('Add key'),
+      label: Text(LocaleKeys.editorAddKey.tr()),
     );
 
     if (isCompact) {
@@ -266,19 +269,20 @@ class _EditorViewState extends State<_EditorView> {
     return [
       EditorHeaderAction(
         icon: HugeIcons.strokeRoundedSettings01,
-        label: 'Settings',
+        label: LocaleKeys.navSettings.tr(),
         compact: compact,
         onPressed: () => _openAppSettings(context, state),
       ),
       EditorHeaderAction(
         icon: HugeIcons.strokeRoundedSparkles,
-        label: 'AI translate',
+        label: LocaleKeys.editorAiTranslate.tr(),
         compact: compact,
         // The label says what it does; the tooltip is left to say why
         // it cannot right now.
         tooltip: switch (state) {
-          _ when state.aiJob != null => 'AI translation running',
-          _ when state.translatableMissing == 0 => 'Nothing left to translate',
+          _ when state.aiJob != null => LocaleKeys.editorAiRunning.tr(),
+          _ when state.translatableMissing == 0 =>
+            LocaleKeys.editorAiNothingLeft.tr(),
           _ => '',
         },
         onPressed: state.aiJob != null || state.translatableMissing == 0
@@ -330,7 +334,9 @@ class _EditorViewState extends State<_EditorView> {
     final languages = await AiTranslateDialog.show(
       context,
       state: state,
-      providerLabel: aiSettings.activeKey?.provider.label ?? 'No provider',
+      providerLabel:
+          aiSettings.activeKey?.provider.label ??
+          LocaleKeys.editorNoProvider.tr(),
       model: aiSettings.activeKey?.model ?? '',
     );
     if (languages != null && languages.isNotEmpty) {
@@ -356,23 +362,27 @@ class _EditorViewState extends State<_EditorView> {
       languages: app.allLanguages,
       sourceLanguage: app.sourceLanguage,
       title: switch (destination) {
-        _ExportDestination.downloads => 'Download ZIP',
-        _ExportDestination.project => 'Save to ${app.name}',
-        _ExportDestination.folder => 'Export to folder',
+        _ExportDestination.downloads => LocaleKeys.editorExportZip.tr(),
+        _ExportDestination.project => LocaleKeys.editorExportSaveTo.tr(
+          namedArgs: {'name': app.name},
+        ),
+        _ExportDestination.folder => LocaleKeys.editorExportToFolder.tr(),
       },
       summary: switch (destination) {
         _ExportDestination.downloads =>
-          'Bundled into ${archiveNameFor(app.name)} in your Downloads '
-              'folder.',
-        _ExportDestination.project =>
-          'Written into ${app.projectPath}, replacing these files.',
+          LocaleKeys.editorExportZipSummary.tr(
+            namedArgs: {'file': archiveNameFor(app.name)},
+          ),
+        _ExportDestination.project => LocaleKeys.editorExportProjectSummary.tr(
+          namedArgs: {'path': app.projectPath ?? ''},
+        ),
         _ExportDestination.folder =>
-          'You pick the folder next; one file per language lands in it.',
+          LocaleKeys.editorExportFolderSummary.tr(),
       },
       confirmLabel: switch (destination) {
-        _ExportDestination.downloads => 'Download',
-        _ExportDestination.project => 'Overwrite files',
-        _ExportDestination.folder => 'Choose folder',
+        _ExportDestination.downloads => LocaleKeys.editorExportDownload.tr(),
+        _ExportDestination.project => LocaleKeys.editorExportOverwrite.tr(),
+        _ExportDestination.folder => LocaleKeys.uploadChooseFolder.tr(),
       },
       // Only a save back to the project follows the imported layout;
       // the other two write flat <lang>.json files.
@@ -423,40 +433,40 @@ class _ExportMenuButton extends StatelessWidget {
     final enabled = state.entries.isNotEmpty && !state.isExporting;
 
     return LingoDeskMenuButton<_ExportDestination>(
-      tooltip: 'Export',
+      tooltip: LocaleKeys.editorExport.tr(),
       menuWidth: 280,
       enabled: enabled,
       onSelected: (destination) => onSelected(context, state, destination),
       items: [
-        const LingoDeskMenuItem(
+        LingoDeskMenuItem(
           value: _ExportDestination.downloads,
-          label: 'Download ZIP',
+          label: LocaleKeys.editorExportZip.tr(),
           icon: HugeIcons.strokeRoundedDownload04,
-          description: 'Zipped into your Downloads folder',
+          description: LocaleKeys.editorExportZipHint.tr(),
         ),
         LingoDeskMenuItem(
           value: _ExportDestination.project,
-          label: 'Save to project',
+          label: LocaleKeys.editorExportSaveToProject.tr(),
           icon: HugeIcons.strokeRoundedFolderSync,
           // Naming the folder is the whole reassurance here: this is the
           // one destination that overwrites files the user already has.
           description: app.hasProject
               ? app.projectPath
-              : 'Import a project folder first',
+              : LocaleKeys.editorExportNoProject.tr(),
           enabled: app.hasProject,
         ),
-        const LingoDeskMenuItem(
+        LingoDeskMenuItem(
           value: _ExportDestination.folder,
-          label: 'Export to folder\u2026',
+          label: LocaleKeys.editorExportToFolderEllipsis.tr(),
           icon: HugeIcons.strokeRoundedFolderOpen,
-          description: 'Choose a destination',
+          description: LocaleKeys.editorExportChooseDestination.tr(),
         ),
       ],
       // The menu owns the tap, so the button is here for its looks only.
       child: IgnorePointer(
         child: EditorHeaderAction(
           icon: HugeIcons.strokeRoundedDownload04,
-          label: 'Export',
+          label: LocaleKeys.editorExport.tr(),
           // The menu trigger above already carries the tooltip.
           tooltip: '',
           primary: true,
@@ -619,19 +629,19 @@ const double _barHeight = 48;
 List<Widget> _summaryTiles(TranslationEditorLoaded state) {
   return [
     WorkspaceMetaTile(
-      label: 'Keys',
+      label: LocaleKeys.dashboardStatKeys.tr(),
       value: '${state.entries.length}',
       icon: HugeIcons.strokeRoundedKey01,
       height: _barHeight,
     ),
     WorkspaceMetaTile(
-      label: 'Missing',
+      label: LocaleKeys.dashboardMetricMissing.tr(),
       value: '${state.totalMissing}',
       icon: HugeIcons.strokeRoundedAlertCircle,
       height: _barHeight,
     ),
     WorkspaceMetaTile(
-      label: 'Languages',
+      label: LocaleKeys.appsTableColLanguages.tr(),
       value: '${state.app.allLanguages.length}',
       icon: HugeIcons.strokeRoundedLanguageSquare,
       height: _barHeight,
@@ -676,9 +686,14 @@ class _AiJobBanner extends StatelessWidget {
               children: [
                 Text(
                   job.isCanceling
-                      ? 'Finishing the current batch…'
-                      : 'Translating ${job.label} · '
-                            '${job.settled} of ${job.total}',
+                      ? LocaleKeys.editorAiFinishing.tr()
+                      : LocaleKeys.editorAiProgress.tr(
+                          namedArgs: {
+                            'label': job.label,
+                            'done': '${job.settled}',
+                            'total': '${job.total}',
+                          },
+                        ),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: tokens.foreground,
                     fontSize: 13,
@@ -702,7 +717,7 @@ class _AiJobBanner extends StatelessWidget {
                 : () => context.read<TranslationEditorBloc>().add(
                     CancelAiTranslationEvent(),
                   ),
-            child: const Text('Cancel'),
+            child: Text(LocaleKeys.commonCancel.tr()),
           ),
         ],
       ),

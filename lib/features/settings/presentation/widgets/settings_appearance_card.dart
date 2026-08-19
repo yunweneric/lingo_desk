@@ -10,6 +10,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../../core/localization/export.dart';
 
 /// Theme mode, the six palette variants, and a live swatch preview of
 /// whichever combination is currently resolved.
@@ -29,17 +30,26 @@ class SettingsAppearanceCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WorkspaceCardHeader(
-                title: 'Appearance',
-                subtitle: 'Follow the system theme or pick one explicitly.',
+              WorkspaceCardHeader(
+                title: LocaleKeys.navAppearance.tr(),
+                subtitle: LocaleKeys.settingsAppearanceSubtitle.tr(),
                 icon: HugeIcons.strokeRoundedPaintBoard,
               ),
               const SizedBox(height: 22),
               SegmentedButton<ThemeMode>(
-                segments: const [
-                  ButtonSegment(value: ThemeMode.system, label: Text('System')),
-                  ButtonSegment(value: ThemeMode.light, label: Text('Light')),
-                  ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
+                segments: [
+                  ButtonSegment(
+                    value: ThemeMode.system,
+                    label: Text(LocaleKeys.commonThemeSystem.tr()),
+                  ),
+                  ButtonSegment(
+                    value: ThemeMode.light,
+                    label: Text(LocaleKeys.commonThemeLight.tr()),
+                  ),
+                  ButtonSegment(
+                    value: ThemeMode.dark,
+                    label: Text(LocaleKeys.commonThemeDark.tr()),
+                  ),
                 ],
                 selected: {settings.themeMode},
                 onSelectionChanged: (selection) =>
@@ -48,13 +58,25 @@ class SettingsAppearanceCard extends StatelessWidget {
               const SizedBox(height: 22),
               Row(
                 children: [
-                  _Swatch(color: tokens.background, label: 'Background'),
+                  _Swatch(
+                    color: tokens.background,
+                    label: LocaleKeys.settingsSwatchBackground.tr(),
+                  ),
                   const SizedBox(width: 8),
-                  _Swatch(color: tokens.card, label: 'Card'),
+                  _Swatch(
+                    color: tokens.card,
+                    label: LocaleKeys.settingsSwatchCard.tr(),
+                  ),
                   const SizedBox(width: 8),
-                  _Swatch(color: tokens.active, label: 'Active'),
+                  _Swatch(
+                    color: tokens.active,
+                    label: LocaleKeys.settingsSwatchActive.tr(),
+                  ),
                   const SizedBox(width: 8),
-                  _Swatch(color: tokens.brand, label: 'Brand'),
+                  _Swatch(
+                    color: tokens.brand,
+                    label: LocaleKeys.settingsSwatchBrand.tr(),
+                  ),
                 ],
               ),
             ],
@@ -65,11 +87,9 @@ class SettingsAppearanceCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WorkspaceCardHeader(
-                title: 'Theme',
-                subtitle:
-                    'Six palettes. Each one restyles the whole app, not '
-                    'just the accent.',
+              WorkspaceCardHeader(
+                title: LocaleKeys.commonTheme.tr(),
+                subtitle: LocaleKeys.settingsThemeSubtitle.tr(),
                 icon: HugeIcons.strokeRoundedColors,
               ),
               const SizedBox(height: 22),
@@ -196,7 +216,7 @@ class _VariantTileState extends State<_VariantTile> {
               const SizedBox(height: 4),
               Expanded(
                 child: Text(
-                  widget.variant.description,
+                  widget.variant.description.tr(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(

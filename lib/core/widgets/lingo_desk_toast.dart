@@ -7,6 +7,7 @@ import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_theme.dart';
 import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// One message on its way to the toast stack.
 ///
@@ -603,7 +604,7 @@ class _ToastCloseButtonState extends State<_ToastCloseButton> {
     final tokens = LingoDeskTokens.of(context);
 
     return Semantics(
-      label: 'Dismiss',
+      label: LocaleKeys.commonDismiss.tr(),
       button: true,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,

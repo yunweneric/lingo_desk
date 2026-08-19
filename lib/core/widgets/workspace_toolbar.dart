@@ -6,6 +6,7 @@ import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_animations.dart';
 import 'lingo_desk_icon.dart';
 import 'lingo_desk_menu.dart';
+import '../localization/export.dart';
 
 /// Bordered 42px control used for header toolbar affordances.
 ///
@@ -109,24 +110,24 @@ class ThemeModeSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LingoDeskMenuButton<ThemeMode>(
-      tooltip: 'Theme',
+      tooltip: LocaleKeys.commonTheme.tr(),
       selectedValue: themeMode,
       menuWidth: 180,
       onSelected: onChanged,
-      items: const [
+      items: [
         LingoDeskMenuItem(
           value: ThemeMode.system,
-          label: 'System',
+          label: LocaleKeys.commonThemeSystem.tr(),
           icon: HugeIcons.strokeRoundedComputerSettings,
         ),
         LingoDeskMenuItem(
           value: ThemeMode.light,
-          label: 'Light',
+          label: LocaleKeys.commonThemeLight.tr(),
           icon: HugeIcons.strokeRoundedSun03,
         ),
         LingoDeskMenuItem(
           value: ThemeMode.dark,
-          label: 'Dark',
+          label: LocaleKeys.commonThemeDark.tr(),
           icon: HugeIcons.strokeRoundedMoon02,
         ),
       ],
@@ -137,9 +138,9 @@ class ThemeModeSwitcher extends StatelessWidget {
           ThemeMode.system => HugeIcons.strokeRoundedComputerSettings,
         },
         label: switch (themeMode) {
-          ThemeMode.light => 'Light',
-          ThemeMode.dark => 'Dark',
-          ThemeMode.system => 'System',
+          ThemeMode.light => LocaleKeys.commonThemeLight.tr(),
+          ThemeMode.dark => LocaleKeys.commonThemeDark.tr(),
+          ThemeMode.system => LocaleKeys.commonThemeSystem.tr(),
         },
         compact: compact,
       ),

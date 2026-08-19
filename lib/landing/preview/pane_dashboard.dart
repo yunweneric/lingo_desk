@@ -9,6 +9,7 @@ import '../../core/widgets/workspace_card.dart';
 import '../../core/widgets/workspace_scaffold.dart';
 import 'preview_chrome.dart';
 import 'preview_workspace.dart';
+import '../../core/localization/export.dart';
 
 /// Coverage, key counts and language health — recomputed from whatever the
 /// editor pane has been filled in with, so the two screens never disagree.
@@ -31,9 +32,12 @@ class PreviewDashboardPane extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PreviewBreadcrumb(
-            segments: ['Workspace', 'Dashboard'],
-            actions: [_ThemePill()],
+          PreviewBreadcrumb(
+            segments: [
+              LocaleKeys.navGroupWorkspace.tr(),
+              LocaleKeys.navDashboard.tr(),
+            ],
+            actions: const [_ThemePill()],
           ),
           const SizedBox(height: 16),
           _HeaderCard(workspace: workspace),
@@ -44,9 +48,9 @@ class PreviewDashboardPane extends StatelessWidget {
               children: [
                 Expanded(
                   child: _MetricCard(
-                    label: 'Apps',
+                    label: LocaleKeys.navApps.tr(),
                     value: PreviewWorkspace.apps.length.toString(),
-                    detail: 'Local workspace',
+                    detail: LocaleKeys.dashboardMetricLocalWorkspace.tr(),
                     icon: HugeIcons.strokeRoundedFolder02,
                     onTap: () => onNavigate?.call(PreviewScreen.projects),
                   ),
@@ -54,7 +58,7 @@ class PreviewDashboardPane extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _MetricCard(
-                    label: 'Total keys',
+                    label: LocaleKeys.dashboardMetricTotalKeys.tr(),
                     value: workspace.entries.length.toString(),
                     detail: 'Storefront · en.json',
                     icon: HugeIcons.strokeRoundedKey01,
@@ -64,18 +68,22 @@ class PreviewDashboardPane extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _MetricCard(
-                    label: 'Coverage',
+                    label: LocaleKeys.dashboardMetricCoverage.tr(),
                     value: '${(workspace.coverage * 100).round()}%',
-                    detail: '${PreviewWorkspace.locales.length} target locales',
+                    detail: LocaleKeys.dashboardMetricTargetLocales.plural(
+                      PreviewWorkspace.locales.length,
+                    ),
                     icon: HugeIcons.strokeRoundedChartHistogram,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _MetricCard(
-                    label: 'Missing',
+                    label: LocaleKeys.dashboardMetricMissing.tr(),
                     value: missing.toString(),
-                    detail: missing == 0 ? 'All clear' : 'Needs review',
+                    detail: missing == 0
+                        ? LocaleKeys.dashboardMetricAllClear.tr()
+                        : LocaleKeys.dashboardMetricNeedsReview.tr(),
                     icon: HugeIcons.strokeRoundedAlertCircle,
                     isPositive: missing == 0,
                     onTap: () => onNavigate?.call(PreviewScreen.editor),
@@ -130,7 +138,7 @@ class _ThemePill extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            'System',
+            LocaleKeys.commonThemeSystem.tr(),
             style: TextStyle(
               fontSize: 12.5,
               fontWeight: FontWeight.w700,
@@ -163,7 +171,7 @@ class _HeaderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Translation dashboard',
+                  LocaleKeys.dashboardTitle.tr(),
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontSize: 27,
                     height: 1.08,
@@ -171,8 +179,7 @@ class _HeaderCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Track coverage, review missing strings, and jump back '
-                  'into active localization work.',
+                  LocaleKeys.dashboardSubtitle.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: tokens.muted,
                     height: 1.45,
@@ -193,24 +200,24 @@ class _HeaderCard extends StatelessWidget {
               alignment: WrapAlignment.end,
               children: [
                 WorkspaceMetaTile(
-                  label: 'Apps',
+                  label: LocaleKeys.navApps.tr(),
                   value: PreviewWorkspace.apps.length.toString(),
                   icon: HugeIcons.strokeRoundedFolder02,
                 ),
                 WorkspaceMetaTile(
-                  label: 'Keys',
+                  label: LocaleKeys.dashboardStatKeys.tr(),
                   value: workspace.entries.length.toString(),
                   icon: HugeIcons.strokeRoundedKey01,
                 ),
                 WorkspaceMetaTile(
-                  label: 'Locales',
+                  label: LocaleKeys.dashboardStatLocales.tr(),
                   value: PreviewWorkspace.locales.length.toString(),
                   icon: HugeIcons.strokeRoundedLanguageSquare,
                 ),
                 WorkspaceBadge(
                   label: missing == 0
-                      ? 'All clear'
-                      : '$missing missing strings',
+                      ? LocaleKeys.dashboardMetricAllClear.tr()
+                      : LocaleKeys.landingPreviewMissingStrings.plural(missing),
                   color: missing == 0
                       ? LingoDeskColors.complete
                       : LingoDeskColors.warning,
@@ -348,9 +355,9 @@ class _CoverageCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Coverage by app',
-            subtitle: 'Translated share of target strings per app',
+          WorkspaceCardHeader(
+            title: LocaleKeys.dashboardCoverageTitle.tr(),
+            subtitle: LocaleKeys.dashboardCoverageSubtitle.tr(),
             icon: HugeIcons.strokeRoundedChartArea,
           ),
           const SizedBox(height: 22),
@@ -380,9 +387,12 @@ class _CoverageCard extends StatelessWidget {
           Divider(color: tokens.border),
           const SizedBox(height: 12),
           Text(
-            '${workspace.totalTranslated} strings translated. '
-            '${workspace.totalMissing} are still missing across active '
-            'target languages.',
+            LocaleKeys.dashboardCoverageSummary.tr(
+              namedArgs: {
+                'translated': '${workspace.totalTranslated}',
+                'missing': '${workspace.totalMissing}',
+              },
+            ),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 13),
@@ -483,9 +493,9 @@ class _LanguageHealthCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Language health',
-            subtitle: 'Coverage by target locale',
+          WorkspaceCardHeader(
+            title: LocaleKeys.dashboardHealthTitle.tr(),
+            subtitle: LocaleKeys.dashboardHealthSubtitle.tr(),
             icon: HugeIcons.strokeRoundedLanguageSquare,
           ),
           const SizedBox(height: 20),
@@ -511,9 +521,13 @@ class _LanguageHealthCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   behind.isEmpty
-                      ? 'Every locale is fully translated.'
-                      : 'Next review: '
-                            '${behind.first.toUpperCase()} · Storefront',
+                      ? LocaleKeys.landingPreviewAllTranslated.tr()
+                      : LocaleKeys.dashboardHealthNextReview.tr(
+                          namedArgs: {
+                            'name':
+                                '${behind.first.toUpperCase()} · Storefront',
+                          },
+                        ),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: tokens.muted,
                     fontSize: 13,
@@ -552,7 +566,9 @@ class _LanguageProgress extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              missing == 0 ? 'Complete' : '$missing missing',
+              missing == 0
+                  ? LocaleKeys.appsStatusComplete.tr()
+                  : LocaleKeys.commonMissingCount.plural(missing),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: tokens.muted,
                 fontSize: 12,

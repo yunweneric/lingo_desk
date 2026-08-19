@@ -19,6 +19,7 @@ import 'app_shell_scope.dart';
 import 'lingo_desk_icon.dart';
 import 'lingo_desk_mark.dart';
 import 'lingo_desk_toast.dart';
+import '../localization/export.dart';
 
 /// Width of the sidebar with its labels showing.
 const double kSidebarWidth = 284;
@@ -33,12 +34,13 @@ const double kSidebarRailWidth = 72;
 /// title its groups, and what lets a phone collapse the second one into a
 /// single entry.
 enum NavGroup {
-  workspace('Workspace'),
-  settings('Settings');
+  workspace(LocaleKeys.navGroupWorkspace),
+  settings(LocaleKeys.navGroupSettings);
 
-  const NavGroup(this.title);
+  const NavGroup(this.titleKey);
 
-  final String title;
+  /// Translation key; call `.tr()` where the group heading is drawn.
+  final String titleKey;
 }
 
 /// One place in the primary navigation.
@@ -48,14 +50,16 @@ enum NavGroup {
 /// instead of three that have to be kept in step.
 class AppDestination {
   const AppDestination({
-    required this.label,
+    required this.labelKey,
     required this.icon,
     required this.group,
     required this.isActive,
     required this.onTap,
   });
 
-  final String label;
+  /// Translation key; call `.tr()` where the label is drawn.
+  final String labelKey;
+
   final List<List<dynamic>> icon;
   final NavGroup group;
 
@@ -72,42 +76,42 @@ class AppDestination {
 /// away and the rail is the only navigation the settings screens need.
 const List<AppDestination> kAppDestinations = [
   AppDestination(
-    label: 'Dashboard',
+    labelKey: LocaleKeys.navDashboard,
     icon: HugeIcons.strokeRoundedDashboardSquare01,
     group: NavGroup.workspace,
     isActive: _isDashboard,
     onTap: _goDashboard,
   ),
   AppDestination(
-    label: 'Apps',
+    labelKey: LocaleKeys.navApps,
     icon: HugeIcons.strokeRoundedFolder02,
     group: NavGroup.workspace,
     isActive: _isApps,
     onTap: _goApps,
   ),
   AppDestination(
-    label: 'Import',
+    labelKey: LocaleKeys.navImport,
     icon: HugeIcons.strokeRoundedFileUpload,
     group: NavGroup.workspace,
     isActive: _isImport,
     onTap: openImportProject,
   ),
   AppDestination(
-    label: 'Profile',
+    labelKey: LocaleKeys.navProfile,
     icon: HugeIcons.strokeRoundedUserCircle,
     group: NavGroup.settings,
     isActive: _isProfile,
     onTap: _goProfile,
   ),
   AppDestination(
-    label: 'Appearance',
+    labelKey: LocaleKeys.navAppearance,
     icon: HugeIcons.strokeRoundedPaintBoard,
     group: NavGroup.settings,
     isActive: _isAppearance,
     onTap: _goAppearance,
   ),
   AppDestination(
-    label: 'Languages',
+    labelKey: LocaleKeys.navLanguages,
     icon: HugeIcons.strokeRoundedLanguageSquare,
     group: NavGroup.settings,
     isActive: _isLanguages,
@@ -116,7 +120,7 @@ const List<AppDestination> kAppDestinations = [
   // Keys are a setting you manage, not a workspace task — and putting
   // them here means the old "AI" settings tab has exactly one successor.
   AppDestination(
-    label: 'AI providers',
+    labelKey: LocaleKeys.navAiProviders,
     icon: HugeIcons.strokeRoundedSparkles,
     group: NavGroup.settings,
     isActive: _isAiProviders,
@@ -131,28 +135,28 @@ const List<AppDestination> kAppDestinations = [
 /// [SettingsPaneSwitcher] offers the rest once you are there.
 const List<AppDestination> kBottomNavDestinations = [
   AppDestination(
-    label: 'Dashboard',
+    labelKey: LocaleKeys.navDashboard,
     icon: HugeIcons.strokeRoundedDashboardSquare01,
     group: NavGroup.workspace,
     isActive: _isDashboard,
     onTap: _goDashboard,
   ),
   AppDestination(
-    label: 'Apps',
+    labelKey: LocaleKeys.navApps,
     icon: HugeIcons.strokeRoundedFolder02,
     group: NavGroup.workspace,
     isActive: _isApps,
     onTap: _goApps,
   ),
   AppDestination(
-    label: 'Import',
+    labelKey: LocaleKeys.navImport,
     icon: HugeIcons.strokeRoundedFileUpload,
     group: NavGroup.workspace,
     isActive: _isImport,
     onTap: openImportProject,
   ),
   AppDestination(
-    label: 'Settings',
+    labelKey: LocaleKeys.navSettings,
     icon: HugeIcons.strokeRoundedSettings01,
     group: NavGroup.settings,
     isActive: _isAnySettings,
@@ -326,7 +330,7 @@ class AppBottomNav extends StatelessWidget {
                 size: 22,
                 color: tokens.accent,
               ),
-              label: destination.label,
+              label: destination.labelKey.tr(),
             ),
         ],
       ),
@@ -453,7 +457,7 @@ class _SidebarSection extends StatelessWidget {
           if (!collapsed)
             Padding(
               padding: EdgeInsets.fromLTRB(10, index == 0 ? 0 : 18, 10, 8),
-              child: Text(group.title.toUpperCase(), style: headingStyle),
+              child: Text(group.titleKey.tr().toUpperCase(), style: headingStyle),
             )
           // The first group needs no rule above it — the mark already
           // separates it from the top of the rail.
@@ -548,7 +552,7 @@ class _SidebarItemState extends State<_SidebarItem> {
                       ).textTheme.labelLarge?.copyWith(color: tint) ??
                       TextStyle(color: tint),
                   child: Text(
-                    destination.label,
+                    destination.labelKey.tr(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -595,7 +599,7 @@ class _SidebarItemState extends State<_SidebarItem> {
           // stack a second wash on top of it.
           hoverColor: Colors.transparent,
           child: collapsed
-              ? Tooltip(message: destination.label, child: content)
+              ? Tooltip(message: destination.labelKey.tr(), child: content)
               : content,
         ),
       ),
@@ -652,7 +656,7 @@ class _SidebarFooter extends StatelessWidget {
         }
 
         final subtitle = settings.profileEmail.isEmpty
-            ? 'Local storage'
+            ? LocaleKeys.navLocalStorage.tr()
             : settings.profileEmail;
 
         // Deliberately not lifted on hover: this card is a button, and a

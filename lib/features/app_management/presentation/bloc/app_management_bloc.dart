@@ -6,6 +6,7 @@ import '../../domain/usecases/delete_app.dart';
 import '../../domain/usecases/get_app_overviews.dart';
 import 'app_management_event.dart';
 import 'app_management_state.dart';
+import '../../../../core/localization/export.dart';
 
 class AppManagementBloc extends Bloc<AppManagementEvent, AppManagementState> {
   AppManagementBloc({required this.getAppOverviews, required this.deleteApp})
@@ -85,7 +86,11 @@ class AppManagementBloc extends Bloc<AppManagementEvent, AppManagementState> {
               overviews: overviews,
               query: query,
               notice: ToastNotice.success(
-                name == null ? 'App deleted.' : 'Deleted "$name".',
+                name == null
+                    ? LocaleKeys.appsDeletedToast.tr()
+                    : LocaleKeys.appsDeletedNamedToast.tr(
+                        namedArgs: {'name': name},
+                      ),
               ),
             ),
           );

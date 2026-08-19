@@ -22,6 +22,7 @@ import '../../domain/usecases/save_translations.dart';
 import '../../domain/usecases/update_translation.dart';
 import 'translation_editor_event.dart';
 import 'translation_editor_state.dart';
+import '../../../../core/localization/export.dart';
 
 class TranslationEditorBloc
     extends Bloc<TranslationEditorEvent, TranslationEditorState> {
@@ -173,7 +174,11 @@ class TranslationEditorBloc
         await _reloadEntries(
           emit,
           appId,
-          notice: ToastNotice.success('Added key "${event.key.trim()}".'),
+          notice: ToastNotice.success(
+            LocaleKeys.editorKeyAddedToast.tr(
+              namedArgs: {'key': event.key.trim()},
+            ),
+          ),
         );
       },
     );
@@ -200,7 +205,11 @@ class TranslationEditorBloc
         await _reloadEntries(
           emit,
           appId,
-          notice: ToastNotice.success('Deleted key "${event.key}".'),
+          notice: ToastNotice.success(
+            LocaleKeys.editorKeyDeletedToast.tr(
+              namedArgs: {'key': event.key},
+            ),
+          ),
         );
       },
     );
@@ -246,7 +255,9 @@ class TranslationEditorBloc
       return result.map(
         (outcome) => _exportedNotice(
           outcome.location,
-          '${_fileCount(event.languages.length)} zipped to Downloads',
+          LocaleKeys.editorExportZippedToast.tr(
+            namedArgs: {'files': _fileCount(event.languages.length)},
+          ),
         ),
       );
     });
@@ -258,12 +269,8 @@ class TranslationEditorBloc
   ) async {
     await _runExport(emit, (appId, app) async {
       if (!app.hasProject) {
-        return const Left(
-          ValidationFailure(
-            message:
-                'This app was not imported from a project folder, so there '
-                'is nowhere to save it back to.',
-          ),
+        return Left(
+          ValidationFailure(message: LocaleKeys.errorsNoProjectFolder.tr()),
         );
       }
 
@@ -278,7 +285,12 @@ class TranslationEditorBloc
       return result.map(
         (outcome) => _exportedNotice(
           outcome.location,
-          '${_fileCount(outcome.fileCount)} saved to ${app.name}',
+          LocaleKeys.editorExportSavedToast.tr(
+            namedArgs: {
+              'files': _fileCount(outcome.fileCount),
+              'name': app.name,
+            },
+          ),
         ),
       );
     });
@@ -300,7 +312,9 @@ class TranslationEditorBloc
         (rootPath) async {
           if (rootPath == null) {
             // Dismissing the picker is a neutral note, not a green tick.
-            return const Right(ToastNotice.info('Export canceled.'));
+            return Right(
+              ToastNotice.info(LocaleKeys.editorExportCanceled.tr()),
+            );
           }
           final result = await exportToFolder(
             ExportToFolderParams(
@@ -312,7 +326,9 @@ class TranslationEditorBloc
           return result.map(
             (outcome) => _exportedNotice(
               outcome.location,
-              '${_fileCount(outcome.fileCount)} exported',
+              LocaleKeys.editorExportedToast.tr(
+                namedArgs: {'files': _fileCount(outcome.fileCount)},
+              ),
             ),
           );
         },
@@ -363,7 +379,7 @@ class TranslationEditorBloc
     return ToastNotice.success(
       location,
       title: title,
-      actionLabel: 'Show in folder',
+      actionLabel: LocaleKeys.editorShowInFolder.tr(),
       onAction: () {
         // A toast outlives the editor that raised it when the user
         // navigates straight off the page, so a late tap goes to the use
@@ -394,7 +410,7 @@ class TranslationEditorBloc
     }
   }
 
-  String _fileCount(int count) => count == 1 ? '1 file' : '$count files';
+  String _fileCount(int count) => LocaleKeys.editorFileCount.plural(count);
 
   Future<void> _onAiTranslateCell(
     AiTranslateCellEvent event,
@@ -416,7 +432,7 @@ class TranslationEditorBloc
   ) {
     final label = event.languages.length == 1
         ? SupportedLanguages.nameOf(event.languages.first)
-        : '${event.languages.length} languages';
+        : LocaleKeys.editorLanguageCount.plural(event.languages.length);
     return _runAiTranslation(
       emit,
       languages: event.languages,
@@ -457,9 +473,7 @@ class TranslationEditorBloc
     if (current.aiJob != null) {
       emit(
         current.copyWith(
-          notice: const ToastNotice.warning(
-            'A translation pass is already running.',
-          ),
+          notice: ToastNotice.warning(LocaleKeys.editorAiAlreadyRunning.tr()),
         ),
       );
       return;
@@ -467,9 +481,9 @@ class TranslationEditorBloc
     if (!aiSettings.isConfigured) {
       emit(
         current.copyWith(
-          notice: const ToastNotice.warning(
-            'Add an API key in Settings - AI first.',
-            title: 'AI is not configured',
+          notice: ToastNotice.warning(
+            LocaleKeys.editorAiNotConfiguredBody.tr(),
+            title: LocaleKeys.editorAiNotConfiguredTitle.tr(),
           ),
         ),
       );
@@ -487,7 +501,7 @@ class TranslationEditorBloc
     if (total == 0) {
       emit(
         current.copyWith(
-          notice: const ToastNotice.info('Nothing left to translate here.'),
+          notice: ToastNotice.info(LocaleKeys.editorAiNothingHere.tr()),
         ),
       );
       return;
@@ -675,18 +689,27 @@ class TranslationEditorBloc
     if (job.completed == 0) {
       buffer.write(
         canceled
-            ? 'Canceled before anything landed.'
-            : 'Nothing was translated.',
+            ? LocaleKeys.editorAiCanceledEmpty.tr()
+            : LocaleKeys.editorAiNothingTranslated.tr(),
       );
     } else {
-      final strings = job.completed == 1 ? 'string' : 'strings';
-      buffer.write('Translated ${job.completed} $strings');
-      buffer.write(canceled ? ' before canceling.' : '.');
+      buffer.write(
+        canceled
+            ? LocaleKeys.editorAiTranslatedCanceled.plural(job.completed)
+            : LocaleKeys.editorAiTranslatedDone.plural(job.completed),
+      );
     }
     if (job.failed > 0) {
-      buffer.write(' ${job.failed} could not be translated');
+      buffer.write(' ');
       final error = job.lastError;
-      buffer.write(error == null ? '.' : ' ($error)');
+      buffer.write(
+        error == null
+            ? LocaleKeys.editorAiFailedCount.plural(job.failed)
+            : LocaleKeys.editorAiFailedCountReason.plural(
+                job.failed,
+                namedArgs: {'error': error},
+              ),
+      );
     }
     return buffer.toString();
   }

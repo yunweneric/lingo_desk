@@ -4,6 +4,7 @@ import '../../../../core/di/injection_container.dart';
 import '../../../../core/preferences/app_settings_controller.dart';
 import '../widgets/settings_profile_card.dart';
 import 'settings_pane.dart';
+import '../../../../core/localization/export.dart';
 
 /// Who the workspace belongs to: display name and initials.
 class SettingsProfilePage extends StatelessWidget {
@@ -14,7 +15,7 @@ class SettingsProfilePage extends StatelessWidget {
     final settings = getIt<AppSettingsController>();
 
     return SettingsPane(
-      title: 'Profile',
+      title: LocaleKeys.navProfile.tr(),
       listenable: settings,
       builder: (context) => SettingsProfileCard(settings: settings),
     );

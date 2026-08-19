@@ -7,6 +7,7 @@ import '../../domain/entities/app_overview.dart';
 import '../../domain/repositories/app_repository.dart';
 import '../datasources/app_local_data_source.dart';
 import '../models/app_model.dart';
+import '../../../../core/localization/export.dart';
 
 class AppRepositoryImpl implements AppRepository {
   const AppRepositoryImpl({required this.localDataSource});
@@ -50,7 +51,7 @@ class AppRepositoryImpl implements AppRepository {
     try {
       final json = await localDataSource.getAppById(id);
       if (json == null) {
-        return const Left(CacheFailure(message: 'App not found.'));
+        return Left(CacheFailure(message: LocaleKeys.errorsAppNotFound.tr()));
       }
       return Right(AppModel.fromJson(json));
     } on CacheException catch (e) {

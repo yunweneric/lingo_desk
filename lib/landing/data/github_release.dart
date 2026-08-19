@@ -1,3 +1,5 @@
+import '../../core/localization/export.dart';
+
 /// The repository the landing page advertises, in one place.
 ///
 /// Every GitHub link on the page is built from here, so pointing the site
@@ -42,18 +44,17 @@ enum DownloadTarget {
 
   /// Headline used on the primary call to action for this target.
   String get cta => switch (this) {
-    DownloadTarget.macos => 'Download for macOS',
+    DownloadTarget.macos => LocaleKeys.landingCtaMacos.tr(),
     DownloadTarget.windowsInstaller ||
-    DownloadTarget.windowsPortable => 'Download for Windows',
-    DownloadTarget.android => 'Download the APK',
+    DownloadTarget.windowsPortable => LocaleKeys.landingCtaWindows.tr(),
+    DownloadTarget.android => LocaleKeys.landingCtaApk.tr(),
   };
 
   /// The caveat shown under the button, matching the release notes.
   String? get warning => switch (this) {
-    DownloadTarget.macos =>
-      'Unsigned build — right-click the app and choose Open the first time.',
+    DownloadTarget.macos => LocaleKeys.landingWarningMacos.tr(),
     DownloadTarget.windowsInstaller || DownloadTarget.windowsPortable =>
-      'Unsigned build — in SmartScreen choose More info, then Run anyway.',
+      LocaleKeys.landingWarningWindows.tr(),
     DownloadTarget.android => null,
   };
 
@@ -152,27 +153,11 @@ class GithubRelease {
     return null;
   }
 
-  /// `18 August 2026`, or null when GitHub omits the date.
+  /// `18 Aug 2026`, in the visitor's language — or null when GitHub omits
+  /// the date.
   String? get publishedLabel {
     final date = publishedAt;
-    if (date == null) {
-      return null;
-    }
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return '${date.day} ${months[date.month - 1]} ${date.year}';
+    return date == null ? null : AppLocalization.formatDate(date);
   }
 
   static GithubRelease fromJson(Map<String, dynamic> json) {

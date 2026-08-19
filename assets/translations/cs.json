@@ -1,0 +1,817 @@
+{
+  "ai": {
+    "addKey": "Přidat klíč API",
+    "addProviderKey": "Přidat klíč {provider}",
+    "col": {
+      "added": "Přidáno",
+      "apiKey": "Klíč API",
+      "model": "Model",
+      "provider": "Poskytovatel"
+    },
+    "createKeyAt": "Vytvořte klíč na {console}.",
+    "defaultModel": "výchozí",
+    "delete": {
+      "activeBody": "Tím odstraníte „{label}“, klíč, na kterém právě běží překlady. Převezme to jiný uložený klíč, jinak se překlad AI zastaví, dokud nějaký nepřidáte.",
+      "body": "Tím odstraníte „{label}“ z tohoto zařízení. Samotný klíč zůstane platný na {console}.",
+      "title": "Smazat klíč API?"
+    },
+    "editKey": "Upravit klíč API",
+    "field": {
+      "name": "Název",
+      "nameHelp": "Nepovinné — jak tomuto klíči říkáte v tabulce."
+    },
+    "hideKey": "Skrýt klíč",
+    "key": {
+      "actions": "Akce s klíčem",
+      "active": "Aktivní",
+      "required": "Vložte klíč API a můžete pokračovat.",
+      "test": "Otestovat připojení",
+      "use": "Používat pro překlady"
+    },
+    "pickModel": "Vyberte doporučený model",
+    "pickProvider": "Ke kterému poskytovateli tento klíč patří?",
+    "saveKey": "Přidat klíč",
+    "showKey": "Zobrazit klíč",
+    "status": {
+      "detail": "{provider} · {model} · používá ho každá akce AI v editoru.",
+      "noKey": "Zatím není připravený žádný klíč",
+      "noKeyDetail": "Přidejte klíč API a editor za vás doplní chybějící překlady.",
+      "translatingWith": "Překlad pomocí {label}"
+    },
+    "storage": {
+      "plain": "Toto sestavení se nedostane k systémové klíčence, takže se klíče ukládají v prostém textu k ostatnímu místnímu nastavení. Zůstávají na tomto zařízení a odesílají se jen tomu poskytovateli, kterému patří.",
+      "secure": "Klíče jsou uložené v klíčence tohoto zařízení a odesílají se jen tomu poskytovateli, kterému patří."
+    },
+    "table": {
+      "empty": "Zatím žádné klíče API. Přidejte jeden a můžete překládat přímo z editoru.",
+      "keyCount": {
+        "few": "{} klíče",
+        "many": "{} klíče",
+        "one": "1 klíč",
+        "other": "{} klíčů"
+      },
+      "noKeys": "Zatím žádné klíče",
+      "range": "{start}-{end} z {total}"
+    },
+    "toast": {
+      "activeTitle": "Překlady nyní používají {label}",
+      "addedBody": "{provider} je připravený překládat.",
+      "addedTitle": "Klíč přidán",
+      "deletedBody": "{label} byl odstraněn z tohoto zařízení.",
+      "deletedNamedTitle": "{label} smazán",
+      "deletedTitle": "Klíč smazán",
+      "promotedBody": "Překlady nyní používají {label}.",
+      "testFailedTitle": "{label} selhal",
+      "testPassedBody": "{provider} klíč přijal.",
+      "testPassedTitle": "{label} připojen",
+      "updatedBody": "Změny v {label} uloženy.",
+      "updatedTitle": "Klíč aktualizován"
+    }
+  },
+  "appSettings": {
+    "appIcon": "Ikona aplikace",
+    "appIconHelp": "Nepovinná. Bez ní aplikace zobrazuje své iniciály.",
+    "appIconNote": "PNG, JPG nebo WebP. Obrázek se zmenší na {size} px a uloží se s aplikací, takže původní soubor můžete klidně přesunout.",
+    "appName": "Název aplikace",
+    "appNameHint": "např. Zákaznický portál",
+    "createApp": "Vytvořit aplikaci",
+    "general": "Obecné",
+    "generalSubtitle": "Jak se tato aplikace jmenuje a z jakého jazyka překládá.",
+    "localeCount": {
+      "few": "{} jazyky",
+      "many": "{} jazyka",
+      "one": "1 jazyk",
+      "other": "{} jazyků"
+    },
+    "metaNoTargets": "Zatím žádné",
+    "metaSource": "Zdroj",
+    "metaTargets": "Cíle",
+    "metaUpdated": "Poslední změna",
+    "replaceIcon": "Vyměnit ikonu",
+    "saveChanges": "Uložit změny",
+    "savedToast": "„{name}“ uloženo.",
+    "selectAll": "Vybrat vše",
+    "selectedCount": "Vybráno {selected} z {total}",
+    "sourceLanguage": "Zdrojový jazyk",
+    "sourceLanguageHelp": "Základní jazyk, ve kterém jsou vaše klíče napsané.",
+    "sourceNotTarget": "Zdrojový jazyk nemůže být zároveň cílový.",
+    "targetLanguages": "Cílové jazyky",
+    "targetLanguagesHelp": "Jazyky, do kterých chcete překládat.",
+    "targetLanguagesNote": "Každý přidaný klíč se zařadí do fronty pro všechny vybrané jazyky. Odebrání jazyka skryje jeho sloupec v editoru; překlady, které už máte, zůstanou.",
+    "targetLanguagesSubtitle": "Jazyky, do kterých se tato aplikace překládá.",
+    "uploadIcon": "Nahrát ikonu"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "Hotové soubory: {complete}/{total} - {updated}"
+    },
+    "created": {
+      "body": "Chcete své stávající soubory překladů JSON nahrát hned teď? Můžete to udělat i později z přehledu.",
+      "later": "Později",
+      "title": "„{name}“ vytvořeno",
+      "upload": "Nahrát soubory"
+    },
+    "delete": {
+      "body": "Tím se aplikace i všechny její překlady trvale odstraní. Nelze to vrátit zpět.",
+      "title": "Smazat „{name}“?"
+    },
+    "deletedNamedToast": "„{name}“ smazáno.",
+    "deletedToast": "Aplikace smazána.",
+    "empty": {
+      "message": "Ukažte LingoDesku složku projektu a naimportuje soubory překladů, které v ní najde — nebo aplikaci vytvořte ručně se zdrojovým jazykem a cíli.",
+      "title": "Vytvořte svou první aplikaci"
+    },
+    "importProject": "Importovat projekt",
+    "menu": {
+      "deleteApp": "Smazat aplikaci",
+      "openEditor": "Otevřít editor",
+      "uploadFiles": "Nahrát soubory"
+    },
+    "newApp": "Nová aplikace",
+    "searchHint": "Hledat aplikace",
+    "status": {
+      "complete": "Hotovo",
+      "missing": "Chybí",
+      "new": "Nová"
+    },
+    "summary": {
+      "filesComplete": "Hotové soubory",
+      "missingStrings": "Chybějící texty",
+      "overallCoverage": "celkového pokrytí",
+      "subtitle": "Soubory překladů napříč všemi aplikacemi a jazyky",
+      "title": "Souhrn pracovního prostoru"
+    },
+    "table": {
+      "colApp": "Aplikace",
+      "colFiles": "Soubory",
+      "colLanguages": "Jazyky",
+      "colProgress": "Postup",
+      "colStatus": "Stav",
+      "colUpdated": "Změněno",
+      "complete": "hotovo",
+      "hideLanguages": "Skrýt jazyky",
+      "less": "Méně",
+      "noMatches": "Vašemu hledání neodpovídá žádná aplikace.",
+      "searchSubtitle": "{matches} z {total} aplikací odpovídá „{query}“",
+      "showLanguages": "Zobrazit všechny jazyky",
+      "subtitle": "Aktuální lokalizační pracovní prostory"
+    }
+  },
+  "common": {
+    "back": "Zpět",
+    "cancel": "Zrušit",
+    "clear": "Vymazat",
+    "close": "Zavřít",
+    "delete": "Smazat",
+    "dismiss": "Zavřít",
+    "edit": "Upravit",
+    "errorPrefix": "Chyba: {message}",
+    "missingCount": {
+      "few": "{} chybí",
+      "many": "{} chybí",
+      "one": "1 chybí",
+      "other": "{} chybí"
+    },
+    "more": "Více",
+    "next": "Další",
+    "nextPage": "Další stránka",
+    "previousPage": "Předchozí stránka",
+    "remove": "Odebrat",
+    "retry": "Zkusit znovu",
+    "rows": "Řádky",
+    "selectLanguage": "Vyberte jazyk",
+    "selectOption": "Vyberte možnost",
+    "theme": "Motiv",
+    "themeDark": "Tmavý",
+    "themeLight": "Světlý",
+    "themeSystem": "Systémový"
+  },
+  "dashboard": {
+    "appCount": {
+      "few": "{} aplikace",
+      "many": "{} aplikace",
+      "one": "1 aplikace",
+      "other": "{} aplikací"
+    },
+    "appsShortcutSubtitle": "{apps} - hotové soubory překladů: {complete}/{total}",
+    "coverage": {
+      "empty": "Vytvořte aplikaci a uvidíte tu pokrytí.",
+      "noData": "Zatím žádná data o překladech. Začněte nahráním souborů JSON.",
+      "subtitle": "Podíl přeložených cílových textů u jednotlivých aplikací",
+      "summary": "Přeloženo {translated} textů. V aktivních cílových jazycích jich {missing} stále chybí.",
+      "title": "Pokrytí podle aplikace"
+    },
+    "empty": {
+      "message": "Aplikace sdružuje soubory překladů jednoho projektu. Nastavte zdrojový jazyk, vyberte cíle a začněte překládat.",
+      "title": "Vytvořte svou první aplikaci"
+    },
+    "health": {
+      "allTranslated": "Všechny aplikace jsou plně přeložené.",
+      "empty": "Zatím žádné cílové jazyky.",
+      "nextReview": "Další kontrola: {name}",
+      "nextReviewPrefix": "Další kontrola: ",
+      "subtitle": "Pokrytí podle cílového jazyka",
+      "title": "Stav jazyků"
+    },
+    "metric": {
+      "acrossApps": "Napříč všemi aplikacemi",
+      "allClear": "Vše v pořádku",
+      "coverage": "Pokrytí",
+      "localWorkspace": "Místní pracovní prostor",
+      "missing": "Chybí",
+      "needsReview": "Ke kontrole",
+      "targetLocales": {
+        "few": "{} cílové jazyky",
+        "many": "{} cílového jazyka",
+        "one": "1 cílový jazyk",
+        "other": "{} cílových jazyků"
+      },
+      "totalKeys": "Celkem klíčů"
+    },
+    "stat": {
+      "keys": "Klíče",
+      "locales": "Jazyky"
+    },
+    "subtitle": "Sledujte pokrytí, procházejte chybějící texty a vraťte se k lokalizační práci.",
+    "title": "Přehled překladů",
+    "viewAllApps": "Zobrazit všechny aplikace"
+  },
+  "editor": {
+    "addKey": "Přidat klíč",
+    "addKeyHint": "Vyplňte, co máte teď — co necháte prázdné, zůstane chybět a přeložíte to později v mřížce.",
+    "aiAllComplete": "Všechny cílové jazyky jsou kompletní.",
+    "aiAlreadyRunning": "Překladové kolo už běží.",
+    "aiCanceledEmpty": "Zrušeno dřív, než se cokoli uložilo.",
+    "aiDialogBody": "Vyplňují se jen prázdné buňky — existující překlady se nikdy nepřepisují.",
+    "aiFailedCount": {
+      "few": "{} se nepodařilo přeložit.",
+      "many": "{} se nepodařilo přeložit.",
+      "one": "1 se nepodařilo přeložit.",
+      "other": "{} se nepodařilo přeložit."
+    },
+    "aiFailedCountReason": {
+      "few": "{} se nepodařilo přeložit ({error}).",
+      "many": "{} se nepodařilo přeložit ({error}).",
+      "one": "1 se nepodařilo přeložit ({error}).",
+      "other": "{} se nepodařilo přeložit ({error})."
+    },
+    "aiFinishing": "Dokončuje se aktuální dávka…",
+    "aiNotConfiguredBody": "Nejprve přidejte klíč API v Nastavení - Poskytovatelé AI.",
+    "aiNotConfiguredTitle": "AI není nastavená",
+    "aiNothingHere": "Tady už není co překládat.",
+    "aiNothingLeft": "Není co překládat",
+    "aiNothingTranslated": "Nic se nepřeložilo.",
+    "aiProgress": "Překládá se {label} · {done} z {total}",
+    "aiRunning": "Probíhá překlad AI",
+    "aiTranslate": "Přeložit pomocí AI",
+    "aiTranslateMissing": {
+      "few": "Přeložit pomocí AI {} chybějící texty",
+      "many": "Přeložit pomocí AI {} chybějícího textu",
+      "one": "Přeložit pomocí AI 1 chybějící text",
+      "other": "Přeložit pomocí AI {} chybějících textů"
+    },
+    "aiTranslateRow": "Přeložit řádek pomocí AI",
+    "aiTranslatedCanceled": {
+      "few": "Před zrušením byly přeloženy {} texty.",
+      "many": "Před zrušením bylo přeloženo {} textu.",
+      "one": "Před zrušením byl přeložen 1 text.",
+      "other": "Před zrušením bylo přeloženo {} textů."
+    },
+    "aiTranslatedDone": {
+      "few": "Přeloženy {} texty.",
+      "many": "Přeloženo {} textu.",
+      "one": "Přeložen 1 text.",
+      "other": "Přeloženo {} textů."
+    },
+    "aiUsing": "Přes {provider} · {model}",
+    "clearAll": "Zrušit výběr",
+    "clickToHide": "Kliknutím skryjete ostatní jazyky",
+    "clickToShow": "Kliknutím zobrazíte ostatní jazyky",
+    "copiedToast": "„{key}“ zkopírováno do schránky.",
+    "copyKey": "Kopírovat klíč",
+    "deleteKey": "Smazat klíč",
+    "deleteKeyBody": "Tím odstraníte „{key}“ ze všech jazyků. Nelze to vrátit zpět.",
+    "deleteKeyTitle": "Smazat klíč?",
+    "empty": "Zatím žádné klíče. Nahrajte soubory JSON nebo přidejte svůj první klíč.",
+    "export": "Exportovat",
+    "exportCanceled": "Export zrušen.",
+    "exportChooseDestination": "Vyberte cíl",
+    "exportDownload": "Stáhnout",
+    "exportFolderSummary": "Složku vyberete vzápětí; přistane v ní jeden soubor na jazyk.",
+    "exportNoProject": "Nejprve naimportujte složku projektu",
+    "exportOverwrite": "Přepsat soubory",
+    "exportProjectSummary": "Zapíše se do {path} a nahradí tyto soubory.",
+    "exportSaveTo": "Uložit do {name}",
+    "exportSaveToProject": "Uložit do projektu",
+    "exportSavedToast": "{files} uloženo do {name}",
+    "exportToFolder": "Exportovat do složky",
+    "exportToFolderEllipsis": "Exportovat do složky…",
+    "exportZip": "Stáhnout ZIP",
+    "exportZipHint": "Zabaleno do složky Stažené soubory",
+    "exportZipSummary": "Zabaleno do {file} ve složce Stažené soubory.",
+    "exportZippedToast": "{files} zabaleno do Stažených souborů",
+    "exportedToast": "{files} exportováno",
+    "fileCount": {
+      "few": "{} soubory",
+      "many": "{} souboru",
+      "one": "1 soubor",
+      "other": "{} souborů"
+    },
+    "hiddenLanguages": {
+      "few": "ještě {} jazyky",
+      "many": "ještě {} jazyka",
+      "one": "ještě 1 jazyk",
+      "other": "ještě {} jazyků"
+    },
+    "hiddenLanguagesInRow": {
+      "few": "ještě {} jazyky, uvnitř každého řádku",
+      "many": "ještě {} jazyka, uvnitř každého řádku",
+      "one": "ještě 1 jazyk, uvnitř každého řádku",
+      "other": "ještě {} jazyků, uvnitř každého řádku"
+    },
+    "hideOtherLanguages": "Skrýt ostatní jazyky",
+    "keyActions": "Akce s klíčem",
+    "keyAddedToast": "Klíč „{key}“ přidán.",
+    "keyDeletedToast": "Klíč „{key}“ smazán.",
+    "keyHelper": "Tečková notace seskupuje klíče do vnořeného JSON.",
+    "keyLabel": "Klíč",
+    "languageCount": {
+      "few": "{} jazyky",
+      "many": "{} jazyka",
+      "one": "1 jazyk",
+      "other": "{} jazyků"
+    },
+    "languageSourceSuffix": "{language} (zdrojový)",
+    "missingOnly": "Jen chybějící",
+    "missingOnlyCount": "Jen chybějící ({count})",
+    "noKeys": "Žádné klíče",
+    "noMatches": "Aktuálním filtrům neodpovídá žádný klíč.",
+    "noProvider": "Žádný poskytovatel",
+    "paginationSummary": "{start}-{end} z {lines} řádků - {keys} klíčů",
+    "searchHint": "Hledat klíče a hodnoty",
+    "showInFolder": "Zobrazit ve složce",
+    "sourceText": "Zdrojový text",
+    "title": "Editor",
+    "translate": "Přeložit",
+    "translateCount": {
+      "few": "Přeložit {} texty",
+      "many": "Přeložit {} textu",
+      "one": "Přeložit 1 text",
+      "other": "Přeložit {} textů"
+    },
+    "translateWithAi": "Přeložit pomocí AI",
+    "translatingHint": "Překládá se…",
+    "translationOptional": "Překlad - nepovinný",
+    "translations": "Překlady"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Přidejte klíč API v Nastavení - Poskytovatelé AI.",
+      "blocked": "{provider} tuto dávku zablokoval ({reason}).",
+      "emptyResponse": "{provider} vrátil prázdnou odpověď.",
+      "keyRejected": "Klíč API pro {provider} byl odmítnut. Zkontrolujte ho v Nastavení - Poskytovatelé AI.",
+      "malformed": "Poskytovatel překladu vrátil poškozený JSON.",
+      "modelNotFound": "Model {provider} nebyl nalezen. Zkontrolujte název modelu v Nastavení - Poskytovatelé AI.",
+      "noConnection": "Není spojení s poskytovatelem překladu.",
+      "noKey": "Nejprve zadejte klíč API.",
+      "refused": "{provider} odmítl tuto dávku přeložit. Přeskočte ji nebo zkuste jiný model.",
+      "stoppedEarly": "{provider} skončil předčasně ({reason}).",
+      "timeout": "Poskytovatel překladu nestihl odpovědět.",
+      "unexpectedResponse": "{provider} vrátil neočekávanou odpověď."
+    },
+    "app": {
+      "nameEmpty": "Název aplikace nemůže být prázdný.",
+      "noTargetLanguage": "Vyberte alespoň jeden cílový jazyk.",
+      "sourceIsTarget": "Zdrojový jazyk nemůže být zároveň cílovým jazykem."
+    },
+    "cache": {
+      "appListCorrupt": "Uložený seznam aplikací je poškozený: {error}",
+      "appNotFound": "Aplikace nenalezena.",
+      "appNotFoundId": "Aplikace nenalezena: {id}",
+      "translationsCorrupt": "Uložené překlady jsou poškozené: {error}",
+      "writeAppList": "Seznam aplikací se nepodařilo uložit.",
+      "writeTranslations": "Překlady se nepodařilo uložit."
+    },
+    "editor": {
+      "invalidKey": "Použijte tečkovou notaci s písmeny, číslicemi, „_“ nebo „-“ (např. nav.home).",
+      "keyExists": "Klíč „{key}“ už existuje.",
+      "keyNotFound": "Klíč nenalezen: {key}"
+    },
+    "export": {
+      "chooseFolder": "Vyberte složku, do které se má exportovat.",
+      "noDownloadsFolder": "Na této platformě se nepodařilo najít složku Stažené soubory.",
+      "noProjectFolder": "Tato aplikace nebyla naimportována ze složky projektu, takže není kam ji zapsat zpět.",
+      "nothingToExport": "Zatím není co exportovat.",
+      "selectLanguage": "Vyberte alespoň jeden jazyk k exportu."
+    },
+    "file": {
+      "folderPickerOpen": "Výběr složky se nepodařilo otevřít: {error}",
+      "launchFailed": "{executable} se nepodařilo spustit: {error}",
+      "openPath": "{path} se nepodařilo otevřít: {error}",
+      "pickerOpen": "Výběr souborů se nepodařilo otevřít: {error}",
+      "projectFolderRead": "Složku projektu se nepodařilo přečíst: {error}",
+      "revealUnsupported": "Zobrazení složky není na této platformě dostupné.",
+      "save": "{file} se nepodařilo uložit: {error}",
+      "unknownLanguage": "Nepodařilo se určit, ke kterému jazyku tento soubor patří. Pojmenujte ho podle kódu jazyka nebo ho vložte do složky jazyka.",
+      "unsupportedPlatform": "Na této platformě není dostupné.",
+      "writeFolder": "Do {path} se nepodařilo zapsat: {error}"
+    },
+    "image": {
+      "convert": "Tento obrázek se nepodařilo převést do PNG.",
+      "notAnImage": "Tento soubor není obrázek, který by LingoDesk uměl přečíst: {error}",
+      "pickerOpen": "Výběr obrázků se nepodařilo otevřít: {error}",
+      "tooLarge": "Vyberte obrázek menší než 8 MB.",
+      "unreadable": "Tento obrázek se nepodařilo přečíst."
+    },
+    "import": {
+      "noFiles": "Žádné soubory k importu."
+    },
+    "json": {
+      "invalid": "Neplatný JSON: {error}",
+      "noKeys": "Soubor neobsahuje žádné klíče překladu.",
+      "notObject": "Soubor musí na nejvyšší úrovni obsahovat objekt JSON."
+    }
+  },
+  "landing": {
+    "apkLink": "Nebo si stáhněte APK pro Android · {size}  →",
+    "askingGithub": "Ptáme se GitHubu na nejnovější vydání…",
+    "checkingBuilds": "Hledáme sestavení…",
+    "codeMissing": "chybí",
+    "cta": {
+      "apk": "Stáhnout APK",
+      "latest": "Stáhnout nejnovější sestavení",
+      "macos": "Stáhnout pro macOS",
+      "windows": "Stáhnout pro Windows"
+    },
+    "download": {
+      "allReleases": "Všechna vydání a seznamy změn na GitHubu  →",
+      "body": "Zdarma a s otevřeným kódem pod licencí MIT. Bez účtu, bez zkušební verze, bez telemetrie.",
+      "copied": "Zkopírováno",
+      "copy": "Kopírovat",
+      "eyebrow": "Ke stažení",
+      "latest": "Nejnovější",
+      "latestBuildRuns": "Poslední běhy sestavení",
+      "noBuildBody": "Instalátory pro macOS, Windows a Android sestavuje GitHub Actions a připojí je k vydání, jakmile se odešle tag verze. Do té doby trvá spuštění ze zdrojového kódu asi dvě minuty.",
+      "noBuildTitle": "Zatím nebylo zveřejněno žádné zabalené sestavení",
+      "published": "Zveřejněno {date}",
+      "releasesOnGithub": "Vydání na GitHubu",
+      "runFromSource": "Nebo ho spusťte ze zdrojového kódu na kterékoli z šesti platforem",
+      "runFromSourceNote": "Zaměňte zařízení za windows, linux, chrome nebo připojený telefon. Projekt si verzi Flutteru fixuje v .fvmrc.",
+      "title": "Získejte LingoDesk.",
+      "tryAgain": "Zkusit znovu",
+      "unreachableBody": "{reason} Pořád můžete procházet stránku vydání nebo sestavit projekt ze zdrojového kódu.",
+      "unreachableTitle": "Nepodařilo se spojit s GitHubem",
+      "unsignedNote": "Desktopová sestavení nejsou podepsaná: na macOS klikněte na aplikaci pravým tlačítkem a poprvé zvolte Otevřít, ve Windows zvolte Další informace a pak Přesto spustit.",
+      "version": "Verze {version}"
+    },
+    "features": {
+      "body": "LingoDesk je soustředěný desktopový nástroj, ne překladatelská platforma s licencemi a nástěnkami.",
+      "eyebrow": "Funkce",
+      "f1Body": "Vnořený JSON se zploští na klíče s tečkami, takže text i všechny jeho překlady se vejdou do jediného řádku, který přečtete napříč.",
+      "f1Title": "Jedna mřížka pro všechny jazyky",
+      "f2Body": "Živé pokrytí pro každý jazyk a filtr „jen chybějící“, který ze stovek klíčů nechá jen tu hrstku, která je pořád prázdná.",
+      "f2Title": "Chybějící texty místo přehlédnutých chyb",
+      "f3Body": "Překládejte mezery po dávkách přes Anthropic, OpenAI nebo Gemini. Váš klíč, váš účet, váš účet za tokeny — nic neteče přes prostředníka.",
+      "f3Title": "Překládejte vlastním klíčem AI",
+      "f4Body": "Žádný backend, žádná telemetrie, žádná registrace. Projekty zůstávají na vašem počítači a klíče API putují do zabezpečeného úložiště systému.",
+      "f4Title": "Lokálně a soukromě",
+      "f5Body": "Prohledejte složku projektu, načtěte jazykové soubory, které už máte, a vnořenou strukturu vyexportujte rovnou zpět do repozitáře.",
+      "f5Title": "Import i export na místě",
+      "f6Body": "Pracovní prostor, na který se dá dívat celý den — každý motiv je celá paleta, ne jen vyměněná barva zvýraznění.",
+      "f6Title": "Šest motivů, světlý i tmavý",
+      "title": "Všechno, co práce potřebuje. Nic navíc."
+    },
+    "flutter": {
+      "body": "LingoDesk je jednou napsaný v Dartu a zkompilovaný pro macOS, Windows, Linux, Android, iOS a web. Tahle stránka není HTML s přilepeným demem Flutteru — je to tentýž projekt, tytéž designové tokeny a tytéž widgety, zkompilované pro prohlížeč, ve kterém ji čtete.",
+      "eyebrow": "Postaveno na Flutteru a Dartu",
+      "fromSource": "Ze zdrojového kódu",
+      "markBody": "Logo výše je CustomPainter, který kreslí zaoblené obdélníky a dvě kružnice na plátno — proto zůstává ostré v jakékoli velikosti a přebírá zvýrazňovací barvu zvoleného motivu.",
+      "markTitle": "Není to obrázkový soubor",
+      "pill": "Živě, právě teď",
+      "prebuilt": "Předpřipravené",
+      "proofBody": "Tohle je šest palet dodávaných s LingoDeskem, načtených ze stejného rozšíření motivu, jaké čte desktopová verze. Vyberte jednu a celý web se přebarví — bez načítání znovu, bez výměny stylopisu.",
+      "proofTitle": "Každá barva na této stránce pochází z aplikace.",
+      "statCodebase": "kódová základna",
+      "statJavascript": "řádků JavaScriptu psaných ručně",
+      "statTargets": "cíle kompilace",
+      "title": "Jedna kódová základna. Šest platforem.\nVčetně této stránky.",
+      "youAreHere": "Jste tady"
+    },
+    "footer": {
+      "issues": "Issues",
+      "licence": "Licence MIT",
+      "note": "Tato stránka je webová aplikace ve Flutteru, sestavená ze stejného repozitáře jako produkt.",
+      "readme": "Readme",
+      "releases": "Vydání"
+    },
+    "getStarted": "Začít",
+    "hero": {
+      "body": "LingoDesk promění složku s en.json, fr.json a es.json v jediný pracovní prostor: každý klíč je řádek, každý jazyk sloupec a žádný chybějící text vám neunikne.",
+      "pill": "Otevřený kód · MIT · Bez účtu, bez backendu",
+      "title": "Překládejte všechny jazyky\nod jednoho uklizeného stolu."
+    },
+    "localeStrip": "20 jazyků v základu · jakýkoli další přidáte v nastavení",
+    "nav": {
+      "download": "Stáhnout",
+      "features": "Funkce",
+      "flutter": "Flutter",
+      "howItWorks": "Jak to funguje",
+      "language": "Jazyk",
+      "menu": "Menu",
+      "screens": "Obrazovky",
+      "why": "Proč"
+    },
+    "openIssue": "Založit issue",
+    "openSource": {
+      "body": "Licence MIT. Forkněte si ho, nasaďte ho ve svém týmu nebo založte issue k tomu, co vás nejvíc štve — plán vývoje určují ti, kdo ho používají.",
+      "title": "Zdarma napořád a zdrojový kód je hned tady."
+    },
+    "preview": {
+      "allTranslated": "Každý jazyk je plně přeložený.",
+      "appearanceNote": "Tohle je opravdu to nastavení — přebarví celou stránku, ne jen tohle okno.",
+      "editorWindow": "Editor překladů",
+      "keysNote": "Klíče leží v zabezpečeném úložišti systému. Zůstávají na tomto zařízení a odesílají se jen tomu poskytovateli, kterému patří.",
+      "missingStrings": {
+        "few": "{} chybějící texty",
+        "many": "{} chybějícího textu",
+        "one": "1 chybějící text",
+        "other": "{} chybějících textů"
+      },
+      "noMatches": "Dotazu „{query}“ neodpovídá žádný klíč.",
+      "nothingMissing": "Nic nechybí — každý text je přeložený.",
+      "projects": "Projekty",
+      "semantics": "Přehled LingoDesku: pokrytí, počty klíčů a stav jazyků napříč celým pracovním prostorem."
+    },
+    "problem": {
+      "afterEyebrow": "S LingoDeskem",
+      "afterTitle": "Jediná mřížka. Díry se hlásí samy.",
+      "beforeEyebrow": "Bez LingoDesku",
+      "beforeTitle": "Tři soubory, tři panely a jeden chybějící text, který najdete až při revizi.",
+      "body": "Přidat jeden text znamená otevřít každý jazykový soubor a na žádný nezapomenout. LingoDesk z toho udělá jediný řádek.",
+      "exportNote": "Export znovu poskládá vnořenou podobu, soubor po souboru, přesně tak, jak ji vaše aplikace očekává.",
+      "eyebrow": "Problém",
+      "title": "Lokalizační soubory se rozejdou ve chvíli, kdy přidáte klíč."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · zdarma napořád",
+    "releasePending": "Zabalené sestavení zatím není — spusťte ho ze zdrojového kódu dvěma příkazy.",
+    "releasePickBuild": "Verze {version} je venku — vyberte si sestavení níže.",
+    "releaseUnavailable": "{reason} Podívejte se na stránku vydání.",
+    "seeAllDownloads": "Zobrazit vše ke stažení",
+    "starOnGithub": "Dát hvězdičku na GitHubu",
+    "starOnGithubCount": "Hvězdička na GitHubu · {stars}",
+    "starOnGithubTooltip": "Dejte LingoDesku hvězdičku na GitHubu",
+    "steps": {
+      "eyebrow": "Jak to funguje",
+      "s1Body": "Jeden na aplikaci. Zdrojový jazyk vyberte jednou a k tomu ty cílové, které opravdu vydáváte.",
+      "s1Title": "Vytvořte pracovní prostor",
+      "s2Body": "Ukažte na svou složku s jazyky. Stávající JSON se zploští, ověří proti deklarovaným jazykům a načte.",
+      "s2Title": "Naimportujte, co máte",
+      "s3Body": "Vyfiltrujte, co chybí, a pište — nebo dávku předejte svému poskytovateli AI. Úpravy se průběžně ukládají.",
+      "s3Title": "Zaplňte mezery",
+      "s4Body": "Vnořená struktura se znovu poskládá pro každý jazyk, připravená vrátit se vedle vašeho kódu a jít do commitu.",
+      "s4Title": "Vyexportujte zpět do repozitáře",
+      "title": "Čtyři kroky a zpátky ke kódu."
+    },
+    "switchToDark": "Přepnout na tmavý",
+    "switchToLight": "Přepnout na světlý",
+    "tour": {
+      "aiProviders": "Přineste si vlastní klíč pro Anthropic, OpenAI nebo Gemini. Vyberte jeden a bude ho používat každá akce AI v editoru.",
+      "appearance": "Šest kompletních palet a přepínač světlý/tmavý. Tohle je skutečné nastavení, ne jeho obrázek — vyberte motiv a celý web se přebarví.",
+      "body": "Tohle není snímek obrazovky. Je to aplikace zkompilovaná do této stránky — klidně po ní klikejte.",
+      "dashboard": "Pokrytí, počty klíčů a stav jazyků pro každý projekt hned po otevření aplikace. Čísla pocházejí ze stejných buněk, do kterých píše editor — vyplňte jednu a sledujte, jak se pohnou.",
+      "editor": "Klíče po straně, jazyky nahoře. Každá buňka je skutečné pole: napište překlad, hledejte nebo si vyfiltrujte jen to, co ještě chybí.",
+      "eyebrow": "Pohled dovnitř",
+      "pill": "Živě · nic z toho, co tu uděláte, se neukládá",
+      "projects": "Jeden pracovní prostor na aplikaci, každý s vlastním zdrojovým jazykem a cíli. Kliknutím na řádek ho otevřete.",
+      "title": "Postavené jako desktopová aplikace, protože jí je."
+    },
+    "viewOnGithub": "Zobrazit na GitHubu",
+    "warning": {
+      "macos": "Nepodepsané sestavení — klikněte na aplikaci pravým tlačítkem a poprvé zvolte Otevřít.",
+      "windows": "Nepodepsané sestavení — ve SmartScreenu zvolte Další informace a pak Přesto spustit."
+    }
+  },
+  "language": {
+    "ar": "arabština",
+    "cs": "čeština",
+    "de": "němčina",
+    "en": "angličtina",
+    "es": "španělština",
+    "fr": "francouzština",
+    "hi": "hindština",
+    "it": "italština",
+    "ja": "japonština",
+    "ko": "korejština",
+    "nl": "nizozemština",
+    "pl": "polština",
+    "pt": "portugalština",
+    "ro": "rumunština",
+    "ru": "ruština",
+    "sv": "švédština",
+    "tr": "turečtina",
+    "uk": "ukrajinština",
+    "vi": "vietnamština",
+    "zh": "čínština"
+  },
+  "nav": {
+    "aiProviders": "Poskytovatelé AI",
+    "appearance": "Vzhled",
+    "apps": "Aplikace",
+    "dashboard": "Přehled",
+    "group": {
+      "settings": "Nastavení",
+      "workspace": "Pracovní prostor"
+    },
+    "import": "Import",
+    "languages": "Jazyky",
+    "localStorage": "Místní úložiště",
+    "profile": "Profil",
+    "settings": "Nastavení"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Nejdřív lokálně",
+      "locales": "20 jazyků",
+      "nestedJson": "Vnořený JSON"
+    },
+    "skip": "Přeskočit",
+    "stage": {
+      "body": "Žádné účty, žádná synchronizace, žádné bujení tabulek - jen váš JSON, na vašem počítači.",
+      "title": "Jeden stůl pro každý jazykový soubor."
+    },
+    "startSetup": "Spustit nastavení",
+    "step1": {
+      "body": "Každý klíč je řádek a každý jazyk sloupec. Chybějící texty zůstávají zvýrazněné, dokud pracujete, takže nic neodejde přeložené jen napůl.",
+      "caption": "Všechny svazky v jedné místnosti",
+      "eyebrow": "Překladatelský prostor",
+      "highlight1": "Klíče a jazyky v jediné mřížce",
+      "highlight2": "Vyfiltrujte to, co ještě chybí",
+      "highlight3": "Úpravy se ukládají do tohoto počítače, jak píšete",
+      "title": "Překládejte všechny jazyky od jednoho uklizeného stolu"
+    },
+    "step2": {
+      "body": "Jeden pracovní prostor na aplikaci: zdrojový jazyk vyberte jednou, sledujte jen ty cílové jazyky, na kterých záleží, a nechte pokrytí mluvit za sebe.",
+      "caption": "Zaindexováno, popsáno, k nalezení",
+      "eyebrow": "Nastavení projektu",
+      "highlight1": "Vlastní pracovní prostor pro každou aplikaci",
+      "highlight2": "Vybírejte cíle z 20 podporovaných jazyků",
+      "highlight3": "Pokrytí podle aplikace i podle jazyka",
+      "title": "Udržujte každý produkt uspořádaný podle jazyka"
+    },
+    "step3": {
+      "body": "LingoDesk před exportem znovu poskládá původní strukturu vašich klíčů, takže soubory, které přistanou ve vašem repozitáři, jsou přesně ty, které vaše aplikace očekává.",
+      "caption": "Všechny cíle na tabuli",
+      "eyebrow": "Připraveno k exportu",
+      "highlight1": "Klíče s tečkami se zase rozvinou do vnořených objektů",
+      "highlight2": "Vyberte jazyky, uložte kam chcete",
+      "highlight3": "Úhledně naformátováno se stabilním pořadím klíčů",
+      "title": "Pošlete vnořené soubory JSON zpět do své aplikace"
+    },
+    "stepOf": "Krok {step} z {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Řiďte se motivem systému nebo si jeden vyberte sami.",
+      "swatchActive": "Aktivní",
+      "swatchBackground": "Pozadí",
+      "swatchBrand": "Značka",
+      "swatchCard": "Karta",
+      "themeSubtitle": "Šest palet. Každá přestylizuje celou aplikaci, ne jen zvýraznění."
+    },
+    "defaults": {
+      "count": {
+        "few": "{} jazyky budou předvybrané.",
+        "many": "{} jazyka bude předvybráno.",
+        "one": "1 jazyk bude předvybraný.",
+        "other": "{} jazyků bude předvybráno."
+      },
+      "empty": "Zatím žádné výchozí hodnoty — nové aplikace začínají bez cílových jazyků.",
+      "subtitle": "Předvybrané pokaždé, když vytvoříte novou aplikaci.",
+      "title": "Výchozí cílové jazyky"
+    },
+    "language": {
+      "note": "Vaše volba se uloží a projeví se hned — nabídky, dialogy i hlášky se přepnou s ní.",
+      "subtitle": "Jazyk, ve kterém se zobrazuje samotný LingoDesk.",
+      "title": "Jazyk rozhraní"
+    },
+    "profile": {
+      "email": "E-mail",
+      "emailHint": "nepovinné",
+      "name": "Zobrazované jméno",
+      "nameHint": "Místní pracovní prostor",
+      "note": "LingoDesk nemá účty. Tohle jen pojmenovává váš místní pracovní prostor.",
+      "subtitle": "Zobrazuje se v postranním panelu. Uloženo jen na tomto zařízení."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Teplá jantarová a opečené pískové odstíny."
+    },
+    "graphite": {
+      "description": "Vůbec žádný odstín — zvýrazňuje samotný kontrast."
+    },
+    "indigo": {
+      "description": "Chladné indigo na modrošedých neutrálních tónech."
+    },
+    "rose": {
+      "description": "Sytá růžová na jemných plochách."
+    },
+    "teal": {
+      "description": "Domácí vzhled — sytá modrozelená na teplém kameni."
+    },
+    "violet": {
+      "description": "Elektrická fialová na lehce purpurovém podkladu."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "few": "před {} dny",
+      "many": "před {} dne",
+      "one": "před 1 dnem",
+      "other": "před {} dny"
+    },
+    "hoursAgo": {
+      "few": "před {} hodinami",
+      "many": "před {} hodiny",
+      "one": "před 1 hodinou",
+      "other": "před {} hodinami"
+    },
+    "justNow": "Právě teď",
+    "minutesAgo": {
+      "few": "před {} min",
+      "many": "před {} min",
+      "one": "před 1 min",
+      "other": "před {} min"
+    },
+    "monthsAgo": {
+      "few": "před {} měsíci",
+      "many": "před {} měsíce",
+      "one": "před 1 měsícem",
+      "other": "před {} měsíci"
+    },
+    "weeksAgo": {
+      "few": "před {} týdny",
+      "many": "před {} týdne",
+      "one": "před 1 týdnem",
+      "other": "před {} týdny"
+    },
+    "yearsAgo": {
+      "few": "před {} lety",
+      "many": "před {} roku",
+      "one": "před 1 rokem",
+      "other": "před {} lety"
+    },
+    "yesterday": "Včera"
+  },
+  "upload": {
+    "addFiles": "Přidat soubory",
+    "addFolder": "Přidat složku",
+    "addMore": "Přidat další",
+    "backToApps": "Zpět na aplikace",
+    "backToEditor": "Zpět do editoru",
+    "browseFiles": "Procházet soubory",
+    "chooseFolder": "Vybrat složku",
+    "defaultImportName": "Naimportovaný projekt",
+    "defaultProjectName": "Naimportované překlady",
+    "detectedLanguages": "Rozpoznané jazyky",
+    "detectedLanguagesHint": "Přidejte další složky nebo soubory a spojí se s těmito.",
+    "exportsBackTo": "Exportuje se zpět do {path}",
+    "filesReady": {
+      "few": "{} soubory připraveny k importu.",
+      "many": "{} souboru připraveno k importu.",
+      "one": "1 soubor připraven k importu.",
+      "other": "{} souborů připraveno k importu."
+    },
+    "hero": {
+      "filesBody": "Prohledejte složku nebo si soubory .json vyberte sami. Každý soubor se podle názvu přiřadí k jazyku.",
+      "filesTitle": "Přidejte své soubory překladů",
+      "projectBody": "Vyberte projekt (nebo libovolnou složku) a LingoDesk v ní najde soubory překladů — nebo si soubory .json vyberte sami.",
+      "projectTitle": "Naimportujte své překlady"
+    },
+    "importAndOpen": "Importovat a otevřít editor",
+    "importedToast": "Naimportováno do „{name}“.",
+    "keepOneLanguage": "Ponechte alespoň jeden jazyk k importu.",
+    "languageSource": "{language} - zdroj",
+    "logo": "Logo",
+    "namingRule": "Každý soubor pojmenujte podle jeho kódu jazyka. Cokoli mimo tuto množinu se odmítne.",
+    "needValidFile": "Přidejte alespoň jeden platný soubor k importu.",
+    "noFilesFound": "V „{name}“ se nenašly žádné soubory překladů. Hledali jsme soubory .json ve složkách /translation, /translations a /languages.",
+    "pickFilesTitle": "Vyberte soubory překladů",
+    "pickFolderTitle": "Vyberte složku svého projektu",
+    "readySummary": "K importu připraveno {languages} jazyků a {keys} klíčů.",
+    "removeLogo": "Odebrat logo",
+    "replaceLogo": "Vyměnit logo",
+    "requiredLanguages": "Požadované jazyky",
+    "scanning": "Prohledávání…",
+    "skipToEditor": "Přejít do editoru",
+    "sourceHelper": "Všechno ostatní se stane cílovým jazykem, do kterého můžete překládat.",
+    "stagedFiles": "Připravené soubory",
+    "startOver": "Začít znovu",
+    "stat": {
+      "translated": "Přeloženo"
+    },
+    "uploadLogo": "Nahrát logo",
+    "whereWeLook": "Kde hledáme",
+    "whereWeLookBody": "Jakýkoli soubor .json ve složce /translation, /translations nebo /languages, kdekoli v projektu. Složky sestavení a závislostí se přeskakují."
+  }
+}

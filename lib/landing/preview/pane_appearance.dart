@@ -10,6 +10,7 @@ import '../../core/widgets/workspace_card.dart';
 import '../../core/widgets/workspace_scaffold.dart';
 import '../state/landing_controller.dart';
 import 'preview_chrome.dart';
+import '../../core/localization/export.dart';
 
 /// The appearance settings, wired to the site's own theme.
 ///
@@ -32,8 +33,12 @@ class PreviewAppearancePane extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PreviewBreadcrumb(
-            segments: ['Workspace', 'Settings', 'Appearance'],
+          PreviewBreadcrumb(
+            segments: [
+              LocaleKeys.navGroupWorkspace.tr(),
+              LocaleKeys.navSettings.tr(),
+              LocaleKeys.navAppearance.tr(),
+            ],
           ),
           const SizedBox(height: 16),
           WorkspaceSurface(
@@ -41,16 +46,16 @@ class PreviewAppearancePane extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const WorkspaceCardHeader(
-                  title: 'Appearance',
-                  subtitle: 'Follow the system theme or pick one explicitly.',
+                WorkspaceCardHeader(
+                  title: LocaleKeys.navAppearance.tr(),
+                  subtitle: LocaleKeys.settingsAppearanceSubtitle.tr(),
                   icon: HugeIcons.strokeRoundedPaintBoard,
                 ),
                 const SizedBox(height: 18),
                 Row(
                   children: [
                     _ModeButton(
-                      label: 'Light',
+                      label: LocaleKeys.commonThemeLight.tr(),
                       icon: HugeIcons.strokeRoundedSun03,
                       selected: !controller.isDark,
                       onTap: controller.isDark
@@ -59,7 +64,7 @@ class PreviewAppearancePane extends StatelessWidget {
                       first: true,
                     ),
                     _ModeButton(
-                      label: 'Dark',
+                      label: LocaleKeys.commonThemeDark.tr(),
                       icon: HugeIcons.strokeRoundedMoon02,
                       selected: controller.isDark,
                       onTap: controller.isDark
@@ -70,8 +75,7 @@ class PreviewAppearancePane extends StatelessWidget {
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        'This really is the setting — it repaints the whole '
-                        'page, not just this window.',
+                        LocaleKeys.landingPreviewAppearanceNote.tr(),
                         style: TextStyle(fontSize: 12.5, color: tokens.muted),
                       ),
                     ),
@@ -87,11 +91,10 @@ class PreviewAppearancePane extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const WorkspaceCardHeader(
-                    title: 'Theme',
+                  WorkspaceCardHeader(
+                    title: LocaleKeys.commonTheme.tr(),
                     subtitle:
-                        'Six palettes. Each one restyles the whole app, '
-                        'not just the accent.',
+                        LocaleKeys.settingsThemeSubtitle.tr(),
                     icon: HugeIcons.strokeRoundedColors,
                   ),
                   const SizedBox(height: 18),
@@ -280,7 +283,7 @@ class _VariantTileState extends State<_VariantTile> {
               const SizedBox(height: 4),
               Expanded(
                 child: Text(
-                  widget.variant.description,
+                  widget.variant.description.tr(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

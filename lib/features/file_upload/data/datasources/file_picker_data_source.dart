@@ -6,6 +6,7 @@ import '../../../../core/errors/exceptions.dart';
 import 'project_scanner_stub.dart'
     if (dart.library.io) 'project_scanner_io.dart';
 import 'scanned_project_data.dart';
+import '../../../../core/localization/export.dart';
 
 /// Raw picked file data (name + decoded text content).
 class PickedFileData {
@@ -33,7 +34,7 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
   Future<List<PickedFileData>> pickJsonFiles() async {
     try {
       final result = await FilePicker.platform.pickFiles(
-        dialogTitle: 'Select translation files',
+        dialogTitle: LocaleKeys.uploadPickFilesTitle.tr(),
         type: FileType.custom,
         allowedExtensions: const ['json'],
         allowMultiple: true,
@@ -59,7 +60,9 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
       }
       return files;
     } on Exception catch (e) {
-      throw FileException('Could not open the file picker: $e');
+      throw FileException(
+        LocaleKeys.errorsFilePickerOpen.tr(namedArgs: {'error': '$e'}),
+      );
     }
   }
 
@@ -68,10 +71,12 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
     final String? root;
     try {
       root = await FilePicker.platform.getDirectoryPath(
-        dialogTitle: 'Select your project folder',
+        dialogTitle: LocaleKeys.uploadPickFolderTitle.tr(),
       );
     } on Exception catch (e) {
-      throw FileException('Could not open the folder picker: $e');
+      throw FileException(
+        LocaleKeys.errorsFolderPickerOpen.tr(namedArgs: {'error': '$e'}),
+      );
     }
 
     if (root == null || root.isEmpty) {
@@ -85,7 +90,9 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
         files: await scanProjectDirectory(root),
       );
     } on Exception catch (e) {
-      throw FileException('Could not read the project folder: $e');
+      throw FileException(
+        LocaleKeys.errorsProjectFolderRead.tr(namedArgs: {'error': '$e'}),
+      );
     }
   }
 
@@ -94,6 +101,8 @@ class FilePickerDataSourceImpl implements FilePickerDataSource {
     final segments = path
         .split(RegExp(r'[/\\]'))
         .where((segment) => segment.isNotEmpty);
-    return segments.isEmpty ? 'Imported project' : segments.last;
+    return segments.isEmpty
+        ? LocaleKeys.uploadDefaultImportName.tr()
+        : segments.last;
   }
 }

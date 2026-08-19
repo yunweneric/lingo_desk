@@ -4,6 +4,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/export_outcome.dart';
 import '../repositories/translation_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class ExportToDownloadsParams {
   const ExportToDownloadsParams({
@@ -79,8 +80,8 @@ class ExportTranslationsToFolder
     }
     if (params.rootPath.trim().isEmpty) {
       return Future.value(
-        const Left(
-          ValidationFailure(message: 'Choose a folder to export into.'),
+        Left(
+          ValidationFailure(message: LocaleKeys.errorsChooseFolder.tr()),
         ),
       );
     }
@@ -127,9 +128,7 @@ class RevealExportLocation implements UseCase<void, String> {
 
 Failure? _validateLanguages(List<String> languages) {
   if (languages.isEmpty) {
-    return const ValidationFailure(
-      message: 'Select at least one language to export.',
-    );
+    return ValidationFailure(message: LocaleKeys.errorsSelectLanguage.tr());
   }
   return null;
 }

@@ -5,6 +5,7 @@ import '../../../../core/usecases/usecase.dart';
 import '../entities/ai_credentials.dart';
 import '../entities/ai_translation_item.dart';
 import '../repositories/ai_translation_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class TranslateBatchParams {
   const TranslateBatchParams({
@@ -36,8 +37,8 @@ class TranslateBatch
     }
     if (!params.credentials.isConfigured) {
       return Future.value(
-        const Left(
-          ValidationFailure(message: 'Add an API key in Settings - AI.'),
+        Left(
+          ValidationFailure(message: LocaleKeys.errorsAiAddKey.tr()),
         ),
       );
     }

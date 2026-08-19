@@ -20,6 +20,7 @@ import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
 import 'app_icon_field.dart';
 import 'language_target_selector.dart';
+import '../../../../core/localization/export.dart';
 
 /// Name + source language, the left column of the app settings page.
 class AppSettingsGeneralCard extends StatelessWidget {
@@ -40,9 +41,9 @@ class AppSettingsGeneralCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'General',
-            subtitle: 'How this app is identified and what it translates from.',
+          WorkspaceCardHeader(
+            title: LocaleKeys.appSettingsGeneral.tr(),
+            subtitle: LocaleKeys.appSettingsGeneralSubtitle.tr(),
             icon: HugeIcons.strokeRoundedSettings02,
           ),
           const SizedBox(height: 20),
@@ -50,8 +51,8 @@ class AppSettingsGeneralCard extends StatelessWidget {
           const SizedBox(height: 22),
           LingoDeskTextField(
             controller: nameController,
-            label: 'App name',
-            hintText: 'e.g. Customer Portal',
+            label: LocaleKeys.appSettingsAppName.tr(),
+            hintText: LocaleKeys.appSettingsAppNameHint.tr(),
             size: LingoDeskFieldSize.large,
             isRequired: true,
             enabled: !state.isSaving,
@@ -60,8 +61,8 @@ class AppSettingsGeneralCard extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           LanguageDropdown(
-            label: 'Source language',
-            description: 'The base language your keys are written in.',
+            label: LocaleKeys.appSettingsSourceLanguage.tr(),
+            description: LocaleKeys.appSettingsSourceLanguageHelp.tr(),
             value: state.sourceLanguage,
             enabled: !state.isSaving,
             onChanged: (value) => context.read<AppSettingsBloc>().add(
@@ -100,16 +101,21 @@ class AppSettingsLanguagesCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: WorkspaceCardHeader(
-                  title: 'Target languages',
-                  subtitle: 'The locales this app is translated into.',
+                  title: LocaleKeys.appSettingsTargetLanguages.tr(),
+                  subtitle: LocaleKeys.appSettingsTargetLanguagesSubtitle.tr(),
                   icon: HugeIcons.strokeRoundedLanguageSquare,
                 ),
               ),
               const SizedBox(width: 12),
               WorkspaceBadge(
-                label: '$selected of $selectable selected',
+                label: LocaleKeys.appSettingsSelectedCount.tr(
+                  namedArgs: {
+                    'selected': '$selected',
+                    'total': '$selectable',
+                  },
+                ),
                 color: selected == 0 ? LingoDeskColors.warning : tokens.accent,
               ),
               const SizedBox(width: 4),
@@ -119,7 +125,7 @@ class AppSettingsLanguagesCard extends StatelessWidget {
                     : () => bloc.add(
                         AllTargetLanguagesToggledEvent(selectAll: true),
                       ),
-                child: const Text('Select all'),
+                child: Text(LocaleKeys.appSettingsSelectAll.tr()),
               ),
               TextButton(
                 onPressed: state.isSaving || selected == 0
@@ -127,7 +133,7 @@ class AppSettingsLanguagesCard extends StatelessWidget {
                     : () => bloc.add(
                         AllTargetLanguagesToggledEvent(selectAll: false),
                       ),
-                child: const Text('Clear'),
+                child: Text(LocaleKeys.commonClear.tr()),
               ),
             ],
           ),
@@ -140,9 +146,7 @@ class AppSettingsLanguagesCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            'Every key you add is queued for each selected locale. Removing a '
-            'locale hides its column in the editor; the translations you '
-            'already have are kept.',
+            LocaleKeys.appSettingsTargetLanguagesNote.tr(),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),
@@ -179,26 +183,24 @@ class AppSettingsMetaStrip extends StatelessWidget {
     final facts = <Widget>[
       _MetaFact(
         icon: HugeIcons.strokeRoundedTranslate,
-        label: 'Source',
+        label: LocaleKeys.appSettingsMetaSource.tr(),
         value: SupportedLanguages.nameOf(source),
         leading: SupportedLanguages.flagOf(source),
         trailing: source,
       ),
       _MetaFact(
         icon: HugeIcons.strokeRoundedLanguageSquare,
-        label: 'Targets',
-        value: switch (targets.length) {
-          0 => 'None yet',
-          1 => '1 locale',
-          final count => '$count locales',
-        },
+        label: LocaleKeys.appSettingsMetaTargets.tr(),
+        value: targets.isEmpty
+            ? LocaleKeys.appSettingsMetaNoTargets.tr()
+            : LocaleKeys.appSettingsLocaleCount.plural(targets.length),
         // The flags say which locales at a glance; the count already
         // says how many, so a long list folds rather than wraps.
         detail: _FlagRow(languages: targets),
       ),
       _MetaFact(
         icon: HugeIcons.strokeRoundedCalendar03,
-        label: 'Last updated',
+        label: LocaleKeys.appSettingsMetaUpdated.tr(),
         value: _formatDate(updatedAt),
         detailText: DateFormatter.relative(updatedAt),
       ),
@@ -419,21 +421,4 @@ class _FlagRow extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime date) {
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  final local = date.toLocal();
-  return '${local.day} ${months[local.month - 1]} ${local.year}';
-}
+String _formatDate(DateTime date) => AppLocalization.formatDate(date);

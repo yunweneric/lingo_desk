@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
+import '../../core/localization/export.dart';
 
 /// A small rounded label: the MIT badge, the platform row, locale chips.
 class LandingPill extends StatelessWidget {
@@ -144,7 +145,10 @@ class _PlatformTileState extends State<PlatformTile> {
               ),
               const SizedBox(height: 3),
               Text(
-                widget.note ?? (widget.available ? 'Prebuilt' : 'From source'),
+                widget.note ??
+                    (widget.available
+                        ? LocaleKeys.landingPrebuilt.tr()
+                        : LocaleKeys.landingFromSource.tr()),
                 style: TextStyle(fontSize: 11.5, color: tokens.muted),
               ),
             ],

@@ -4,6 +4,7 @@ import '../../../../core/constants/languages.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/lingo_desk_dialog.dart';
+import '../../../../core/localization/export.dart';
 
 /// Dialog to choose which languages an export covers.
 ///
@@ -97,9 +98,13 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
             LingoDeskCheckboxTile(
               value: _selected.contains(language),
               leading: SupportedLanguages.flagOf(language),
-              title:
-                  '${SupportedLanguages.nameOf(language)}'
-                  '${language == widget.sourceLanguage ? ' (source)' : ''}',
+              title: language == widget.sourceLanguage
+                  ? LocaleKeys.editorLanguageSourceSuffix.tr(
+                      namedArgs: {
+                        'language': SupportedLanguages.nameOf(language),
+                      },
+                    )
+                  : SupportedLanguages.nameOf(language),
               description: _fileNameFor(language),
               onChanged: (checked) {
                 setState(() {
@@ -116,7 +121,7 @@ class _ExportLanguagesDialogState extends State<ExportLanguagesDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(LocaleKeys.commonCancel.tr()),
         ),
         FilledButton(
           onPressed: _selected.isEmpty

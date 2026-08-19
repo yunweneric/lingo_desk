@@ -96,9 +96,9 @@ class _CoverageCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Coverage by app',
-            subtitle: 'Translated share of target strings per app',
+          WorkspaceCardHeader(
+            title: LocaleKeys.dashboardCoverageTitle.tr(),
+            subtitle: LocaleKeys.dashboardCoverageSubtitle.tr(),
             icon: HugeIcons.strokeRoundedChartArea,
           ),
           const SizedBox(height: 26),
@@ -110,7 +110,7 @@ class _CoverageCard extends StatelessWidget {
             child: apps.isEmpty
                 ? Center(
                     child: Text(
-                      'Create an app to see coverage here.',
+                      LocaleKeys.dashboardCoverageEmpty.tr(),
                       style: Theme.of(
                         context,
                       ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -138,9 +138,13 @@ class _CoverageCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             state.totalCells == 0
-                ? 'No translation data yet. Upload JSON files to get started.'
-                : '$translated strings translated. ${state.totalMissing} are '
-                      'still missing across active target languages.',
+                ? LocaleKeys.dashboardCoverageNoData.tr()
+                : LocaleKeys.dashboardCoverageSummary.tr(
+                    namedArgs: {
+                      'translated': '$translated',
+                      'missing': '${state.totalMissing}',
+                    },
+                  ),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -186,7 +190,8 @@ class _ChartBarState extends State<_ChartBar> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: Tooltip(
-        message: '${widget.name} - ${(widget.value * 100).round()}%',
+        message:
+            '${widget.name} - ${(widget.value * 100).round()}%',
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -256,15 +261,15 @@ class _LanguageHealthCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Language health',
-            subtitle: 'Coverage by target locale',
+          WorkspaceCardHeader(
+            title: LocaleKeys.dashboardHealthTitle.tr(),
+            subtitle: LocaleKeys.dashboardHealthSubtitle.tr(),
             icon: HugeIcons.strokeRoundedLanguageSquare,
           ),
           const SizedBox(height: 22),
           if (health.isEmpty)
             Text(
-              'No target languages yet.',
+              LocaleKeys.dashboardHealthEmpty.tr(),
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -297,8 +302,10 @@ class _LanguageHealthCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   nextReview.isEmpty
-                      ? 'All apps are fully translated.'
-                      : 'Next review: ${nextReview.first.app.name}',
+                      ? LocaleKeys.dashboardHealthAllTranslated.tr()
+                      : LocaleKeys.dashboardHealthNextReview.tr(
+                          namedArgs: {'name': nextReview.first.app.name},
+                        ),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -340,7 +347,9 @@ class _LanguageProgress extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              missing == 0 ? 'Complete' : '$missing missing',
+              missing == 0
+                  ? LocaleKeys.appsStatusComplete.tr()
+                  : LocaleKeys.commonMissingCount.plural(missing),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: tokens.muted,
                 fontSize: 12,

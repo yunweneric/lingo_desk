@@ -21,6 +21,7 @@ import '../bloc/translation_editor_bloc.dart';
 import '../bloc/translation_editor_event.dart';
 import '../bloc/translation_editor_state.dart';
 import 'translation_cell_field.dart';
+import '../../../../core/localization/export.dart';
 
 /// The translation grid, segmented by key namespace.
 ///
@@ -103,9 +104,16 @@ class _TranslationTableWidgetState extends State<TranslationTableWidget> {
       pageSize: _pageSize,
       pageSizes: _pageSizes,
       summary: slots.isEmpty
-          ? 'No keys'
-          : '${start + 1}-$end of ${slots.length} lines - '
-                '${groups.fold(0, (sum, g) => sum + g.entries.length)} keys',
+          ? LocaleKeys.editorNoKeys.tr()
+          : LocaleKeys.editorPaginationSummary.tr(
+              namedArgs: {
+                'start': '${start + 1}',
+                'end': '$end',
+                'lines': '${slots.length}',
+                'keys':
+                    '${groups.fold(0, (sum, g) => sum + g.entries.length)}',
+              },
+            ),
       onPageChanged: (value) => setState(() => _page = value),
       onPageSizeChanged: (value) => setState(() {
         _pageSize = value;
@@ -418,10 +426,9 @@ class _TableHeaderRow extends StatelessWidget {
           // sentence goes in the tooltip.
           if (hiddenCount > 0)
             Tooltip(
-              message:
-                  '$hiddenCount more '
-                  '${hiddenCount == 1 ? 'language' : 'languages'}, '
-                  'inside each row',
+              message: LocaleKeys.editorHiddenLanguagesInRow.plural(
+                hiddenCount,
+              ),
               child: Text('+$hiddenCount', style: headerStyle),
             ),
         ],
@@ -671,9 +678,8 @@ class _TranslationRowState extends State<_TranslationRow> {
                           padding: const EdgeInsets.only(right: 12),
                           child: Tooltip(
                             message: canExpand
-                                ? '${widget.entry.key}\nClick to '
-                                      '${_expanded ? 'hide' : 'show'} the '
-                                      'other languages'
+                                ? '${widget.entry.key}\n'
+                                      '${_expanded ? LocaleKeys.editorClickToHide.tr() : LocaleKeys.editorClickToShow.tr()}'
                                 : widget.entry.key,
                             waitDuration: const Duration(milliseconds: 500),
                             child: Text(
@@ -1051,24 +1057,24 @@ class KeyActionsMenu extends StatelessWidget {
       curve: LingoDeskMotion.curve,
       opacity: restingOpacity(hovered),
       child: LingoDeskMenuButton<String>(
-        tooltip: 'Key actions',
+        tooltip: LocaleKeys.editorKeyActions.tr(),
         menuWidth: 190,
         items: [
           LingoDeskMenuItem(
             value: 'ai',
-            label: 'AI translate row',
+            label: LocaleKeys.editorAiTranslateRow.tr(),
             icon: HugeIcons.strokeRoundedSparkles,
             enabled: missingLanguages.isNotEmpty,
           ),
-          const LingoDeskMenuItem(
+          LingoDeskMenuItem(
             value: 'copy',
-            label: 'Copy key',
+            label: LocaleKeys.editorCopyKey.tr(),
             icon: HugeIcons.strokeRoundedCopy01,
           ),
           const LingoDeskMenuItem.divider(),
-          const LingoDeskMenuItem(
+          LingoDeskMenuItem(
             value: 'delete',
-            label: 'Delete key',
+            label: LocaleKeys.editorDeleteKey.tr(),
             icon: HugeIcons.strokeRoundedDelete02,
             destructive: true,
           ),
@@ -1081,7 +1087,11 @@ class KeyActionsMenu extends StatelessWidget {
               );
             case 'copy':
               Clipboard.setData(ClipboardData(text: entry.key));
-              context.showInfoToast('Copied "${entry.key}" to the clipboard.');
+              context.showInfoToast(
+                LocaleKeys.editorCopiedToast.tr(
+                  namedArgs: {'key': entry.key},
+                ),
+              );
             case 'delete':
               _confirmDelete(context);
           }
@@ -1095,22 +1105,21 @@ class KeyActionsMenu extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete key?'),
+        title: Text(LocaleKeys.editorDeleteKeyTitle.tr()),
         content: Text(
-          'This removes "${entry.key}" from every language. '
-          'This cannot be undone.',
+          LocaleKeys.editorDeleteKeyBody.tr(namedArgs: {'key': entry.key}),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancel'),
+            child: Text(LocaleKeys.commonCancel.tr()),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: LingoDeskColors.error,
             ),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete'),
+            child: Text(LocaleKeys.commonDelete.tr()),
           ),
         ],
       ),
@@ -1179,9 +1188,8 @@ class _RowExpander extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Tooltip(
         message: expanded
-            ? 'Hide the other languages'
-            : '$hiddenCount more '
-                  '${hiddenCount == 1 ? 'language' : 'languages'}',
+            ? LocaleKeys.editorHideOtherLanguages.tr()
+            : LocaleKeys.editorHiddenLanguages.plural(hiddenCount),
         waitDuration: const Duration(milliseconds: 400),
         child: InkWell(
           onTap: onTap,
@@ -1237,8 +1245,8 @@ class _EmptyRows extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 hasEntries
-                    ? 'No keys match the current filters.'
-                    : 'No keys yet. Upload JSON files or add your first key.',
+                    ? LocaleKeys.editorNoMatches.tr()
+                    : LocaleKeys.editorEmpty.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,

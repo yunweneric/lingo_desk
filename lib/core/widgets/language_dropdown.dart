@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants/languages.dart';
 import 'lingo_desk_dropdown.dart';
 import 'lingo_desk_field.dart';
+import '../localization/export.dart';
 
 /// Language picker used wherever a source locale is chosen.
 ///
@@ -18,7 +19,7 @@ class LanguageDropdown extends StatelessWidget {
     this.description,
     this.helperText,
     this.errorText,
-    this.hintText = 'Select a language',
+    this.hintText,
     this.size = LingoDeskFieldSize.large,
     this.enabled = true,
     this.isRequired = false,
@@ -34,7 +35,8 @@ class LanguageDropdown extends StatelessWidget {
   final String? description;
   final String? helperText;
   final String? errorText;
-  final String hintText;
+  /// Defaults to the translated "Select a language" placeholder.
+  final String? hintText;
   final LingoDeskFieldSize size;
   final bool enabled;
   final bool isRequired;
@@ -66,7 +68,7 @@ class LanguageDropdown extends StatelessWidget {
       description: description,
       helperText: helperText,
       errorText: errorText,
-      hintText: hintText,
+      hintText: hintText ?? LocaleKeys.commonSelectLanguage.tr(),
       size: size,
       enabled: enabled,
       isRequired: isRequired,

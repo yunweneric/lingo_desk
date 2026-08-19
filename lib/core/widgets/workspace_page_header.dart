@@ -5,6 +5,7 @@ import '../responsive/breakpoints.dart';
 import '../theme/lingo_desk_motion.dart';
 import '../theme/lingo_desk_tokens.dart';
 import '../router/app_router.dart';
+import '../localization/export.dart';
 
 /// Bordered header band for the pages rendered inside `AppShell`:
 /// breadcrumb on the left, toolbar actions on the right, and an optional
@@ -121,8 +122,10 @@ class WorkspacePageHeader extends StatelessWidget {
 class Crumb {
   const Crumb(this.label, {this.route});
 
-  /// The root segment every page hangs off.
-  static const workspace = Crumb('Workspace', route: AppRoutes.dashboard);
+  /// The root segment every page hangs off. Not `const`: its label is
+  /// resolved against the active locale each time it is built.
+  static Crumb get workspace =>
+      Crumb(LocaleKeys.navGroupWorkspace.tr(), route: AppRoutes.dashboard);
 
   final String label;
   final String? route;

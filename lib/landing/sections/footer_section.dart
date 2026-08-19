@@ -8,6 +8,7 @@ import '../../core/widgets/lingo_desk_mark.dart';
 import '../data/github_release.dart';
 import '../widgets/landing_button.dart';
 import '../widgets/landing_layout.dart';
+import '../../core/localization/export.dart';
 
 /// Colophon: who made it, under what licence, and with what.
 class FooterSection extends StatelessWidget {
@@ -18,15 +19,27 @@ class FooterSection extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final narrow = context.windowSize.isBelow(WindowSizeClass.expanded);
 
-    const links = Wrap(
+    final links = Wrap(
       spacing: 26,
       runSpacing: 12,
       children: [
-        LandingLink(label: 'GitHub', url: GithubRepo.url),
-        LandingLink(label: 'Releases', url: GithubRepo.releases),
-        LandingLink(label: 'Issues', url: GithubRepo.issues),
-        LandingLink(label: 'MIT licence', url: GithubRepo.license),
-        LandingLink(label: 'Readme', url: GithubRepo.readme),
+        const LandingLink(label: 'GitHub', url: GithubRepo.url),
+        LandingLink(
+          label: LocaleKeys.landingFooterReleases.tr(),
+          url: GithubRepo.releases,
+        ),
+        LandingLink(
+          label: LocaleKeys.landingFooterIssues.tr(),
+          url: GithubRepo.issues,
+        ),
+        LandingLink(
+          label: LocaleKeys.landingFooterLicence.tr(),
+          url: GithubRepo.license,
+        ),
+        LandingLink(
+          label: LocaleKeys.landingFooterReadme.tr(),
+          url: GithubRepo.readme,
+        ),
       ],
     );
 
@@ -70,8 +83,7 @@ class FooterSection extends StatelessWidget {
                     const SizedBox(width: 9),
                     Flexible(
                       child: Text(
-                        'This page is a Flutter web app, built from the same '
-                        'repository as the product.',
+                        LocaleKeys.landingFooterNote.tr(),
                         style: TextStyle(fontSize: 13, color: tokens.muted),
                       ),
                     ),

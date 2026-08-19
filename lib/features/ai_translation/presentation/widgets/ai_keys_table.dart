@@ -15,6 +15,7 @@ import '../../../../core/widgets/workspace_pagination_bar.dart';
 import '../../domain/entities/ai_key.dart';
 import '../../domain/entities/ai_provider.dart';
 import 'ai_provider_logo.dart';
+import '../../../../core/localization/export.dart';
 
 /// What a row's menu asked for.
 enum AiKeyAction { use, test, edit, delete }
@@ -98,9 +99,14 @@ class _AiKeysTableState extends State<AiKeysTable> {
                 pageCount: pageCount,
                 pageSize: _pageSize,
                 summary: keys.isEmpty
-                    ? 'No keys yet'
-                    : '${start + 1}-$end of ${keys.length} '
-                          'key${keys.length == 1 ? '' : 's'}',
+                    ? LocaleKeys.aiTableNoKeys.tr()
+                    : LocaleKeys.aiTableRange.tr(
+                        namedArgs: {
+                          'start': '${start + 1}',
+                          'end': '$end',
+                          'total': LocaleKeys.aiKeyCount.plural(keys.length),
+                        },
+                      ),
                 onPageChanged: (value) => setState(() => _page = value),
                 onPageSizeChanged: (value) => setState(() {
                   _pageSize = value;
@@ -166,10 +172,10 @@ class _HeaderRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          cell('PROVIDER', _Columns.provider),
-          cell('API KEY', _Columns.apiKey),
-          cell('MODEL', _Columns.model),
-          cell('ADDED', _Columns.added),
+          cell(LocaleKeys.aiColProvider.tr().toUpperCase(), _Columns.provider),
+          cell(LocaleKeys.aiColApiKey.tr().toUpperCase(), _Columns.apiKey),
+          cell(LocaleKeys.aiColModel.tr().toUpperCase(), _Columns.model),
+          cell(LocaleKeys.aiColAdded.tr().toUpperCase(), _Columns.added),
           const SizedBox(width: _Columns.actionsWidth),
         ],
       ),
@@ -313,9 +319,17 @@ class _KeyEntryState extends State<_KeyEntry> {
           ],
         ),
         const SizedBox(height: 10),
-        _CardFact(label: 'MODEL', tokens: tokens, child: _model(context)),
+        _CardFact(
+          label: LocaleKeys.aiColModel.tr().toUpperCase(),
+          tokens: tokens,
+          child: _model(context),
+        ),
         const SizedBox(height: 4),
-        _CardFact(label: 'ADDED', tokens: tokens, child: _added(context)),
+        _CardFact(
+          label: LocaleKeys.aiColAdded.tr().toUpperCase(),
+          tokens: tokens,
+          child: _added(context),
+        ),
       ],
     );
   }
@@ -359,30 +373,30 @@ class _KeyEntryState extends State<_KeyEntry> {
       // screen to bring it up with.
       opacity: hasHover ? (_hovered ? 1 : 0.4) : 1,
       child: LingoDeskMenuButton<AiKeyAction>(
-        tooltip: 'Key actions',
+        tooltip: LocaleKeys.aiKeyActions.tr(),
         menuWidth: 210,
         items: [
           LingoDeskMenuItem(
             value: AiKeyAction.use,
-            label: 'Use for translations',
+            label: LocaleKeys.aiKeyUse.tr(),
             icon: HugeIcons.strokeRoundedCheckmarkCircle02,
             enabled: !widget.isActive && widget.entry.isUsable,
           ),
           LingoDeskMenuItem(
             value: AiKeyAction.test,
-            label: 'Test connection',
+            label: LocaleKeys.aiKeyTest.tr(),
             icon: HugeIcons.strokeRoundedPlugSocket,
             enabled: !widget.isTesting,
           ),
-          const LingoDeskMenuItem(
+          LingoDeskMenuItem(
             value: AiKeyAction.edit,
-            label: 'Edit',
+            label: LocaleKeys.commonEdit.tr(),
             icon: HugeIcons.strokeRoundedEdit02,
           ),
           const LingoDeskMenuItem.divider(),
-          const LingoDeskMenuItem(
+          LingoDeskMenuItem(
             value: AiKeyAction.delete,
-            label: 'Delete',
+            label: LocaleKeys.commonDelete.tr(),
             icon: HugeIcons.strokeRoundedDelete02,
             destructive: true,
           ),
@@ -503,7 +517,7 @@ class _ActiveBadge extends StatelessWidget {
         border: Border.all(color: tokens.accent.withValues(alpha: 0.4)),
       ),
       child: Text(
-        'Active',
+        LocaleKeys.aiKeyActive.tr(),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
           color: tokens.accent,
           fontWeight: FontWeight.w700,
@@ -525,7 +539,7 @@ class _EmptyRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
       child: Center(
         child: Text(
-          'No API keys yet. Add one to translate from the editor.',
+          LocaleKeys.aiTableEmpty.tr(),
           textAlign: TextAlign.center,
           style: Theme.of(
             context,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/languages.dart';
 import '../../core/theme/lingo_desk_motion.dart';
 import '../../core/theme/lingo_desk_tokens.dart';
+import '../../core/localization/export.dart';
 
 /// The twenty locales the product ships with, drifting past.
 ///
@@ -66,7 +67,7 @@ class _LocaleStripState extends State<LocaleStrip>
       child: Column(
         children: [
           Text(
-            '20 LOCALES BUILT IN · ADD ANY OTHER IN SETTINGS',
+            LocaleKeys.landingLocaleStrip.tr().toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 11,

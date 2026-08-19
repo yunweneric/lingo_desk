@@ -9,6 +9,7 @@ import '../../app_settings/presentation/widgets/create_app_dialog.dart';
 import '../domain/entities/app_overview.dart';
 import 'bloc/app_management_bloc.dart';
 import 'bloc/app_management_event.dart';
+import '../../../core/localization/export.dart';
 
 /// Navigation and dialog helpers shared by the shell sidebar, the apps
 /// table and the dashboard. They all read the shell-scoped
@@ -24,19 +25,18 @@ Future<void> openCreateApp(BuildContext context) async {
   final uploadNow = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      title: Text('"${app.name}" created'),
-      content: const Text(
-        'Do you want to upload your existing JSON translation files now? '
-        'You can also do this later from the dashboard.',
+      title: Text(
+        LocaleKeys.appsCreatedTitle.tr(namedArgs: {'name': app.name}),
       ),
+      content: Text(LocaleKeys.appsCreatedBody.tr()),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(dialogContext).pop(false),
-          child: const Text('Later'),
+          child: Text(LocaleKeys.appsCreatedLater.tr()),
         ),
         FilledButton(
           onPressed: () => Navigator.of(dialogContext).pop(true),
-          child: const Text('Upload files'),
+          child: Text(LocaleKeys.appsCreatedUpload.tr()),
         ),
       ],
     ),
@@ -73,20 +73,21 @@ Future<void> confirmDeleteApp(
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      title: Text('Delete "${overview.app.name}"?'),
-      content: const Text(
-        'This permanently removes the app and all of its translations. '
-        'This cannot be undone.',
+      title: Text(
+        LocaleKeys.appsDeleteTitle.tr(
+          namedArgs: {'name': overview.app.name},
+        ),
       ),
+      content: Text(LocaleKeys.appsDeleteBody.tr()),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(dialogContext).pop(false),
-          child: const Text('Cancel'),
+          child: Text(LocaleKeys.commonCancel.tr()),
         ),
         FilledButton(
           style: FilledButton.styleFrom(backgroundColor: LingoDeskColors.error),
           onPressed: () => Navigator.of(dialogContext).pop(true),
-          child: const Text('Delete'),
+          child: Text(LocaleKeys.commonDelete.tr()),
         ),
       ],
     ),
@@ -103,10 +104,16 @@ Future<void> confirmDeleteApp(
   LingoDeskTokens tokens,
 ) {
   if (overview.keyCount == 0) {
-    return (label: 'New', color: tokens.accent);
+    return (label: LocaleKeys.appsStatusNew.tr(), color: tokens.accent);
   }
   if (overview.isComplete) {
-    return (label: 'Complete', color: LingoDeskColors.complete);
+    return (
+      label: LocaleKeys.appsStatusComplete.tr(),
+      color: LingoDeskColors.complete,
+    );
   }
-  return (label: 'Missing', color: LingoDeskColors.warning);
+  return (
+    label: LocaleKeys.appsStatusMissing.tr(),
+    color: LingoDeskColors.warning,
+  );
 }

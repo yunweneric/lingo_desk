@@ -1,0 +1,793 @@
+{
+  "ai": {
+    "addKey": "Adaugă cheie API",
+    "addProviderKey": "Adaugă cheie {provider}",
+    "col": {
+      "added": "Adăugată",
+      "apiKey": "Cheie API",
+      "model": "Model",
+      "provider": "Furnizor"
+    },
+    "createKeyAt": "Creează o cheie pe {console}.",
+    "defaultModel": "implicit",
+    "delete": {
+      "activeBody": "Se elimină „{label}”, cheia pe care rulează acum traducerile. O altă cheie salvată preia rolul, altfel traducerea AI se oprește până adaugi una nouă.",
+      "body": "Se elimină „{label}” de pe acest dispozitiv. Cheia în sine rămâne valabilă pe {console}.",
+      "title": "Ștergi cheia API?"
+    },
+    "editKey": "Editează cheia API",
+    "field": {
+      "name": "Nume",
+      "nameHelp": "Opțional — cum numești această cheie în tabel."
+    },
+    "hideKey": "Ascunde cheia",
+    "key": {
+      "actions": "Acțiuni pentru cheie",
+      "active": "Activă",
+      "required": "Lipește cheia API pentru a continua.",
+      "test": "Testează conexiunea",
+      "use": "Folosește pentru traduceri"
+    },
+    "pickModel": "Alege un model sugerat",
+    "pickProvider": "Cărui furnizor îi aparține această cheie?",
+    "saveKey": "Adaugă cheia",
+    "showKey": "Arată cheia",
+    "status": {
+      "detail": "{provider} · {model} · folosit de fiecare acțiune AI din editor.",
+      "noKey": "Nicio cheie nu este încă pregătită",
+      "noKeyDetail": "Adaugă o cheie API și editorul va completa traducerile lipsă în locul tău.",
+      "translatingWith": "Se traduce cu {label}"
+    },
+    "storage": {
+      "plain": "Această versiune nu poate accesa depozitul de chei al sistemului, așa că acestea se salvează ca text simplu alături de celelalte setări locale. Rămân pe acest dispozitiv și sunt trimise doar furnizorului căruia îi aparțin.",
+      "secure": "Cheile stau în depozitul securizat al acestui dispozitiv și sunt trimise doar furnizorului căruia îi aparțin."
+    },
+    "table": {
+      "empty": "Încă nu există chei API. Adaugă una ca să traduci din editor.",
+      "keyCount": {
+        "few": "{} chei",
+        "one": "1 cheie",
+        "other": "{} de chei"
+      },
+      "noKeys": "Încă nicio cheie",
+      "range": "{start}-{end} din {total}"
+    },
+    "toast": {
+      "activeTitle": "Traducerile folosesc acum {label}",
+      "addedBody": "{provider} este gata de traducere.",
+      "addedTitle": "Cheie adăugată",
+      "deletedBody": "{label} a fost eliminată de pe acest dispozitiv.",
+      "deletedNamedTitle": "{label} ștearsă",
+      "deletedTitle": "Cheie ștearsă",
+      "promotedBody": "Traducerile folosesc acum {label}.",
+      "testFailedTitle": "{label} a eșuat",
+      "testPassedBody": "{provider} a acceptat cheia.",
+      "testPassedTitle": "{label} conectată",
+      "updatedBody": "Modificările la {label} au fost salvate.",
+      "updatedTitle": "Cheie actualizată"
+    }
+  },
+  "appSettings": {
+    "appIcon": "Pictograma aplicației",
+    "appIconHelp": "Opțională. Fără ea, aplicația își arată inițialele.",
+    "appIconNote": "PNG, JPG sau WebP. Imaginea este redimensionată la {size} px și salvată împreună cu aplicația, așa că poți muta liniștit fișierul original.",
+    "appName": "Numele aplicației",
+    "appNameHint": "ex. Portal clienți",
+    "createApp": "Creează aplicația",
+    "general": "General",
+    "generalSubtitle": "Cum se numește această aplicație și din ce limbă traduce.",
+    "localeCount": {
+      "few": "{} limbi",
+      "one": "1 limbă",
+      "other": "{} de limbi"
+    },
+    "metaNoTargets": "Încă niciuna",
+    "metaSource": "Sursă",
+    "metaTargets": "Ținte",
+    "metaUpdated": "Ultima actualizare",
+    "replaceIcon": "Înlocuiește pictograma",
+    "saveChanges": "Salvează modificările",
+    "savedToast": "„{name}” a fost salvată.",
+    "selectAll": "Selectează tot",
+    "selectedCount": "{selected} din {total} selectate",
+    "sourceLanguage": "Limbă sursă",
+    "sourceLanguageHelp": "Limba de bază în care sunt scrise cheile tale.",
+    "sourceNotTarget": "Limba sursă nu poate fi și limbă țintă.",
+    "targetLanguages": "Limbi țintă",
+    "targetLanguagesHelp": "Limbile în care vrei să traduci.",
+    "targetLanguagesNote": "Fiecare cheie adăugată intră în coadă pentru fiecare limbă selectată. Eliminarea unei limbi ascunde coloana ei din editor; traducerile existente se păstrează.",
+    "targetLanguagesSubtitle": "Limbile în care este tradusă această aplicație.",
+    "uploadIcon": "Încarcă pictograma"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} fișiere gata - {updated}"
+    },
+    "created": {
+      "body": "Vrei să încarci acum fișierele JSON de traducere existente? Poți face asta și mai târziu din panou.",
+      "later": "Mai târziu",
+      "title": "„{name}” a fost creată",
+      "upload": "Încarcă fișiere"
+    },
+    "delete": {
+      "body": "Se șterg definitiv aplicația și toate traducerile ei. Operațiunea nu poate fi anulată.",
+      "title": "Ștergi „{name}”?"
+    },
+    "deletedNamedToast": "„{name}” a fost ștearsă.",
+    "deletedToast": "Aplicație ștearsă.",
+    "empty": {
+      "message": "Indică-i LingoDesk un folder de proiect și va importa fișierele de traducere găsite acolo, sau creează manual o aplicație cu o limbă sursă și limbile tale țintă.",
+      "title": "Creează prima ta aplicație"
+    },
+    "importProject": "Importă proiect",
+    "menu": {
+      "deleteApp": "Șterge aplicația",
+      "openEditor": "Deschide editorul",
+      "uploadFiles": "Încarcă fișiere"
+    },
+    "newApp": "Aplicație nouă",
+    "searchHint": "Caută aplicații",
+    "status": {
+      "complete": "Completă",
+      "missing": "Lipsuri",
+      "new": "Nouă"
+    },
+    "summary": {
+      "filesComplete": "Fișiere complete",
+      "missingStrings": "Texte lipsă",
+      "overallCoverage": "acoperire generală",
+      "subtitle": "Fișiere de traducere din toate aplicațiile și limbile",
+      "title": "Totaluri pe spațiul de lucru"
+    },
+    "table": {
+      "colApp": "Aplicație",
+      "colFiles": "Fișiere",
+      "colLanguages": "Limbi",
+      "colProgress": "Progres",
+      "colStatus": "Stare",
+      "colUpdated": "Actualizată",
+      "complete": "gata",
+      "hideLanguages": "Ascunde limbile",
+      "less": "Mai puțin",
+      "noMatches": "Nicio aplicație nu se potrivește căutării tale.",
+      "searchSubtitle": "{matches} din {total} aplicații se potrivesc cu „{query}”",
+      "showLanguages": "Arată toate limbile",
+      "subtitle": "Spațiile de lucru actuale de localizare"
+    }
+  },
+  "common": {
+    "back": "Înapoi",
+    "cancel": "Anulează",
+    "clear": "Golește",
+    "close": "Închide",
+    "delete": "Șterge",
+    "dismiss": "Închide",
+    "edit": "Editează",
+    "errorPrefix": "Eroare: {message}",
+    "missingCount": {
+      "few": "{} lipsă",
+      "one": "1 lipsă",
+      "other": "{} lipsă"
+    },
+    "more": "Mai mult",
+    "next": "Înainte",
+    "nextPage": "Pagina următoare",
+    "previousPage": "Pagina anterioară",
+    "remove": "Elimină",
+    "retry": "Reîncearcă",
+    "rows": "Rânduri",
+    "selectLanguage": "Alege o limbă",
+    "selectOption": "Alege o opțiune",
+    "theme": "Temă",
+    "themeDark": "Întunecată",
+    "themeLight": "Luminoasă",
+    "themeSystem": "Sistem"
+  },
+  "dashboard": {
+    "appCount": {
+      "few": "{} aplicații",
+      "one": "1 aplicație",
+      "other": "{} de aplicații"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} fișiere de traducere gata",
+    "coverage": {
+      "empty": "Creează o aplicație ca să vezi acoperirea aici.",
+      "noData": "Încă nu există date de traducere. Încarcă fișiere JSON ca să începi.",
+      "subtitle": "Proporția textelor țintă traduse, pe fiecare aplicație",
+      "summary": "{translated} texte traduse. În limbile țintă active mai lipsesc {missing}.",
+      "title": "Acoperire pe aplicație"
+    },
+    "empty": {
+      "message": "O aplicație grupează fișierele de traducere ale unui proiect. Setează o limbă sursă, alege-ți țintele și începe să traduci.",
+      "title": "Creează prima ta aplicație"
+    },
+    "health": {
+      "allTranslated": "Toate aplicațiile sunt traduse complet.",
+      "empty": "Încă nicio limbă țintă.",
+      "nextReview": "Următoarea revizuire: {name}",
+      "nextReviewPrefix": "Următoarea revizuire: ",
+      "subtitle": "Acoperire pe limbă țintă",
+      "title": "Starea limbilor"
+    },
+    "metric": {
+      "acrossApps": "În toate aplicațiile",
+      "allClear": "Totul în regulă",
+      "coverage": "Acoperire",
+      "localWorkspace": "Spațiu de lucru local",
+      "missing": "Lipsuri",
+      "needsReview": "De revizuit",
+      "targetLocales": {
+        "few": "{} limbi țintă",
+        "one": "1 limbă țintă",
+        "other": "{} de limbi țintă"
+      },
+      "totalKeys": "Total chei"
+    },
+    "stat": {
+      "keys": "Chei",
+      "locales": "Limbi"
+    },
+    "subtitle": "Urmărește acoperirea, revizuiește textele lipsă și revino la munca de localizare.",
+    "title": "Panou de traduceri",
+    "viewAllApps": "Vezi toate aplicațiile"
+  },
+  "editor": {
+    "addKey": "Adaugă cheie",
+    "addKeyHint": "Completează ce ai acum — ce lași gol rămâne lipsă și poate fi tradus mai târziu în grilă.",
+    "aiAllComplete": "Toate limbile țintă sunt complete.",
+    "aiAlreadyRunning": "O rundă de traducere este deja în curs.",
+    "aiCanceledEmpty": "Anulat înainte să se salveze ceva.",
+    "aiDialogBody": "Se completează doar celulele goale — traducerile pe care le ai deja nu sunt niciodată suprascrise.",
+    "aiFailedCount": {
+      "few": "{} nu au putut fi traduse.",
+      "one": "1 nu a putut fi tradus.",
+      "other": "{} nu au putut fi traduse."
+    },
+    "aiFailedCountReason": {
+      "few": "{} nu au putut fi traduse ({error}).",
+      "one": "1 nu a putut fi tradus ({error}).",
+      "other": "{} nu au putut fi traduse ({error})."
+    },
+    "aiFinishing": "Se termină lotul curent…",
+    "aiNotConfiguredBody": "Adaugă mai întâi o cheie API în Setări - Furnizori AI.",
+    "aiNotConfiguredTitle": "AI nu este configurat",
+    "aiNothingHere": "Aici nu mai e nimic de tradus.",
+    "aiNothingLeft": "Nu mai e nimic de tradus",
+    "aiNothingTranslated": "Nu s-a tradus nimic.",
+    "aiProgress": "Se traduce {label} · {done} din {total}",
+    "aiRunning": "Traducere AI în curs",
+    "aiTranslate": "Tradu cu AI",
+    "aiTranslateMissing": {
+      "few": "Tradu cu AI {} texte lipsă",
+      "one": "Tradu cu AI 1 text lipsă",
+      "other": "Tradu cu AI {} de texte lipsă"
+    },
+    "aiTranslateRow": "Tradu rândul cu AI",
+    "aiTranslatedCanceled": {
+      "few": "{} texte traduse înainte de anulare.",
+      "one": "1 text tradus înainte de anulare.",
+      "other": "{} de texte traduse înainte de anulare."
+    },
+    "aiTranslatedDone": {
+      "few": "{} texte traduse.",
+      "one": "1 text tradus.",
+      "other": "{} de texte traduse."
+    },
+    "aiUsing": "Cu {provider} · {model}",
+    "clearAll": "Deselectează tot",
+    "clickToHide": "Clic pentru a ascunde celelalte limbi",
+    "clickToShow": "Clic pentru a afișa celelalte limbi",
+    "copiedToast": "„{key}” a fost copiată în clipboard.",
+    "copyKey": "Copiază cheia",
+    "deleteKey": "Șterge cheia",
+    "deleteKeyBody": "Se elimină „{key}” din toate limbile. Operațiunea nu poate fi anulată.",
+    "deleteKeyTitle": "Ștergi cheia?",
+    "empty": "Încă nicio cheie. Încarcă fișiere JSON sau adaugă prima ta cheie.",
+    "export": "Exportă",
+    "exportCanceled": "Export anulat.",
+    "exportChooseDestination": "Alege o destinație",
+    "exportDownload": "Descarcă",
+    "exportFolderSummary": "Vei alege folderul imediat; acolo ajunge câte un fișier pentru fiecare limbă.",
+    "exportNoProject": "Importă mai întâi un folder de proiect",
+    "exportOverwrite": "Suprascrie fișierele",
+    "exportProjectSummary": "Se scrie în {path} și înlocuiește acele fișiere.",
+    "exportSaveTo": "Salvează în {name}",
+    "exportSaveToProject": "Salvează în proiect",
+    "exportSavedToast": "{files} salvate în {name}",
+    "exportToFolder": "Exportă într-un folder",
+    "exportToFolderEllipsis": "Exportă într-un folder…",
+    "exportZip": "Descarcă ZIP",
+    "exportZipHint": "Arhivat în folderul Descărcări",
+    "exportZipSummary": "Adunat în {file}, în folderul tău Descărcări.",
+    "exportZippedToast": "{files} arhivate în Descărcări",
+    "exportedToast": "{files} exportate",
+    "fileCount": {
+      "few": "{} fișiere",
+      "one": "1 fișier",
+      "other": "{} de fișiere"
+    },
+    "hiddenLanguages": {
+      "few": "încă {} limbi",
+      "one": "încă 1 limbă",
+      "other": "încă {} de limbi"
+    },
+    "hiddenLanguagesInRow": {
+      "few": "încă {} limbi, în fiecare rând",
+      "one": "încă 1 limbă, în fiecare rând",
+      "other": "încă {} de limbi, în fiecare rând"
+    },
+    "hideOtherLanguages": "Ascunde celelalte limbi",
+    "keyActions": "Acțiuni pentru cheie",
+    "keyAddedToast": "Cheia „{key}” a fost adăugată.",
+    "keyDeletedToast": "Cheia „{key}” a fost ștearsă.",
+    "keyHelper": "Notația cu puncte grupează cheile în JSON imbricat.",
+    "keyLabel": "Cheie",
+    "languageCount": {
+      "few": "{} limbi",
+      "one": "1 limbă",
+      "other": "{} de limbi"
+    },
+    "languageSourceSuffix": "{language} (sursă)",
+    "missingOnly": "Doar lipsurile",
+    "missingOnlyCount": "Doar lipsurile ({count})",
+    "noKeys": "Nicio cheie",
+    "noMatches": "Nicio cheie nu se potrivește filtrelor actuale.",
+    "noProvider": "Niciun furnizor",
+    "paginationSummary": "{start}-{end} din {lines} rânduri - {keys} chei",
+    "searchHint": "Caută chei și valori",
+    "showInFolder": "Arată în folder",
+    "sourceText": "Text sursă",
+    "title": "Editor",
+    "translate": "Tradu",
+    "translateCount": {
+      "few": "Tradu {} texte",
+      "one": "Tradu 1 text",
+      "other": "Tradu {} de texte"
+    },
+    "translateWithAi": "Tradu cu AI",
+    "translatingHint": "Se traduce…",
+    "translationOptional": "Traducere - opțională",
+    "translations": "Traduceri"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Adaugă o cheie API în Setări - Furnizori AI.",
+      "blocked": "{provider} a blocat acest lot ({reason}).",
+      "emptyResponse": "{provider} a returnat un răspuns gol.",
+      "keyRejected": "Cheia API {provider} a fost respinsă. Verific-o în Setări - Furnizori AI.",
+      "malformed": "Furnizorul de traducere a returnat JSON invalid.",
+      "modelNotFound": "Modelul {provider} nu a fost găsit. Verifică numele modelului în Setări - Furnizori AI.",
+      "noConnection": "Nicio conexiune la furnizorul de traducere.",
+      "noKey": "Introdu mai întâi o cheie API.",
+      "refused": "{provider} a refuzat să traducă acest lot. Sari peste el sau încearcă un alt model.",
+      "stoppedEarly": "{provider} s-a oprit prea devreme ({reason}).",
+      "timeout": "Furnizorul de traducere nu a răspuns la timp.",
+      "unexpectedResponse": "{provider} a returnat un răspuns neașteptat."
+    },
+    "app": {
+      "nameEmpty": "Numele aplicației nu poate fi gol.",
+      "noTargetLanguage": "Alege cel puțin o limbă țintă.",
+      "sourceIsTarget": "Limba sursă nu poate fi și limbă țintă."
+    },
+    "cache": {
+      "appListCorrupt": "Lista de aplicații salvată este coruptă: {error}",
+      "appNotFound": "Aplicația nu a fost găsită.",
+      "appNotFoundId": "Aplicația nu a fost găsită: {id}",
+      "translationsCorrupt": "Traducerile salvate sunt corupte: {error}",
+      "writeAppList": "Lista de aplicații nu a putut fi salvată.",
+      "writeTranslations": "Traducerile nu au putut fi salvate."
+    },
+    "editor": {
+      "invalidKey": "Folosește notația cu puncte, cu litere, cifre, „_” sau „-” (ex. nav.home).",
+      "keyExists": "Cheia „{key}” există deja.",
+      "keyNotFound": "Cheie negăsită: {key}"
+    },
+    "export": {
+      "chooseFolder": "Alege un folder în care să exporți.",
+      "noDownloadsFolder": "Folderul tău Descărcări nu a fost găsit pe această platformă.",
+      "noProjectFolder": "Această aplicație nu a fost importată dintr-un folder de proiect, așa că nu există unde să fie scrisă înapoi.",
+      "nothingToExport": "Încă nu există chei de exportat.",
+      "selectLanguage": "Alege cel puțin o limbă pentru export."
+    },
+    "file": {
+      "folderPickerOpen": "Selectorul de foldere nu a putut fi deschis: {error}",
+      "launchFailed": "{executable} nu a putut fi pornit: {error}",
+      "openPath": "{path} nu a putut fi deschis: {error}",
+      "pickerOpen": "Selectorul de fișiere nu a putut fi deschis: {error}",
+      "projectFolderRead": "Folderul proiectului nu a putut fi citit: {error}",
+      "revealUnsupported": "Afișarea unui folder nu este disponibilă pe această platformă.",
+      "save": "{file} nu a putut fi salvat: {error}",
+      "unknownLanguage": "Nu s-a putut determina limba acestui fișier. Denumește-l după codul limbii sau pune-l într-un folder de limbă.",
+      "unsupportedPlatform": "Nu este disponibil pe această platformă.",
+      "writeFolder": "Nu s-a putut scrie în {path}: {error}"
+    },
+    "image": {
+      "convert": "Imaginea nu a putut fi convertită în PNG.",
+      "notAnImage": "Fișierul nu este o imagine pe care LingoDesk o poate citi: {error}",
+      "pickerOpen": "Selectorul de imagini nu a putut fi deschis: {error}",
+      "tooLarge": "Alege o imagine mai mică de 8 MB.",
+      "unreadable": "Imaginea nu a putut fi citită."
+    },
+    "import": {
+      "noFiles": "Niciun fișier de importat."
+    },
+    "json": {
+      "invalid": "JSON invalid: {error}",
+      "noKeys": "Fișierul nu conține chei de traducere.",
+      "notObject": "Fișierul trebuie să conțină un obiect JSON la nivelul superior."
+    }
+  },
+  "landing": {
+    "apkLink": "Sau descarcă APK-ul de Android · {size}  →",
+    "askingGithub": "Întrebăm GitHub de cea mai nouă versiune…",
+    "checkingBuilds": "Căutăm build-uri…",
+    "codeMissing": "lipsă",
+    "cta": {
+      "apk": "Descarcă APK-ul",
+      "latest": "Descarcă cel mai nou build",
+      "macos": "Descarcă pentru macOS",
+      "windows": "Descarcă pentru Windows"
+    },
+    "download": {
+      "allReleases": "Toate versiunile și jurnalele de modificări pe GitHub  →",
+      "body": "Gratuit și open source sub licența MIT. Fără cont, fără perioadă de probă, fără telemetrie.",
+      "copied": "Copiat",
+      "copy": "Copiază",
+      "eyebrow": "Descărcare",
+      "latest": "Cea mai nouă",
+      "latestBuildRuns": "Ultimele rulări de build",
+      "noBuildBody": "Instalatoarele pentru macOS, Windows și Android sunt construite de GitHub Actions și atașate unei versiuni de îndată ce se publică o etichetă de versiune. Până atunci, rularea din sursă durează cam două minute.",
+      "noBuildTitle": "Încă nu a fost publicat niciun build împachetat",
+      "published": "Publicată pe {date}",
+      "releasesOnGithub": "Versiuni pe GitHub",
+      "runFromSource": "Sau rulează-l din sursă pe oricare dintre cele șase platforme",
+      "runFromSourceNote": "Schimbă dispozitivul cu windows, linux, chrome sau un telefon conectat. Proiectul își fixează versiunea de Flutter în .fvmrc.",
+      "title": "Ia-ți LingoDesk.",
+      "tryAgain": "Reîncearcă",
+      "unreachableBody": "{reason} Poți totuși să răsfoiești pagina versiunilor sau să compilezi din sursă.",
+      "unreachableTitle": "GitHub nu a putut fi contactat",
+      "unsignedNote": "Build-urile de desktop nu sunt semnate: pe macOS dă clic dreapta pe aplicație și alege Deschide prima dată, iar pe Windows alege Mai multe informații, apoi Rulează oricum.",
+      "version": "Versiunea {version}"
+    },
+    "features": {
+      "body": "LingoDesk este un instrument de desktop concentrat, nu o platformă de traducere cu licențe și tablouri de bord.",
+      "eyebrow": "Funcții",
+      "f1Body": "JSON-ul imbricat este aplatizat în chei cu puncte, așa că un text și toate traducerile lui încap pe un singur rând, pe care îl citești dintr-o parte în alta.",
+      "f1Title": "O singură grilă pentru toate limbile",
+      "f2Body": "Acoperire în timp real pe fiecare limbă și un filtru „doar lipsurile” care reduce sute de chei la mâna de chei încă goale.",
+      "f2Title": "Texte lipsă, nu erori scăpate",
+      "f3Body": "Tradu golurile în loturi prin Anthropic, OpenAI sau Gemini. Cheia ta, contul tău, factura ta — nimic nu trece printr-un intermediar.",
+      "f3Title": "Tradu cu propria ta cheie AI",
+      "f4Body": "Fără backend, fără telemetrie, fără înregistrare. Proiectele stau pe calculatorul tău, iar cheile API ajung în depozitul securizat al sistemului.",
+      "f4Title": "Local și privat",
+      "f5Body": "Scanează un folder de proiect, adu fișierele de limbă pe care le ai deja și exportă structura imbricată direct înapoi în depozit.",
+      "f5Title": "Import și export pe loc",
+      "f6Body": "Un spațiu de lucru la care poți privi toată ziua — fiecare temă este o paletă completă, nu doar o culoare de accent schimbată.",
+      "f6Title": "Șase teme, luminoase și întunecate",
+      "title": "Tot ce cere munca. Nimic din ce nu cere."
+    },
+    "flutter": {
+      "body": "LingoDesk este scris o singură dată în Dart și compilat pentru macOS, Windows, Linux, Android, iOS și web. Pagina asta nu e HTML cu un demo Flutter lipit deasupra — e același proiect, aceleași token-uri de design și aceleași widget-uri, compilate pentru browserul în care o citești.",
+      "eyebrow": "Construit cu Flutter și Dart",
+      "fromSource": "Din sursă",
+      "markBody": "Sigla de mai sus este un CustomPainter care desenează dreptunghiuri rotunjite și două cercuri pe o pânză — de aceea rămâne clară la orice dimensiune și preia accentul temei alese.",
+      "markTitle": "Nu este un fișier imagine",
+      "pill": "În direct, chiar acum",
+      "prebuilt": "Precompilat",
+      "proofBody": "Acestea sunt cele șase palete livrate cu LingoDesk, citite din aceeași extensie de temă pe care o citește versiunea de desktop. Alege una și tot site-ul se recolorează — fără reîncărcare, fără schimbare de foaie de stil.",
+      "proofTitle": "Fiecare culoare de pe această pagină vine din aplicație.",
+      "statCodebase": "bază de cod",
+      "statJavascript": "linii de JavaScript scrise de mână",
+      "statTargets": "ținte de compilare",
+      "title": "O bază de cod. Șase platforme.\nInclusiv această pagină.",
+      "youAreHere": "Ești aici"
+    },
+    "footer": {
+      "issues": "Probleme",
+      "licence": "Licența MIT",
+      "note": "Această pagină este o aplicație web Flutter, construită din același depozit ca produsul.",
+      "readme": "Readme",
+      "releases": "Versiuni"
+    },
+    "getStarted": "Începe",
+    "hero": {
+      "body": "LingoDesk transformă un folder cu en.json, fr.json și es.json într-un singur spațiu de lucru: fiecare cheie un rând, fiecare limbă o coloană, fiecare text lipsă imposibil de ratat.",
+      "pill": "Open source · MIT · Fără cont, fără backend",
+      "title": "Tradu toate limbile\nde la un birou ordonat."
+    },
+    "localeStrip": "20 de limbi incluse · adaugă oricare alta din setări",
+    "nav": {
+      "download": "Descarcă",
+      "features": "Funcții",
+      "flutter": "Flutter",
+      "howItWorks": "Cum funcționează",
+      "language": "Limbă",
+      "menu": "Meniu",
+      "screens": "Ecrane",
+      "why": "De ce"
+    },
+    "openIssue": "Deschide o problemă",
+    "openSource": {
+      "body": "Licențiat MIT. Fă-i fork, folosește-l în echipa ta sau deschide o problemă despre fluxul care te enervează cel mai tare — foaia de parcurs e condusă de cei care îl folosesc.",
+      "title": "Gratuit pentru totdeauna, iar sursa este chiar acolo."
+    },
+    "preview": {
+      "allTranslated": "Fiecare limbă este tradusă complet.",
+      "appearanceNote": "Aceasta chiar este setarea — recolorează toată pagina, nu doar fereastra asta.",
+      "editorWindow": "Editor de traduceri",
+      "keysNote": "Cheile stau în depozitul securizat al sistemului. Rămân pe acest dispozitiv și sunt trimise doar furnizorului căruia îi aparțin.",
+      "missingStrings": {
+        "few": "{} texte lipsă",
+        "one": "1 text lipsă",
+        "other": "{} de texte lipsă"
+      },
+      "noMatches": "Nicio cheie nu se potrivește cu „{query}”.",
+      "nothingMissing": "Nu lipsește nimic — fiecare text este tradus.",
+      "projects": "Proiecte",
+      "semantics": "Panoul LingoDesk: acoperire, număr de chei și starea limbilor pentru un întreg spațiu de lucru."
+    },
+    "problem": {
+      "afterEyebrow": "Cu LingoDesk",
+      "afterTitle": "O singură grilă. Golurile se anunță singure.",
+      "beforeEyebrow": "Fără LingoDesk",
+      "beforeTitle": "Trei fișiere, trei file și un text lipsă pe care îl descoperi abia la revizuire.",
+      "body": "Adăugarea unui singur text înseamnă să deschizi fiecare fișier de limbă și să nu uiți niciunul. LingoDesk transformă asta într-un singur rând.",
+      "exportNote": "Exportul reconstruiește forma imbricată, fișier cu fișier, exact așa cum o așteaptă aplicația ta.",
+      "eyebrow": "Problema",
+      "title": "Fișierele de localizare se desincronizează din clipa în care adaugi o cheie."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · gratuit pentru totdeauna",
+    "releasePending": "Încă nu există un build împachetat — rulează-l din sursă cu două comenzi.",
+    "releasePickBuild": "v{version} a apărut — alege un build mai jos.",
+    "releaseUnavailable": "{reason} Aruncă o privire pe pagina versiunilor.",
+    "seeAllDownloads": "Vezi toate descărcările",
+    "starOnGithub": "Dă o stea pe GitHub",
+    "starOnGithubCount": "Stea pe GitHub · {stars}",
+    "starOnGithubTooltip": "Dă-i lui LingoDesk o stea pe GitHub",
+    "steps": {
+      "eyebrow": "Cum funcționează",
+      "s1Body": "Câte unul pentru fiecare aplicație. Alege limba sursă o dată și limbile țintă pe care chiar le livrezi.",
+      "s1Title": "Creează un spațiu de lucru",
+      "s2Body": "Indică-i folderul tău de limbi. JSON-ul existent este aplatizat, validat față de limbile declarate și încărcat.",
+      "s2Title": "Importă ce ai deja",
+      "s3Body": "Filtrează ce lipsește și scrie, sau dă lotul furnizorului tău de AI. Modificările se salvează din mers.",
+      "s3Title": "Umple golurile",
+      "s4Body": "Structura imbricată este reconstruită pentru fiecare limbă, gata să se întoarcă lângă codul tău și să intre în commit.",
+      "s4Title": "Exportă înapoi în depozit",
+      "title": "Patru pași și înapoi la scris cod."
+    },
+    "switchToDark": "Treci la tema întunecată",
+    "switchToLight": "Treci la tema luminoasă",
+    "tour": {
+      "aiProviders": "Vino cu propria cheie pentru Anthropic, OpenAI sau Gemini. Alege una și devine cheia folosită de fiecare acțiune AI din editor.",
+      "appearance": "Șase palete complete și un comutator luminos/întunecat. Aceasta e setarea reală, nu o imagine a ei — alege o temă și tot site-ul se recolorează.",
+      "body": "Aceasta nu este o captură de ecran. Este aplicația, compilată în această pagină — dă clic prin ea.",
+      "dashboard": "Acoperire, număr de chei și starea limbilor pentru fiecare proiect, imediat ce deschizi aplicația. Cifrele vin din aceleași celule în care scrie editorul — completează una și privește-le cum se mișcă.",
+      "editor": "Cheile pe margine, limbile sus. Fiecare celulă este un câmp real: scrie o traducere, caută sau filtrează doar ce încă lipsește.",
+      "eyebrow": "O privire în interior",
+      "pill": "În direct · nimic din ce faci aici nu se salvează",
+      "projects": "Un spațiu de lucru pentru fiecare aplicație, fiecare cu limba lui sursă și limbile lui țintă. Dă clic pe un rând ca să-l deschizi.",
+      "title": "Făcut ca o aplicație de desktop, pentru că asta și este."
+    },
+    "viewOnGithub": "Vezi pe GitHub",
+    "warning": {
+      "macos": "Build nesemnat — dă clic dreapta pe aplicație și alege Deschide prima dată.",
+      "windows": "Build nesemnat — în SmartScreen alege Mai multe informații, apoi Rulează oricum."
+    }
+  },
+  "language": {
+    "ar": "arabă",
+    "cs": "cehă",
+    "de": "germană",
+    "en": "engleză",
+    "es": "spaniolă",
+    "fr": "franceză",
+    "hi": "hindi",
+    "it": "italiană",
+    "ja": "japoneză",
+    "ko": "coreeană",
+    "nl": "neerlandeză",
+    "pl": "poloneză",
+    "pt": "portugheză",
+    "ro": "română",
+    "ru": "rusă",
+    "sv": "suedeză",
+    "tr": "turcă",
+    "uk": "ucraineană",
+    "vi": "vietnameză",
+    "zh": "chineză"
+  },
+  "nav": {
+    "aiProviders": "Furnizori AI",
+    "appearance": "Aspect",
+    "apps": "Aplicații",
+    "dashboard": "Panou",
+    "group": {
+      "settings": "Setări",
+      "workspace": "Spațiu de lucru"
+    },
+    "import": "Import",
+    "languages": "Limbi",
+    "localStorage": "Stocare locală",
+    "profile": "Profil",
+    "settings": "Setări"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Local în primul rând",
+      "locales": "20 de limbi",
+      "nestedJson": "JSON imbricat"
+    },
+    "skip": "Sari peste",
+    "stage": {
+      "body": "Fără conturi, fără sincronizare, fără foi de calcul răspândite peste tot - doar JSON-ul tău, pe calculatorul tău.",
+      "title": "Un singur birou pentru fiecare fișier de limbă."
+    },
+    "startSetup": "Începe configurarea",
+    "step1": {
+      "body": "Fiecare cheie este un rând și fiecare limbă o coloană. Textele lipsă rămân evidențiate cât timp lucrezi, așa că nimic nu pleacă tradus pe jumătate.",
+      "caption": "Toate volumele, o singură încăpere",
+      "eyebrow": "Spațiu de traducere",
+      "highlight1": "Chei și limbi într-o singură grilă",
+      "highlight2": "Filtrează până la ce încă lipsește",
+      "highlight3": "Modificările se salvează local pe măsură ce scrii",
+      "title": "Tradu toate limbile de la un birou ordonat"
+    },
+    "step2": {
+      "body": "Un spațiu de lucru pentru fiecare aplicație: alege limba sursă o dată, urmărește doar limbile țintă care contează și lasă acoperirea să vorbească de la sine.",
+      "caption": "Indexat, etichetat, ușor de găsit",
+      "eyebrow": "Configurarea proiectului",
+      "highlight1": "Un spațiu de lucru dedicat fiecărei aplicații",
+      "highlight2": "Alege ținte dintre 20 de limbi acceptate",
+      "highlight3": "Acoperire pe aplicație și pe limbă",
+      "title": "Ține fiecare produs organizat pe limbi"
+    },
+    "step3": {
+      "body": "LingoDesk reconstruiește structura originală a cheilor înainte de export, așa că fișierele care ajung în depozitul tău sunt exact cele pe care le așteaptă aplicația.",
+      "caption": "Toate destinațiile pe panou",
+      "eyebrow": "Gata de export",
+      "highlight1": "Cheile cu puncte se desfac înapoi în obiecte imbricate",
+      "highlight2": "Alege limbile, salvează unde vrei",
+      "highlight3": "Formatat frumos, cu o ordine stabilă a cheilor",
+      "title": "Trimite fișiere JSON imbricate înapoi în aplicația ta"
+    },
+    "stepOf": "Pasul {step} din {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Urmează tema sistemului sau alege una explicit.",
+      "swatchActive": "Activ",
+      "swatchBackground": "Fundal",
+      "swatchBrand": "Brand",
+      "swatchCard": "Card",
+      "themeSubtitle": "Șase palete. Fiecare restilizează întreaga aplicație, nu doar accentul."
+    },
+    "defaults": {
+      "count": {
+        "few": "{} limbi vor fi preselectate.",
+        "one": "1 limbă va fi preselectată.",
+        "other": "{} de limbi vor fi preselectate."
+      },
+      "empty": "Încă nicio valoare implicită — aplicațiile noi pornesc fără limbi țintă.",
+      "subtitle": "Preselectate de fiecare dată când creezi o aplicație nouă.",
+      "title": "Limbi țintă implicite"
+    },
+    "language": {
+      "note": "Alegerea ta este salvată și aplicată imediat — meniurile, dialogurile și mesajele trec toate pe ea.",
+      "subtitle": "Limba în care este afișat însuși LingoDesk.",
+      "title": "Limba interfeței"
+    },
+    "profile": {
+      "email": "E-mail",
+      "emailHint": "opțional",
+      "name": "Nume afișat",
+      "nameHint": "Spațiu de lucru local",
+      "note": "LingoDesk nu are conturi. Asta doar dă un nume spațiului tău de lucru local.",
+      "subtitle": "Apare în bara laterală. Salvat doar pe acest dispozitiv."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Chihlimbar cald și neutre de nisip prăjit."
+    },
+    "graphite": {
+      "description": "Nicio nuanță — contrastul face accentul."
+    },
+    "indigo": {
+      "description": "Indigo rece peste neutre gri-albăstrui."
+    },
+    "rose": {
+      "description": "Roz intens pe suprafețe delicate."
+    },
+    "teal": {
+      "description": "Aspectul casei — turcoaz saturat pe piatră caldă."
+    },
+    "violet": {
+      "description": "Violet electric pe un șasiu ușor purpuriu."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "few": "acum {} zile",
+      "one": "acum 1 zi",
+      "other": "acum {} de zile"
+    },
+    "hoursAgo": {
+      "few": "acum {} ore",
+      "one": "acum 1 oră",
+      "other": "acum {} de ore"
+    },
+    "justNow": "Chiar acum",
+    "minutesAgo": {
+      "few": "acum {} min",
+      "one": "acum 1 min",
+      "other": "acum {} de min"
+    },
+    "monthsAgo": {
+      "few": "acum {} luni",
+      "one": "acum 1 lună",
+      "other": "acum {} de luni"
+    },
+    "weeksAgo": {
+      "few": "acum {} săptămâni",
+      "one": "acum 1 săptămână",
+      "other": "acum {} de săptămâni"
+    },
+    "yearsAgo": {
+      "few": "acum {} ani",
+      "one": "acum 1 an",
+      "other": "acum {} de ani"
+    },
+    "yesterday": "Ieri"
+  },
+  "upload": {
+    "addFiles": "Adaugă fișiere",
+    "addFolder": "Adaugă folder",
+    "addMore": "Adaugă mai multe",
+    "backToApps": "Înapoi la aplicații",
+    "backToEditor": "Înapoi la editor",
+    "browseFiles": "Răsfoiește fișiere",
+    "chooseFolder": "Alege folder",
+    "defaultImportName": "Proiect importat",
+    "defaultProjectName": "Traduceri importate",
+    "detectedLanguages": "Limbi detectate",
+    "detectedLanguagesHint": "Adaugă alte foldere sau fișiere și se vor uni cu acestea.",
+    "exportsBackTo": "Se exportă înapoi în {path}",
+    "filesReady": {
+      "few": "{} fișiere gata de import.",
+      "one": "1 fișier gata de import.",
+      "other": "{} de fișiere gata de import."
+    },
+    "hero": {
+      "filesBody": "Scanează un folder sau alege singur fișierele .json. Fiecare fișier este asociat unei limbi după nume.",
+      "filesTitle": "Adaugă fișierele tale de traducere",
+      "projectBody": "Alege proiectul (sau orice folder) și LingoDesk găsește fișierele de traducere din el — sau alege singur fișierele .json.",
+      "projectTitle": "Importă-ți traducerile"
+    },
+    "importAndOpen": "Importă și deschide editorul",
+    "importedToast": "Importat în „{name}”.",
+    "keepOneLanguage": "Păstrează cel puțin o limbă pentru import.",
+    "languageSource": "{language} - sursă",
+    "logo": "Siglă",
+    "namingRule": "Denumește fiecare fișier după codul limbii sale. Orice iese din acest set este respins.",
+    "needValidFile": "Adaugă cel puțin un fișier valid pentru import.",
+    "noFilesFound": "Nu s-au găsit fișiere de traducere în „{name}”. Am căutat fișiere .json în folderele /translation, /translations și /languages.",
+    "pickFilesTitle": "Alege fișierele de traducere",
+    "pickFolderTitle": "Alege folderul proiectului tău",
+    "readySummary": "{languages} limbi și {keys} chei gata de import.",
+    "removeLogo": "Elimină sigla",
+    "replaceLogo": "Înlocuiește sigla",
+    "requiredLanguages": "Limbi necesare",
+    "scanning": "Se scanează…",
+    "skipToEditor": "Treci la editor",
+    "sourceHelper": "Tot restul devine o limbă țintă în care poți traduce.",
+    "stagedFiles": "Fișiere pregătite",
+    "startOver": "Ia-o de la capăt",
+    "stat": {
+      "translated": "Traduse"
+    },
+    "uploadLogo": "Încarcă o siglă",
+    "whereWeLook": "Unde căutăm",
+    "whereWeLookBody": "Orice fișier .json dintr-un folder /translation, /translations sau /languages, oriunde în proiect. Folderele de build și de dependențe sunt sărite."
+  }
+}

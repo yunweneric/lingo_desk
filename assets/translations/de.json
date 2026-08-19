@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "API-Schlüssel hinzufügen",
+    "addProviderKey": "{provider}-Schlüssel hinzufügen",
+    "col": {
+      "added": "Hinzugefügt",
+      "apiKey": "API-Schlüssel",
+      "model": "Modell",
+      "provider": "Anbieter"
+    },
+    "createKeyAt": "Erstelle einen Schlüssel unter {console}.",
+    "defaultModel": "Standard",
+    "delete": {
+      "activeBody": "Damit wird „{label}“ entfernt – der Schlüssel, über den derzeit übersetzt wird. Ein anderer gespeicherter Schlüssel übernimmt, sonst ruht die KI-Übersetzung, bis du einen neuen hinzufügst.",
+      "body": "Damit wird „{label}“ von diesem Gerät entfernt. Der Schlüssel selbst bleibt bei {console} gültig.",
+      "title": "API-Schlüssel löschen?"
+    },
+    "editKey": "API-Schlüssel bearbeiten",
+    "field": {
+      "name": "Name",
+      "nameHelp": "Optional – wie du diesen Schlüssel in der Tabelle nennst."
+    },
+    "hideKey": "Schlüssel verbergen",
+    "key": {
+      "actions": "Schlüsselaktionen",
+      "active": "Aktiv",
+      "required": "Füge den API-Schlüssel ein, um fortzufahren.",
+      "test": "Verbindung testen",
+      "use": "Für Übersetzungen verwenden"
+    },
+    "pickModel": "Vorgeschlagenes Modell wählen",
+    "pickProvider": "Zu welchem Anbieter gehört dieser Schlüssel?",
+    "saveKey": "Schlüssel hinzufügen",
+    "showKey": "Schlüssel anzeigen",
+    "status": {
+      "detail": "{provider} · {model} · wird von jeder KI-Aktion im Editor genutzt.",
+      "noKey": "Noch kein Schlüssel bereit",
+      "noKeyDetail": "Füge einen API-Schlüssel hinzu, dann kann der Editor fehlende Übersetzungen für dich ergänzen.",
+      "translatingWith": "Übersetzt mit {label}"
+    },
+    "storage": {
+      "plain": "Dieser Build erreicht den Systemschlüsselbund nicht, deshalb werden Schlüssel im Klartext bei deinen übrigen lokalen Einstellungen gespeichert. Sie bleiben auf diesem Gerät und werden nur an den zugehörigen Anbieter gesendet.",
+      "secure": "Schlüssel liegen im Schlüsselbund dieses Geräts und werden nur an den Anbieter gesendet, zu dem sie gehören."
+    },
+    "table": {
+      "empty": "Noch keine API-Schlüssel. Füge einen hinzu, um aus dem Editor heraus zu übersetzen.",
+      "keyCount": {
+        "one": "1 Schlüssel",
+        "other": "{} Schlüssel"
+      },
+      "noKeys": "Noch keine Schlüssel",
+      "range": "{start}-{end} von {total}"
+    },
+    "toast": {
+      "activeTitle": "Übersetzungen nutzen jetzt {label}",
+      "addedBody": "{provider} ist bereit zum Übersetzen.",
+      "addedTitle": "Schlüssel hinzugefügt",
+      "deletedBody": "{label} wurde von diesem Gerät entfernt.",
+      "deletedNamedTitle": "{label} gelöscht",
+      "deletedTitle": "Schlüssel gelöscht",
+      "promotedBody": "Übersetzungen nutzen jetzt {label}.",
+      "testFailedTitle": "{label} fehlgeschlagen",
+      "testPassedBody": "{provider} hat den Schlüssel akzeptiert.",
+      "testPassedTitle": "{label} verbunden",
+      "updatedBody": "Änderungen an {label} gespeichert.",
+      "updatedTitle": "Schlüssel aktualisiert"
+    }
+  },
+  "appSettings": {
+    "appIcon": "App-Symbol",
+    "appIconHelp": "Optional. Ohne Symbol zeigt die App ihre Initialen.",
+    "appIconNote": "PNG, JPG oder WebP. Das Bild wird auf {size} px skaliert und mit der App gespeichert – die Originaldatei darfst du also verschieben.",
+    "appName": "App-Name",
+    "appNameHint": "z. B. Kundenportal",
+    "createApp": "App erstellen",
+    "general": "Allgemein",
+    "generalSubtitle": "Wie diese App benannt ist und aus welcher Sprache sie übersetzt.",
+    "localeCount": {
+      "one": "1 Sprache",
+      "other": "{} Sprachen"
+    },
+    "metaNoTargets": "Noch keine",
+    "metaSource": "Quelle",
+    "metaTargets": "Ziele",
+    "metaUpdated": "Zuletzt geändert",
+    "replaceIcon": "Symbol ersetzen",
+    "saveChanges": "Änderungen speichern",
+    "savedToast": "„{name}“ gespeichert.",
+    "selectAll": "Alle auswählen",
+    "selectedCount": "{selected} von {total} ausgewählt",
+    "sourceLanguage": "Quellsprache",
+    "sourceLanguageHelp": "Die Basissprache, in der deine Schlüssel verfasst sind.",
+    "sourceNotTarget": "Die Quellsprache kann nicht zugleich Zielsprache sein.",
+    "targetLanguages": "Zielsprachen",
+    "targetLanguagesHelp": "Sprachen, in die du übersetzen möchtest.",
+    "targetLanguagesNote": "Jeder neue Schlüssel wird für jede ausgewählte Sprache eingeplant. Entfernst du eine Sprache, verschwindet ihre Spalte im Editor; vorhandene Übersetzungen bleiben erhalten.",
+    "targetLanguagesSubtitle": "Die Sprachen, in die diese App übersetzt wird.",
+    "uploadIcon": "Symbol hochladen"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} Dateien vollständig - {updated}"
+    },
+    "created": {
+      "body": "Möchtest du deine vorhandenen JSON-Übersetzungsdateien jetzt hochladen? Du kannst das auch später über das Dashboard tun.",
+      "later": "Später",
+      "title": "„{name}“ erstellt",
+      "upload": "Dateien hochladen"
+    },
+    "delete": {
+      "body": "Damit werden die App und alle ihre Übersetzungen dauerhaft entfernt. Das lässt sich nicht rückgängig machen.",
+      "title": "„{name}“ löschen?"
+    },
+    "deletedNamedToast": "„{name}“ gelöscht.",
+    "deletedToast": "App gelöscht.",
+    "empty": {
+      "message": "Zeig LingoDesk einen Projektordner, und es importiert die gefundenen Übersetzungsdateien – oder lege eine App von Hand mit Quellsprache und Zielsprachen an.",
+      "title": "Erstelle deine erste App"
+    },
+    "importProject": "Projekt importieren",
+    "menu": {
+      "deleteApp": "App löschen",
+      "openEditor": "Editor öffnen",
+      "uploadFiles": "Dateien hochladen"
+    },
+    "newApp": "Neue App",
+    "searchHint": "Apps durchsuchen",
+    "status": {
+      "complete": "Vollständig",
+      "missing": "Fehlend",
+      "new": "Neu"
+    },
+    "summary": {
+      "filesComplete": "Dateien vollständig",
+      "missingStrings": "Fehlende Texte",
+      "overallCoverage": "Gesamtabdeckung",
+      "subtitle": "Übersetzungsdateien über alle Apps und Sprachen",
+      "title": "Workspace-Summen"
+    },
+    "table": {
+      "colApp": "App",
+      "colFiles": "Dateien",
+      "colLanguages": "Sprachen",
+      "colProgress": "Fortschritt",
+      "colStatus": "Status",
+      "colUpdated": "Geändert",
+      "complete": "vollständig",
+      "hideLanguages": "Sprachen ausblenden",
+      "less": "Weniger",
+      "noMatches": "Keine App passt zu deiner Suche.",
+      "searchSubtitle": "{matches} von {total} Apps passen zu „{query}“",
+      "showLanguages": "Alle Sprachen anzeigen",
+      "subtitle": "Aktuelle Lokalisierungs-Workspaces"
+    }
+  },
+  "common": {
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "clear": "Leeren",
+    "close": "Schließen",
+    "delete": "Löschen",
+    "dismiss": "Ausblenden",
+    "edit": "Bearbeiten",
+    "errorPrefix": "Fehler: {message}",
+    "missingCount": {
+      "one": "1 fehlt",
+      "other": "{} fehlen"
+    },
+    "more": "Mehr",
+    "next": "Weiter",
+    "nextPage": "Nächste Seite",
+    "previousPage": "Vorherige Seite",
+    "remove": "Entfernen",
+    "retry": "Erneut versuchen",
+    "rows": "Zeilen",
+    "selectLanguage": "Sprache wählen",
+    "selectOption": "Option wählen",
+    "theme": "Design",
+    "themeDark": "Dunkel",
+    "themeLight": "Hell",
+    "themeSystem": "System"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 App",
+      "other": "{} Apps"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} Übersetzungsdateien vollständig",
+    "coverage": {
+      "empty": "Erstelle eine App, um hier die Abdeckung zu sehen.",
+      "noData": "Noch keine Übersetzungsdaten. Lade JSON-Dateien hoch, um zu starten.",
+      "subtitle": "Übersetzter Anteil der Zieltexte je App",
+      "summary": "{translated} Texte übersetzt. {missing} fehlen noch in den aktiven Zielsprachen.",
+      "title": "Abdeckung nach App"
+    },
+    "empty": {
+      "message": "Eine App bündelt die Übersetzungsdateien eines Projekts. Lege eine Quellsprache fest, wähle deine Zielsprachen und leg los.",
+      "title": "Erstelle deine erste App"
+    },
+    "health": {
+      "allTranslated": "Alle Apps sind vollständig übersetzt.",
+      "empty": "Noch keine Zielsprachen.",
+      "nextReview": "Nächste Durchsicht: {name}",
+      "nextReviewPrefix": "Nächste Durchsicht: ",
+      "subtitle": "Abdeckung je Zielsprache",
+      "title": "Sprachstatus"
+    },
+    "metric": {
+      "acrossApps": "Über alle Apps",
+      "allClear": "Alles erledigt",
+      "coverage": "Abdeckung",
+      "localWorkspace": "Lokaler Workspace",
+      "missing": "Fehlend",
+      "needsReview": "Zu prüfen",
+      "targetLocales": {
+        "one": "1 Zielsprache",
+        "other": "{} Zielsprachen"
+      },
+      "totalKeys": "Schlüssel gesamt"
+    },
+    "stat": {
+      "keys": "Schlüssel",
+      "locales": "Sprachen"
+    },
+    "subtitle": "Behalte die Abdeckung im Blick, prüfe fehlende Texte und mach dort weiter, wo du aufgehört hast.",
+    "title": "Übersetzungs-Dashboard",
+    "viewAllApps": "Alle Apps ansehen"
+  },
+  "editor": {
+    "addKey": "Schlüssel hinzufügen",
+    "addKeyHint": "Trage ein, was du schon hast – leer gelassene Felder bleiben offen und lassen sich später im Raster übersetzen.",
+    "aiAllComplete": "Alle Zielsprachen sind vollständig.",
+    "aiAlreadyRunning": "Es läuft bereits ein Übersetzungsdurchgang.",
+    "aiCanceledEmpty": "Abgebrochen, bevor etwas ankam.",
+    "aiDialogBody": "Nur leere Zellen werden gefüllt – vorhandene Übersetzungen werden nie überschrieben.",
+    "aiFailedCount": {
+      "one": "1 konnte nicht übersetzt werden.",
+      "other": "{} konnten nicht übersetzt werden."
+    },
+    "aiFailedCountReason": {
+      "one": "1 konnte nicht übersetzt werden ({error}).",
+      "other": "{} konnten nicht übersetzt werden ({error})."
+    },
+    "aiFinishing": "Aktueller Stapel wird abgeschlossen…",
+    "aiNotConfiguredBody": "Füge zuerst einen API-Schlüssel unter Einstellungen - KI-Anbieter hinzu.",
+    "aiNotConfiguredTitle": "KI ist nicht eingerichtet",
+    "aiNothingHere": "Hier gibt es nichts mehr zu übersetzen.",
+    "aiNothingLeft": "Nichts mehr zu übersetzen",
+    "aiNothingTranslated": "Es wurde nichts übersetzt.",
+    "aiProgress": "Übersetzt {label} · {done} von {total}",
+    "aiRunning": "KI-Übersetzung läuft",
+    "aiTranslate": "Mit KI übersetzen",
+    "aiTranslateMissing": {
+      "one": "1 fehlenden Text mit KI übersetzen",
+      "other": "{} fehlende Texte mit KI übersetzen"
+    },
+    "aiTranslateRow": "Zeile mit KI übersetzen",
+    "aiTranslatedCanceled": {
+      "one": "1 Text vor dem Abbruch übersetzt.",
+      "other": "{} Texte vor dem Abbruch übersetzt."
+    },
+    "aiTranslatedDone": {
+      "one": "1 Text übersetzt.",
+      "other": "{} Texte übersetzt."
+    },
+    "aiUsing": "Mit {provider} · {model}",
+    "clearAll": "Auswahl aufheben",
+    "clickToHide": "Klicken, um die anderen Sprachen auszublenden",
+    "clickToShow": "Klicken, um die anderen Sprachen anzuzeigen",
+    "copiedToast": "„{key}“ in die Zwischenablage kopiert.",
+    "copyKey": "Schlüssel kopieren",
+    "deleteKey": "Schlüssel löschen",
+    "deleteKeyBody": "Damit wird „{key}“ aus allen Sprachen entfernt. Das lässt sich nicht rückgängig machen.",
+    "deleteKeyTitle": "Schlüssel löschen?",
+    "empty": "Noch keine Schlüssel. Lade JSON-Dateien hoch oder füge deinen ersten Schlüssel hinzu.",
+    "export": "Exportieren",
+    "exportCanceled": "Export abgebrochen.",
+    "exportChooseDestination": "Ziel wählen",
+    "exportDownload": "Herunterladen",
+    "exportFolderSummary": "Du wählst gleich den Ordner; dort landet eine Datei je Sprache.",
+    "exportNoProject": "Importiere zuerst einen Projektordner",
+    "exportOverwrite": "Dateien überschreiben",
+    "exportProjectSummary": "Wird nach {path} geschrieben und ersetzt diese Dateien.",
+    "exportSaveTo": "In {name} speichern",
+    "exportSaveToProject": "Im Projekt speichern",
+    "exportSavedToast": "{files} in {name} gespeichert",
+    "exportToFolder": "In Ordner exportieren",
+    "exportToFolderEllipsis": "In Ordner exportieren…",
+    "exportZip": "ZIP herunterladen",
+    "exportZipHint": "Gepackt in deinen Downloads-Ordner",
+    "exportZipSummary": "Gebündelt in {file} in deinem Downloads-Ordner.",
+    "exportZippedToast": "{files} nach Downloads gepackt",
+    "exportedToast": "{files} exportiert",
+    "fileCount": {
+      "one": "1 Datei",
+      "other": "{} Dateien"
+    },
+    "hiddenLanguages": {
+      "one": "1 weitere Sprache",
+      "other": "{} weitere Sprachen"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "1 weitere Sprache, in jeder Zeile",
+      "other": "{} weitere Sprachen, in jeder Zeile"
+    },
+    "hideOtherLanguages": "Die anderen Sprachen ausblenden",
+    "keyActions": "Schlüsselaktionen",
+    "keyAddedToast": "Schlüssel „{key}“ hinzugefügt.",
+    "keyDeletedToast": "Schlüssel „{key}“ gelöscht.",
+    "keyHelper": "Die Punktnotation gruppiert Schlüssel zu verschachteltem JSON.",
+    "keyLabel": "Schlüssel",
+    "languageCount": {
+      "one": "1 Sprache",
+      "other": "{} Sprachen"
+    },
+    "languageSourceSuffix": "{language} (Quelle)",
+    "missingOnly": "Nur fehlende",
+    "missingOnlyCount": "Nur fehlende ({count})",
+    "noKeys": "Keine Schlüssel",
+    "noMatches": "Kein Schlüssel passt zu den aktuellen Filtern.",
+    "noProvider": "Kein Anbieter",
+    "paginationSummary": "{start}-{end} von {lines} Zeilen - {keys} Schlüssel",
+    "searchHint": "Schlüssel und Werte durchsuchen",
+    "showInFolder": "Im Ordner anzeigen",
+    "sourceText": "Quelltext",
+    "title": "Editor",
+    "translate": "Übersetzen",
+    "translateCount": {
+      "one": "1 Text übersetzen",
+      "other": "{} Texte übersetzen"
+    },
+    "translateWithAi": "Mit KI übersetzen",
+    "translatingHint": "Wird übersetzt…",
+    "translationOptional": "Übersetzung - optional",
+    "translations": "Übersetzungen"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Füge unter Einstellungen - KI-Anbieter einen API-Schlüssel hinzu.",
+      "blocked": "{provider} hat diesen Stapel blockiert ({reason}).",
+      "emptyResponse": "{provider} hat eine leere Antwort geliefert.",
+      "keyRejected": "Der API-Schlüssel für {provider} wurde abgelehnt. Prüfe ihn unter Einstellungen - KI-Anbieter.",
+      "malformed": "Der Übersetzungsanbieter hat fehlerhaftes JSON geliefert.",
+      "modelNotFound": "Das Modell von {provider} wurde nicht gefunden. Prüfe den Modellnamen unter Einstellungen - KI-Anbieter.",
+      "noConnection": "Keine Verbindung zum Übersetzungsanbieter.",
+      "noKey": "Gib zuerst einen API-Schlüssel ein.",
+      "refused": "{provider} hat die Übersetzung dieses Stapels abgelehnt. Überspringe ihn oder probiere ein anderes Modell.",
+      "stoppedEarly": "{provider} hat vorzeitig abgebrochen ({reason}).",
+      "timeout": "Zeitüberschreitung beim Übersetzungsanbieter.",
+      "unexpectedResponse": "{provider} hat eine unerwartete Antwort geliefert."
+    },
+    "app": {
+      "nameEmpty": "Der App-Name darf nicht leer sein.",
+      "noTargetLanguage": "Wähle mindestens eine Zielsprache.",
+      "sourceIsTarget": "Die Quellsprache kann nicht zugleich Zielsprache sein."
+    },
+    "cache": {
+      "appListCorrupt": "Die gespeicherte App-Liste ist beschädigt: {error}",
+      "appNotFound": "App nicht gefunden.",
+      "appNotFoundId": "App nicht gefunden: {id}",
+      "translationsCorrupt": "Die gespeicherten Übersetzungen sind beschädigt: {error}",
+      "writeAppList": "Die App-Liste konnte nicht gespeichert werden.",
+      "writeTranslations": "Die Übersetzungen konnten nicht gespeichert werden."
+    },
+    "editor": {
+      "invalidKey": "Verwende Punktnotation mit Buchstaben, Ziffern, „_“ oder „-“ (z. B. nav.home).",
+      "keyExists": "Der Schlüssel „{key}“ existiert bereits.",
+      "keyNotFound": "Schlüssel nicht gefunden: {key}"
+    },
+    "export": {
+      "chooseFolder": "Wähle einen Ordner für den Export.",
+      "noDownloadsFolder": "Dein Downloads-Ordner wurde auf dieser Plattform nicht gefunden.",
+      "noProjectFolder": "Diese App wurde nicht aus einem Projektordner importiert – es gibt also keinen Ort, an den zurückgeschrieben werden könnte.",
+      "nothingToExport": "Es gibt noch keine Schlüssel zum Exportieren.",
+      "selectLanguage": "Wähle mindestens eine Sprache für den Export."
+    },
+    "file": {
+      "folderPickerOpen": "Die Ordnerauswahl konnte nicht geöffnet werden: {error}",
+      "launchFailed": "{executable} konnte nicht gestartet werden: {error}",
+      "openPath": "{path} konnte nicht geöffnet werden: {error}",
+      "pickerOpen": "Die Dateiauswahl konnte nicht geöffnet werden: {error}",
+      "projectFolderRead": "Der Projektordner konnte nicht gelesen werden: {error}",
+      "revealUnsupported": "Das Anzeigen eines Ordners ist auf dieser Plattform nicht verfügbar.",
+      "save": "{file} konnte nicht gespeichert werden: {error}",
+      "unknownLanguage": "Die Sprache dieser Datei ließ sich nicht bestimmen. Benenne sie nach ihrem Sprachcode oder lege sie in einen Sprachordner.",
+      "unsupportedPlatform": "Auf dieser Plattform nicht verfügbar.",
+      "writeFolder": "In {path} konnte nicht geschrieben werden: {error}"
+    },
+    "image": {
+      "convert": "Dieses Bild konnte nicht in PNG umgewandelt werden.",
+      "notAnImage": "Diese Datei ist kein Bild, das LingoDesk lesen kann: {error}",
+      "pickerOpen": "Die Bildauswahl konnte nicht geöffnet werden: {error}",
+      "tooLarge": "Wähle ein Bild unter 8 MB.",
+      "unreadable": "Dieses Bild konnte nicht gelesen werden."
+    },
+    "import": {
+      "noFiles": "Keine Dateien zum Importieren."
+    },
+    "json": {
+      "invalid": "Ungültiges JSON: {error}",
+      "noKeys": "Die Datei enthält keine Übersetzungsschlüssel.",
+      "notObject": "Die Datei muss auf oberster Ebene ein JSON-Objekt enthalten."
+    }
+  },
+  "landing": {
+    "apkLink": "Oder lade die Android-APK herunter · {size}  →",
+    "askingGithub": "Frage GitHub nach der neuesten Version…",
+    "checkingBuilds": "Suche nach Builds…",
+    "codeMissing": "fehlt",
+    "cta": {
+      "apk": "APK herunterladen",
+      "latest": "Neuesten Build herunterladen",
+      "macos": "Für macOS herunterladen",
+      "windows": "Für Windows herunterladen"
+    },
+    "download": {
+      "allReleases": "Alle Releases und Changelogs auf GitHub  →",
+      "body": "Kostenlos und quelloffen unter der MIT-Lizenz. Kein Konto, keine Testphase, keine Telemetrie.",
+      "copied": "Kopiert",
+      "copy": "Kopieren",
+      "eyebrow": "Download",
+      "latest": "Neueste",
+      "latestBuildRuns": "Letzte Build-Läufe",
+      "noBuildBody": "Die Installer für macOS, Windows und Android werden von GitHub Actions gebaut und an ein Release gehängt, sobald ein Versions-Tag gepusht wird. Bis dahin dauert der Start aus dem Quellcode etwa zwei Minuten.",
+      "noBuildTitle": "Noch kein gepackter Build veröffentlicht",
+      "published": "Veröffentlicht am {date}",
+      "releasesOnGithub": "Releases auf GitHub",
+      "runFromSource": "Oder starte es aus dem Quellcode auf jeder der sechs Plattformen",
+      "runFromSourceNote": "Tausche das Gerät gegen windows, linux, chrome oder ein verbundenes Telefon. Das Projekt fixiert seine Flutter-Version in .fvmrc.",
+      "title": "Hol dir LingoDesk.",
+      "tryAgain": "Erneut versuchen",
+      "unreachableBody": "{reason} Du kannst weiterhin die Releases-Seite besuchen oder aus dem Quellcode bauen.",
+      "unreachableTitle": "GitHub nicht erreichbar",
+      "unsignedNote": "Die Desktop-Builds sind unsigniert: Klicke unter macOS beim ersten Start mit der rechten Maustaste auf die App und wähle Öffnen; wähle unter Windows Weitere Informationen und dann Trotzdem ausführen.",
+      "version": "Version {version}"
+    },
+    "features": {
+      "body": "LingoDesk ist ein fokussiertes Desktop-Werkzeug, keine Übersetzungsplattform mit Lizenzplätzen und Dashboards.",
+      "eyebrow": "Funktionen",
+      "f1Body": "Verschachteltes JSON wird zu Punktschlüsseln geglättet – ein Text und all seine Übersetzungen stehen in einer einzigen Zeile, die du quer lesen kannst.",
+      "f1Title": "Ein Raster für alle Sprachen",
+      "f2Body": "Live-Abdeckung je Sprache und ein Filter „nur fehlende“, der Hunderte Schlüssel auf die wenigen leeren zusammenzieht.",
+      "f2Title": "Fehlende Texte statt übersehener Fehler",
+      "f3Body": "Übersetze die Lücken stapelweise über Anthropic, OpenAI oder Gemini. Dein Schlüssel, dein Konto, deine Rechnung – nichts läuft über einen Zwischenserver.",
+      "f3Title": "Übersetze mit deinem eigenen KI-Schlüssel",
+      "f4Body": "Kein Backend, keine Telemetrie, keine Anmeldung. Projekte bleiben auf deinem Rechner und API-Schlüssel wandern in den sicheren Speicher des Systems.",
+      "f4Title": "Lokal und privat",
+      "f5Body": "Scanne einen Projektordner, hole vorhandene Sprachdateien herein und exportiere die verschachtelte Struktur direkt zurück ins Repository.",
+      "f5Title": "Import und Export an Ort und Stelle",
+      "f6Body": "Ein Arbeitsbereich, den man den ganzen Tag ansehen mag – jedes Design ist eine vollständige Palette, nicht nur eine ausgetauschte Akzentfarbe.",
+      "f6Title": "Sechs Designs, hell und dunkel",
+      "title": "Alles, was die Arbeit braucht. Nichts, was sie nicht braucht."
+    },
+    "flutter": {
+      "body": "LingoDesk wird einmal in Dart geschrieben und für macOS, Windows, Linux, Android, iOS und das Web kompiliert. Diese Seite ist kein HTML mit aufgesetzter Flutter-Demo – es ist dasselbe Projekt, dieselben Design-Tokens und dieselben Widgets, kompiliert für den Browser, in dem du sie liest.",
+      "eyebrow": "Gebaut mit Flutter & Dart",
+      "fromSource": "Aus dem Quellcode",
+      "markBody": "Das Logo oben ist ein CustomPainter, der abgerundete Rechtecke und zwei Kreise auf eine Leinwand zeichnet – deshalb bleibt es in jeder Größe scharf und übernimmt den Akzent des gewählten Designs.",
+      "markTitle": "Keine Bilddatei",
+      "pill": "Live, genau jetzt",
+      "prebuilt": "Vorgefertigt",
+      "proofBody": "Das sind die sechs Paletten, die LingoDesk mitbringt, gelesen aus derselben Theme-Extension wie im Desktop-Build. Wähle eine, und die ganze Seite färbt sich neu – ohne Neuladen, ohne Stylesheet-Wechsel.",
+      "proofTitle": "Jede Farbe auf dieser Seite kommt aus der App.",
+      "statCodebase": "Codebasis",
+      "statJavascript": "von Hand geschriebene JavaScript-Zeilen",
+      "statTargets": "Kompilierziele",
+      "title": "Eine Codebasis. Sechs Plattformen.\nDiese Seite eingeschlossen.",
+      "youAreHere": "Du bist hier"
+    },
+    "footer": {
+      "issues": "Issues",
+      "licence": "MIT-Lizenz",
+      "note": "Diese Seite ist eine Flutter-Web-App, gebaut aus demselben Repository wie das Produkt.",
+      "readme": "Readme",
+      "releases": "Releases"
+    },
+    "getStarted": "Loslegen",
+    "hero": {
+      "body": "LingoDesk macht aus einem Ordner mit en.json, fr.json und es.json einen einzigen Arbeitsbereich: jeder Schlüssel eine Zeile, jede Sprache eine Spalte, jeder fehlende Text unübersehbar.",
+      "pill": "Open Source · MIT · Kein Konto, kein Backend",
+      "title": "Übersetze alle Sprachen\nvon einem aufgeräumten Schreibtisch aus."
+    },
+    "localeStrip": "20 Sprachen eingebaut · jede weitere in den Einstellungen",
+    "nav": {
+      "download": "Download",
+      "features": "Funktionen",
+      "flutter": "Flutter",
+      "howItWorks": "So funktioniert es",
+      "language": "Sprache",
+      "menu": "Menü",
+      "screens": "Ansichten",
+      "why": "Warum"
+    },
+    "openIssue": "Issue eröffnen",
+    "openSource": {
+      "body": "MIT-lizenziert. Forke es, setze es im Team ein oder eröffne ein Issue zu dem Ablauf, der dich am meisten stört – die Roadmap machen die Leute, die es benutzen.",
+      "title": "Für immer kostenlos, und der Quellcode liegt offen."
+    },
+    "preview": {
+      "allTranslated": "Jede Sprache ist vollständig übersetzt.",
+      "appearanceNote": "Das ist wirklich die Einstellung – sie färbt die ganze Seite neu, nicht nur dieses Fenster.",
+      "editorWindow": "Übersetzungseditor",
+      "keysNote": "Die Schlüssel liegen im sicheren Speicher des Systems. Sie bleiben auf diesem Gerät und werden nur an den zugehörigen Anbieter gesendet.",
+      "missingStrings": {
+        "one": "1 fehlender Text",
+        "other": "{} fehlende Texte"
+      },
+      "noMatches": "Kein Schlüssel passt zu „{query}“.",
+      "nothingMissing": "Nichts fehlt – jeder Text ist übersetzt.",
+      "projects": "Projekte",
+      "semantics": "Das LingoDesk-Dashboard: Abdeckung, Schlüsselzahlen und Sprachstatus über einen ganzen Workspace."
+    },
+    "problem": {
+      "afterEyebrow": "Mit LingoDesk",
+      "afterTitle": "Ein Raster. Die Lücken melden sich von selbst.",
+      "beforeEyebrow": "Ohne LingoDesk",
+      "beforeTitle": "Drei Dateien, drei Tabs, ein fehlender Text, den du erst im Review findest.",
+      "body": "Ein einziger neuer Text heißt: jede Sprachdatei öffnen und keine vergessen. LingoDesk macht daraus eine einzige Zeile.",
+      "exportNote": "Der Export baut die verschachtelte Form Datei für Datei wieder auf – genau so, wie deine App sie erwartet.",
+      "eyebrow": "Das Problem",
+      "title": "Lokalisierungsdateien laufen auseinander, sobald du einen Schlüssel hinzufügst."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · für immer kostenlos",
+    "releasePending": "Noch kein gepackter Build – starte es mit zwei Befehlen aus dem Quellcode.",
+    "releasePickBuild": "v{version} ist da – wähle unten einen Build.",
+    "releaseUnavailable": "{reason} Schau auf der Releases-Seite nach.",
+    "seeAllDownloads": "Alle Downloads ansehen",
+    "starOnGithub": "Auf GitHub mit Stern versehen",
+    "starOnGithubCount": "Stern auf GitHub · {stars}",
+    "starOnGithubTooltip": "LingoDesk auf GitHub mit einem Stern versehen",
+    "steps": {
+      "eyebrow": "So funktioniert es",
+      "s1Body": "Einer pro App. Lege die Quellsprache einmal fest und dazu die Zielsprachen, die du wirklich ausliefern willst.",
+      "s1Title": "Lege einen Workspace an",
+      "s2Body": "Zeig auf deinen Sprachordner. Vorhandenes JSON wird geglättet, gegen die deklarierten Sprachen geprüft und geladen.",
+      "s2Title": "Importiere, was du hast",
+      "s3Body": "Filtere auf das Fehlende und tippe – oder gib den Stapel an deinen KI-Anbieter. Änderungen werden nebenbei gespeichert.",
+      "s3Title": "Schließe die Lücken",
+      "s4Body": "Die verschachtelte Struktur wird je Sprache neu aufgebaut – fertig, um neben deinem Code zu landen und committet zu werden.",
+      "s4Title": "Exportiere zurück ins Repository",
+      "title": "Vier Schritte, dann zurück zum Code."
+    },
+    "switchToDark": "Auf Dunkel umschalten",
+    "switchToLight": "Auf Hell umschalten",
+    "tour": {
+      "aiProviders": "Bring deinen eigenen Schlüssel für Anthropic, OpenAI oder Gemini mit. Wähle einen aus, und jede KI-Aktion im Editor nutzt ihn.",
+      "appearance": "Sechs vollständige Paletten und ein Hell/Dunkel-Schalter. Das ist die echte Einstellung, kein Bild davon – wähle ein Design, und die ganze Seite färbt sich neu.",
+      "body": "Das ist kein Screenshot. Das ist die App, in diese Seite kompiliert – klick dich ruhig durch.",
+      "dashboard": "Abdeckung, Schlüsselzahlen und Sprachstatus für jedes Projekt, sobald du die App öffnest. Die Zahlen stammen aus denselben Zellen, in die der Editor schreibt – füll eine aus und sieh zu, wie sie sich bewegen.",
+      "editor": "Schlüssel an der Seite, Sprachen oben. Jede Zelle ist ein echtes Feld: tippe eine Übersetzung, suche oder filtere auf das, was noch fehlt.",
+      "eyebrow": "Ein Blick hinein",
+      "pill": "Live · nichts von dem, was du hier tust, wird gespeichert",
+      "projects": "Ein Workspace je App, jeweils mit eigener Quellsprache und eigenen Zielsprachen. Klicke auf eine Zeile, um sie zu öffnen.",
+      "title": "Gebaut wie eine Desktop-App, weil es eine ist."
+    },
+    "viewOnGithub": "Auf GitHub ansehen",
+    "warning": {
+      "macos": "Unsignierter Build – klicke die App beim ersten Start mit der rechten Maustaste an und wähle Öffnen.",
+      "windows": "Unsignierter Build – wähle in SmartScreen Weitere Informationen und dann Trotzdem ausführen."
+    }
+  },
+  "language": {
+    "ar": "Arabisch",
+    "cs": "Tschechisch",
+    "de": "Deutsch",
+    "en": "Englisch",
+    "es": "Spanisch",
+    "fr": "Französisch",
+    "hi": "Hindi",
+    "it": "Italienisch",
+    "ja": "Japanisch",
+    "ko": "Koreanisch",
+    "nl": "Niederländisch",
+    "pl": "Polnisch",
+    "pt": "Portugiesisch",
+    "ro": "Rumänisch",
+    "ru": "Russisch",
+    "sv": "Schwedisch",
+    "tr": "Türkisch",
+    "uk": "Ukrainisch",
+    "vi": "Vietnamesisch",
+    "zh": "Chinesisch"
+  },
+  "nav": {
+    "aiProviders": "KI-Anbieter",
+    "appearance": "Darstellung",
+    "apps": "Apps",
+    "dashboard": "Dashboard",
+    "group": {
+      "settings": "Einstellungen",
+      "workspace": "Workspace"
+    },
+    "import": "Import",
+    "languages": "Sprachen",
+    "localStorage": "Lokaler Speicher",
+    "profile": "Profil",
+    "settings": "Einstellungen"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Local-first",
+      "locales": "20 Sprachen",
+      "nestedJson": "Verschachteltes JSON"
+    },
+    "skip": "Überspringen",
+    "stage": {
+      "body": "Keine Konten, keine Synchronisierung, kein Tabellen-Wildwuchs – nur dein JSON, auf deinem Rechner.",
+      "title": "Ein Schreibtisch für jede Sprachdatei."
+    },
+    "startSetup": "Einrichtung starten",
+    "step1": {
+      "body": "Jeder Schlüssel ist eine Zeile und jede Sprache eine Spalte. Fehlende Texte bleiben beim Arbeiten hervorgehoben, damit nichts halb übersetzt ausgeliefert wird.",
+      "caption": "Alle Bände, ein Raum",
+      "eyebrow": "Übersetzungs-Workspace",
+      "highlight1": "Schlüssel und Sprachen in einem einzigen Raster",
+      "highlight2": "Filtere auf das, was noch fehlt",
+      "highlight3": "Änderungen werden beim Tippen lokal gespeichert",
+      "title": "Übersetze alle Sprachen von einem aufgeräumten Schreibtisch aus"
+    },
+    "step2": {
+      "body": "Ein Workspace je App: Quellsprache einmal wählen, nur die Zielsprachen verfolgen, die zählen, und die Abdeckung für sich sprechen lassen.",
+      "caption": "Indiziert, beschriftet, auffindbar",
+      "eyebrow": "Projekteinrichtung",
+      "highlight1": "Ein eigener Workspace für jede App",
+      "highlight2": "Wähle Zielsprachen aus 20 unterstützten Sprachen",
+      "highlight3": "Abdeckung je App und je Sprache",
+      "title": "Halte jedes Produkt nach Sprache geordnet"
+    },
+    "step3": {
+      "body": "LingoDesk baut deine ursprüngliche Schlüsselstruktur vor dem Export wieder auf – die Dateien, die in deinem Repository landen, sind die, die deine App erwartet.",
+      "caption": "Jedes Ziel auf der Anzeigetafel",
+      "eyebrow": "Bereit zum Export",
+      "highlight1": "Punktschlüssel werden wieder zu verschachtelten Objekten",
+      "highlight2": "Wähle die Sprachen, speichere, wo du willst",
+      "highlight3": "Sauber formatiert, mit stabiler Schlüsselreihenfolge",
+      "title": "Schicke verschachtelte JSON-Dateien zurück in deine App"
+    },
+    "stepOf": "Schritt {step} von {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Folge dem Systemdesign oder wähle eines fest aus.",
+      "swatchActive": "Aktiv",
+      "swatchBackground": "Hintergrund",
+      "swatchBrand": "Marke",
+      "swatchCard": "Karte",
+      "themeSubtitle": "Sechs Paletten. Jede gestaltet die ganze App neu, nicht nur den Akzent."
+    },
+    "defaults": {
+      "count": {
+        "one": "1 Sprache wird vorausgewählt.",
+        "other": "{} Sprachen werden vorausgewählt."
+      },
+      "empty": "Noch keine Vorgaben – neue Apps starten ohne Zielsprachen.",
+      "subtitle": "Wird bei jeder neuen App vorausgewählt.",
+      "title": "Standard-Zielsprachen"
+    },
+    "language": {
+      "note": "Deine Wahl wird gespeichert und sofort angewendet – Menüs, Dialoge und Meldungen wechseln mit.",
+      "subtitle": "Die Sprache, in der LingoDesk selbst angezeigt wird.",
+      "title": "Oberflächensprache"
+    },
+    "profile": {
+      "email": "E-Mail",
+      "emailHint": "optional",
+      "name": "Anzeigename",
+      "nameHint": "Lokaler Workspace",
+      "note": "LingoDesk hat keine Konten. Das benennt nur deinen lokalen Workspace.",
+      "subtitle": "Wird in der Seitenleiste gezeigt. Nur auf diesem Gerät gespeichert."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Warmes Bernstein und geröstete Sandtöne."
+    },
+    "graphite": {
+      "description": "Gar kein Farbton – der Kontrast setzt die Akzente."
+    },
+    "indigo": {
+      "description": "Kühles Indigo über blaugrauen Neutraltönen."
+    },
+    "rose": {
+      "description": "Tiefes Rosé auf zarten Flächen."
+    },
+    "teal": {
+      "description": "Der Hauslook – sattes Petrol auf warmem Stein."
+    },
+    "violet": {
+      "description": "Elektrisches Violett auf leicht purpurnem Chassis."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "vor 1 Tag",
+      "other": "vor {} Tagen"
+    },
+    "hoursAgo": {
+      "one": "vor 1 Stunde",
+      "other": "vor {} Stunden"
+    },
+    "justNow": "Gerade eben",
+    "minutesAgo": {
+      "one": "vor 1 Min.",
+      "other": "vor {} Min."
+    },
+    "monthsAgo": {
+      "one": "vor 1 Monat",
+      "other": "vor {} Monaten"
+    },
+    "weeksAgo": {
+      "one": "vor 1 Woche",
+      "other": "vor {} Wochen"
+    },
+    "yearsAgo": {
+      "one": "vor 1 Jahr",
+      "other": "vor {} Jahren"
+    },
+    "yesterday": "Gestern"
+  },
+  "upload": {
+    "addFiles": "Dateien hinzufügen",
+    "addFolder": "Ordner hinzufügen",
+    "addMore": "Weitere hinzufügen",
+    "backToApps": "Zurück zu den Apps",
+    "backToEditor": "Zurück zum Editor",
+    "browseFiles": "Dateien durchsuchen",
+    "chooseFolder": "Ordner wählen",
+    "defaultImportName": "Importiertes Projekt",
+    "defaultProjectName": "Importierte Übersetzungen",
+    "detectedLanguages": "Erkannte Sprachen",
+    "detectedLanguagesHint": "Füge weitere Ordner oder Dateien hinzu – sie werden hier zusammengeführt.",
+    "exportsBackTo": "Exportiert zurück nach {path}",
+    "filesReady": {
+      "one": "1 Datei bereit zum Import.",
+      "other": "{} Dateien bereit zum Import."
+    },
+    "hero": {
+      "filesBody": "Scanne einen Ordner oder wähle die .json-Dateien selbst aus. Jede Datei wird über ihren Namen einer Sprache zugeordnet.",
+      "filesTitle": "Füge deine Übersetzungsdateien hinzu",
+      "projectBody": "Wähle das Projekt (oder irgendeinen Ordner) und LingoDesk findet die Übersetzungsdateien darin – oder wähle die .json-Dateien selbst aus.",
+      "projectTitle": "Importiere deine Übersetzungen"
+    },
+    "importAndOpen": "Importieren & Editor öffnen",
+    "importedToast": "In „{name}“ importiert.",
+    "keepOneLanguage": "Behalte mindestens eine Sprache für den Import.",
+    "languageSource": "{language} - Quelle",
+    "logo": "Logo",
+    "namingRule": "Benenne jede Datei nach ihrem Sprachcode. Alles außerhalb dieser Menge wird abgelehnt.",
+    "needValidFile": "Füge mindestens eine gültige Datei zum Importieren hinzu.",
+    "noFilesFound": "In „{name}“ wurden keine Übersetzungsdateien gefunden. Gesucht wurde nach .json-Dateien in den Ordnern /translation, /translations und /languages.",
+    "pickFilesTitle": "Übersetzungsdateien auswählen",
+    "pickFolderTitle": "Wähle deinen Projektordner",
+    "readySummary": "{languages} Sprache(n) und {keys} Schlüssel bereit zum Import.",
+    "removeLogo": "Logo entfernen",
+    "replaceLogo": "Logo ersetzen",
+    "requiredLanguages": "Benötigte Sprachen",
+    "scanning": "Wird gescannt…",
+    "skipToEditor": "Zum Editor springen",
+    "sourceHelper": "Alles andere wird zu einer Zielsprache, in die du übersetzen kannst.",
+    "stagedFiles": "Vorbereitete Dateien",
+    "startOver": "Neu beginnen",
+    "stat": {
+      "translated": "Übersetzt"
+    },
+    "uploadLogo": "Logo hochladen",
+    "whereWeLook": "Wo wir suchen",
+    "whereWeLookBody": "Jede .json-Datei in einem Ordner /translation, /translations oder /languages, irgendwo im Projekt. Build- und Abhängigkeitsordner werden übersprungen."
+  }
+}

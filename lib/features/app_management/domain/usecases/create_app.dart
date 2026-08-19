@@ -5,6 +5,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/app.dart';
 import '../repositories/app_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class CreateAppParams {
   const CreateAppParams({
@@ -72,13 +73,13 @@ String? validateAppConfig({
   required List<String> targetLanguages,
 }) {
   if (name.trim().isEmpty) {
-    return 'App name cannot be empty.';
+    return LocaleKeys.errorsAppNameEmpty.tr();
   }
   if (targetLanguages.isEmpty) {
-    return 'Select at least one target language.';
+    return LocaleKeys.errorsNoTargetLanguage.tr();
   }
   if (targetLanguages.contains(sourceLanguage)) {
-    return 'The source language cannot also be a target language.';
+    return LocaleKeys.errorsSourceIsTarget.tr();
   }
   return null;
 }

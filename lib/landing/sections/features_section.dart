@@ -9,6 +9,7 @@ import '../../features/ai_translation/domain/entities/ai_provider.dart';
 import '../../features/ai_translation/presentation/widgets/ai_provider_logo.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// What the product actually does, one card per capability.
 ///
@@ -28,46 +29,34 @@ class FeaturesSection extends StatelessWidget {
     const features = <_Feature>[
       _Feature(
         icon: HugeIcons.strokeRoundedTable01,
-        title: 'One grid for every language',
-        body:
-            'Nested JSON is flattened to dot-notation keys, so a string and '
-            'all of its translations sit on a single row you can read across.',
+        title: LocaleKeys.landingFeature1Title,
+        body: LocaleKeys.landingFeature1Body,
       ),
       _Feature(
         icon: HugeIcons.strokeRoundedFilter,
-        title: 'Missing strings, not missing bugs',
-        body:
-            'Live coverage per locale and a "missing only" filter that '
-            'collapses hundreds of keys down to the handful still empty.',
+        title: LocaleKeys.landingFeature2Title,
+        body: LocaleKeys.landingFeature2Body,
       ),
       _Feature(
         icon: HugeIcons.strokeRoundedSparkles,
-        title: 'Translate with your own AI key',
-        body:
-            'Batch-translate the gaps through Anthropic, OpenAI or Gemini. '
-            'Your key, your account, your bill — nothing is proxied.',
+        title: LocaleKeys.landingFeature3Title,
+        body: LocaleKeys.landingFeature3Body,
         providers: true,
       ),
       _Feature(
         icon: HugeIcons.strokeRoundedShield01,
-        title: 'Local-first and private',
-        body:
-            'No backend, no telemetry, no sign-up. Projects live on your '
-            'machine and API keys go into the OS secure store.',
+        title: LocaleKeys.landingFeature4Title,
+        body: LocaleKeys.landingFeature4Body,
       ),
       _Feature(
         icon: HugeIcons.strokeRoundedFolderSync,
-        title: 'Import and export in place',
-        body:
-            'Scan a project folder, pull in the locale files you already '
-            'have, and export the nested shape straight back into the repo.',
+        title: LocaleKeys.landingFeature5Title,
+        body: LocaleKeys.landingFeature5Body,
       ),
       _Feature(
         icon: HugeIcons.strokeRoundedPaintBoard,
-        title: 'Six themes, light and dark',
-        body:
-            'A workspace you can stand to look at all day — each theme a '
-            'full palette, not just a swapped accent colour.',
+        title: LocaleKeys.landingFeature6Title,
+        body: LocaleKeys.landingFeature6Body,
       ),
     ];
 
@@ -76,12 +65,10 @@ class FeaturesSection extends StatelessWidget {
       tinted: true,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'Features',
-            title: 'Everything the job needs. Nothing it does not.',
-            body:
-                'LingoDesk is a focused desktop tool, not a translation '
-                'platform with seats and dashboards.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingFeaturesEyebrow.tr(),
+            title: LocaleKeys.landingFeaturesTitle.tr(),
+            body: LocaleKeys.landingFeaturesBody.tr(),
           ),
           const SizedBox(height: 56),
           LayoutBuilder(
@@ -188,7 +175,7 @@ class _FeatureCardState extends State<_FeatureCard> {
             ),
             const SizedBox(height: 20),
             Text(
-              feature.title,
+              feature.title.tr(),
               style: TextStyle(
                 fontSize: 17.5,
                 height: 1.3,
@@ -199,7 +186,7 @@ class _FeatureCardState extends State<_FeatureCard> {
             ),
             const SizedBox(height: 10),
             Text(
-              feature.body,
+              feature.body.tr(),
               style: TextStyle(
                 fontSize: 14.5,
                 height: 1.6,

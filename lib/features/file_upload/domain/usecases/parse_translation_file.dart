@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/json_flattener.dart';
+import '../../../../core/localization/export.dart';
 
 class ParseTranslationFileParams {
   const ParseTranslationFileParams({required this.content});
@@ -25,21 +26,25 @@ class ParseTranslationFile
     try {
       final decoded = jsonDecode(params.content);
       if (decoded is! Map) {
-        return const Left(
-          ValidationFailure(
-            message: 'The file must contain a JSON object at the top level.',
-          ),
+        return Left(
+          ValidationFailure(message: LocaleKeys.errorsJsonNotObject.tr()),
         );
       }
       final flat = JsonFlattener.flatten(Map<String, dynamic>.from(decoded));
       if (flat.isEmpty) {
-        return const Left(
-          ValidationFailure(message: 'The file contains no translation keys.'),
+        return Left(
+          ValidationFailure(message: LocaleKeys.errorsJsonNoKeys.tr()),
         );
       }
       return Right(flat);
     } on FormatException catch (e) {
-      return Left(ValidationFailure(message: 'Invalid JSON: ${e.message}'));
+      return Left(
+        ValidationFailure(
+          message: LocaleKeys.errorsJsonInvalid.tr(
+            namedArgs: {'error': e.message},
+          ),
+        ),
+      );
     }
   }
 }

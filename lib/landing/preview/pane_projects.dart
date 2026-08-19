@@ -10,6 +10,7 @@ import '../../core/widgets/workspace_card.dart';
 import '../../core/widgets/workspace_scaffold.dart';
 import 'preview_chrome.dart';
 import 'preview_workspace.dart';
+import '../../core/localization/export.dart';
 
 /// One workspace per app, each with its own source language and targets.
 ///
@@ -60,7 +61,10 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           PreviewBreadcrumb(
-            segments: const ['Workspace', 'Apps'],
+            segments: [
+              LocaleKeys.navGroupWorkspace.tr(),
+              LocaleKeys.navApps.tr(),
+            ],
             actions: [
               SizedBox(
                 width: 230,
@@ -68,12 +72,12 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
                   onChanged: (value) => setState(() => _query = value),
                 ),
               ),
-              const PreviewButton(
-                label: 'Import project',
+              PreviewButton(
+                label: LocaleKeys.appsImportProject.tr(),
                 icon: HugeIcons.strokeRoundedFileImport,
               ),
-              const PreviewButton(
-                label: 'New app',
+              PreviewButton(
+                label: LocaleKeys.appsNewApp.tr(),
                 icon: HugeIcons.strokeRoundedAdd01,
                 primary: true,
               ),
@@ -86,12 +90,10 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
               children: [
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: WorkspaceCardHeader(
-                        title: 'Workspace totals',
-                        subtitle:
-                            'Translation files across every app '
-                            'and locale',
+                        title: LocaleKeys.appsSummaryTitle.tr(),
+                        subtitle: LocaleKeys.appsSummarySubtitle.tr(),
                         icon: HugeIcons.strokeRoundedChartHistogram,
                       ),
                     ),
@@ -107,21 +109,21 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
                 Row(
                   children: [
                     WorkspaceMetaTile(
-                      label: 'Apps',
+                      label: LocaleKeys.navApps.tr(),
                       value: PreviewWorkspace.apps.length.toString(),
                       icon: HugeIcons.strokeRoundedFolder02,
                       width: 108,
                     ),
                     const SizedBox(width: 8),
-                    const WorkspaceMetaTile(
-                      label: 'Total keys',
+                    WorkspaceMetaTile(
+                      label: LocaleKeys.dashboardMetricTotalKeys.tr(),
                       value: '428',
                       icon: HugeIcons.strokeRoundedKey01,
                       width: 128,
                     ),
                     const SizedBox(width: 8),
                     WorkspaceMetaTile(
-                      label: 'Missing strings',
+                      label: LocaleKeys.appsSummaryMissingStrings.tr(),
                       value: widget.workspace.totalMissing.toString(),
                       icon: HugeIcons.strokeRoundedAlertCircle,
                       width: 152,
@@ -143,13 +145,22 @@ class _PreviewProjectsPaneState extends State<PreviewProjectsPane> {
                 borderRadius: BorderRadius.circular(LingoDeskTheme.radius - 1),
                 child: Column(
                   children: [
-                    const PreviewTableHeader(
+                    PreviewTableHeader(
                       cells: [
-                        (34, 'APP'),
-                        (20, 'LANGUAGES'),
-                        (14, 'FILES'),
-                        (22, 'PROGRESS'),
-                        (16, 'UPDATED'),
+                        (34, LocaleKeys.appsTableColApp.tr().toUpperCase()),
+                        (
+                          20,
+                          LocaleKeys.appsTableColLanguages.tr().toUpperCase(),
+                        ),
+                        (14, LocaleKeys.appsTableColFiles.tr().toUpperCase()),
+                        (
+                          22,
+                          LocaleKeys.appsTableColProgress.tr().toUpperCase(),
+                        ),
+                        (
+                          16,
+                          LocaleKeys.appsTableColUpdated.tr().toUpperCase(),
+                        ),
                       ],
                     ),
                     Expanded(
@@ -240,7 +251,7 @@ class _AppSearchState extends State<_AppSearch> {
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: 'Search apps',
+                hintText: LocaleKeys.appsSearchHint.tr(),
                 hintStyle: TextStyle(fontSize: 13, color: tokens.muted),
               ),
             ),
@@ -445,7 +456,7 @@ class _AppRowState extends State<_AppRow> {
                             ),
                             const SizedBox(width: 12),
                             PreviewButton(
-                              label: 'Open editor',
+                              label: LocaleKeys.appsMenuOpenEditor.tr(),
                               icon: HugeIcons.strokeRoundedArrowRight01,
                               onTap: widget.onOpen,
                             ),

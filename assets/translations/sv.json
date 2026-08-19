@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "Lägg till API-nyckel",
+    "addProviderKey": "Lägg till {provider}-nyckel",
+    "col": {
+      "added": "Tillagd",
+      "apiKey": "API-nyckel",
+      "model": "Modell",
+      "provider": "Leverantör"
+    },
+    "createKeyAt": "Skapa en nyckel på {console}.",
+    "defaultModel": "standard",
+    "delete": {
+      "activeBody": "Det här tar bort ”{label}”, nyckeln som översättningarna körs på just nu. En annan sparad nyckel tar över, annars stannar AI-översättningen tills du lägger till en ny.",
+      "body": "Det här tar bort ”{label}” från den här enheten. Själva nyckeln fortsätter att gälla hos {console}.",
+      "title": "Ta bort API-nyckeln?"
+    },
+    "editKey": "Redigera API-nyckel",
+    "field": {
+      "name": "Namn",
+      "nameHelp": "Valfritt — vad du kallar den här nyckeln i tabellen."
+    },
+    "hideKey": "Dölj nyckel",
+    "key": {
+      "actions": "Nyckelåtgärder",
+      "active": "Aktiv",
+      "required": "Klistra in API-nyckeln för att fortsätta.",
+      "test": "Testa anslutningen",
+      "use": "Använd för översättningar"
+    },
+    "pickModel": "Välj en föreslagen modell",
+    "pickProvider": "Vilken leverantör hör nyckeln till?",
+    "saveKey": "Lägg till nyckel",
+    "showKey": "Visa nyckel",
+    "status": {
+      "detail": "{provider} · {model} · används av varje AI-åtgärd i redigeraren.",
+      "noKey": "Ingen nyckel är klar ännu",
+      "noKeyDetail": "Lägg till en API-nyckel, så kan redigeraren fylla i de översättningar som saknas åt dig.",
+      "translatingWith": "Översätter med {label}"
+    },
+    "storage": {
+      "plain": "Det här bygget når inte systemets nyckelring, så nycklarna sparas i klartext bland dina övriga lokala inställningar. De stannar på den här enheten och skickas bara till den leverantör de hör till.",
+      "secure": "Nycklarna ligger i den här enhetens nyckelring och skickas bara till den leverantör de hör till."
+    },
+    "table": {
+      "empty": "Inga API-nycklar ännu. Lägg till en för att översätta från redigeraren.",
+      "keyCount": {
+        "one": "1 nyckel",
+        "other": "{} nycklar"
+      },
+      "noKeys": "Inga nycklar ännu",
+      "range": "{start}-{end} av {total}"
+    },
+    "toast": {
+      "activeTitle": "Översättningarna använder nu {label}",
+      "addedBody": "{provider} är redo att översätta med.",
+      "addedTitle": "Nyckel tillagd",
+      "deletedBody": "{label} togs bort från den här enheten.",
+      "deletedNamedTitle": "{label} borttagen",
+      "deletedTitle": "Nyckel borttagen",
+      "promotedBody": "Översättningarna använder nu {label}.",
+      "testFailedTitle": "{label} misslyckades",
+      "testPassedBody": "{provider} godkände nyckeln.",
+      "testPassedTitle": "{label} ansluten",
+      "updatedBody": "Ändringar i {label} sparade.",
+      "updatedTitle": "Nyckel uppdaterad"
+    }
+  },
+  "appSettings": {
+    "appIcon": "Appikon",
+    "appIconHelp": "Valfri. Utan ikon visar appen sina initialer.",
+    "appIconNote": "PNG, JPG eller WebP. Bilden skalas till {size} px och sparas med appen, så du kan flytta originalfilen utan problem.",
+    "appName": "Appnamn",
+    "appNameHint": "t.ex. Kundportal",
+    "createApp": "Skapa app",
+    "general": "Allmänt",
+    "generalSubtitle": "Vad appen heter och vilket språk den översätter från.",
+    "localeCount": {
+      "one": "1 språk",
+      "other": "{} språk"
+    },
+    "metaNoTargets": "Inga ännu",
+    "metaSource": "Källa",
+    "metaTargets": "Mål",
+    "metaUpdated": "Senast uppdaterad",
+    "replaceIcon": "Byt ikon",
+    "saveChanges": "Spara ändringar",
+    "savedToast": "”{name}” sparad.",
+    "selectAll": "Markera alla",
+    "selectedCount": "{selected} av {total} valda",
+    "sourceLanguage": "Källspråk",
+    "sourceLanguageHelp": "Grundspråket som dina nycklar är skrivna på.",
+    "sourceNotTarget": "Källspråket kan inte också vara ett målspråk.",
+    "targetLanguages": "Målspråk",
+    "targetLanguagesHelp": "Språk du vill översätta till.",
+    "targetLanguagesNote": "Varje nyckel du lägger till köas för alla valda språk. Tar du bort ett språk döljs dess kolumn i redigeraren; översättningarna du redan har finns kvar.",
+    "targetLanguagesSubtitle": "Språken som appen översätts till.",
+    "uploadIcon": "Ladda upp ikon"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} filer klara - {updated}"
+    },
+    "created": {
+      "body": "Vill du ladda upp dina befintliga JSON-översättningsfiler nu? Du kan också göra det senare från panelen.",
+      "later": "Senare",
+      "title": "”{name}” skapad",
+      "upload": "Ladda upp filer"
+    },
+    "delete": {
+      "body": "Det här tar bort appen och alla dess översättningar permanent. Det går inte att ångra.",
+      "title": "Ta bort ”{name}”?"
+    },
+    "deletedNamedToast": "”{name}” borttagen.",
+    "deletedToast": "Appen togs bort.",
+    "empty": {
+      "message": "Peka ut en projektmapp för LingoDesk så importeras översättningsfilerna som hittas, eller skapa en app för hand med ett källspråk och dina målspråk.",
+      "title": "Skapa din första app"
+    },
+    "importProject": "Importera projekt",
+    "menu": {
+      "deleteApp": "Ta bort app",
+      "openEditor": "Öppna redigeraren",
+      "uploadFiles": "Ladda upp filer"
+    },
+    "newApp": "Ny app",
+    "searchHint": "Sök appar",
+    "status": {
+      "complete": "Klar",
+      "missing": "Saknas",
+      "new": "Ny"
+    },
+    "summary": {
+      "filesComplete": "Klara filer",
+      "missingStrings": "Saknade texter",
+      "overallCoverage": "total täckning",
+      "subtitle": "Översättningsfiler över alla appar och språk",
+      "title": "Totalsummor för arbetsytan"
+    },
+    "table": {
+      "colApp": "App",
+      "colFiles": "Filer",
+      "colLanguages": "Språk",
+      "colProgress": "Förlopp",
+      "colStatus": "Status",
+      "colUpdated": "Uppdaterad",
+      "complete": "klara",
+      "hideLanguages": "Dölj språk",
+      "less": "Mindre",
+      "noMatches": "Ingen app matchar din sökning.",
+      "searchSubtitle": "{matches} av {total} appar matchar ”{query}”",
+      "showLanguages": "Visa alla språk",
+      "subtitle": "Aktuella lokaliseringsarbetsytor"
+    }
+  },
+  "common": {
+    "back": "Tillbaka",
+    "cancel": "Avbryt",
+    "clear": "Rensa",
+    "close": "Stäng",
+    "delete": "Ta bort",
+    "dismiss": "Stäng",
+    "edit": "Redigera",
+    "errorPrefix": "Fel: {message}",
+    "missingCount": {
+      "one": "1 saknas",
+      "other": "{} saknas"
+    },
+    "more": "Mer",
+    "next": "Nästa",
+    "nextPage": "Nästa sida",
+    "previousPage": "Föregående sida",
+    "remove": "Ta bort",
+    "retry": "Försök igen",
+    "rows": "Rader",
+    "selectLanguage": "Välj ett språk",
+    "selectOption": "Välj ett alternativ",
+    "theme": "Tema",
+    "themeDark": "Mörkt",
+    "themeLight": "Ljust",
+    "themeSystem": "System"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 app",
+      "other": "{} appar"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} översättningsfiler klara",
+    "coverage": {
+      "empty": "Skapa en app för att se täckningen här.",
+      "noData": "Ingen översättningsdata ännu. Ladda upp JSON-filer för att komma igång.",
+      "subtitle": "Andel översatta måltexter per app",
+      "summary": "{translated} texter översatta. {missing} saknas fortfarande i de aktiva målspråken.",
+      "title": "Täckning per app"
+    },
+    "empty": {
+      "message": "En app samlar översättningsfilerna för ett projekt. Ange ett källspråk, välj dina målspråk och börja översätta.",
+      "title": "Skapa din första app"
+    },
+    "health": {
+      "allTranslated": "Alla appar är helt översatta.",
+      "empty": "Inga målspråk ännu.",
+      "nextReview": "Nästa genomgång: {name}",
+      "nextReviewPrefix": "Nästa genomgång: ",
+      "subtitle": "Täckning per målspråk",
+      "title": "Språkstatus"
+    },
+    "metric": {
+      "acrossApps": "Över alla appar",
+      "allClear": "Allt klart",
+      "coverage": "Täckning",
+      "localWorkspace": "Lokal arbetsyta",
+      "missing": "Saknas",
+      "needsReview": "Behöver ses över",
+      "targetLocales": {
+        "one": "1 målspråk",
+        "other": "{} målspråk"
+      },
+      "totalKeys": "Totalt antal nycklar"
+    },
+    "stat": {
+      "keys": "Nycklar",
+      "locales": "Språk"
+    },
+    "subtitle": "Följ täckningen, se över saknade texter och hoppa tillbaka in i lokaliseringsarbetet.",
+    "title": "Översättningspanel",
+    "viewAllApps": "Visa alla appar"
+  },
+  "editor": {
+    "addKey": "Lägg till nyckel",
+    "addKeyHint": "Fyll i det du har nu — det du lämnar tomt fortsätter att saknas och kan översättas senare i rutnätet.",
+    "aiAllComplete": "Alla målspråk är kompletta.",
+    "aiAlreadyRunning": "En översättningsomgång pågår redan.",
+    "aiCanceledEmpty": "Avbröts innan något hann sparas.",
+    "aiDialogBody": "Bara tomma celler fylls i — översättningar du redan har skrivs aldrig över.",
+    "aiFailedCount": {
+      "one": "1 kunde inte översättas.",
+      "other": "{} kunde inte översättas."
+    },
+    "aiFailedCountReason": {
+      "one": "1 kunde inte översättas ({error}).",
+      "other": "{} kunde inte översättas ({error})."
+    },
+    "aiFinishing": "Avslutar den pågående satsen…",
+    "aiNotConfiguredBody": "Lägg först till en API-nyckel under Inställningar - AI-leverantörer.",
+    "aiNotConfiguredTitle": "AI är inte konfigurerat",
+    "aiNothingHere": "Det finns inget kvar att översätta här.",
+    "aiNothingLeft": "Inget kvar att översätta",
+    "aiNothingTranslated": "Ingenting översattes.",
+    "aiProgress": "Översätter {label} · {done} av {total}",
+    "aiRunning": "AI-översättning pågår",
+    "aiTranslate": "Översätt med AI",
+    "aiTranslateMissing": {
+      "one": "Översätt 1 saknad text med AI",
+      "other": "Översätt {} saknade texter med AI"
+    },
+    "aiTranslateRow": "Översätt raden med AI",
+    "aiTranslatedCanceled": {
+      "one": "1 text översattes innan avbrottet.",
+      "other": "{} texter översattes innan avbrottet."
+    },
+    "aiTranslatedDone": {
+      "one": "1 text översatt.",
+      "other": "{} texter översatta."
+    },
+    "aiUsing": "Med {provider} · {model}",
+    "clearAll": "Avmarkera alla",
+    "clickToHide": "Klicka för att dölja de andra språken",
+    "clickToShow": "Klicka för att visa de andra språken",
+    "copiedToast": "”{key}” kopierad till urklipp.",
+    "copyKey": "Kopiera nyckel",
+    "deleteKey": "Ta bort nyckel",
+    "deleteKeyBody": "Det här tar bort ”{key}” från alla språk. Det går inte att ångra.",
+    "deleteKeyTitle": "Ta bort nyckeln?",
+    "empty": "Inga nycklar ännu. Ladda upp JSON-filer eller lägg till din första nyckel.",
+    "export": "Exportera",
+    "exportCanceled": "Exporten avbröts.",
+    "exportChooseDestination": "Välj ett mål",
+    "exportDownload": "Ladda ner",
+    "exportFolderSummary": "Du väljer mappen härnäst; dit hamnar en fil per språk.",
+    "exportNoProject": "Importera först en projektmapp",
+    "exportOverwrite": "Skriv över filerna",
+    "exportProjectSummary": "Skrivs till {path} och ersätter de filerna.",
+    "exportSaveTo": "Spara i {name}",
+    "exportSaveToProject": "Spara i projektet",
+    "exportSavedToast": "{files} sparade i {name}",
+    "exportToFolder": "Exportera till mapp",
+    "exportToFolderEllipsis": "Exportera till mapp…",
+    "exportZip": "Ladda ner ZIP",
+    "exportZipHint": "Packas till din nedladdningsmapp",
+    "exportZipSummary": "Samlas i {file} i din nedladdningsmapp.",
+    "exportZippedToast": "{files} packade till Hämtade filer",
+    "exportedToast": "{files} exporterade",
+    "fileCount": {
+      "one": "1 fil",
+      "other": "{} filer"
+    },
+    "hiddenLanguages": {
+      "one": "1 språk till",
+      "other": "{} språk till"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "1 språk till, inuti varje rad",
+      "other": "{} språk till, inuti varje rad"
+    },
+    "hideOtherLanguages": "Dölj de andra språken",
+    "keyActions": "Nyckelåtgärder",
+    "keyAddedToast": "Nyckeln ”{key}” lades till.",
+    "keyDeletedToast": "Nyckeln ”{key}” togs bort.",
+    "keyHelper": "Punktnotation grupperar nycklar till nästlad JSON.",
+    "keyLabel": "Nyckel",
+    "languageCount": {
+      "one": "1 språk",
+      "other": "{} språk"
+    },
+    "languageSourceSuffix": "{language} (källa)",
+    "missingOnly": "Endast saknade",
+    "missingOnlyCount": "Endast saknade ({count})",
+    "noKeys": "Inga nycklar",
+    "noMatches": "Ingen nyckel matchar de aktuella filtren.",
+    "noProvider": "Ingen leverantör",
+    "paginationSummary": "{start}-{end} av {lines} rader - {keys} nycklar",
+    "searchHint": "Sök nycklar och värden",
+    "showInFolder": "Visa i mappen",
+    "sourceText": "Källtext",
+    "title": "Redigerare",
+    "translate": "Översätt",
+    "translateCount": {
+      "one": "Översätt 1 text",
+      "other": "Översätt {} texter"
+    },
+    "translateWithAi": "Översätt med AI",
+    "translatingHint": "Översätter…",
+    "translationOptional": "Översättning - valfri",
+    "translations": "Översättningar"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Lägg till en API-nyckel under Inställningar - AI-leverantörer.",
+      "blocked": "{provider} blockerade den här satsen ({reason}).",
+      "emptyResponse": "{provider} returnerade ett tomt svar.",
+      "keyRejected": "API-nyckeln för {provider} avvisades. Kontrollera den under Inställningar - AI-leverantörer.",
+      "malformed": "Översättningsleverantören returnerade felaktig JSON.",
+      "modelNotFound": "Modellen för {provider} hittades inte. Kontrollera modellnamnet under Inställningar - AI-leverantörer.",
+      "noConnection": "Ingen anslutning till översättningsleverantören.",
+      "noKey": "Ange en API-nyckel först.",
+      "refused": "{provider} vägrade översätta den här satsen. Hoppa över den eller prova en annan modell.",
+      "stoppedEarly": "{provider} stannade i förtid ({reason}).",
+      "timeout": "Översättningsleverantören svarade inte i tid.",
+      "unexpectedResponse": "{provider} returnerade ett oväntat svar."
+    },
+    "app": {
+      "nameEmpty": "Appnamnet får inte vara tomt.",
+      "noTargetLanguage": "Välj minst ett målspråk.",
+      "sourceIsTarget": "Källspråket kan inte också vara ett målspråk."
+    },
+    "cache": {
+      "appListCorrupt": "Den sparade applistan är skadad: {error}",
+      "appNotFound": "Appen hittades inte.",
+      "appNotFoundId": "Appen hittades inte: {id}",
+      "translationsCorrupt": "De sparade översättningarna är skadade: {error}",
+      "writeAppList": "Applistan kunde inte sparas.",
+      "writeTranslations": "Översättningarna kunde inte sparas."
+    },
+    "editor": {
+      "invalidKey": "Använd punktnotation med bokstäver, siffror, ”_” eller ”-” (t.ex. nav.home).",
+      "keyExists": "Nyckeln ”{key}” finns redan.",
+      "keyNotFound": "Nyckeln hittades inte: {key}"
+    },
+    "export": {
+      "chooseFolder": "Välj en mapp att exportera till.",
+      "noDownloadsFolder": "Din nedladdningsmapp hittades inte på den här plattformen.",
+      "noProjectFolder": "Appen importerades inte från en projektmapp, så det finns ingenstans att skriva tillbaka den.",
+      "nothingToExport": "Det finns inga nycklar att exportera ännu.",
+      "selectLanguage": "Välj minst ett språk att exportera."
+    },
+    "file": {
+      "folderPickerOpen": "Mappväljaren kunde inte öppnas: {error}",
+      "launchFailed": "{executable} kunde inte startas: {error}",
+      "openPath": "{path} kunde inte öppnas: {error}",
+      "pickerOpen": "Filväljaren kunde inte öppnas: {error}",
+      "projectFolderRead": "Projektmappen kunde inte läsas: {error}",
+      "revealUnsupported": "Att visa en mapp är inte tillgängligt på den här plattformen.",
+      "save": "{file} kunde inte sparas: {error}",
+      "unknownLanguage": "Det gick inte att avgöra vilket språk filen hör till. Namnge den efter språkkoden eller lägg den i en språkmapp.",
+      "unsupportedPlatform": "Inte tillgängligt på den här plattformen.",
+      "writeFolder": "Det gick inte att skriva till {path}: {error}"
+    },
+    "image": {
+      "convert": "Bilden kunde inte konverteras till PNG.",
+      "notAnImage": "Filen är ingen bild som LingoDesk kan läsa: {error}",
+      "pickerOpen": "Bildväljaren kunde inte öppnas: {error}",
+      "tooLarge": "Välj en bild som är mindre än 8 MB.",
+      "unreadable": "Bilden kunde inte läsas."
+    },
+    "import": {
+      "noFiles": "Inga filer att importera."
+    },
+    "json": {
+      "invalid": "Ogiltig JSON: {error}",
+      "noKeys": "Filen innehåller inga översättningsnycklar.",
+      "notObject": "Filen måste innehålla ett JSON-objekt på översta nivån."
+    }
+  },
+  "landing": {
+    "apkLink": "Eller ladda ner Android-APK:n · {size}  →",
+    "askingGithub": "Frågar GitHub efter den senaste versionen…",
+    "checkingBuilds": "Letar efter byggen…",
+    "codeMissing": "saknas",
+    "cta": {
+      "apk": "Ladda ner APK:n",
+      "latest": "Ladda ner senaste bygget",
+      "macos": "Ladda ner för macOS",
+      "windows": "Ladda ner för Windows"
+    },
+    "download": {
+      "allReleases": "Alla versioner och ändringsloggar på GitHub  →",
+      "body": "Gratis och öppen källkod under MIT-licens. Inget konto, ingen provperiod, ingen telemetri.",
+      "copied": "Kopierat",
+      "copy": "Kopiera",
+      "eyebrow": "Ladda ner",
+      "latest": "Senaste",
+      "latestBuildRuns": "Senaste byggkörningarna",
+      "noBuildBody": "Installationsfilerna för macOS, Windows och Android byggs av GitHub Actions och bifogas en version så snart en versionstagg pushas. Till dess tar det ungefär två minuter att köra från källkoden.",
+      "noBuildTitle": "Inget paketerat bygge har publicerats ännu",
+      "published": "Publicerad {date}",
+      "releasesOnGithub": "Versioner på GitHub",
+      "runFromSource": "Eller kör det från källkoden på någon av de sex plattformarna",
+      "runFromSourceNote": "Byt ut enheten mot windows, linux, chrome eller en ansluten telefon. Projektet låser sin Flutter-version i .fvmrc.",
+      "title": "Skaffa LingoDesk.",
+      "tryAgain": "Försök igen",
+      "unreachableBody": "{reason} Du kan fortfarande bläddra bland versionerna eller bygga från källkoden.",
+      "unreachableTitle": "Kunde inte nå GitHub",
+      "unsignedNote": "Skrivbordsbyggena är osignerade: högerklicka appen på macOS och välj Öppna första gången, välj Mer information och sedan Kör ändå på Windows.",
+      "version": "Version {version}"
+    },
+    "features": {
+      "body": "LingoDesk är ett fokuserat skrivbordsverktyg, inte en översättningsplattform med licenser och instrumentpaneler.",
+      "eyebrow": "Funktioner",
+      "f1Body": "Nästlad JSON plattas ut till punktnycklar, så en text och alla dess översättningar ryms på en enda rad som du läser tvärsöver.",
+      "f1Title": "Ett rutnät för alla språk",
+      "f2Body": "Live-täckning per språk och ett filter för ”endast saknade” som kokar ner hundratals nycklar till den handfull som fortfarande är tom.",
+      "f2Title": "Saknade texter, inte missade buggar",
+      "f3Body": "Översätt luckorna satsvis via Anthropic, OpenAI eller Gemini. Din nyckel, ditt konto, din faktura — inget går via en mellanhand.",
+      "f3Title": "Översätt med din egen AI-nyckel",
+      "f4Body": "Ingen backend, ingen telemetri, ingen registrering. Projekten ligger på din dator och API-nycklarna hamnar i systemets säkra lagring.",
+      "f4Title": "Lokalt och privat",
+      "f5Body": "Skanna en projektmapp, hämta in språkfilerna du redan har och exportera den nästlade formen rakt tillbaka till kodbasen.",
+      "f5Title": "Import och export på plats",
+      "f6Body": "En arbetsyta du orkar titta på hela dagen — varje tema är en hel palett, inte bara en utbytt accentfärg.",
+      "f6Title": "Sex teman, ljust och mörkt",
+      "title": "Allt jobbet behöver. Inget det inte behöver."
+    },
+    "flutter": {
+      "body": "LingoDesk skrivs en gång i Dart och kompileras till macOS, Windows, Linux, Android, iOS och webben. Den här sidan är inte HTML med en påklistrad Flutter-demo — det är samma projekt, samma designtokens och samma widgetar, kompilerade för webbläsaren du läser den i.",
+      "eyebrow": "Byggt med Flutter och Dart",
+      "fromSource": "Från källkod",
+      "markBody": "Logotypen ovan är en CustomPainter som ritar rundade rektanglar och två cirklar på en canvas — därför är den skarp i alla storlekar och tar accentfärgen från det valda temat.",
+      "markTitle": "Ingen bildfil",
+      "pill": "Live, just nu",
+      "prebuilt": "Förbyggt",
+      "proofBody": "Det här är de sex paletterna som följer med LingoDesk, lästa från samma temautökning som skrivbordsbygget läser. Välj en så målas hela webbplatsen om — ingen omladdning, inget byte av stilmall.",
+      "proofTitle": "Varje färg på den här sidan kommer från appen.",
+      "statCodebase": "kodbas",
+      "statJavascript": "handskrivna rader JavaScript",
+      "statTargets": "kompileringsmål",
+      "title": "En kodbas. Sex plattformar.\nDen här sidan inräknad.",
+      "youAreHere": "Du är här"
+    },
+    "footer": {
+      "issues": "Ärenden",
+      "licence": "MIT-licens",
+      "note": "Den här sidan är en Flutter-webbapp, byggd från samma kodbas som produkten.",
+      "readme": "Readme",
+      "releases": "Versioner"
+    },
+    "getStarted": "Kom igång",
+    "hero": {
+      "body": "LingoDesk gör en mapp med en.json, fr.json och es.json till en enda arbetsyta: varje nyckel en rad, varje språk en kolumn, varje saknad text omöjlig att missa.",
+      "pill": "Öppen källkod · MIT · Inget konto, ingen backend",
+      "title": "Översätt alla språk\nfrån ett välstädat skrivbord."
+    },
+    "localeStrip": "20 språk inbyggda · lägg till vilket annat som helst i inställningarna",
+    "nav": {
+      "download": "Ladda ner",
+      "features": "Funktioner",
+      "flutter": "Flutter",
+      "howItWorks": "Så fungerar det",
+      "language": "Språk",
+      "menu": "Meny",
+      "screens": "Vyer",
+      "why": "Varför"
+    },
+    "openIssue": "Öppna ett ärende",
+    "openSource": {
+      "body": "MIT-licensierat. Forka det, använd det i ditt team eller öppna ett ärende om det flöde som stör dig mest — färdplanen styrs av dem som använder det.",
+      "title": "Gratis för alltid, och källkoden ligger precis där."
+    },
+    "preview": {
+      "allTranslated": "Varje språk är helt översatt.",
+      "appearanceNote": "Det här är verkligen inställningen — den målar om hela sidan, inte bara det här fönstret.",
+      "editorWindow": "Översättningsredigerare",
+      "keysNote": "Nycklarna ligger i systemets säkra lagring. De stannar på den här enheten och skickas bara till den leverantör de hör till.",
+      "missingStrings": {
+        "one": "1 saknad text",
+        "other": "{} saknade texter"
+      },
+      "noMatches": "Ingen nyckel matchar ”{query}”.",
+      "nothingMissing": "Ingenting saknas — varje text är översatt.",
+      "projects": "Projekt",
+      "semantics": "LingoDesk-panelen: täckning, antal nycklar och språkstatus över en hel arbetsyta."
+    },
+    "problem": {
+      "afterEyebrow": "Med LingoDesk",
+      "afterTitle": "Ett rutnät. Hålen anmäler sig själva.",
+      "beforeEyebrow": "Utan LingoDesk",
+      "beforeTitle": "Tre filer, tre flikar och en saknad text som du hittar först vid granskningen.",
+      "body": "Att lägga till en text betyder att öppna varje språkfil och inte glömma någon. LingoDesk gör det till en enda rad i stället.",
+      "exportNote": "Exporten bygger upp den nästlade formen, fil för fil, exakt som din app förväntar sig den.",
+      "eyebrow": "Problemet",
+      "title": "Lokaliseringsfilerna glider isär i samma stund som du lägger till en nyckel."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · gratis för alltid",
+    "releasePending": "Inget paketerat bygge ännu — kör det från källkoden med två kommandon.",
+    "releasePickBuild": "v{version} är ute — välj ett bygge nedan.",
+    "releaseUnavailable": "{reason} Titta på versionssidan.",
+    "seeAllDownloads": "Visa alla nedladdningar",
+    "starOnGithub": "Stjärnmärk på GitHub",
+    "starOnGithubCount": "Stjärna på GitHub · {stars}",
+    "starOnGithubTooltip": "Stjärnmärk LingoDesk på GitHub",
+    "steps": {
+      "eyebrow": "Så fungerar det",
+      "s1Body": "En per app. Välj källspråket en gång och de målspråk du faktiskt levererar.",
+      "s1Title": "Skapa en arbetsyta",
+      "s2Body": "Peka ut din språkmapp. Befintlig JSON plattas ut, valideras mot språken du angett och läses in.",
+      "s2Title": "Importera det du har",
+      "s3Body": "Filtrera fram det som saknas och skriv, eller lämna satsen till din AI-leverantör. Ändringar sparas medan du jobbar.",
+      "s3Title": "Fyll luckorna",
+      "s4Body": "Den nästlade strukturen byggs upp per språk, redo att läggas tillbaka bredvid din kod och committas.",
+      "s4Title": "Exportera tillbaka till kodbasen",
+      "title": "Fyra steg, sedan tillbaka till koden."
+    },
+    "switchToDark": "Byt till mörkt",
+    "switchToLight": "Byt till ljust",
+    "tour": {
+      "aiProviders": "Ta med din egen nyckel för Anthropic, OpenAI eller Gemini. Välj en, så blir den nyckeln som varje AI-åtgärd i redigeraren använder.",
+      "appearance": "Sex fullständiga paletter och en ljus/mörk-omkopplare. Det här är den riktiga inställningen, inte en bild av den — välj ett tema så målas hela webbplatsen om.",
+      "body": "Det här är ingen skärmbild. Det är appen, kompilerad in i den här sidan — klicka runt i den.",
+      "dashboard": "Täckning, antal nycklar och språkstatus för varje projekt, direkt när du öppnar appen. Siffrorna kommer från samma celler som redigeraren skriver till — fyll i en och se dem röra sig.",
+      "editor": "Nycklar längs sidan, språk längs toppen. Varje cell är ett riktigt fält: skriv en översättning, sök eller filtrera fram bara det som saknas.",
+      "eyebrow": "En titt inuti",
+      "pill": "Live · inget du gör här sparas",
+      "projects": "En arbetsyta per app, var och en med eget källspråk och egna målspråk. Klicka på en rad för att öppna den.",
+      "title": "Byggd som en skrivbordsapp, för det är den."
+    },
+    "viewOnGithub": "Visa på GitHub",
+    "warning": {
+      "macos": "Osignerat bygge — högerklicka appen och välj Öppna första gången.",
+      "windows": "Osignerat bygge — välj Mer information i SmartScreen och sedan Kör ändå."
+    }
+  },
+  "language": {
+    "ar": "arabiska",
+    "cs": "tjeckiska",
+    "de": "tyska",
+    "en": "engelska",
+    "es": "spanska",
+    "fr": "franska",
+    "hi": "hindi",
+    "it": "italienska",
+    "ja": "japanska",
+    "ko": "koreanska",
+    "nl": "nederländska",
+    "pl": "polska",
+    "pt": "portugisiska",
+    "ro": "rumänska",
+    "ru": "ryska",
+    "sv": "svenska",
+    "tr": "turkiska",
+    "uk": "ukrainska",
+    "vi": "vietnamesiska",
+    "zh": "kinesiska"
+  },
+  "nav": {
+    "aiProviders": "AI-leverantörer",
+    "appearance": "Utseende",
+    "apps": "Appar",
+    "dashboard": "Panel",
+    "group": {
+      "settings": "Inställningar",
+      "workspace": "Arbetsyta"
+    },
+    "import": "Importera",
+    "languages": "Språk",
+    "localStorage": "Lokal lagring",
+    "profile": "Profil",
+    "settings": "Inställningar"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Lokalt först",
+      "locales": "20 språk",
+      "nestedJson": "Nästlad JSON"
+    },
+    "skip": "Hoppa över",
+    "stage": {
+      "body": "Inga konton, ingen synk, inga kalkylblad som växer sig vilda - bara din JSON, på din dator.",
+      "title": "Ett skrivbord för varje språkfil."
+    },
+    "startSetup": "Börja konfigurera",
+    "step1": {
+      "body": "Varje nyckel är en rad och varje språk en kolumn. Saknade texter förblir markerade medan du jobbar, så ingenting går ut halvöversatt.",
+      "caption": "Alla band, ett rum",
+      "eyebrow": "Översättningsarbetsyta",
+      "highlight1": "Nycklar och språk i ett enda rutnät",
+      "highlight2": "Filtrera ner till det som fortfarande saknas",
+      "highlight3": "Ändringar sparas lokalt medan du skriver",
+      "title": "Översätt alla språk från ett välstädat skrivbord"
+    },
+    "step2": {
+      "body": "En arbetsyta per app: välj källspråket en gång, följ bara de målspråk som betyder något och låt täckningen tala för sig själv.",
+      "caption": "Indexerat, märkt, sökbart",
+      "eyebrow": "Projektuppsättning",
+      "highlight1": "En egen arbetsyta för varje app",
+      "highlight2": "Välj målspråk bland 20 språk som stöds",
+      "highlight3": "Täckning per app och per språk",
+      "title": "Håll varje produkt ordnad efter språk"
+    },
+    "step3": {
+      "body": "LingoDesk bygger upp din ursprungliga nyckelstruktur före exporten, så filerna som landar i din kodbas är precis de filer din app förväntar sig.",
+      "caption": "Alla destinationer på tavlan",
+      "eyebrow": "Redo att exporteras",
+      "highlight1": "Punktnycklar veckas ut till nästlade objekt igen",
+      "highlight2": "Välj språken, spara var du vill",
+      "highlight3": "Snyggt formaterat, med stabil nyckelordning",
+      "title": "Skicka nästlade JSON-filer tillbaka till din app"
+    },
+    "stepOf": "Steg {step} av {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Följ systemets tema eller välj ett själv.",
+      "swatchActive": "Aktiv",
+      "swatchBackground": "Bakgrund",
+      "swatchBrand": "Varumärke",
+      "swatchCard": "Kort",
+      "themeSubtitle": "Sex paletter. Var och en stylar om hela appen, inte bara accenten."
+    },
+    "defaults": {
+      "count": {
+        "one": "1 språk förväljs.",
+        "other": "{} språk förväljs."
+      },
+      "empty": "Inga standardval ännu — nya appar startar utan målspråk.",
+      "subtitle": "Förvalda varje gång du skapar en ny app.",
+      "title": "Standardmålspråk"
+    },
+    "language": {
+      "note": "Ditt val sparas och tillämpas direkt — menyer, dialoger och meddelanden byter med.",
+      "subtitle": "Språket som LingoDesk självt visas på.",
+      "title": "Gränssnittsspråk"
+    },
+    "profile": {
+      "email": "E-post",
+      "emailHint": "valfritt",
+      "name": "Visningsnamn",
+      "nameHint": "Lokal arbetsyta",
+      "note": "LingoDesk har inga konton. Det här sätter bara namn på din lokala arbetsyta.",
+      "subtitle": "Visas i sidofältet. Sparas bara på den här enheten."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Varm bärnsten och rostade sandtoner."
+    },
+    "graphite": {
+      "description": "Ingen kulör alls — kontrasten står för accenten."
+    },
+    "indigo": {
+      "description": "Sval indigo över blågrå neutraler."
+    },
+    "rose": {
+      "description": "Djup rosa med mjuka ytor."
+    },
+    "teal": {
+      "description": "Husets look — mättad blågrön mot varm sten."
+    },
+    "violet": {
+      "description": "Elektrisk violett på ett svagt purpurfärgat chassi."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1 dag sedan",
+      "other": "{} dagar sedan"
+    },
+    "hoursAgo": {
+      "one": "1 timme sedan",
+      "other": "{} timmar sedan"
+    },
+    "justNow": "Precis nu",
+    "minutesAgo": {
+      "one": "1 min sedan",
+      "other": "{} min sedan"
+    },
+    "monthsAgo": {
+      "one": "1 månad sedan",
+      "other": "{} månader sedan"
+    },
+    "weeksAgo": {
+      "one": "1 vecka sedan",
+      "other": "{} veckor sedan"
+    },
+    "yearsAgo": {
+      "one": "1 år sedan",
+      "other": "{} år sedan"
+    },
+    "yesterday": "I går"
+  },
+  "upload": {
+    "addFiles": "Lägg till filer",
+    "addFolder": "Lägg till mapp",
+    "addMore": "Lägg till fler",
+    "backToApps": "Tillbaka till apparna",
+    "backToEditor": "Tillbaka till redigeraren",
+    "browseFiles": "Bläddra bland filer",
+    "chooseFolder": "Välj mapp",
+    "defaultImportName": "Importerat projekt",
+    "defaultProjectName": "Importerade översättningar",
+    "detectedLanguages": "Upptäckta språk",
+    "detectedLanguagesHint": "Lägg till fler mappar eller filer så slås de ihop med de här.",
+    "exportsBackTo": "Exporteras tillbaka till {path}",
+    "filesReady": {
+      "one": "1 fil redo att importeras.",
+      "other": "{} filer redo att importeras."
+    },
+    "hero": {
+      "filesBody": "Skanna en mapp eller välj .json-filerna själv. Varje fil kopplas till ett språk utifrån sitt namn.",
+      "filesTitle": "Lägg till dina översättningsfiler",
+      "projectBody": "Välj projektet (eller vilken mapp som helst) så hittar LingoDesk översättningsfilerna i den — eller välj .json-filerna själv.",
+      "projectTitle": "Importera dina översättningar"
+    },
+    "importAndOpen": "Importera och öppna redigeraren",
+    "importedToast": "Importerat till ”{name}”.",
+    "keepOneLanguage": "Behåll minst ett språk för att importera.",
+    "languageSource": "{language} - källa",
+    "logo": "Logotyp",
+    "namingRule": "Namnge varje fil efter sin språkkod. Allt utanför den här mängden avvisas.",
+    "needValidFile": "Lägg till minst en giltig fil att importera.",
+    "noFilesFound": "Inga översättningsfiler hittades i ”{name}”. Vi letade efter .json-filer i mapparna /translation, /translations och /languages.",
+    "pickFilesTitle": "Välj översättningsfiler",
+    "pickFolderTitle": "Välj din projektmapp",
+    "readySummary": "{languages} språk och {keys} nycklar redo att importeras.",
+    "removeLogo": "Ta bort logotypen",
+    "replaceLogo": "Byt logotyp",
+    "requiredLanguages": "Språk som krävs",
+    "scanning": "Skannar…",
+    "skipToEditor": "Hoppa till redigeraren",
+    "sourceHelper": "Allt annat blir ett målspråk som du kan översätta till.",
+    "stagedFiles": "Förberedda filer",
+    "startOver": "Börja om",
+    "stat": {
+      "translated": "Översatta"
+    },
+    "uploadLogo": "Ladda upp en logotyp",
+    "whereWeLook": "Var vi letar",
+    "whereWeLookBody": "Alla .json-filer i en mapp som heter /translation, /translations eller /languages, var som helst i projektet. Bygg- och beroendemappar hoppas över."
+  }
+}

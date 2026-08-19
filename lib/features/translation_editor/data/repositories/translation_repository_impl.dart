@@ -9,6 +9,7 @@ import '../../domain/repositories/translation_repository.dart';
 import '../datasources/file_export_data_source.dart';
 import '../datasources/translation_local_data_source.dart';
 import '../models/translation_entry_model.dart';
+import '../../../../core/localization/export.dart';
 
 class TranslationRepositoryImpl implements TranslationRepository {
   const TranslationRepositoryImpl({
@@ -68,7 +69,11 @@ class TranslationRepositoryImpl implements TranslationRepository {
       final entries = await localDataSource.getEntries(appId);
       final values = entries[key];
       if (values == null) {
-        return Left(CacheFailure(message: 'Key not found: $key'));
+        return Left(
+          CacheFailure(
+            message: LocaleKeys.errorsKeyNotFound.tr(namedArgs: {'key': key}),
+          ),
+        );
       }
       values[language] = value;
       await localDataSource.saveEntries(appId, entries);
@@ -90,7 +95,9 @@ class TranslationRepositoryImpl implements TranslationRepository {
       final entries = await localDataSource.getEntries(appId);
       if (entries.containsKey(key)) {
         return Left(
-          ValidationFailure(message: 'The key "$key" already exists.'),
+          ValidationFailure(
+            message: LocaleKeys.errorsKeyExists.tr(namedArgs: {'key': key}),
+          ),
         );
       }
       // Blank values are dropped so the key reads as missing for them.
@@ -112,7 +119,11 @@ class TranslationRepositoryImpl implements TranslationRepository {
     try {
       final entries = await localDataSource.getEntries(appId);
       if (entries.remove(key) == null) {
-        return Left(CacheFailure(message: 'Key not found: $key'));
+        return Left(
+          CacheFailure(
+            message: LocaleKeys.errorsKeyNotFound.tr(namedArgs: {'key': key}),
+          ),
+        );
       }
       await localDataSource.saveEntries(appId, entries);
       return const Right(null);
@@ -198,8 +209,8 @@ class TranslationRepositoryImpl implements TranslationRepository {
     try {
       final entries = await localDataSource.getEntries(appId);
       if (entries.isEmpty) {
-        return const Left(
-          ValidationFailure(message: 'There are no keys to export yet.'),
+        return Left(
+          ValidationFailure(message: LocaleKeys.errorsNothingToExport.tr()),
         );
       }
       return Right(await write(entries));

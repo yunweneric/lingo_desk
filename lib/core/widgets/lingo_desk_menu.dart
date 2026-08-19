@@ -7,6 +7,7 @@ import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_animations.dart';
 import 'lingo_desk_field.dart';
 import 'lingo_desk_icon.dart';
+import '../localization/export.dart';
 
 /// The panel every menu surface in the app drops: a card-coloured sheet
 /// with the 12px radius, a hairline border and a soft shadow.
@@ -240,7 +241,7 @@ class LingoDeskMenuButton<T> extends StatefulWidget {
     required this.items,
     required this.onSelected,
     this.icon = HugeIcons.strokeRoundedMoreHorizontal,
-    this.tooltip = 'More',
+    this.tooltip,
     this.child,
     this.selectedValue,
     this.enabled = true,
@@ -256,7 +257,8 @@ class LingoDeskMenuButton<T> extends StatefulWidget {
   /// Glyph for the default trigger; ignored when [child] is given.
   final List<List<dynamic>> icon;
 
-  final String tooltip;
+  /// Defaults to the translated "More" tooltip.
+  final String? tooltip;
 
   /// Custom trigger. It gets the open/hover treatment of whatever it
   /// draws itself — only the menu behaviour comes from here.
@@ -358,7 +360,7 @@ class _LingoDeskMenuButtonState<T> extends State<LingoDeskMenuButton<T>> {
         // to this box, so scaling it drags the menu out from under the
         // pointer that is reaching for an item.
         return Tooltip(
-          message: widget.tooltip,
+          message: widget.tooltip ?? LocaleKeys.commonMore.tr(),
           child: MouseRegion(
             cursor: isEnabled
                 ? SystemMouseCursors.click

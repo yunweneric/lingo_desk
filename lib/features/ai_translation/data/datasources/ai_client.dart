@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entities/ai_credentials.dart';
 import '../../domain/entities/ai_translation_item.dart';
+import '../../../../core/localization/export.dart';
 
 /// One provider's HTTP surface.
 ///
@@ -38,11 +39,11 @@ class AiErrors {
 
     final summary = switch (statusCode) {
       401 || 403 =>
-        'The $provider API key was rejected. '
-            'Check it in Settings - AI.',
+        LocaleKeys.errorsAiKeyRejected.tr(namedArgs: {'provider': provider}),
       404 =>
-        'The $provider model was not found. Check the model name in '
-            'Settings - AI.',
+        LocaleKeys.errorsAiModelNotFound.tr(
+          namedArgs: {'provider': provider},
+        ),
       429 => '$provider rate limit reached. Try again in a moment.',
       >= 500 => '$provider is unavailable right now.',
       _ => '$provider rejected the request.',

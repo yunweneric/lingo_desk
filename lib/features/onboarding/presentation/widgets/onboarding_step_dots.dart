@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/localization/export.dart';
 
 /// Progress dots that also work as a control — tapping one jumps
 /// straight to that step.
@@ -28,7 +29,9 @@ class OnboardingStepDots extends StatelessWidget {
         return Semantics(
           selected: isActive,
           button: true,
-          label: 'Step ${index + 1} of $length',
+          label: LocaleKeys.onboardingStepOf.tr(
+            namedArgs: {'step': '${index + 1}', 'total': '$length'},
+          ),
           child: InkWell(
             onTap: isActive ? null : () => onSelect(index),
             borderRadius: BorderRadius.circular(999),

@@ -5,6 +5,7 @@ import '../../../../core/preferences/app_settings_controller.dart';
 import '../widgets/settings_defaults_card.dart';
 import '../widgets/settings_language_card.dart';
 import 'settings_pane.dart';
+import '../../../../core/localization/export.dart';
 
 /// The two language preferences that are not per-app: the interface
 /// locale, and the targets pre-selected for every app you create.
@@ -16,7 +17,7 @@ class SettingsLanguagesPage extends StatelessWidget {
     final settings = getIt<AppSettingsController>();
 
     return SettingsPane(
-      title: 'Languages',
+      title: LocaleKeys.navLanguages.tr(),
       listenable: settings,
       builder: (context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

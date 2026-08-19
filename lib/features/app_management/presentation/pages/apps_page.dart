@@ -20,6 +20,7 @@ import '../bloc/app_management_state.dart';
 import '../widgets/apps_search_field.dart';
 import '../widgets/apps_summary_card.dart';
 import '../widgets/apps_table.dart';
+import '../../../../core/localization/export.dart';
 
 /// Every localization app in one table, above workspace-wide counters and
 /// the overall translation-file progress.
@@ -72,7 +73,10 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                   listenable: _settings,
                   builder: (context, _) {
                     return WorkspacePageHeader(
-                      breadcrumb: const [Crumb.workspace, Crumb('Apps')],
+                      breadcrumb: [
+                        Crumb.workspace,
+                        Crumb(LocaleKeys.navApps.tr()),
+                      ],
                       actions: [
                         const AppsSearchField(),
                         ThemeModeSwitcher(
@@ -85,7 +89,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                             HugeIcons.strokeRoundedFolderAdd,
                             size: 18,
                           ),
-                          label: const Text('Import project'),
+                          label: Text(LocaleKeys.appsImportProject.tr()),
                         ),
                         FilledButton.icon(
                           onPressed: () => openCreateApp(context),
@@ -94,7 +98,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                             color: Colors.white,
                             size: 18,
                           ),
-                          label: const Text('New app'),
+                          label: Text(LocaleKeys.appsNewApp.tr()),
                         ),
                       ],
                       // Four controls, one of them 280px wide, would take
@@ -119,7 +123,7 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
                                 color: Colors.white,
                                 size: 18,
                               ),
-                              label: const Text('New app'),
+                              label: Text(LocaleKeys.appsNewApp.tr()),
                             ),
                           ],
                         ),
@@ -179,12 +183,9 @@ class _AppsPageState extends State<AppsPage> with RouteAware {
               if (state.overviews.isEmpty)
                 WorkspaceEmptyState(
                   icon: HugeIcons.strokeRoundedFolder02,
-                  title: 'Create your first app',
-                  message:
-                      'Point LingoDesk at a project folder and it imports the '
-                      'translation files it finds, or set one up by hand with '
-                      'a source language and your targets.',
-                  actionLabel: 'Import project',
+                  title: LocaleKeys.appsEmptyTitle.tr(),
+                  message: LocaleKeys.appsEmptyMessage.tr(),
+                  actionLabel: LocaleKeys.appsImportProject.tr(),
                   actionIcon: HugeIcons.strokeRoundedFolderAdd,
                   onAction: () => openImportProject(context),
                 )

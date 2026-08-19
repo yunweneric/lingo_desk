@@ -1,0 +1,769 @@
+{
+  "ai": {
+    "addKey": "Add API key",
+    "addProviderKey": "Add {provider} key",
+    "col": {
+      "added": "Added",
+      "apiKey": "API key",
+      "model": "Model",
+      "provider": "Provider"
+    },
+    "createKeyAt": "Create a key at {console}.",
+    "defaultModel": "default",
+    "delete": {
+      "activeBody": "This removes \"{label}\", the key translations currently run on. Another saved key takes over, or AI translation stops until you add one.",
+      "body": "This removes \"{label}\" from this device. The key itself stays valid at {console}.",
+      "title": "Delete API key?"
+    },
+    "editKey": "Edit API key",
+    "field": {
+      "name": "Name",
+      "nameHelp": "Optional — what you call this key in the table."
+    },
+    "hideKey": "Hide key",
+    "key": {
+      "actions": "Key actions",
+      "active": "Active",
+      "required": "Paste the API key to continue.",
+      "test": "Test connection",
+      "use": "Use for translations"
+    },
+    "pickModel": "Pick a suggested model",
+    "pickProvider": "Which provider is this key for?",
+    "saveKey": "Add key",
+    "showKey": "Show key",
+    "status": {
+      "detail": "{provider} · {model} · used by every AI action in the editor.",
+      "noKey": "No key is ready yet",
+      "noKeyDetail": "Add an API key, then the editor can fill missing translations for you.",
+      "translatingWith": "Translating with {label}"
+    },
+    "storage": {
+      "plain": "This build cannot reach the system keychain, so keys are stored with your other local settings in plain text. They stay on this device and are only ever sent to the provider they belong to.",
+      "secure": "Keys are stored in this device’s keychain and are only ever sent to the provider they belong to."
+    },
+    "table": {
+      "empty": "No API keys yet. Add one to translate from the editor.",
+      "keyCount": {
+        "one": "1 key",
+        "other": "{} keys"
+      },
+      "noKeys": "No keys yet",
+      "range": "{start}-{end} of {total}"
+    },
+    "toast": {
+      "activeTitle": "Translations now use {label}",
+      "addedBody": "{provider} is ready to translate with.",
+      "addedTitle": "Key added",
+      "deletedBody": "{label} was removed from this device.",
+      "deletedNamedTitle": "Deleted {label}",
+      "deletedTitle": "Key deleted",
+      "promotedBody": "Translations now use {label}.",
+      "testFailedTitle": "{label} failed",
+      "testPassedBody": "{provider} accepted the key.",
+      "testPassedTitle": "{label} connected",
+      "updatedBody": "Saved changes to {label}.",
+      "updatedTitle": "Key updated"
+    }
+  },
+  "appSettings": {
+    "appIcon": "App icon",
+    "appIconHelp": "Optional. Without one, the app shows its initials.",
+    "appIconNote": "PNG, JPG or WebP. The image is scaled to {size} px and stored with the app, so moving the original file is fine.",
+    "appName": "App name",
+    "appNameHint": "e.g. Customer Portal",
+    "createApp": "Create app",
+    "general": "General",
+    "generalSubtitle": "How this app is identified and what it translates from.",
+    "localeCount": {
+      "one": "1 locale",
+      "other": "{} locales"
+    },
+    "metaNoTargets": "None yet",
+    "metaSource": "Source",
+    "metaTargets": "Targets",
+    "metaUpdated": "Last updated",
+    "replaceIcon": "Replace icon",
+    "saveChanges": "Save changes",
+    "savedToast": "Saved \"{name}\".",
+    "selectAll": "Select all",
+    "selectedCount": "{selected} of {total} selected",
+    "sourceLanguage": "Source language",
+    "sourceLanguageHelp": "The base language your keys are written in.",
+    "sourceNotTarget": "The source language cannot also be a target.",
+    "targetLanguages": "Target languages",
+    "targetLanguagesHelp": "Languages you want to translate into.",
+    "targetLanguagesNote": "Every key you add is queued for each selected locale. Removing a locale hides its column in the editor; the translations you already have are kept.",
+    "targetLanguagesSubtitle": "The locales this app is translated into.",
+    "uploadIcon": "Upload icon"
+  },
+  "apps": {
+    "card": {
+      "filesSummary": "{complete}/{total} files complete - {updated}"
+    },
+    "created": {
+      "body": "Do you want to upload your existing JSON translation files now? You can also do this later from the dashboard.",
+      "later": "Later",
+      "title": "\"{name}\" created",
+      "upload": "Upload files"
+    },
+    "delete": {
+      "body": "This permanently removes the app and all of its translations. This cannot be undone.",
+      "title": "Delete \"{name}\"?"
+    },
+    "deletedNamedToast": "Deleted \"{name}\".",
+    "deletedToast": "App deleted.",
+    "empty": {
+      "message": "Point LingoDesk at a project folder and it imports the translation files it finds, or set one up by hand with a source language and your targets.",
+      "title": "Create your first app"
+    },
+    "importProject": "Import project",
+    "menu": {
+      "deleteApp": "Delete app",
+      "openEditor": "Open editor",
+      "uploadFiles": "Upload files"
+    },
+    "newApp": "New app",
+    "searchHint": "Search apps",
+    "status": {
+      "complete": "Complete",
+      "missing": "Missing",
+      "new": "New"
+    },
+    "summary": {
+      "filesComplete": "Files complete",
+      "missingStrings": "Missing strings",
+      "overallCoverage": "overall coverage",
+      "subtitle": "Translation files across every app and locale",
+      "title": "Workspace totals"
+    },
+    "table": {
+      "colApp": "App",
+      "colFiles": "Files",
+      "colLanguages": "Languages",
+      "colProgress": "Progress",
+      "colStatus": "Status",
+      "colUpdated": "Updated",
+      "complete": "complete",
+      "hideLanguages": "Hide languages",
+      "less": "Less",
+      "noMatches": "No apps match your search.",
+      "searchSubtitle": "{matches} of {total} apps match \"{query}\"",
+      "showLanguages": "Show all languages",
+      "subtitle": "Current localization workspaces"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "close": "Close",
+    "delete": "Delete",
+    "dismiss": "Dismiss",
+    "edit": "Edit",
+    "errorPrefix": "Error: {message}",
+    "missingCount": {
+      "one": "1 missing",
+      "other": "{} missing"
+    },
+    "more": "More",
+    "next": "Next",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "remove": "Remove",
+    "retry": "Retry",
+    "rows": "Rows",
+    "selectLanguage": "Select a language",
+    "selectOption": "Select an option",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "themeSystem": "System"
+  },
+  "dashboard": {
+    "appCount": {
+      "one": "1 app",
+      "other": "{} apps"
+    },
+    "appsShortcutSubtitle": "{apps} - {complete}/{total} translation files complete",
+    "coverage": {
+      "empty": "Create an app to see coverage here.",
+      "noData": "No translation data yet. Upload JSON files to get started.",
+      "subtitle": "Translated share of target strings per app",
+      "summary": "{translated} strings translated. {missing} are still missing across active target languages.",
+      "title": "Coverage by app"
+    },
+    "empty": {
+      "message": "An app groups the translation files of one project. Set a source language, pick your targets, and start translating.",
+      "title": "Create your first app"
+    },
+    "health": {
+      "allTranslated": "All apps are fully translated.",
+      "empty": "No target languages yet.",
+      "nextReview": "Next review: {name}",
+      "nextReviewPrefix": "Next review: ",
+      "subtitle": "Coverage by target locale",
+      "title": "Language health"
+    },
+    "metric": {
+      "acrossApps": "Across all apps",
+      "allClear": "All clear",
+      "coverage": "Coverage",
+      "localWorkspace": "Local workspace",
+      "missing": "Missing",
+      "needsReview": "Needs review",
+      "targetLocales": {
+        "one": "1 target locale",
+        "other": "{} target locales"
+      },
+      "totalKeys": "Total keys"
+    },
+    "stat": {
+      "keys": "Keys",
+      "locales": "Locales"
+    },
+    "subtitle": "Track coverage, review missing strings, and jump back into active localization work.",
+    "title": "Translation dashboard",
+    "viewAllApps": "View all apps"
+  },
+  "editor": {
+    "addKey": "Add key",
+    "addKeyHint": "Fill in what you have now - anything left blank stays missing and can be translated later in the grid.",
+    "aiAllComplete": "Every target language is complete.",
+    "aiAlreadyRunning": "A translation pass is already running.",
+    "aiCanceledEmpty": "Canceled before anything landed.",
+    "aiDialogBody": "Only empty cells are filled — translations you already have are never overwritten.",
+    "aiFailedCount": {
+      "one": "1 could not be translated.",
+      "other": "{} could not be translated."
+    },
+    "aiFailedCountReason": {
+      "one": "1 could not be translated ({error}).",
+      "other": "{} could not be translated ({error})."
+    },
+    "aiFinishing": "Finishing the current batch…",
+    "aiNotConfiguredBody": "Add an API key under Settings - AI providers first.",
+    "aiNotConfiguredTitle": "AI is not configured",
+    "aiNothingHere": "Nothing left to translate here.",
+    "aiNothingLeft": "Nothing left to translate",
+    "aiNothingTranslated": "Nothing was translated.",
+    "aiProgress": "Translating {label} · {done} of {total}",
+    "aiRunning": "AI translation running",
+    "aiTranslate": "AI translate",
+    "aiTranslateMissing": {
+      "one": "AI translate 1 missing string",
+      "other": "AI translate {} missing strings"
+    },
+    "aiTranslateRow": "AI translate row",
+    "aiTranslatedCanceled": {
+      "one": "Translated 1 string before canceling.",
+      "other": "Translated {} strings before canceling."
+    },
+    "aiTranslatedDone": {
+      "one": "Translated 1 string.",
+      "other": "Translated {} strings."
+    },
+    "aiUsing": "Using {provider} · {model}",
+    "clearAll": "Clear all",
+    "clickToHide": "Click to hide the other languages",
+    "clickToShow": "Click to show the other languages",
+    "copiedToast": "Copied \"{key}\" to the clipboard.",
+    "copyKey": "Copy key",
+    "deleteKey": "Delete key",
+    "deleteKeyBody": "This removes \"{key}\" from every language. This cannot be undone.",
+    "deleteKeyTitle": "Delete key?",
+    "empty": "No keys yet. Upload JSON files or add your first key.",
+    "export": "Export",
+    "exportCanceled": "Export canceled.",
+    "exportChooseDestination": "Choose a destination",
+    "exportDownload": "Download",
+    "exportFolderSummary": "You pick the folder next; one file per language lands in it.",
+    "exportNoProject": "Import a project folder first",
+    "exportOverwrite": "Overwrite files",
+    "exportProjectSummary": "Written into {path}, replacing these files.",
+    "exportSaveTo": "Save to {name}",
+    "exportSaveToProject": "Save to project",
+    "exportSavedToast": "{files} saved to {name}",
+    "exportToFolder": "Export to folder",
+    "exportToFolderEllipsis": "Export to folder…",
+    "exportZip": "Download ZIP",
+    "exportZipHint": "Zipped into your Downloads folder",
+    "exportZipSummary": "Bundled into {file} in your Downloads folder.",
+    "exportZippedToast": "{files} zipped to Downloads",
+    "exportedToast": "{files} exported",
+    "fileCount": {
+      "one": "1 file",
+      "other": "{} files"
+    },
+    "hiddenLanguages": {
+      "one": "1 more language",
+      "other": "{} more languages"
+    },
+    "hiddenLanguagesInRow": {
+      "one": "1 more language, inside each row",
+      "other": "{} more languages, inside each row"
+    },
+    "hideOtherLanguages": "Hide the other languages",
+    "keyActions": "Key actions",
+    "keyAddedToast": "Added key \"{key}\".",
+    "keyDeletedToast": "Deleted key \"{key}\".",
+    "keyHelper": "Dot notation groups keys into nested JSON.",
+    "keyLabel": "Key",
+    "languageCount": {
+      "one": "1 language",
+      "other": "{} languages"
+    },
+    "languageSourceSuffix": "{language} (source)",
+    "missingOnly": "Missing only",
+    "missingOnlyCount": "Missing only ({count})",
+    "noKeys": "No keys",
+    "noMatches": "No keys match the current filters.",
+    "noProvider": "No provider",
+    "paginationSummary": "{start}-{end} of {lines} lines - {keys} keys",
+    "searchHint": "Search keys and values",
+    "showInFolder": "Show in folder",
+    "sourceText": "Source text",
+    "title": "Editor",
+    "translate": "Translate",
+    "translateCount": {
+      "one": "Translate 1 string",
+      "other": "Translate {} strings"
+    },
+    "translateWithAi": "Translate with AI",
+    "translatingHint": "Translating…",
+    "translationOptional": "Translation - optional",
+    "translations": "Translations"
+  },
+  "errors": {
+    "ai": {
+      "addKey": "Add an API key under Settings - AI providers.",
+      "blocked": "{provider} blocked this batch ({reason}).",
+      "emptyResponse": "{provider} returned an empty response.",
+      "keyRejected": "The {provider} API key was rejected. Check it under Settings - AI providers.",
+      "malformed": "The translation provider returned malformed JSON.",
+      "modelNotFound": "The {provider} model was not found. Check the model name under Settings - AI providers.",
+      "noConnection": "No connection to the translation provider.",
+      "noKey": "Enter an API key first.",
+      "refused": "{provider} declined to translate this batch. Skip it or try a different model.",
+      "stoppedEarly": "{provider} stopped early ({reason}).",
+      "timeout": "The translation provider timed out.",
+      "unexpectedResponse": "{provider} returned an unexpected response."
+    },
+    "app": {
+      "nameEmpty": "App name cannot be empty.",
+      "noTargetLanguage": "Select at least one target language.",
+      "sourceIsTarget": "The source language cannot also be a target language."
+    },
+    "cache": {
+      "appListCorrupt": "Stored app list is corrupted: {error}",
+      "appNotFound": "App not found.",
+      "appNotFoundId": "App not found: {id}",
+      "translationsCorrupt": "Stored translations are corrupted: {error}",
+      "writeAppList": "Could not write the app list to storage.",
+      "writeTranslations": "Could not write translations to storage."
+    },
+    "editor": {
+      "invalidKey": "Use dot notation with letters, digits, \"_\" or \"-\" (e.g. nav.home).",
+      "keyExists": "The key \"{key}\" already exists.",
+      "keyNotFound": "Key not found: {key}"
+    },
+    "export": {
+      "chooseFolder": "Choose a folder to export into.",
+      "noDownloadsFolder": "Could not find your Downloads folder on this platform.",
+      "noProjectFolder": "This app was not imported from a project folder, so there is nowhere to save it back to.",
+      "nothingToExport": "There are no keys to export yet.",
+      "selectLanguage": "Select at least one language to export."
+    },
+    "file": {
+      "folderPickerOpen": "Could not open the folder picker: {error}",
+      "launchFailed": "Could not launch {executable}: {error}",
+      "openPath": "Could not open {path}: {error}",
+      "pickerOpen": "Could not open the file picker: {error}",
+      "projectFolderRead": "Could not read the project folder: {error}",
+      "revealUnsupported": "Showing a folder is not available on this platform.",
+      "save": "Could not save {file}: {error}",
+      "unknownLanguage": "Could not tell which language this file is for. Name it after its language code, or put it in a locale folder.",
+      "unsupportedPlatform": "Not available on this platform.",
+      "writeFolder": "Could not write to {path}: {error}"
+    },
+    "image": {
+      "convert": "That image could not be converted to PNG.",
+      "notAnImage": "That file is not an image LingoDesk can read: {error}",
+      "pickerOpen": "Could not open the image picker: {error}",
+      "tooLarge": "Pick an image smaller than 8 MB.",
+      "unreadable": "That image could not be read."
+    },
+    "import": {
+      "noFiles": "No files to import."
+    },
+    "json": {
+      "invalid": "Invalid JSON: {error}",
+      "noKeys": "The file contains no translation keys.",
+      "notObject": "The file must contain a JSON object at the top level."
+    }
+  },
+  "landing": {
+    "apkLink": "Or download the Android APK · {size}  →",
+    "askingGithub": "Asking GitHub for the newest release…",
+    "checkingBuilds": "Checking for builds…",
+    "codeMissing": "missing",
+    "cta": {
+      "apk": "Download the APK",
+      "latest": "Download the latest build",
+      "macos": "Download for macOS",
+      "windows": "Download for Windows"
+    },
+    "download": {
+      "allReleases": "All releases and changelogs on GitHub  →",
+      "body": "Free and open source under the MIT licence. No account, no trial, no telemetry.",
+      "copied": "Copied",
+      "copy": "Copy",
+      "eyebrow": "Download",
+      "latest": "Latest",
+      "latestBuildRuns": "Latest build runs",
+      "noBuildBody": "The macOS, Windows and Android installers are built by GitHub Actions and attached to a release the moment a version tag is pushed. Until then, running from source takes about two minutes.",
+      "noBuildTitle": "No packaged build published yet",
+      "published": "Published {date}",
+      "releasesOnGithub": "Releases on GitHub",
+      "runFromSource": "Or run it from source on any of the six platforms",
+      "runFromSourceNote": "Swap the device for windows, linux, chrome, or a connected phone. The project pins its Flutter version in .fvmrc.",
+      "title": "Get LingoDesk.",
+      "tryAgain": "Try again",
+      "unreachableBody": "{reason} You can still browse the releases page directly, or build from source.",
+      "unreachableTitle": "Could not reach GitHub",
+      "unsignedNote": "The desktop builds are unsigned: on macOS right-click the app and choose Open the first time, on Windows choose More info then Run anyway.",
+      "version": "Version {version}"
+    },
+    "features": {
+      "body": "LingoDesk is a focused desktop tool, not a translation platform with seats and dashboards.",
+      "eyebrow": "Features",
+      "f1Body": "Nested JSON is flattened to dot-notation keys, so a string and all of its translations sit on a single row you can read across.",
+      "f1Title": "One grid for every language",
+      "f2Body": "Live coverage per locale and a \"missing only\" filter that collapses hundreds of keys down to the handful still empty.",
+      "f2Title": "Missing strings, not missing bugs",
+      "f3Body": "Batch-translate the gaps through Anthropic, OpenAI or Gemini. Your key, your account, your bill — nothing is proxied.",
+      "f3Title": "Translate with your own AI key",
+      "f4Body": "No backend, no telemetry, no sign-up. Projects live on your machine and API keys go into the OS secure store.",
+      "f4Title": "Local-first and private",
+      "f5Body": "Scan a project folder, pull in the locale files you already have, and export the nested shape straight back into the repo.",
+      "f5Title": "Import and export in place",
+      "f6Body": "A workspace you can stand to look at all day — each theme a full palette, not just a swapped accent colour.",
+      "f6Title": "Six themes, light and dark",
+      "title": "Everything the job needs. Nothing it does not."
+    },
+    "flutter": {
+      "body": "LingoDesk is written once in Dart and compiled to macOS, Windows, Linux, Android, iOS and the web. This landing page is not HTML with a Flutter demo bolted on — it is the same project, the same design tokens and the same widgets, compiled for the browser you are reading it in.",
+      "eyebrow": "Built with Flutter & Dart",
+      "fromSource": "From source",
+      "markBody": "The logo above is a CustomPainter drawing rounded rectangles and two circles onto a canvas — so it is crisp at any size and takes the accent of whichever theme is selected.",
+      "markTitle": "Not an image file",
+      "pill": "Live, right now",
+      "prebuilt": "Prebuilt",
+      "proofBody": "These are the six palettes shipped in LingoDesk, read from the same theme extension the desktop build reads. Pick one and the whole site repaints — no reload, no stylesheet swap.",
+      "proofTitle": "Every colour on this page comes from the app.",
+      "statCodebase": "codebase",
+      "statJavascript": "lines of JavaScript written by hand",
+      "statTargets": "compile targets",
+      "title": "One codebase. Six platforms.\nIncluding this page.",
+      "youAreHere": "You are here"
+    },
+    "footer": {
+      "issues": "Issues",
+      "licence": "MIT licence",
+      "note": "This page is a Flutter web app, built from the same repository as the product.",
+      "readme": "Readme",
+      "releases": "Releases"
+    },
+    "getStarted": "Get started",
+    "hero": {
+      "body": "LingoDesk turns a folder of en.json, fr.json and es.json into one workspace: every key a row, every language a column, every missing string impossible to miss.",
+      "pill": "Open source · MIT · No account, no backend",
+      "title": "Translate every locale\nfrom one clean desk."
+    },
+    "localeStrip": "20 locales built in · add any other in settings",
+    "nav": {
+      "download": "Download",
+      "features": "Features",
+      "flutter": "Flutter",
+      "howItWorks": "How it works",
+      "language": "Language",
+      "menu": "Menu",
+      "screens": "Screens",
+      "why": "Why"
+    },
+    "openIssue": "Open an issue",
+    "openSource": {
+      "body": "MIT licensed. Fork it, ship it inside your team, or open an issue about the workflow that annoys you most — the roadmap is driven by the people using it.",
+      "title": "Free forever, and the source is right there."
+    },
+    "preview": {
+      "allTranslated": "Every locale is fully translated.",
+      "appearanceNote": "This really is the setting — it repaints the whole page, not just this window.",
+      "editorWindow": "Translation editor",
+      "keysNote": "Keys live in the OS secure store. They stay on this device and are only ever sent to the provider they belong to.",
+      "missingStrings": {
+        "one": "1 missing string",
+        "other": "{} missing strings"
+      },
+      "noMatches": "No keys match “{query}”.",
+      "nothingMissing": "Nothing is missing — every string is translated.",
+      "projects": "Projects",
+      "semantics": "The LingoDesk dashboard: coverage, key counts and language health across a workspace of apps."
+    },
+    "problem": {
+      "afterEyebrow": "With LingoDesk",
+      "afterTitle": "One grid. The holes announce themselves.",
+      "beforeEyebrow": "Without LingoDesk",
+      "beforeTitle": "Three files, three tabs, one missing string you find in review.",
+      "body": "Adding one string means opening every locale file and remembering every one of them. LingoDesk makes that a single row instead.",
+      "exportNote": "Export rebuilds the nested shape, file by file, exactly as your app expects it.",
+      "eyebrow": "The problem",
+      "title": "Localization files drift the moment you add a key."
+    },
+    "releaseCaption": "v{version} · {size} · {detail} · free forever",
+    "releasePending": "No packaged build published yet — run it from source in two commands.",
+    "releasePickBuild": "v{version} is out — pick a build below.",
+    "releaseUnavailable": "{reason} Browse the releases page.",
+    "seeAllDownloads": "See all downloads",
+    "starOnGithub": "Star on GitHub",
+    "starOnGithubCount": "Star on GitHub · {stars}",
+    "starOnGithubTooltip": "Star LingoDesk on GitHub",
+    "steps": {
+      "eyebrow": "How it works",
+      "s1Body": "One per app. Pick the source language once and the target locales you actually ship.",
+      "s1Title": "Create a workspace",
+      "s2Body": "Point it at your locale folder. Existing JSON is flattened, validated against the languages you declared, and loaded.",
+      "s2Title": "Import what you have",
+      "s3Body": "Filter to what is missing and type, or hand the batch to your AI provider. Edits save as you go.",
+      "s3Title": "Fill the gaps",
+      "s4Body": "The nested structure is rebuilt per locale, ready to drop back beside your code and commit.",
+      "s4Title": "Export back into the repo",
+      "title": "Four steps, then back to writing code."
+    },
+    "switchToDark": "Switch to dark",
+    "switchToLight": "Switch to light",
+    "tour": {
+      "aiProviders": "Bring your own key for Anthropic, OpenAI or Gemini. Pick one and it becomes the key every AI action in the editor uses.",
+      "appearance": "Six full palettes and a light/dark switch. This is the live setting, not a picture of one — choose a theme and the whole site repaints with it.",
+      "body": "This is not a screenshot. It is the app, compiled to this page — click around it.",
+      "dashboard": "Coverage, key counts and language health for every project, the moment you open the app. The numbers come from the same cells the editor writes to — fill one in and watch them move.",
+      "editor": "Keys down the side, locales across the top. Every cell here is a real field: type a translation, search, or filter to only what is still missing.",
+      "eyebrow": "A look inside",
+      "pill": "Live · nothing you do here is saved",
+      "projects": "One workspace per app, each with its own source language and target locales. Click a row to open it up.",
+      "title": "Built like a desktop app, because it is one."
+    },
+    "viewOnGithub": "View on GitHub",
+    "warning": {
+      "macos": "Unsigned build — right-click the app and choose Open the first time.",
+      "windows": "Unsigned build — in SmartScreen choose More info, then Run anyway."
+    }
+  },
+  "language": {
+    "ar": "Arabic",
+    "cs": "Czech",
+    "de": "German",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "hi": "Hindi",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "nl": "Dutch",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "sv": "Swedish",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "vi": "Vietnamese",
+    "zh": "Chinese"
+  },
+  "nav": {
+    "aiProviders": "AI providers",
+    "appearance": "Appearance",
+    "apps": "Apps",
+    "dashboard": "Dashboard",
+    "group": {
+      "settings": "Settings",
+      "workspace": "Workspace"
+    },
+    "import": "Import",
+    "languages": "Languages",
+    "localStorage": "Local storage",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "onboarding": {
+    "proof": {
+      "localFirst": "Local-first",
+      "locales": "20 locales",
+      "nestedJson": "Nested JSON"
+    },
+    "skip": "Skip",
+    "stage": {
+      "body": "No accounts, no sync, no spreadsheet sprawl - just your JSON, on your machine.",
+      "title": "One desk for every locale file."
+    },
+    "startSetup": "Start setup",
+    "step1": {
+      "body": "Every key is a row and every language a column. Missing strings stay highlighted while you work, so nothing ships half-translated.",
+      "caption": "Every volume, one room",
+      "eyebrow": "Translation workspace",
+      "highlight1": "Keys and languages in a single grid",
+      "highlight2": "Filter down to what is still missing",
+      "highlight3": "Edits save to this machine as you type",
+      "title": "Translate every locale from one clean desk"
+    },
+    "step2": {
+      "body": "One workspace per app: pick the source language once, track only the target locales that matter, and let coverage speak for itself.",
+      "caption": "Indexed, labelled, findable",
+      "eyebrow": "Project setup",
+      "highlight1": "A focused workspace for every app",
+      "highlight2": "Pick targets from 20 supported locales",
+      "highlight3": "Coverage per app and per language",
+      "title": "Keep each product organized by language"
+    },
+    "step3": {
+      "body": "LingoDesk rebuilds your original key structure before export, so the files that land in your repo are the files your app expects.",
+      "caption": "Every destination on the board",
+      "eyebrow": "Export ready",
+      "highlight1": "Dot keys expand back into nested objects",
+      "highlight2": "Choose the locales, save where you like",
+      "highlight3": "Pretty-printed with a stable key order",
+      "title": "Ship nested JSON files back to your app"
+    },
+    "stepOf": "Step {step} of {total}"
+  },
+  "settings": {
+    "appearance": {
+      "subtitle": "Follow the system theme or pick one explicitly.",
+      "swatchActive": "Active",
+      "swatchBackground": "Background",
+      "swatchBrand": "Brand",
+      "swatchCard": "Card",
+      "themeSubtitle": "Six palettes. Each one restyles the whole app, not just the accent."
+    },
+    "defaults": {
+      "count": {
+        "one": "1 locale will be pre-selected.",
+        "other": "{} locales will be pre-selected."
+      },
+      "empty": "No defaults yet — new apps start with an empty target list.",
+      "subtitle": "Pre-selected whenever you create a new app.",
+      "title": "Default target languages"
+    },
+    "language": {
+      "note": "Your choice is saved and applied straight away — menus, dialogs and messages all switch to it.",
+      "subtitle": "The language LingoDesk itself is displayed in.",
+      "title": "Interface language"
+    },
+    "profile": {
+      "email": "Email",
+      "emailHint": "optional",
+      "name": "Display name",
+      "nameHint": "Local workspace",
+      "note": "LingoDesk has no accounts. This only labels your local workspace.",
+      "subtitle": "Shown in the sidebar. Stored on this device only."
+    }
+  },
+  "theme": {
+    "amber": {
+      "description": "Warm amber and toasted-sand neutrals."
+    },
+    "graphite": {
+      "description": "No hue at all — contrast does the accenting."
+    },
+    "indigo": {
+      "description": "Cool indigo over blue-grey neutrals."
+    },
+    "rose": {
+      "description": "Deep rose with soft blush surfaces."
+    },
+    "teal": {
+      "description": "The house look — saturated teal on warm stone."
+    },
+    "violet": {
+      "description": "Electric violet on a faintly purple chassis."
+    }
+  },
+  "time": {
+    "daysAgo": {
+      "one": "1 day ago",
+      "other": "{} days ago"
+    },
+    "hoursAgo": {
+      "one": "1 hour ago",
+      "other": "{} hours ago"
+    },
+    "justNow": "Just now",
+    "minutesAgo": {
+      "one": "1 min ago",
+      "other": "{} min ago"
+    },
+    "monthsAgo": {
+      "one": "1 month ago",
+      "other": "{} months ago"
+    },
+    "weeksAgo": {
+      "one": "1 week ago",
+      "other": "{} weeks ago"
+    },
+    "yearsAgo": {
+      "one": "1 year ago",
+      "other": "{} years ago"
+    },
+    "yesterday": "Yesterday"
+  },
+  "upload": {
+    "addFiles": "Add files",
+    "addFolder": "Add folder",
+    "addMore": "Add more",
+    "backToApps": "Back to apps",
+    "backToEditor": "Back to editor",
+    "browseFiles": "Browse files",
+    "chooseFolder": "Choose folder",
+    "defaultImportName": "Imported project",
+    "defaultProjectName": "Imported translations",
+    "detectedLanguages": "Detected languages",
+    "detectedLanguagesHint": "Add more folders or files and they merge into these.",
+    "exportsBackTo": "Exports back to {path}",
+    "filesReady": {
+      "one": "1 file ready to import.",
+      "other": "{} files ready to import."
+    },
+    "hero": {
+      "filesBody": "Scan a folder, or select the .json files yourself. Each file is matched to a language by its name.",
+      "filesTitle": "Add your translation files",
+      "projectBody": "Pick the project (or any folder) and LingoDesk finds the translation files inside it — or select the .json files yourself.",
+      "projectTitle": "Import your translations"
+    },
+    "importAndOpen": "Import & open editor",
+    "importedToast": "Imported into \"{name}\".",
+    "keepOneLanguage": "Keep at least one language to import.",
+    "languageSource": "{language} - source",
+    "logo": "Logo",
+    "namingRule": "Name each file after its language code. Anything outside this set is rejected.",
+    "needValidFile": "Add at least one valid file to import.",
+    "noFilesFound": "No translation files found in \"{name}\". Looked for .json files inside /translation, /translations and /languages folders.",
+    "pickFilesTitle": "Select translation files",
+    "pickFolderTitle": "Select your project folder",
+    "readySummary": "{languages} language(s) and {keys} keys ready to import.",
+    "removeLogo": "Remove logo",
+    "replaceLogo": "Replace logo",
+    "requiredLanguages": "Required languages",
+    "scanning": "Scanning…",
+    "skipToEditor": "Skip to editor",
+    "sourceHelper": "Everything else becomes a target language you can translate into.",
+    "stagedFiles": "Staged files",
+    "startOver": "Start over",
+    "stat": {
+      "translated": "Translated"
+    },
+    "uploadLogo": "Upload a logo",
+    "whereWeLook": "Where we look",
+    "whereWeLookBody": "Any .json file inside a /translation, /translations or /languages folder, anywhere in the project. Build and dependency folders are skipped."
+  }
+}

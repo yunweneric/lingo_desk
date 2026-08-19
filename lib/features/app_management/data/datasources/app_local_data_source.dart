@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/localization/export.dart';
 
 /// Local storage operations for app metadata.
 ///
@@ -35,7 +36,9 @@ class AppLocalDataSourceImpl implements AppLocalDataSource {
           .map((item) => Map<String, dynamic>.from(item as Map))
           .toList();
     } on FormatException catch (e) {
-      throw CacheException('Stored app list is corrupted: ${e.message}');
+      throw CacheException(
+        LocaleKeys.errorsAppListCorrupt.tr(namedArgs: {'error': e.message}),
+      );
     }
   }
 
@@ -63,7 +66,11 @@ class AppLocalDataSourceImpl implements AppLocalDataSource {
     final apps = await getApps();
     final index = apps.indexWhere((item) => item['id'] == app['id']);
     if (index == -1) {
-      throw CacheException('App not found: ${app['id']}');
+      throw CacheException(
+        LocaleKeys.errorsAppNotFoundId.tr(
+          namedArgs: {'id': '${app['id']}'},
+        ),
+      );
     }
     apps[index] = app;
     await _saveApps(apps);
@@ -88,7 +95,11 @@ class AppLocalDataSourceImpl implements AppLocalDataSource {
     try {
       return Map<String, dynamic>.from(jsonDecode(raw) as Map);
     } on FormatException catch (e) {
-      throw CacheException('Stored translations are corrupted: ${e.message}');
+      throw CacheException(
+        LocaleKeys.errorsStoredTranslationsCorrupt.tr(
+          namedArgs: {'error': e.message},
+        ),
+      );
     }
   }
 
@@ -98,7 +109,7 @@ class AppLocalDataSourceImpl implements AppLocalDataSource {
       jsonEncode(apps),
     );
     if (!saved) {
-      throw const CacheException('Could not write the app list to storage.');
+      throw CacheException(LocaleKeys.errorsWriteAppList.tr());
     }
   }
 }

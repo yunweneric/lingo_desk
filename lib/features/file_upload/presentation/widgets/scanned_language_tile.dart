@@ -7,6 +7,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/scanned_project.dart';
+import '../../../../core/localization/export.dart';
 
 /// One detected language in a scanned project: where it came from, how
 /// complete it is, and whether it will be imported.
@@ -99,7 +100,8 @@ class ScannedLanguageTile extends StatelessWidget {
                           if (isSource) ...[
                             const SizedBox(width: 8),
                             WorkspaceBadge(
-                              label: 'SOURCE',
+                              label: LocaleKeys.appSettingsMetaSource.tr()
+                                  .toUpperCase(),
                               color: tokens.accent,
                             ),
                           ],
@@ -172,7 +174,9 @@ class ScannedLanguageTile extends StatelessWidget {
             if (_mergesOnExport) ...[
               const SizedBox(height: 8),
               Text(
-                'Exports back to $exportPath',
+                LocaleKeys.uploadExportsBackTo.tr(
+                  namedArgs: {'path': exportPath ?? ''},
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: LingoDeskTheme.codeStyle.copyWith(

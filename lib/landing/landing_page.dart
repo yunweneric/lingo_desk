@@ -16,6 +16,7 @@ import 'sections/tour_section.dart';
 import 'state/landing_controller.dart';
 import 'widgets/landing_layout.dart';
 import 'widgets/reveal.dart';
+import '../core/localization/export.dart';
 
 /// The whole site: one scrolling column under a sticky bar.
 ///
@@ -221,15 +222,31 @@ class _LandingPageState extends State<LandingPage> {
                 activeId: _activeId,
                 onDownload: () => _jumpTo(_download),
                 targets: [
-                  NavTarget('why', 'Why', () => _jumpTo(_problem)),
-                  NavTarget('features', 'Features', () => _jumpTo(_features)),
-                  NavTarget('screens', 'Screens', () => _jumpTo(_tour)),
+                  NavTarget(
+                    'why',
+                    LocaleKeys.landingNavWhy.tr(),
+                    () => _jumpTo(_problem),
+                  ),
+                  NavTarget(
+                    'features',
+                    LocaleKeys.landingNavFeatures.tr(),
+                    () => _jumpTo(_features),
+                  ),
+                  NavTarget(
+                    'screens',
+                    LocaleKeys.landingNavScreens.tr(),
+                    () => _jumpTo(_tour),
+                  ),
                   NavTarget(
                     'how-it-works',
-                    'How it works',
+                    LocaleKeys.landingNavHowItWorks.tr(),
                     () => _jumpTo(_steps),
                   ),
-                  NavTarget('flutter', 'Flutter', () => _jumpTo(_flutter)),
+                  NavTarget(
+                    'flutter',
+                    LocaleKeys.landingNavFlutter.tr(),
+                    () => _jumpTo(_flutter),
+                  ),
                 ],
               ),
             ),

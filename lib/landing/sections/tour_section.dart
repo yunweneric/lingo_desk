@@ -9,6 +9,7 @@ import '../widgets/app_preview.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/landing_pill.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// A walk through the real screens — running, not photographed.
 ///
@@ -38,25 +39,14 @@ class _TourSectionState extends State<TourSection> {
 
   PreviewScreen _screen = PreviewScreen.dashboard;
 
+  /// Translation keys, resolved against the active locale where the
+  /// caption under the preview is drawn.
   static const Map<PreviewScreen, String> _captions = {
-    PreviewScreen.dashboard:
-        'Coverage, key counts and language health for every project, the '
-        'moment you open the app. The numbers come from the same cells the '
-        'editor writes to — fill one in and watch them move.',
-    PreviewScreen.editor:
-        'Keys down the side, locales across the top. Every cell here is a '
-        'real field: type a translation, search, or filter to only what is '
-        'still missing.',
-    PreviewScreen.projects:
-        'One workspace per app, each with its own source language and '
-        'target locales. Click a row to open it up.',
-    PreviewScreen.aiProviders:
-        'Bring your own key for Anthropic, OpenAI or Gemini. Pick one and '
-        'it becomes the key every AI action in the editor uses.',
-    PreviewScreen.appearance:
-        'Six full palettes and a light/dark switch. This is the live '
-        'setting, not a picture of one — choose a theme and the whole site '
-        'repaints with it.',
+    PreviewScreen.dashboard: LocaleKeys.landingTourDashboard,
+    PreviewScreen.editor: LocaleKeys.landingTourEditor,
+    PreviewScreen.projects: LocaleKeys.landingTourProjects,
+    PreviewScreen.aiProviders: LocaleKeys.landingTourAiProviders,
+    PreviewScreen.appearance: LocaleKeys.landingTourAppearance,
   };
 
   @override
@@ -73,17 +63,15 @@ class _TourSectionState extends State<TourSection> {
       anchor: widget.anchor,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'A look inside',
-            title: 'Built like a desktop app, because it is one.',
-            body:
-                'This is not a screenshot. It is the app, compiled to this '
-                'page — click around it.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingTourEyebrow.tr(),
+            title: LocaleKeys.landingTourTitle.tr(),
+            body: LocaleKeys.landingTourBody.tr(),
           ),
           const SizedBox(height: 20),
-          const Reveal(
+          Reveal(
             child: LandingPill(
-              label: 'Live · nothing you do here is saved',
+              label: LocaleKeys.landingTourPill.tr(),
               icon: HugeIcons.strokeRoundedCursor01,
               emphasis: true,
             ),
@@ -97,7 +85,7 @@ class _TourSectionState extends State<TourSection> {
               children: [
                 for (final screen in PreviewScreen.values)
                   _TourTab(
-                    label: screen.label,
+                    label: screen.label.tr(),
                     selected: screen == _screen,
                     onTap: () => setState(() => _screen = screen),
                   ),
@@ -120,7 +108,7 @@ class _TourSectionState extends State<TourSection> {
               duration: LingoDeskMotion.standard,
               switchInCurve: LingoDeskMotion.entrance,
               child: Text(
-                _captions[_screen]!,
+                _captions[_screen]!.tr(),
                 key: ValueKey(_screen),
                 textAlign: TextAlign.center,
                 style: TextStyle(

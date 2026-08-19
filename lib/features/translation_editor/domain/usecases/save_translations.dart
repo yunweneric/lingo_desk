@@ -4,6 +4,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/translation_entry.dart';
 import '../repositories/translation_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class SaveTranslationsParams {
   const SaveTranslationsParams({
@@ -30,7 +31,7 @@ class SaveTranslations
   ) {
     if (params.filesByLanguage.isEmpty) {
       return Future.value(
-        const Left(ValidationFailure(message: 'No files to import.')),
+        Left(ValidationFailure(message: LocaleKeys.errorsNoFilesToImport.tr())),
       );
     }
     return repository.importTranslations(params.appId, params.filesByLanguage);

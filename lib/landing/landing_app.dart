@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/localization/export.dart';
 import '../core/theme/lingo_desk_theme.dart';
 import 'landing_page.dart';
 import 'state/landing_controller.dart';
@@ -46,6 +47,9 @@ class _LandingAppState extends State<LandingApp> {
           theme: LingoDeskTheme.light(palette),
           darkTheme: LingoDeskTheme.dark(palette),
           themeMode: _controller.isDark ? ThemeMode.dark : ThemeMode.light,
+          locale: AppLocalization.localeOf(context),
+          supportedLocales: AppLocalization.supportedLocalesOf(context),
+          localizationsDelegates: AppLocalization.delegatesOf(context),
           home: LandingPage(
             controller: _controller,
             initialAnchor: widget.initialAnchor,

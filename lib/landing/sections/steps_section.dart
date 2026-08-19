@@ -6,6 +6,7 @@ import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// The four-step loop the product is built around, straight from the
 /// app's own onboarding: create, import, fill, export.
@@ -17,31 +18,23 @@ class StepsSection extends StatelessWidget {
   static const _steps = <_Step>[
     _Step(
       icon: HugeIcons.strokeRoundedFolderAdd,
-      title: 'Create a workspace',
-      body:
-          'One per app. Pick the source language once and the target locales '
-          'you actually ship.',
+      title: LocaleKeys.landingStep1Title,
+      body: LocaleKeys.landingStep1Body,
     ),
     _Step(
       icon: HugeIcons.strokeRoundedFileUpload,
-      title: 'Import what you have',
-      body:
-          'Point it at your locale folder. Existing JSON is flattened, '
-          'validated against the languages you declared, and loaded.',
+      title: LocaleKeys.landingStep2Title,
+      body: LocaleKeys.landingStep2Body,
     ),
     _Step(
       icon: HugeIcons.strokeRoundedTranslate,
-      title: 'Fill the gaps',
-      body:
-          'Filter to what is missing and type, or hand the batch to your AI '
-          'provider. Edits save as you go.',
+      title: LocaleKeys.landingStep3Title,
+      body: LocaleKeys.landingStep3Body,
     ),
     _Step(
       icon: HugeIcons.strokeRoundedDatabaseExport,
-      title: 'Export back into the repo',
-      body:
-          'The nested structure is rebuilt per locale, ready to drop back '
-          'beside your code and commit.',
+      title: LocaleKeys.landingStep4Title,
+      body: LocaleKeys.landingStep4Body,
     ),
   ];
 
@@ -55,9 +48,9 @@ class StepsSection extends StatelessWidget {
       tinted: true,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'How it works',
-            title: 'Four steps, then back to writing code.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingStepsEyebrow.tr(),
+            title: LocaleKeys.landingStepsTitle.tr(),
           ),
           const SizedBox(height: 56),
           LayoutBuilder(
@@ -127,7 +120,7 @@ class _StepCard extends StatelessWidget {
         LingoDeskIcon(step.icon, size: 24, color: tokens.foreground),
         const SizedBox(height: 16),
         Text(
-          step.title,
+          step.title.tr(),
           style: TextStyle(
             fontSize: 17,
             height: 1.3,
@@ -138,7 +131,7 @@ class _StepCard extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          step.body,
+          step.body.tr(),
           style: TextStyle(fontSize: 14.5, height: 1.6, color: tokens.muted),
         ),
       ],

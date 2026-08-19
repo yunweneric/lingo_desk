@@ -4,6 +4,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/ai_credentials.dart';
 import '../repositories/ai_translation_repository.dart';
+import '../../../../core/localization/export.dart';
 
 class VerifyAiCredentialsParams {
   const VerifyAiCredentialsParams({required this.credentials});
@@ -21,7 +22,7 @@ class VerifyAiCredentials implements UseCase<void, VerifyAiCredentialsParams> {
   Future<Either<Failure, void>> call(VerifyAiCredentialsParams params) {
     if (!params.credentials.isConfigured) {
       return Future.value(
-        const Left(ValidationFailure(message: 'Enter an API key first.')),
+        Left(ValidationFailure(message: LocaleKeys.errorsAiNoKey.tr())),
       );
     }
     return repository.verifyCredentials(params.credentials);

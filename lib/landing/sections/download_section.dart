@@ -13,6 +13,7 @@ import '../widgets/landing_button.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/landing_pill.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// Where a visitor actually gets the app.
 ///
@@ -36,12 +37,10 @@ class DownloadSection extends StatelessWidget {
       tinted: true,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'Download',
-            title: 'Get LingoDesk.',
-            body:
-                'Free and open source under the MIT licence. No account, no '
-                'trial, no telemetry.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingDownloadEyebrow.tr(),
+            title: LocaleKeys.landingDownloadTitle.tr(),
+            body: LocaleKeys.landingDownloadBody.tr(),
           ),
           const SizedBox(height: 48),
           Reveal(
@@ -49,19 +48,15 @@ class DownloadSection extends StatelessWidget {
               ReleaseLoading() => const _LoadingCard(),
               ReleaseReady(:final release) => _ReleaseCard(release: release),
               ReleasePending() => _FallbackCard(
-                title: 'No packaged build published yet',
-                body:
-                    'The macOS, Windows and Android installers are built by '
-                    'GitHub Actions and attached to a release the moment a '
-                    'version tag is pushed. Until then, running from source '
-                    'takes about two minutes.',
+                title: LocaleKeys.landingNoBuildTitle.tr(),
+                body: LocaleKeys.landingNoBuildBody.tr(),
                 controller: controller,
               ),
               ReleaseUnavailable(:final reason) => _FallbackCard(
-                title: 'Could not reach GitHub',
-                body:
-                    '$reason You can still browse the releases page directly, '
-                    'or build from source.',
+                title: LocaleKeys.landingGithubUnreachableTitle.tr(),
+                body: LocaleKeys.landingGithubUnreachableBody.tr(
+                  namedArgs: {'reason': reason},
+                ),
                 controller: controller,
                 showRetry: true,
               ),
@@ -98,7 +93,7 @@ class _LoadingCard extends StatelessWidget {
           ],
           const SizedBox(height: 20),
           Text(
-            'Asking GitHub for the newest release…',
+            LocaleKeys.landingAskingGithub.tr(),
             style: TextStyle(fontSize: 13.5, color: tokens.muted),
           ),
         ],
@@ -135,7 +130,9 @@ class _ReleaseCard extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                'Version ${release.version}',
+                LocaleKeys.landingVersion.tr(
+                  namedArgs: {'version': release.version},
+                ),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -143,14 +140,16 @@ class _ReleaseCard extends StatelessWidget {
                   color: tokens.foreground,
                 ),
               ),
-              const LandingPill(
-                label: 'Latest',
+              LandingPill(
+                label: LocaleKeys.landingLatest.tr(),
                 icon: HugeIcons.strokeRoundedCheckmarkBadge01,
                 emphasis: true,
               ),
               if (published != null)
                 Text(
-                  'Published $published',
+                  LocaleKeys.landingPublished.tr(
+                    namedArgs: {'date': published},
+                  ),
                   style: TextStyle(fontSize: 13.5, color: tokens.muted),
                 ),
             ],
@@ -172,9 +171,7 @@ class _ReleaseCard extends StatelessWidget {
                 const SizedBox(width: 9),
                 Expanded(
                   child: Text(
-                    'The desktop builds are unsigned: on macOS right-click the '
-                    'app and choose Open the first time, on Windows choose '
-                    'More info then Run anyway.',
+                    LocaleKeys.landingUnsignedNote.tr(),
                     style: TextStyle(
                       fontSize: 12.5,
                       height: 1.5,
@@ -187,7 +184,7 @@ class _ReleaseCard extends StatelessWidget {
           ],
           const SizedBox(height: 16),
           LandingLink(
-            label: 'All releases and changelogs on GitHub  →',
+            label: LocaleKeys.landingAllReleases.tr(),
             url: release.htmlUrl,
           ),
         ],
@@ -339,20 +336,20 @@ class _FallbackCard extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             children: [
-              const LandingButton(
-                label: 'Releases on GitHub',
+              LandingButton(
+                label: LocaleKeys.landingReleasesOnGithub.tr(),
                 icon: HugeIcons.strokeRoundedGithub,
                 url: GithubRepo.releases,
               ),
-              const LandingButton(
-                label: 'Latest build runs',
+              LandingButton(
+                label: LocaleKeys.landingLatestBuildRuns.tr(),
                 icon: HugeIcons.strokeRoundedComputerActivity,
                 kind: LandingButtonKind.secondary,
                 url: GithubRepo.actions,
               ),
               if (showRetry)
                 LandingButton(
-                  label: 'Try again',
+                  label: LocaleKeys.landingTryAgain.tr(),
                   icon: HugeIcons.strokeRoundedFilterReset,
                   kind: LandingButtonKind.ghost,
                   onPressed: () => controller.load(refresh: true),
@@ -392,7 +389,7 @@ class _SourceCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Or run it from source on any of the six platforms',
+                  LocaleKeys.landingRunFromSource.tr(),
                   style: TextStyle(
                     fontSize: 16.5,
                     fontWeight: FontWeight.w700,
@@ -427,8 +424,7 @@ class _SourceCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            'Swap the device for windows, linux, chrome, or a connected '
-            'phone. The project pins its Flutter version in .fvmrc.',
+            LocaleKeys.landingRunFromSourceNote.tr(),
             style: TextStyle(fontSize: 13, height: 1.55, color: tokens.muted),
           ),
         ],
@@ -464,7 +460,9 @@ class _CopyButtonState extends State<_CopyButton> {
   @override
   Widget build(BuildContext context) {
     return LandingButton(
-      label: _copied ? 'Copied' : 'Copy',
+      label: _copied
+          ? LocaleKeys.landingCopied.tr()
+          : LocaleKeys.landingCopy.tr(),
       icon: _copied
           ? HugeIcons.strokeRoundedTick02
           : HugeIcons.strokeRoundedCopy01,

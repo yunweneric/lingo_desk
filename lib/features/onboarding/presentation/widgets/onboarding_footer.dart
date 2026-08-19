@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import 'onboarding_step_dots.dart';
+import '../../../../core/localization/export.dart';
 
 class OnboardingFooter extends StatelessWidget {
   const OnboardingFooter({
@@ -40,7 +41,7 @@ class OnboardingFooter extends StatelessWidget {
       children: [
         OutlinedButton(
           onPressed: currentIndex == 0 ? null : onBack,
-          child: const Text('Back'),
+          child: Text(LocaleKeys.commonBack.tr()),
         ),
         const SizedBox(width: 12),
         FilledButton.icon(
@@ -52,7 +53,11 @@ class OnboardingFooter extends StatelessWidget {
             color: Colors.white,
             size: 18,
           ),
-          label: Text(isLast ? 'Start setup' : 'Next'),
+          label: Text(
+            isLast
+                ? LocaleKeys.onboardingStartSetup.tr()
+                : LocaleKeys.commonNext.tr(),
+          ),
         ),
       ],
     );
@@ -71,7 +76,7 @@ class OnboardingFooter extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: onBack,
-                    child: const Text('Back'),
+                    child: Text(LocaleKeys.commonBack.tr()),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -87,7 +92,11 @@ class OnboardingFooter extends StatelessWidget {
                     color: Colors.white,
                     size: 18,
                   ),
-                  label: Text(isLast ? 'Start setup' : 'Next'),
+                  label: Text(
+                    isLast
+                        ? LocaleKeys.onboardingStartSetup.tr()
+                        : LocaleKeys.commonNext.tr(),
+                  ),
                 ),
               ),
             ],

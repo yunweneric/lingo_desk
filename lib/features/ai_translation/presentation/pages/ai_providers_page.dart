@@ -20,6 +20,7 @@ import '../../domain/usecases/verify_ai_credentials.dart';
 import '../widgets/ai_key_dialog.dart';
 import '../widgets/ai_keys_table.dart';
 import '../widgets/ai_provider_logo.dart';
+import '../../../../core/localization/export.dart';
 
 /// Manages the API keys the translation editor calls with.
 ///
@@ -52,8 +53,10 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     );
     if (mounted) {
       context.showSuccessToast(
-        '${draft.provider.label} is ready to translate with.',
-        title: 'Key added',
+        LocaleKeys.aiKeyAddedBody.tr(
+          namedArgs: {'provider': draft.provider.label},
+        ),
+        title: LocaleKeys.aiKeyAddedTitle.tr(),
       );
     }
   }
@@ -71,8 +74,8 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     );
     if (mounted) {
       context.showSuccessToast(
-        'Saved changes to ${entry.label}.',
-        title: 'Key updated',
+        LocaleKeys.aiKeyUpdatedBody.tr(namedArgs: {'label': entry.label}),
+        title: LocaleKeys.aiKeyUpdatedTitle.tr(),
       );
     }
   }
@@ -82,27 +85,30 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete API key?'),
+        title: Text(LocaleKeys.aiKeyDeleteTitle.tr()),
         content: Text(
           wasActive
-              ? 'This removes "${entry.label}", the key translations '
-                    'currently run on. Another saved key takes over, or AI '
-                    'translation stops until you add one.'
-              : 'This removes "${entry.label}" from this device. '
-                    'The key itself stays valid at '
-                    '${entry.provider.consoleLabel}.',
+              ? LocaleKeys.aiKeyDeleteActiveBody.tr(
+                  namedArgs: {'label': entry.label},
+                )
+              : LocaleKeys.aiKeyDeleteBody.tr(
+                  namedArgs: {
+                    'label': entry.label,
+                    'console': entry.provider.consoleLabel,
+                  },
+                ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancel'),
+            child: Text(LocaleKeys.commonCancel.tr()),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: LingoDeskColors.error,
             ),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete'),
+            child: Text(LocaleKeys.commonDelete.tr()),
           ),
         ],
       ),
@@ -119,13 +125,17 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     // toast says which — the one thing you would want to know afterwards.
     if (wasActive && promoted != null) {
       context.showWarningToast(
-        'Translations now use ${promoted.label}.',
-        title: 'Deleted ${entry.label}',
+        LocaleKeys.aiKeyPromotedBody.tr(
+          namedArgs: {'label': promoted.label},
+        ),
+        title: LocaleKeys.aiKeyDeletedNamedTitle.tr(
+          namedArgs: {'label': entry.label},
+        ),
       );
     } else {
       context.showSuccessToast(
-        '${entry.label} was removed from this device.',
-        title: 'Key deleted',
+        LocaleKeys.aiKeyDeletedBody.tr(namedArgs: {'label': entry.label}),
+        title: LocaleKeys.aiKeyDeletedTitle.tr(),
       );
     }
   }
@@ -142,11 +152,17 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
     outcome.fold(
       (failure) => context.showErrorToast(
         failure.message,
-        title: '${entry.label} failed',
+        title: LocaleKeys.aiKeyTestFailedTitle.tr(
+          namedArgs: {'label': entry.label},
+        ),
       ),
       (_) => context.showSuccessToast(
-        '${entry.provider.label} accepted the key.',
-        title: '${entry.label} connected',
+        LocaleKeys.aiKeyTestPassedBody.tr(
+          namedArgs: {'provider': entry.provider.label},
+        ),
+        title: LocaleKeys.aiKeyTestPassedTitle.tr(
+          namedArgs: {'label': entry.label},
+        ),
       ),
     );
   }
@@ -157,7 +173,9 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
         _settings.setActive(entry.id);
         context.showSuccessToast(
           '${entry.provider.label} · ${entry.model}',
-          title: 'Translations now use ${entry.label}',
+          title: LocaleKeys.aiKeyActiveTitle.tr(
+            namedArgs: {'label': entry.label},
+          ),
         );
       case AiKeyAction.test:
         _testKey(entry);
@@ -181,10 +199,10 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
             return Column(
               children: [
                 WorkspacePageHeader(
-                  breadcrumb: const [
+                  breadcrumb: [
                     Crumb.workspace,
-                    Crumb('Settings'),
-                    Crumb('AI providers'),
+                    Crumb(LocaleKeys.navSettings.tr()),
+                    Crumb(LocaleKeys.navAiProviders.tr()),
                   ],
                   actions: [
                     FilledButton.icon(
@@ -194,7 +212,7 @@ class _AiProvidersPageState extends State<AiProvidersPage> {
                         color: Colors.white,
                         size: 17,
                       ),
-                      label: const Text('Add API key'),
+                      label: Text(LocaleKeys.aiAddKey.tr()),
                     ),
                   ],
                 ),
@@ -277,8 +295,10 @@ class _Summary extends StatelessWidget {
               children: [
                 Text(
                   configured && active != null
-                      ? 'Translating with ${active.label}'
-                      : 'No key is ready yet',
+                      ? LocaleKeys.aiStatusTranslatingWith.tr(
+                          namedArgs: {'label': active.label},
+                        )
+                      : LocaleKeys.aiStatusNoKey.tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: tokens.foreground,
                     fontWeight: FontWeight.w700,
@@ -287,10 +307,13 @@ class _Summary extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   configured && active != null
-                      ? '${active.provider.label} · ${active.model} · used by '
-                            'every AI action in the editor.'
-                      : 'Add an API key, then the editor can fill missing '
-                            'translations for you.',
+                      ? LocaleKeys.aiStatusDetail.tr(
+                          namedArgs: {
+                            'provider': active.provider.label,
+                            'model': active.model,
+                          },
+                        )
+                      : LocaleKeys.aiStatusNoKeyDetail.tr(),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: tokens.muted),
@@ -336,12 +359,8 @@ class _StorageNote extends StatelessWidget {
         Expanded(
           child: Text(
             isSecure
-                ? 'Keys are stored in this device’s keychain and are only '
-                      'ever sent to the provider they belong to.'
-                : 'This build cannot reach the system keychain, so keys are '
-                      'stored with your other local settings in plain text. '
-                      'They stay on this device and are only ever sent to the '
-                      'provider they belong to.',
+                ? LocaleKeys.aiStorageSecure.tr()
+                : LocaleKeys.aiStoragePlain.tr(),
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: tokens.muted, fontSize: 12),

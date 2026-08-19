@@ -10,6 +10,7 @@ import '../../../app_management/domain/entities/app.dart';
 import '../bloc/app_settings_bloc.dart';
 import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
+import '../../../../core/localization/export.dart';
 
 /// The app's icon, with the controls to set or drop it.
 ///
@@ -39,8 +40,8 @@ class AppIconField extends StatelessWidget {
     final busy = state.isSaving || state.isPickingIcon;
 
     return LingoDeskFieldScaffold(
-      label: 'App icon',
-      description: 'Optional. Without one, the app shows its initials.',
+      label: LocaleKeys.appSettingsAppIcon.tr(),
+      description: LocaleKeys.appSettingsAppIconHelp.tr(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +49,9 @@ class AppIconField extends StatelessWidget {
             valueListenable: nameController,
             builder: (context, value, _) {
               return AppAvatar(
-                name: value.text.trim().isEmpty ? 'New app' : value.text,
+                name: value.text.trim().isEmpty
+                    ? LocaleKeys.appsNewApp.tr()
+                    : value.text,
                 initials: appInitialsFor(value.text),
                 iconImage: state.iconImage,
                 size: size,
@@ -78,7 +81,11 @@ class AppIconField extends StatelessWidget {
                               HugeIcons.strokeRoundedImageAdd01,
                               size: 18,
                             ),
-                      label: Text(hasIcon ? 'Replace icon' : 'Upload icon'),
+                      label: Text(
+                        hasIcon
+                            ? LocaleKeys.appSettingsReplaceIcon.tr()
+                            : LocaleKeys.appSettingsUploadIcon.tr(),
+                      ),
                     ),
                     if (hasIcon)
                       TextButton.icon(
@@ -89,15 +96,15 @@ class AppIconField extends StatelessWidget {
                           HugeIcons.strokeRoundedDelete02,
                           size: 17,
                         ),
-                        label: const Text('Remove'),
+                        label: Text(LocaleKeys.commonRemove.tr()),
                       ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'PNG, JPG or WebP. The image is scaled to $iconPreviewSize px '
-                  'and stored with the app, so moving the original file is '
-                  'fine.',
+                  LocaleKeys.appSettingsAppIconNote.tr(
+                    namedArgs: {'size': '$iconPreviewSize'},
+                  ),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: tokens.muted,
                     fontSize: 12,

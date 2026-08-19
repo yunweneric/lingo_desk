@@ -11,6 +11,7 @@ import '../bloc/app_settings_bloc.dart';
 import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
 import 'app_settings_form_fields.dart';
+import '../../../../core/localization/export.dart';
 
 /// Modal dialog to create a new app.
 ///
@@ -74,7 +75,7 @@ class _CreateAppDialogViewState extends State<_CreateAppDialogView> {
         final ready = state is AppSettingsReady ? state : null;
 
         return LingoDeskDialog(
-          title: const Text('New app'),
+          title: Text(LocaleKeys.appsNewApp.tr()),
           preferredWidth: 560,
           content: ready == null
               ? const Padding(
@@ -94,7 +95,7 @@ class _CreateAppDialogViewState extends State<_CreateAppDialogView> {
               onPressed: (ready?.isSaving ?? false)
                   ? null
                   : () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(LocaleKeys.commonCancel.tr()),
             ),
             FilledButton.icon(
               onPressed: ready == null || ready.isSaving
@@ -114,7 +115,7 @@ class _CreateAppDialogViewState extends State<_CreateAppDialogView> {
                       color: Colors.white,
                       size: 18,
                     ),
-              label: const Text('Create app'),
+              label: Text(LocaleKeys.appSettingsCreateApp.tr()),
             ),
           ],
         );

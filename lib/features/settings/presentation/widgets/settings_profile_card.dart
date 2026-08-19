@@ -8,6 +8,7 @@ import '../../../../core/widgets/lingo_desk_field.dart';
 import '../../../../core/widgets/lingo_desk_text_field.dart';
 import '../../../../core/widgets/workspace_card.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
+import '../../../../core/localization/export.dart';
 
 /// Local identity shown in the sidebar footer. Nothing leaves the device.
 class SettingsProfileCard extends StatefulWidget {
@@ -50,9 +51,9 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WorkspaceCardHeader(
-            title: 'Profile',
-            subtitle: 'Shown in the sidebar. Stored on this device only.',
+          WorkspaceCardHeader(
+            title: LocaleKeys.navProfile.tr(),
+            subtitle: LocaleKeys.settingsProfileSubtitle.tr(),
             icon: HugeIcons.strokeRoundedUser,
           ),
           const SizedBox(height: 22),
@@ -81,8 +82,8 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
                 children: [
                   LingoDeskTextField(
                     controller: _nameController,
-                    label: 'Display name',
-                    hintText: 'Local workspace',
+                    label: LocaleKeys.settingsProfileName.tr(),
+                    hintText: LocaleKeys.settingsProfileNameHint.tr(),
                     prefixIcon: HugeIcons.strokeRoundedUser,
                     size: LingoDeskFieldSize.large,
                     textInputAction: TextInputAction.done,
@@ -92,8 +93,8 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
                   const SizedBox(height: 16),
                   LingoDeskTextField(
                     controller: _emailController,
-                    label: 'Email',
-                    hintText: 'optional',
+                    label: LocaleKeys.settingsProfileEmail.tr(),
+                    hintText: LocaleKeys.settingsProfileEmailHint.tr(),
                     prefixIcon: HugeIcons.strokeRoundedMail01,
                     size: LingoDeskFieldSize.large,
                     keyboardType: TextInputType.emailAddress,
@@ -103,8 +104,7 @@ class _SettingsProfileCardState extends State<SettingsProfileCard> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'LingoDesk has no accounts. This only labels your local '
-                    'workspace.',
+                    LocaleKeys.settingsProfileNote.tr(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: tokens.muted,
                       fontSize: 12,

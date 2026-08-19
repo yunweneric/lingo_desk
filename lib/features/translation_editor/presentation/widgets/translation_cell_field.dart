@@ -8,6 +8,7 @@ import '../../../../core/responsive/touch.dart';
 import '../../../../core/theme/lingo_desk_motion.dart';
 import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
+import '../../../../core/localization/export.dart';
 
 /// Editable translation cell.
 ///
@@ -203,8 +204,10 @@ class _TranslationCellFieldState extends State<TranslationCellField>
                     decoration: InputDecoration(
                       isCollapsed: true,
                       hintText: widget.isTranslating
-                          ? 'Translating…'
-                          : (showMissing ? 'Missing' : null),
+                          ? LocaleKeys.editorTranslatingHint.tr()
+                          : (showMissing
+                                ? LocaleKeys.dashboardMetricMissing.tr()
+                                : null),
                       hintStyle: TextStyle(
                         color: widget.isTranslating
                             ? tokens.accent.withAlpha(190)
@@ -288,7 +291,7 @@ class _CellAiAction extends StatelessWidget {
             : IgnorePointer(
                 ignoring: !isVisible,
                 child: IconButton(
-                  tooltip: 'Translate with AI',
+                  tooltip: LocaleKeys.editorTranslateWithAi.tr(),
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints.tightFor(
                     width: side,

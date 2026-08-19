@@ -7,6 +7,7 @@ import '../../domain/entities/ai_credentials.dart';
 import '../../domain/entities/ai_translation_item.dart';
 import 'ai_client.dart';
 import 'ai_prompt.dart';
+import '../../../../core/localization/export.dart';
 
 /// Google Gemini generative language API.
 class GeminiClient implements AiClient {
@@ -70,17 +71,27 @@ class GeminiClient implements AiClient {
 
     final blockReason = (decoded['promptFeedback'] as Map?)?['blockReason'];
     if (blockReason != null) {
-      throw AiException('Gemini blocked this batch ($blockReason).');
+      throw AiException(
+        LocaleKeys.errorsAiBlocked.tr(
+          namedArgs: {'provider': _provider, 'reason': '$blockReason'},
+        ),
+      );
     }
 
     final candidates = decoded['candidates'];
     if (candidates is! List || candidates.isEmpty) {
-      throw const AiException('Gemini returned an empty response.');
+      throw AiException(
+        LocaleKeys.errorsAiEmptyResponse.tr(namedArgs: {'provider': _provider}),
+      );
     }
     final candidate = candidates.first as Map;
     final finishReason = candidate['finishReason'];
     if (finishReason != null && finishReason != 'STOP') {
-      throw AiException('Gemini stopped early ($finishReason).');
+      throw AiException(
+        LocaleKeys.errorsAiStoppedEarly.tr(
+          namedArgs: {'provider': _provider, 'reason': '$finishReason'},
+        ),
+      );
     }
 
     final parts = (candidate['content'] as Map?)?['parts'];
@@ -92,7 +103,9 @@ class GeminiClient implements AiClient {
               .join()
         : '';
     if (text.trim().isEmpty) {
-      throw const AiException('Gemini returned an empty response.');
+      throw AiException(
+        LocaleKeys.errorsAiEmptyResponse.tr(namedArgs: {'provider': _provider}),
+      );
     }
 
     return AiPrompt.parseResponse(text, items);

@@ -7,6 +7,7 @@ import '../../domain/entities/ai_credentials.dart';
 import '../../domain/entities/ai_translation_item.dart';
 import 'ai_client.dart';
 import 'ai_prompt.dart';
+import '../../../../core/localization/export.dart';
 
 /// Anthropic Messages API.
 class AnthropicClient implements AiClient {
@@ -69,15 +70,18 @@ class AnthropicClient implements AiClient {
     // A safety decline is a 200 with an empty or partial content array, so
     // this has to be read before touching content at all.
     if (decoded['stop_reason'] == 'refusal') {
-      throw const AiException(
-        'Anthropic declined to translate this batch. Skip it or try a '
-        'different model.',
+      throw AiException(
+        LocaleKeys.errorsAiRefused.tr(namedArgs: {'provider': _provider}),
       );
     }
 
     final content = decoded['content'];
     if (content is! List) {
-      throw const AiException('Anthropic returned an unexpected response.');
+      throw AiException(
+        LocaleKeys.errorsAiUnexpectedResponse.tr(
+          namedArgs: {'provider': _provider},
+        ),
+      );
     }
     final text = content
         .whereType<Map>()
@@ -86,7 +90,9 @@ class AnthropicClient implements AiClient {
         .whereType<String>()
         .join();
     if (text.trim().isEmpty) {
-      throw const AiException('Anthropic returned an empty response.');
+      throw AiException(
+        LocaleKeys.errorsAiEmptyResponse.tr(namedArgs: {'provider': _provider}),
+      );
     }
 
     return AiPrompt.parseResponse(text, items);

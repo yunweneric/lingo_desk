@@ -134,7 +134,7 @@ Rules:
   }
 
   static String _describe(String code) {
-    final name = SupportedLanguages.nameOf(code);
+    final name = SupportedLanguages.englishNameOf(code);
     return name == code ? code : '$name ($code)';
   }
 }

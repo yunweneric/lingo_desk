@@ -21,6 +21,7 @@ import '../app_actions.dart';
 import '../bloc/app_management_bloc.dart';
 import '../bloc/app_management_event.dart';
 import '../bloc/app_management_state.dart';
+import '../../../../core/localization/export.dart';
 
 part '../widgets/dashboard_cards.dart';
 part '../widgets/dashboard_content.dart';
@@ -169,28 +170,32 @@ List<_Metric> _dashboardMetrics(AppManagementLoaded state) {
 
   return [
     _Metric(
-      label: 'Apps',
+      label: LocaleKeys.navApps.tr(),
       value: state.overviews.length,
-      detail: 'Local workspace',
+      detail: LocaleKeys.dashboardMetricLocalWorkspace.tr(),
       icon: HugeIcons.strokeRoundedFolder02,
     ),
     _Metric(
-      label: 'Total keys',
+      label: LocaleKeys.dashboardMetricTotalKeys.tr(),
       value: state.totalKeys,
-      detail: 'Across all apps',
+      detail: LocaleKeys.dashboardMetricAcrossApps.tr(),
       icon: HugeIcons.strokeRoundedKey01,
     ),
     _Metric(
-      label: 'Coverage',
+      label: LocaleKeys.dashboardMetricCoverage.tr(),
       value: (state.coverage * 100).round(),
       suffix: '%',
-      detail: '${state.activeLanguages.length} target locales',
+      detail: LocaleKeys.dashboardMetricTargetLocales.plural(
+        state.activeLanguages.length,
+      ),
       icon: HugeIcons.strokeRoundedChartBarIncreasing,
     ),
     _Metric(
-      label: 'Missing',
+      label: LocaleKeys.dashboardMetricMissing.tr(),
       value: missing,
-      detail: missing == 0 ? 'All clear' : 'Needs review',
+      detail: missing == 0
+          ? LocaleKeys.dashboardMetricAllClear.tr()
+          : LocaleKeys.dashboardMetricNeedsReview.tr(),
       icon: HugeIcons.strokeRoundedAlertCircle,
       isPositive: missing == 0,
     ),

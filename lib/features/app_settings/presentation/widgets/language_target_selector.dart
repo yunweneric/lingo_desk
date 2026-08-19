@@ -7,6 +7,7 @@ import '../../../../core/theme/lingo_desk_theme.dart';
 import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_checkbox.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
+import '../../../../core/localization/export.dart';
 
 /// Chip grid to toggle target languages; the source language is disabled.
 ///
@@ -32,7 +33,10 @@ class LanguageTargetSelector extends StatelessWidget {
       children: [
         for (final option in SupportedLanguages.all)
           FilterChip(
-            label: Text('${option.flag}  ${option.name} (${option.code})'),
+            label: Text(
+              '${option.flag}  ${SupportedLanguages.nameOf(option.code)} '
+              '(${option.code})',
+            ),
             selected: selectedLanguages.contains(option.code),
             onSelected: option.code == sourceLanguage
                 ? null
@@ -165,7 +169,7 @@ class _LanguageTileState extends State<_LanguageTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.option.name,
+                  SupportedLanguages.nameOf(widget.option.code),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelLarge?.copyWith(
@@ -174,7 +178,9 @@ class _LanguageTileState extends State<_LanguageTile> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  widget.isSource ? 'Source language' : widget.option.code,
+                  widget.isSource
+                      ? LocaleKeys.appSettingsSourceLanguage.tr()
+                      : widget.option.code,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: LingoDeskTheme.codeStyle.copyWith(
@@ -197,7 +203,7 @@ class _LanguageTileState extends State<_LanguageTile> {
 
     if (widget.isSource) {
       return Tooltip(
-        message: 'The source language cannot also be a target.',
+        message: LocaleKeys.appSettingsSourceNotTarget.tr(),
         child: tile,
       );
     }

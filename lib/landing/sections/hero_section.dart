@@ -11,6 +11,7 @@ import '../widgets/app_preview.dart';
 import '../widgets/landing_pill.dart';
 import '../widgets/reveal.dart';
 import '../widgets/scroll_tilt.dart';
+import '../../core/localization/export.dart';
 
 /// The opening screen: what it is, who it's for, and one button that
 /// resolves the right build for the browser asking.
@@ -66,14 +67,14 @@ class HeroSection extends StatelessWidget {
                   Reveal(
                     child: Column(
                       children: [
-                        const LandingPill(
-                          label: 'Open source · MIT · No account, no backend',
+                        LandingPill(
+                          label: LocaleKeys.landingHeroPill.tr(),
                           icon: HugeIcons.strokeRoundedSourceCodeCircle,
                           emphasis: true,
                         ),
                         const SizedBox(height: 28),
                         Text(
-                          'Translate every locale\nfrom one clean desk.',
+                          LocaleKeys.landingHeroTitle.tr(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: size.resolve<double>(
@@ -92,9 +93,7 @@ class HeroSection extends StatelessWidget {
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 660),
                           child: Text(
-                            'LingoDesk turns a folder of en.json, fr.json and es.json '
-                            'into one workspace: every key a row, every language a '
-                            'column, every missing string impossible to miss.',
+                            LocaleKeys.landingHeroBody.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: narrow ? 16.5 : 18.5,
@@ -197,17 +196,29 @@ class _HeroActions extends StatelessWidget {
       String? url,
       VoidCallback? onPressed,
     ) = switch (state) {
-      ReleaseLoading() => ('Checking for builds…', null, null),
+      ReleaseLoading() => (LocaleKeys.landingCheckingBuilds.tr(), null, null),
       ReleaseReady() when asset != null => (
-        target?.cta ?? 'Download the latest build',
+        target?.cta ?? LocaleKeys.landingCtaLatest.tr(),
         asset.downloadUrl,
         null,
       ),
       // A release exists but not for this visitor's platform — send them
       // to the table rather than handing over the wrong binary.
-      ReleaseReady() => ('See all downloads', null, onSeeDownloads),
-      ReleasePending() => ('Get started', null, onSeeDownloads),
-      ReleaseUnavailable() => ('Get started', null, onSeeDownloads),
+      ReleaseReady() => (
+        LocaleKeys.landingSeeAllDownloads.tr(),
+        null,
+        onSeeDownloads,
+      ),
+      ReleasePending() => (
+        LocaleKeys.landingGetStarted.tr(),
+        null,
+        onSeeDownloads,
+      ),
+      ReleaseUnavailable() => (
+        LocaleKeys.landingGetStarted.tr(),
+        null,
+        onSeeDownloads,
+      ),
     };
 
     return Wrap(
@@ -223,8 +234,8 @@ class _HeroActions extends StatelessWidget {
           url: url,
           onPressed: onPressed,
         ),
-        const LandingButton(
-          label: 'View on GitHub',
+        LandingButton(
+          label: LocaleKeys.landingViewOnGithub.tr(),
           icon: HugeIcons.strokeRoundedGithub,
           kind: LandingButtonKind.secondary,
           large: true,
@@ -253,7 +264,9 @@ class _ApkLink extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: LandingLink(
-        label: 'Or download the Android APK · ${apk.readableSize}  →',
+        label: LocaleKeys.landingApkLink.tr(
+          namedArgs: {'size': apk.readableSize},
+        ),
         url: apk.downloadUrl,
       ),
     );
@@ -274,15 +287,21 @@ class _ReleaseCaption extends StatelessWidget {
     final asset = controller.suggestedAsset;
 
     final text = switch (state) {
-      ReleaseLoading() => 'Asking GitHub for the newest release…',
+      ReleaseLoading() => LocaleKeys.landingAskingGithub.tr(),
       ReleaseReady(:final release) when asset != null =>
-        'v${release.version} · ${asset.readableSize} · '
-            '${asset.target.detail} · free forever',
-      ReleaseReady(:final release) =>
-        'v${release.version} is out — pick a build below.',
-      ReleasePending() =>
-        'No packaged build published yet — run it from source in two commands.',
-      ReleaseUnavailable(:final reason) => '$reason Browse the releases page.',
+        LocaleKeys.landingReleaseCaption.tr(
+          namedArgs: {
+            'version': release.version,
+            'size': asset.readableSize,
+            'detail': asset.target.detail,
+          },
+        ),
+      ReleaseReady(:final release) => LocaleKeys.landingReleasePickBuild.tr(
+        namedArgs: {'version': release.version},
+      ),
+      ReleasePending() => LocaleKeys.landingReleasePending.tr(),
+      ReleaseUnavailable(:final reason) =>
+        LocaleKeys.landingReleaseUnavailable.tr(namedArgs: {'reason': reason}),
     };
 
     return Text(

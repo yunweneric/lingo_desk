@@ -7,6 +7,7 @@ import '../../core/widgets/lingo_desk_icon.dart';
 import '../widgets/code_panel.dart';
 import '../widgets/landing_layout.dart';
 import '../widgets/reveal.dart';
+import '../../core/localization/export.dart';
 
 /// The before/after beat: the same strings as scattered files, then as
 /// one grid. Both sides are drawn live rather than screenshot, so they
@@ -52,10 +53,10 @@ class ProblemSection extends StatelessWidget {
     final tokens = LingoDeskTokens.of(context);
     final stacked = context.windowSize.isBelow(WindowSizeClass.expanded);
 
-    const before = _Side(
-      eyebrow: 'Without LingoDesk',
-      title: 'Three files, three tabs, one missing string you find in review.',
-      child: Column(
+    final before = _Side(
+      eyebrow: LocaleKeys.landingProblemBeforeEyebrow.tr(),
+      title: LocaleKeys.landingProblemBeforeTitle.tr(),
+      child: const Column(
         children: [
           JsonPanel(filename: 'en.json', lines: _en),
           SizedBox(height: 10),
@@ -67,8 +68,8 @@ class ProblemSection extends StatelessWidget {
     );
 
     final after = _Side(
-      eyebrow: 'With LingoDesk',
-      title: 'One grid. The holes announce themselves.',
+      eyebrow: LocaleKeys.landingProblemAfterEyebrow.tr(),
+      title: LocaleKeys.landingProblemAfterTitle.tr(),
       highlight: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,8 +86,7 @@ class ProblemSection extends StatelessWidget {
               const SizedBox(width: 9),
               Expanded(
                 child: Text(
-                  'Export rebuilds the nested shape, file by file, exactly '
-                  'as your app expects it.',
+                  LocaleKeys.landingProblemExportNote.tr(),
                   style: TextStyle(
                     fontSize: 13.5,
                     height: 1.5,
@@ -104,13 +104,10 @@ class ProblemSection extends StatelessWidget {
       anchor: anchor,
       child: Column(
         children: [
-          const SectionHeading(
-            eyebrow: 'The problem',
-            title: 'Localization files drift the moment you add a key.',
-            body:
-                'Adding one string means opening every locale file and '
-                'remembering every one of them. LingoDesk makes that a '
-                'single row instead.',
+          SectionHeading(
+            eyebrow: LocaleKeys.landingProblemEyebrow.tr(),
+            title: LocaleKeys.landingProblemTitle.tr(),
+            body: LocaleKeys.landingProblemBody.tr(),
           ),
           const SizedBox(height: 56),
           Reveal(
@@ -124,7 +121,7 @@ class ProblemSection extends StatelessWidget {
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Expanded(child: before),
+                      Expanded(child: before),
                       const SizedBox(width: 32),
                       Expanded(child: after),
                     ],

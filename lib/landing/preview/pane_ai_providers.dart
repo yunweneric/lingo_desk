@@ -7,6 +7,7 @@ import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 import 'preview_chrome.dart';
 import 'preview_workspace.dart';
+import '../../core/localization/export.dart';
 
 /// Bring your own key. Clicking a row makes it the active key, which the
 /// banner above and the editor's AI action both follow; the eye reveals
@@ -26,11 +27,15 @@ class PreviewAiProvidersPane extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PreviewBreadcrumb(
-            segments: ['Workspace', 'Settings', 'AI providers'],
+          PreviewBreadcrumb(
+            segments: [
+              LocaleKeys.navGroupWorkspace.tr(),
+              LocaleKeys.navSettings.tr(),
+              LocaleKeys.navAiProviders.tr(),
+            ],
             actions: [
               PreviewButton(
-                label: 'Add API key',
+                label: LocaleKeys.aiAddKey.tr(),
                 icon: HugeIcons.strokeRoundedAdd01,
                 primary: true,
               ),
@@ -58,7 +63,9 @@ class PreviewAiProvidersPane extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Translating with ${active.name}',
+                        LocaleKeys.aiStatusTranslatingWith.tr(
+                          namedArgs: {'label': active.name},
+                        ),
                         style: TextStyle(
                           fontSize: 16.5,
                           fontWeight: FontWeight.w700,
@@ -67,8 +74,12 @@ class PreviewAiProvidersPane extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${active.name} · ${active.model} · used by every '
-                        'AI action in the editor.',
+                        LocaleKeys.aiStatusDetail.tr(
+                          namedArgs: {
+                            'provider': active.name,
+                            'model': active.model,
+                          },
+                        ),
                         style: TextStyle(
                           fontSize: 13.5,
                           color: tokens.onBrandFill.withValues(alpha: 0.85),
@@ -91,12 +102,12 @@ class PreviewAiProvidersPane extends StatelessWidget {
               borderRadius: BorderRadius.circular(LingoDeskTheme.radius - 1),
               child: Column(
                 children: [
-                  const PreviewTableHeader(
+                  PreviewTableHeader(
                     cells: [
-                      (26, 'PROVIDER'),
-                      (28, 'API KEY'),
-                      (26, 'MODEL'),
-                      (20, 'ADDED'),
+                      (26, LocaleKeys.aiColProvider.tr().toUpperCase()),
+                      (28, LocaleKeys.aiColApiKey.tr().toUpperCase()),
+                      (26, LocaleKeys.aiColModel.tr().toUpperCase()),
+                      (20, LocaleKeys.aiColAdded.tr().toUpperCase()),
                     ],
                   ),
                   for (final provider in PreviewWorkspace.providers)
@@ -120,9 +131,7 @@ class PreviewAiProvidersPane extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Keys live in the OS secure store. They stay on this '
-                  'device and are only ever sent to the provider they '
-                  'belong to.',
+                  LocaleKeys.landingPreviewKeysNote.tr(),
                   style: TextStyle(fontSize: 12.5, color: tokens.muted),
                 ),
               ),
@@ -273,7 +282,7 @@ class WorkspaceBadgeActive extends StatelessWidget {
         border: Border.all(color: tokens.brandFillBorder),
       ),
       child: Text(
-        'Active',
+        LocaleKeys.aiKeyActive.tr(),
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,

@@ -6,6 +6,7 @@ import '../theme/lingo_desk_tokens.dart';
 import 'lingo_desk_field.dart';
 import 'lingo_desk_icon.dart';
 import 'lingo_desk_menu.dart';
+import '../localization/export.dart';
 
 /// One option in a [LingoDeskDropdown].
 ///
@@ -48,7 +49,7 @@ class LingoDeskDropdown<T> extends StatefulWidget {
     this.description,
     this.helperText,
     this.errorText,
-    this.hintText = 'Select an option',
+    this.hintText,
     this.icon,
     this.size = LingoDeskFieldSize.standard,
     this.enabled = true,
@@ -69,7 +70,8 @@ class LingoDeskDropdown<T> extends StatefulWidget {
   final String? description;
   final String? helperText;
   final String? errorText;
-  final String hintText;
+  /// Defaults to the translated "Select an option" placeholder.
+  final String? hintText;
 
   /// Leading icon on the trigger, used when items carry no icon of their own.
   final List<List<dynamic>>? icon;
@@ -172,7 +174,7 @@ class _LingoDeskDropdownState<T> extends State<LingoDeskDropdown<T>> {
             ],
             builder: (context, controller, child) => _DropdownTrigger(
               selected: _selected,
-              hintText: widget.hintText,
+              hintText: widget.hintText ?? LocaleKeys.commonSelectOption.tr(),
               icon: widget.icon,
               size: widget.size,
               enabled: _isEnabled,

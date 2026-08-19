@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/localization/export.dart';
 
 /// Local storage for an app's translation entries.
 ///
@@ -52,7 +53,11 @@ class TranslationLocalDataSourceImpl implements TranslationLocalDataSource {
         );
       });
     } on FormatException catch (e) {
-      throw CacheException('Stored translations are corrupted: ${e.message}');
+      throw CacheException(
+        LocaleKeys.errorsStoredTranslationsCorrupt.tr(
+          namedArgs: {'error': e.message},
+        ),
+      );
     }
   }
 
@@ -70,7 +75,7 @@ class TranslationLocalDataSourceImpl implements TranslationLocalDataSource {
       jsonEncode(blob),
     );
     if (!saved) {
-      throw const CacheException('Could not write translations to storage.');
+      throw CacheException(LocaleKeys.errorsWriteTranslations.tr());
     }
   }
 }

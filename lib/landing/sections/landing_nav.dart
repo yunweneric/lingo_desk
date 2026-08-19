@@ -11,7 +11,9 @@ import '../data/github_release.dart';
 import '../state/landing_controller.dart';
 import '../widgets/glass_panel.dart';
 import '../widgets/landing_button.dart';
+import '../widgets/language_menu.dart';
 import '../widgets/theme_menu.dart';
+import '../../core/localization/export.dart';
 
 /// Every control in the bar is this tall, so the right-hand cluster reads
 /// as one row of objects rather than three sizes stacked side by side.
@@ -137,6 +139,11 @@ class LandingNav extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          const LanguageMenuButton(
+                            height: kNavControlHeight,
+                            showLabel: false,
+                          ),
+                          const SizedBox(width: 8),
                           ThemeMenuButton(
                             controller: controller,
                             height: kNavControlHeight,
@@ -147,7 +154,7 @@ class LandingNav extends StatelessWidget {
                             _StarChip(stars: controller.stars),
                             const SizedBox(width: 8),
                             LandingButton(
-                              label: 'Download',
+                              label: LocaleKeys.landingNavDownload.tr(),
                               icon: HugeIcons.strokeRoundedDownload04,
                               height: kNavControlHeight,
                               // Once the bar has drawn in, the label is
@@ -158,7 +165,7 @@ class LandingNav extends StatelessWidget {
                           ] else
                             _IconAction(
                               icon: HugeIcons.strokeRoundedMenu01,
-                              tooltip: 'Menu',
+                              tooltip: LocaleKeys.landingNavMenu.tr(),
                               onTap: () => _openMenu(context),
                             ),
                         ],
@@ -208,7 +215,7 @@ class LandingNav extends StatelessWidget {
                 ),
               const SizedBox(height: 12),
               LandingButton(
-                label: 'Download',
+                label: LocaleKeys.landingNavDownload.tr(),
                 icon: HugeIcons.strokeRoundedDownload04,
                 onPressed: () {
                   Navigator.of(sheetContext).pop();
@@ -216,8 +223,8 @@ class LandingNav extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 10),
-              const LandingButton(
-                label: 'View on GitHub',
+              LandingButton(
+                label: LocaleKeys.landingViewOnGithub.tr(),
                 icon: HugeIcons.strokeRoundedGithub,
                 kind: LandingButtonKind.secondary,
                 url: GithubRepo.url,
@@ -375,7 +382,7 @@ class _StarChipState extends State<_StarChip> {
     }
 
     return Tooltip(
-      message: 'Star LingoDesk on GitHub',
+      message: LocaleKeys.landingStarOnGithubTooltip.tr(),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (_) => setState(() => _hovered = true),

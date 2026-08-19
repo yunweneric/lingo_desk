@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import '../../../../core/localization/export.dart';
 
 /// Writes [bytes] to [path] on IO platforms (desktop/mobile), creating
 /// any missing parent directories first.
@@ -69,7 +70,11 @@ Future<void> _run(String executable, List<String> arguments) async {
   try {
     result = await Process.run(executable, arguments);
   } on ProcessException catch (e) {
-    throw FileSystemException('Could not launch $executable: ${e.message}');
+    throw FileSystemException(
+      LocaleKeys.errorsLaunchFailed.tr(
+        namedArgs: {'executable': executable, 'error': e.message},
+      ),
+    );
   }
   if (result.exitCode != 0) {
     throw FileSystemException(

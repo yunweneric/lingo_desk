@@ -10,6 +10,7 @@ import '../../domain/entities/ai_provider.dart';
 import '../../domain/entities/ai_translation_item.dart';
 import '../../domain/repositories/ai_translation_repository.dart';
 import '../datasources/ai_client.dart';
+import '../../../../core/localization/export.dart';
 
 class AiTranslationRepositoryImpl implements AiTranslationRepository {
   const AiTranslationRepositoryImpl({required this.clients});
@@ -80,17 +81,17 @@ class AiTranslationRepositoryImpl implements AiTranslationRepository {
           attempt++;
           continue;
         }
-        return const Left(
-          AiFailure(message: 'No connection to the translation provider.'),
+        return Left(
+          AiFailure(message: LocaleKeys.errorsAiNoConnection.tr()),
         );
       } on TimeoutException {
-        return const Left(
-          AiFailure(message: 'The translation provider timed out.'),
+        return Left(
+          AiFailure(message: LocaleKeys.errorsAiTimeout.tr()),
         );
       } on FormatException {
-        return const Left(
+        return Left(
           AiFailure(
-            message: 'The translation provider returned malformed JSON.',
+            message: LocaleKeys.errorsAiMalformed.tr(),
           ),
         );
       } on Exception catch (e) {

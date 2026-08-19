@@ -8,6 +8,7 @@ import '../../core/theme/lingo_desk_tokens.dart';
 import '../../core/widgets/lingo_desk_icon.dart';
 import '../../core/widgets/lingo_desk_menu.dart';
 import '../state/landing_controller.dart';
+import '../../core/localization/export.dart';
 
 /// A swatch dot showing a variant's brand colour, ringed in its accent.
 class PaletteDot extends StatelessWidget {
@@ -86,7 +87,7 @@ class _ThemeMenuButtonState extends State<ThemeMenuButton> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
                 child: Text(
-                  'THEME',
+                  LocaleKeys.commonTheme.tr().toUpperCase(),
                   style: TextStyle(
                     fontSize: 10.5,
                     fontWeight: FontWeight.w700,
@@ -208,9 +209,11 @@ class _VariantRowState extends State<_VariantRow> {
     final isBrightness = widget.brightnessRow;
 
     final label = isBrightness
-        ? (widget.isDark ? 'Switch to light' : 'Switch to dark')
+        ? (widget.isDark
+              ? LocaleKeys.landingSwitchToLight.tr()
+              : LocaleKeys.landingSwitchToDark.tr())
         : widget.variant.label;
-    final description = isBrightness ? null : widget.variant.description;
+    final description = isBrightness ? null : widget.variant.description.tr();
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,

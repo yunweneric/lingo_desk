@@ -16,6 +16,7 @@ import '../bloc/app_settings_bloc.dart';
 import '../bloc/app_settings_event.dart';
 import '../bloc/app_settings_state.dart';
 import '../widgets/app_settings_cards.dart';
+import '../../../../core/localization/export.dart';
 
 /// Edit an existing app's configuration (name, source language,
 /// target languages). Creation happens in [CreateAppDialog].
@@ -66,7 +67,11 @@ class _AppSettingsViewState extends State<_AppSettingsView> {
       listener: (context, state) {
         if (state is AppSettingsSaveSuccess) {
           final router = GoRouter.of(context);
-          context.showSuccessToast('Saved "${state.app.name}".');
+          context.showSuccessToast(
+            LocaleKeys.appSettingsSavedToast.tr(
+              namedArgs: {'name': state.app.name},
+            ),
+          );
           router.pop(true);
         }
       },
@@ -84,16 +89,16 @@ class _AppSettingsViewState extends State<_AppSettingsView> {
                 WorkspacePageHeader(
                   breadcrumb: [
                     Crumb.workspace,
-                    const Crumb('Apps', route: AppRoutes.apps),
+                    Crumb(LocaleKeys.navApps.tr(), route: AppRoutes.apps),
                     Crumb(widget.app.name),
-                    const Crumb('Settings'),
+                    Crumb(LocaleKeys.navSettings.tr()),
                   ],
                   actions: [
                     OutlinedButton(
                       onPressed: ready == null || ready.isSaving
                           ? null
                           : () => Navigator.of(context).maybePop(),
-                      child: const Text('Cancel'),
+                      child: Text(LocaleKeys.commonCancel.tr()),
                     ),
                     FilledButton.icon(
                       onPressed: ready == null || ready.isSaving
@@ -112,7 +117,7 @@ class _AppSettingsViewState extends State<_AppSettingsView> {
                               color: Colors.white,
                               size: 18,
                             ),
-                      label: const Text('Save changes'),
+                      label: Text(LocaleKeys.appSettingsSaveChanges.tr()),
                     ),
                   ],
                   child: ready == null

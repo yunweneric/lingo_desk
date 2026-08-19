@@ -1,6 +1,7 @@
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../../core/assets/lingo_desk_assets.dart';
+import '../../../../core/localization/export.dart';
 
 /// One proof row under a step's body copy: an icon, a plain-language
 /// claim, and the machine string that backs it up (codeStyle, per the
@@ -13,7 +14,12 @@ class OnboardingHighlight {
   });
 
   final List<List<dynamic>> icon;
+
+  /// Translation key for the claim; call `.tr()` where it is drawn.
   final String label;
+
+  /// The machine string backing the claim — a key path, a file name, a
+  /// timing. Deliberately not translated: it is sample output, not copy.
   final String detail;
 }
 
@@ -28,6 +34,7 @@ class OnboardingStep {
     required this.highlights,
   });
 
+  /// Translation keys, resolved where each is drawn.
   final String eyebrow;
   final String title;
   final String body;
@@ -35,6 +42,9 @@ class OnboardingStep {
   /// Stage photography. 3:2, shown framed rather than full-bleed so the
   /// original composition survives every window size.
   final String photoAsset;
+
+  /// Translation key for the caption. The credit is a person's name and
+  /// stays as written.
   final String photoCaption;
   final String photoCredit;
 
@@ -46,82 +56,76 @@ class OnboardingStep {
 /// a stack, an index, a departures board.
 const onboardingSteps = [
   OnboardingStep(
-    eyebrow: 'Translation workspace',
-    title: 'Translate every locale from one clean desk',
-    body:
-        'Every key is a row and every language a column. Missing strings '
-        'stay highlighted while you work, so nothing ships half-translated.',
+    eyebrow: LocaleKeys.onboardingStep1Eyebrow,
+    title: LocaleKeys.onboardingStep1Title,
+    body: LocaleKeys.onboardingStep1Body,
     photoAsset: LingoDeskAssets.onboardingWorkspace,
-    photoCaption: 'Every volume, one room',
+    photoCaption: LocaleKeys.onboardingStep1Caption,
     photoCredit: 'Gerard GRIFFAY / Unsplash',
     highlights: [
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedTableRowsSplit,
-        label: 'Keys and languages in a single grid',
+        label: LocaleKeys.onboardingStep1Highlight1,
         detail: 'home.hero.title -> es.json',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedSearch01,
-        label: 'Filter down to what is still missing',
+        label: LocaleKeys.onboardingStep1Highlight2,
         detail: '12 missing',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedClock03,
-        label: 'Edits save to this machine as you type',
+        label: LocaleKeys.onboardingStep1Highlight3,
         detail: 'autosave 400ms',
       ),
     ],
   ),
   OnboardingStep(
-    eyebrow: 'Project setup',
-    title: 'Keep each product organized by language',
-    body:
-        'One workspace per app: pick the source language once, track only '
-        'the target locales that matter, and let coverage speak for itself.',
+    eyebrow: LocaleKeys.onboardingStep2Eyebrow,
+    title: LocaleKeys.onboardingStep2Title,
+    body: LocaleKeys.onboardingStep2Body,
     photoAsset: LingoDeskAssets.onboardingProjects,
-    photoCaption: 'Indexed, labelled, findable',
+    photoCaption: LocaleKeys.onboardingStep2Caption,
     photoCredit: 'Daniel Forsman / Unsplash',
     highlights: [
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedFolderAdd,
-        label: 'A focused workspace for every app',
+        label: LocaleKeys.onboardingStep2Highlight1,
         detail: 'source en',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedLanguageSquare,
-        label: 'Pick targets from 20 supported locales',
+        label: LocaleKeys.onboardingStep2Highlight2,
         detail: 'targets fr, es, uk',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedChartBarIncreasing,
-        label: 'Coverage per app and per language',
+        label: LocaleKeys.onboardingStep2Highlight3,
         detail: '84% complete',
       ),
     ],
   ),
   OnboardingStep(
-    eyebrow: 'Export ready',
-    title: 'Ship nested JSON files back to your app',
-    body:
-        'LingoDesk rebuilds your original key structure before export, so '
-        'the files that land in your repo are the files your app expects.',
+    eyebrow: LocaleKeys.onboardingStep3Eyebrow,
+    title: LocaleKeys.onboardingStep3Title,
+    body: LocaleKeys.onboardingStep3Body,
     photoAsset: LingoDeskAssets.onboardingExport,
-    photoCaption: 'Every destination on the board',
+    photoCaption: LocaleKeys.onboardingStep3Caption,
     photoCredit: 'JESHOOTS.COM / Unsplash',
     highlights: [
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedFolderLibrary,
-        label: 'Dot keys expand back into nested objects',
+        label: LocaleKeys.onboardingStep3Highlight1,
         detail: 'nav.home -> {"nav":{"home"}}',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedDownload04,
-        label: 'Choose the locales, save where you like',
+        label: LocaleKeys.onboardingStep3Highlight2,
         detail: 'es.json, uk.json',
       ),
       OnboardingHighlight(
         icon: HugeIcons.strokeRoundedCheckmarkCircle02,
-        label: 'Pretty-printed with a stable key order',
+        label: LocaleKeys.onboardingStep3Highlight3,
         detail: 'git diff stays clean',
       ),
     ],

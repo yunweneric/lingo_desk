@@ -6,6 +6,7 @@ import '../../../../core/theme/lingo_desk_tokens.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_scaffold.dart';
 import '../../domain/entities/uploaded_translation_file.dart';
+import '../../../../core/localization/export.dart';
 
 /// One staged upload row: file name, language badge, key count or error.
 class StagedFileTile extends StatelessWidget {
@@ -69,7 +70,7 @@ class StagedFileTile extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           IconButton(
-            tooltip: 'Remove',
+            tooltip: LocaleKeys.commonRemove.tr(),
             onPressed: onRemove,
             icon: LingoDeskIcon(
               HugeIcons.strokeRoundedDelete02,

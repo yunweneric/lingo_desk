@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lingo_desk/core/di/injection_container.dart';
+import 'package:lingo_desk/core/localization/export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Test helper utilities for setting up and tearing down tests
@@ -12,9 +14,18 @@ class TestHelpers {
     // Reset GetIt before each test
     await reset();
 
+    // The asset bundle caches the *future* of a load, not its result, so
+    // a translation file first read in an earlier test hands this one a
+    // future belonging to a dead test zone — and it never completes.
+    rootBundle.clear();
+
     // Use in-memory storage and register the real dependency graph
     SharedPreferences.setMockInitialValues({});
     await init();
+
+    // Translations, so widgets under test resolve keys rather than
+    // throwing for want of a localization scope.
+    await AppLocalization.ensureInitialized();
 
     // Register test-specific dependencies here
     // Example:
@@ -34,7 +45,16 @@ class TestHelpers {
   ///
   /// Useful for widget tests that need Material context
   static Widget createTestWidget(Widget child) {
-    return MaterialApp(home: Scaffold(body: child));
+    return localized(MaterialApp(home: Scaffold(body: child)));
+  }
+
+  /// Wraps [child] in the localization scope the app is run inside, so a
+  /// pumped widget can resolve translation keys.
+  static Widget localized(Widget child) {
+    return AppLocalization.wrap(
+      startLocale: AppLocalization.fallbackLocale,
+      child: child,
+    );
   }
 
   /// Pumps widget and waits for animations to complete

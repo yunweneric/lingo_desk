@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_shell.dart';
 import '../../../../core/widgets/app_shell_scope.dart';
 import '../../../../core/widgets/lingo_desk_icon.dart';
 import '../../../../core/widgets/workspace_page_header.dart';
+import '../../../../core/localization/export.dart';
 
 /// Shared chassis for the settings panes.
 ///
@@ -55,7 +56,7 @@ class SettingsPane extends StatelessWidget {
             WorkspacePageHeader(
               breadcrumb: [
                 Crumb.workspace,
-                const Crumb('Settings'),
+                Crumb(LocaleKeys.navSettings.tr()),
                 Crumb(title),
               ],
             ),
@@ -167,7 +168,7 @@ class _PanePill extends StatelessWidget {
               LingoDeskIcon(destination.icon, size: 17, color: foreground),
               const SizedBox(width: 8),
               Text(
-                destination.label,
+                destination.labelKey.tr(),
                 style: Theme.of(
                   context,
                 ).textTheme.labelLarge?.copyWith(color: foreground),
