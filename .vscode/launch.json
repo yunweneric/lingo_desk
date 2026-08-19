@@ -26,7 +26,7 @@
       "deviceId": "chrome",
       "args": [
         "--base-href",
-        "/lingo_desk/",
+        "/",
         "--pwa-strategy",
         "none"
       ]

@@ -240,13 +240,13 @@ Further reading: [docs/ui.md](docs/ui.md),
 
 ## Landing page
 
-The marketing site at **<https://yunweneric.github.io/lingo_desk/>** is a second
+The marketing site at **<https://lingodesk.yunweneric.com>** is a second
 Flutter entry point in this repository, not a separate project:
 
 ```bash
 flutter run -d chrome -t lib/main_landing.dart          # develop
 flutter build web --release -t lib/main_landing.dart \
-  --base-href /lingo_desk/ --pwa-strategy none          # what CI publishes
+  --base-href / --pwa-strategy none                     # what CI publishes
 ```
 
 | Path | What it is |
@@ -256,6 +256,7 @@ flutter build web --release -t lib/main_landing.dart \
 | [`lib/landing/data/`](lib/landing/data/) | GitHub Releases lookup behind the download button |
 | [`web/`](web/) | Shell, social cards, and the HTML curtain shown before Flutter boots |
 | [`pages.yml`](.github/workflows/pages.yml) | Builds and publishes to GitHub Pages on push to `main` |
+| [`web/CNAME`](web/CNAME) | The custom domain. Its presence is what makes the build use `--base-href /` |
 
 It imports the app's own [`LingoDeskTheme`](lib/core/theme/lingo_desk_theme.dart),
 palettes, motion tokens and [`LingoDeskMark`](lib/core/widgets/lingo_desk_mark.dart)
